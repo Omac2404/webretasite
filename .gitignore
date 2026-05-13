@@ -42,3 +42,6 @@ next-env.d.ts
 
 # claude code (local user settings)
 .claude/settings.local.json
+
+# local feedback assets (annotated mockups, design references)
+/screenshots

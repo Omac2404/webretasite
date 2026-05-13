@@ -277,6 +277,7 @@ function TestimonialCard({
   return (
     <div
       ref={cardRef}
+      onClick={onClick}
       className="box-border cursor-pointer rounded-xl px-4 py-4"
       style={{
         opacity: isHovered ? 1 : opacity,
@@ -336,7 +337,7 @@ function TestimonialCard({
                   e.stopPropagation()
                   onClick()
                 }}
-                className="cursor-pointer border-0 bg-transparent p-0 font-medium text-[#3c639f] hover:text-[#2f5288] active:text-[#2f5288]"
+                className="devamini-shimmer cursor-pointer border-0 bg-transparent p-0 font-medium"
               >
                 devamını gör
               </button>
@@ -544,19 +545,23 @@ export default function Home() {
   const [tappedIndex, setTappedIndex] = useState<number | null>(null)
   const [popupPosition, setPopupPosition] = useState<{ left: number; top: number } | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(true)
+  const [hintActive, setHintActive] = useState(false)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const openTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const hintShownRef = useRef(false)
 
   const { displayedText, showCheckIcon } = useTypewriter()
   const isMobile = useIsMobile()
 
-  // Card dimensions - 16px consistent gap
+  // Card dimensions. Mobile gets a wider gap because the narrower viewport
+  // makes adjacent cards feel cramped — text wraps to more lines and fills
+  // the card height, leaving little visual breathing room between cards.
   const CARD_HEIGHT = 150
-  const CARD_GAP = 16
+  const CARD_GAP = isMobile ? 24 : 16
   const STEP = CARD_HEIGHT + CARD_GAP
   const VISIBLE_HEIGHT = STEP * 3.5
 
@@ -564,9 +569,10 @@ export default function Home() {
   const allCards = [...testimonials, ...testimonials]
   const totalOriginal = testimonials.length
 
-  // Simple auto-advance every 3 seconds
+  // Auto-advance every 3 seconds — desktop only. On mobile the user drives
+  // the carousel themselves via touch swipe, so we skip the timer entirely.
   useEffect(() => {
-    if (isPaused) return
+    if (isPaused || isMobile) return
 
     const interval = setInterval(() => {
       setCurrentIndex(prev => {
@@ -582,7 +588,7 @@ export default function Home() {
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [isPaused, totalOriginal])
+  }, [isPaused, totalOriginal, isMobile])
 
   // Mousewheel scrolling: capture wheel over the testimonial area and advance
   // the carousel one card per gesture (debounced to match the slide animation).
@@ -626,6 +632,101 @@ export default function Home() {
     el.addEventListener('wheel', handleWheel, { passive: false })
     return () => el.removeEventListener('wheel', handleWheel)
   }, [totalOriginal])
+
+  // Touch swipe (mobile). One card per gesture above a threshold. The
+  // container uses touch-action:none on mobile, so the page won't co-scroll
+  // when the finger lands inside — user scrolls past from above/below.
+  useEffect(() => {
+    if (!isMobile) return
+    const el = containerRef.current
+    if (!el) return
+
+    let touchStartY = 0
+    let touchEndY = 0
+    let lastSwipeTime = 0
+    const SWIPE_DEBOUNCE = 400
+    const SWIPE_THRESHOLD = 30
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY
+      touchEndY = touchStartY
+      // Any touch on the carousel dismisses the swipe hint immediately —
+      // the user has started interacting, so the gesture demo is moot.
+      setHintActive(false)
+      hintShownRef.current = true
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      touchEndY = e.touches[0].clientY
+    }
+
+    const handleTouchEnd = () => {
+      const delta = touchStartY - touchEndY
+      if (Math.abs(delta) < SWIPE_THRESHOLD) return
+
+      const now = Date.now()
+      if (now - lastSwipeTime < SWIPE_DEBOUNCE) return
+      lastSwipeTime = now
+
+      if (delta > 0) {
+        setCurrentIndex(prev => {
+          const next = prev + 1
+          if (next >= totalOriginal) {
+            setIsTransitioning(false)
+            setTimeout(() => setIsTransitioning(true), 50)
+            return 0
+          }
+          return next
+        })
+      } else {
+        setCurrentIndex(prev => {
+          if (prev <= 0) {
+            setIsTransitioning(false)
+            setTimeout(() => setIsTransitioning(true), 50)
+            return totalOriginal - 1
+          }
+          return prev - 1
+        })
+      }
+    }
+
+    el.addEventListener('touchstart', handleTouchStart, { passive: true })
+    el.addEventListener('touchmove', handleTouchMove, { passive: true })
+    el.addEventListener('touchend', handleTouchEnd, { passive: true })
+
+    return () => {
+      el.removeEventListener('touchstart', handleTouchStart)
+      el.removeEventListener('touchmove', handleTouchMove)
+      el.removeEventListener('touchend', handleTouchEnd)
+    }
+  }, [isMobile, totalOriginal])
+
+  // Mobile swipe hint: show once when the carousel scrolls into view.
+  useEffect(() => {
+    if (!isMobile || hintShownRef.current) return
+    const el = containerRef.current
+    if (!el) return
+
+    let hideTimeout: NodeJS.Timeout | undefined
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hintShownRef.current) {
+          hintShownRef.current = true
+          setHintActive(true)
+          observer.disconnect()
+          hideTimeout = setTimeout(() => setHintActive(false), 2800)
+        }
+      },
+      { threshold: 0.5 }
+    )
+
+    observer.observe(el)
+    return () => {
+      observer.disconnect()
+      if (hideTimeout) clearTimeout(hideTimeout)
+    }
+  }, [isMobile])
 
   // Update popup position
   const updatePopupPosition = useCallback((index: number) => {
@@ -827,19 +928,7 @@ export default function Home() {
                   Onaylı iş ortağı
                 </span>
                 <div className="mt-2">
-                  <Image
-                    src="/badges/google-partner.png"
-                    alt="Google Partner"
-                    width={140}
-                    height={46}
-                    className="h-[46px] w-auto"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none'
-                      const placeholder = e.currentTarget.nextElementSibling as HTMLElement
-                      if (placeholder) placeholder.style.display = 'flex'
-                    }}
-                  />
-                  <div className="hidden h-[46px] w-[140px] items-center justify-center rounded border border-black/[0.08] bg-white text-[10px] text-black/40">
+                  <div className="flex h-[46px] w-[140px] items-center justify-center rounded border border-black/[0.08] bg-white text-[10px] text-black/40">
                     Google Partner
                   </div>
                 </div>
@@ -958,6 +1047,10 @@ export default function Home() {
                     'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)',
                   WebkitMaskImage:
                     'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)',
+                  // Block vertical page-scroll inside the carousel on mobile
+                  // so swipes drive the cards instead of the page. Users can
+                  // still scroll the page from above/below the carousel.
+                  touchAction: isMobile ? 'none' : 'auto',
                 }}
                 onMouseEnter={handleContainerMouseEnter}
                 onMouseLeave={handleContainerMouseLeave}
@@ -998,6 +1091,39 @@ export default function Home() {
                     )
                   })}
                 </div>
+
+                {/* Mobile swipe hint — shown once when the carousel scrolls
+                    into view. The hand + label travel together top→bottom
+                    across most of the carousel for 2 cycles (2.8s) and
+                    fade in/out at the extremes. No background pill: brand
+                    blue with a soft white drop-shadow keeps the elements
+                    legible over the static testimonial cards.
+                    Any touch on the carousel dismisses it immediately. */}
+                {hintActive && (
+                  <div
+                    className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center"
+                    style={{ animation: 'hintFade 2.8s ease-in-out forwards' }}
+                  >
+                    <div
+                      className="flex flex-col items-center gap-2 text-[#3c639f]"
+                      style={{
+                        animation: 'swipeDrop 1.4s ease-in-out 2',
+                        filter: 'drop-shadow(0 1px 2px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.7))',
+                      }}
+                    >
+                      <Image
+                        src="/swipe-down.png"
+                        alt=""
+                        width={60}
+                        height={60}
+                        priority
+                      />
+                      <span className="text-[15px] font-semibold tracking-wide">
+                        Kaydırın
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Popup */}
@@ -1016,11 +1142,53 @@ export default function Home() {
         </section>
       </main>
 
-      {/* Cursor blink animation */}
-      <style jsx>{`
+      {/* Cursor blink + mobile swipe hint animations. Global because the
+          @keyframes are referenced from inline style={{ animation: ... }};
+          scoped styled-jsx mangles keyframe names and inline styles can't
+          find them. */}
+      <style jsx global>{`
         @keyframes blink {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
+        }
+        /* Hand+label travel from near the top of the carousel down toward
+           the bottom, fading in at the start and out at the end of each
+           cycle — demonstrates a vertical swipe gesture. The ±180px range
+           stays within the carousel's visible (non-masked) area. */
+        @keyframes swipeDrop {
+          0% { transform: translateY(-180px); opacity: 0; }
+          14% { transform: translateY(-140px); opacity: 1; }
+          86% { transform: translateY(140px); opacity: 1; }
+          100% { transform: translateY(180px); opacity: 0; }
+        }
+        @keyframes hintFade {
+          0% { opacity: 0; transform: scale(0.94); }
+          10% { opacity: 1; transform: scale(1); }
+          90% { opacity: 1; transform: scale(1); }
+          100% { opacity: 0; transform: scale(0.96); }
+        }
+        /* Brand-blue text shimmer for the "devamını gör" button. A lighter
+           blue highlight sweeps left→right through the text via a moving
+           background-position on a clipped gradient. */
+        .devamini-shimmer {
+          background-image: linear-gradient(
+            90deg,
+            #3c639f 0%,
+            #3c639f 38%,
+            #7aaef0 50%,
+            #3c639f 62%,
+            #3c639f 100%
+          );
+          background-size: 250% 100%;
+          background-clip: text;
+          -webkit-background-clip: text;
+          color: transparent;
+          -webkit-text-fill-color: transparent;
+          animation: devaminiShimmer 2.6s ease-in-out infinite;
+        }
+        @keyframes devaminiShimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -100% 0; }
         }
       `}</style>
     </div>
