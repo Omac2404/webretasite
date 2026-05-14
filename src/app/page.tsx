@@ -149,6 +149,178 @@ const testimonials = [
   },
 ]
 
+// "Neler yapıyoruz?" section data. Two categories — `dev` (websites/apps/
+// plugins) and `ops` (server, mail, DNS, security migrations). Each entry
+// carries a short demand/solution line that fits on the card, plus a
+// longer detail pair that fills the hover popup.
+type ProjectCategory = 'dev' | 'ops'
+type Project = {
+  company: string
+  initials: string
+  category: ProjectCategory
+  type: string
+  demand: string
+  solution: string
+  demandDetail: string
+  solutionDetail: string
+}
+
+const projects: Project[] = [
+  // === GELIŞTIRME (10) ===
+  {
+    company: "Sönmez Mimarlık",
+    initials: "SM",
+    category: 'dev',
+    type: "Web Sitesi",
+    demand: "Projelerimizi sergileyebileceğimiz minimalist bir portföy sitesi.",
+    solution: "Görsel ağırlıklı, Lighthouse 98 puanlı kurumsal kimlik sitesi.",
+    demandDetail: "Mevcut sitemiz çok eskiydi, projelerimizi düzgün sergileyemiyorduk. Hızlı, mobil uyumlu, fotoğrafları öne çıkaran kurumsal bir kimlik istiyorduk. Aynı zamanda potansiyel müşterilerden direkt teklif talebi alabileceğimiz bir form da gerekiyordu.",
+    solutionDetail: "Custom Next.js ile sıfırdan kodlanmış, görsel ağırlıklı bir portföy sitesi teslim ettik. Lighthouse skoru 98 ile mobilde dahi anlık yükleniyor. SEO çalışması paketin parçasıydı; teklif talepleri ilk aydan itibaren %40 arttı.",
+  },
+  {
+    company: "Aksel & Partners",
+    initials: "AP",
+    category: 'dev',
+    type: "Web Sitesi",
+    demand: "Hukuk bürosu için güvenli ve şık kurumsal site.",
+    solution: "KVKK uyumlu danışmanlık talep formu içeren modern site.",
+    demandDetail: "Eski sitemiz hem yavaştı hem güvensiz görünüyordu. Kurumsal kimliğimize uygun, şık ve hızlı bir site; ayrıca potansiyel müvekkillerden başvuru toplayabileceğimiz KVKK uyumlu bir form istiyorduk.",
+    solutionDetail: "Mavi-lacivert kurumsal paletle sıfırdan kodlanmış, AAA accessibility standardına uygun bir site teslim ettik. KVKK uyumlu danışmanlık talep formu, otomatik e-posta yönlendirme ve admin panel ile entegre. Yeni başvurular ilk üç ayda 3 katına çıktı.",
+  },
+  {
+    company: "Mira Kafe",
+    initials: "MK",
+    category: 'dev',
+    type: "E-Ticaret",
+    demand: "Online sipariş ve masa rezervasyonu yapılabilen kafe sitesi.",
+    solution: "Stripe entegreli sipariş + Google Takvim bağlantılı rezervasyon.",
+    demandDetail: "Şehir merkezindeki kafemizde paket servis ve rezervasyon talebi çok yüksekti ama telefonu açacak personel bulamıyorduk. Müşterilerin doğrudan menüden sipariş verebileceği, masa rezervasyonu yapabileceği bir sistem istiyorduk.",
+    solutionDetail: "Stripe ile entegre online sipariş sistemi, kategori-bazlı menü editörü ve Google Calendar ile bağlı masa rezervasyon takvimi geliştirdik. Paket servis siparişleri ilk iki ayda iki katına çıktı; telefon trafiği yarı yarıya azaldı.",
+  },
+  {
+    company: "Aydın Klinik",
+    initials: "AK",
+    category: 'dev',
+    type: "Portal",
+    demand: "Hasta randevu ve SMS hatırlatma sistemi.",
+    solution: "Doktor takvimine bağlı online randevu portalı.",
+    demandDetail: "Diş hekimliği muayenehanemizde randevu kaçırma oranı çok yüksekti, sekreterimiz tüm gününü telefon hatırlatmasıyla geçiriyordu. Hastaların doktor müsait saatlerini görüp kendi randevularını alabilecekleri bir portal istedik.",
+    solutionDetail: "Doktorun Google Calendar'ı ile bağlı online randevu sistemi, otomatik SMS+e-posta hatırlatmaları ve hasta dosyalama paneli geliştirdik. Randevu kaçırma oranı %35'ten %8'e düştü. Sekretaryanın günlük telefon yükü %70 azaldı.",
+  },
+  {
+    company: "Vural Concept",
+    initials: "VC",
+    category: 'dev',
+    type: "E-Ticaret",
+    demand: "Mağaza ve online satış için ortak envanterli sistem.",
+    solution: "Headless e-ticaret + barkod entegreli stok senkronu.",
+    demandDetail: "Fiziksel mağazamız ve online satışımız ayrı sistemlerde çalışıyordu; stok tutarsızlıkları ve aşırı satış sürekli sorun yaratıyordu. Tek panelden yönetebileceğimiz birleşik bir sisteme ihtiyacımız vardı.",
+    solutionDetail: "Headless e-ticaret altyapısı kurduk; mağaza POS'u ve online site aynı stok veritabanını paylaşıyor. Barkod entegrasyonu sayesinde mağazadaki her satış anında online stoğa yansıyor. Aşırı satış sorunları tamamen ortadan kalktı.",
+  },
+  {
+    company: "Kılıç Hotels",
+    initials: "KH",
+    category: 'dev',
+    type: "Portal",
+    demand: "Direkt rezervasyon platformu ile aracı komisyonunu düşürmek.",
+    solution: "Müsaitlik takvimli, ödeme entegreli rezervasyon sistemi.",
+    demandDetail: "Butik otelimiz Booking ve Expedia'ya yüksek komisyonlar ödüyordu. Direkt rezervasyon kanalı oluşturup misafirleri kendi sitemizden çekmek istiyorduk; fiyatlandırmayı sezon, oda tipi ve gece sayısına göre dinamik kontrol etmemiz şarttı.",
+    solutionDetail: "Müsaitlik takvimli, dinamik fiyatlandırma motorlu rezervasyon platformu kurduk. iyzico entegrasyonuyla anlık ödeme, otomatik onay e-postası ve PMS senkronu. Direkt rezervasyonlar 6 ayda %50 arttı, aracı komisyonundan ciddi tasarruf.",
+  },
+  {
+    company: "Polat Akademi",
+    initials: "PA",
+    category: 'dev',
+    type: "Portal",
+    demand: "Online ders ve ödev takip portalı.",
+    solution: "Veli/öğrenci/öğretmen rollü LMS sistemi.",
+    demandDetail: "Pandemi sonrası hibrit eğitime geçtik ama elimizdeki çözümler ya çok pahalı ya çok kısıtlıydı. Video ders, ödev takibi, sınav modülü ve veli paneli içeren özel bir öğrenci portalına ihtiyacımız vardı.",
+    solutionDetail: "Üç rollü (öğrenci/öğretmen/veli) bir LMS geliştirdik. Zoom ve Jitsi ile video ders entegrasyonu, otomatik puanlamalı sınav modülü, veli takip paneli. Öğrenci memnuniyet anketinde sistem kullanımı %92 olumlu geri dönüş aldı.",
+  },
+  {
+    company: "Sezer Emlak",
+    initials: "SE",
+    category: 'dev',
+    type: "Portal",
+    demand: "Harita entegrasyonlu, gelişmiş filtreli emlak ilan sitesi.",
+    solution: "Google Maps + 360° sanal tur destekli ilan platformu.",
+    demandDetail: "Sahibinden'e bağımlı kalmak istemiyorduk; kendi marka ilan sitemizi kurmak ve müşterilere harita üzerinde filtrelenebilen, sanal turlu ilanlar sunmak istiyorduk. Admin panelinin de hızlı ilan girişine elverişli olması şarttı.",
+    solutionDetail: "Google Maps ile entegre, semt/fiyat/oda sayısı kombine filtreli emlak platformu kurduk. 360° sanal tur ve drone görseli desteği, toplu ilan içe aktarma. İlan ekleme süresi 12 dakikadan 4 dakikaya düştü; rakiplerden öne çıktılar.",
+  },
+  {
+    company: "NovaTech",
+    initials: "NT",
+    category: 'dev',
+    type: "Web Sitesi",
+    demand: "Teknik içerik üreten, SEO odaklı kurumsal blog ve site.",
+    solution: "MDX bazlı blog + headless CMS + otomatik sitemap.",
+    demandDetail: "B2B yazılım firmamızın eski WordPress sitesi yavaştı, içerik girişi hantaldı. SEO odaklı, hızlı, ekibimizin Markdown ile rahat içerik üretebileceği modern bir altyapı istiyorduk; aynı zamanda mevcut blog yazılarının URL'lerini korumalıydık.",
+    solutionDetail: "Next.js + MDX bazlı, Sanity headless CMS'e bağlı kurumsal site teslim ettik. Otomatik sitemap, RSS feed, JSON-LD schema. Eski URL'ler 301 yönlendirme ile korundu; organik trafik 4 ayda %220 arttı.",
+  },
+  {
+    company: "Nazlı Beauty",
+    initials: "NB",
+    category: 'dev',
+    type: "Eklenti",
+    demand: "Mevcut WordPress siteye personel-bazlı randevu eklentisi.",
+    solution: "Bookly üzerine özel kod + WhatsApp bildirim entegrasyonu.",
+    demandDetail: "Mevcut WP sitemiz vardı ama hazır randevu eklentileri kuaförümüze uymuyordu — personel bazlı saat seçimi, hizmet kombinasyonları ve WhatsApp bildirimi yoktu. Sitemizi baştan yapmadan bu özelliği eklemek istedik.",
+    solutionDetail: "Bookly üzerine kuaföre özel personel/hizmet matrix'i, dinamik süre hesaplama ve WhatsApp Business API entegrasyonu yazdık. Hazır eklentinin %30'u, custom kodun %70'ini barındıran hibrit bir çözüm. Telefon trafiği %60 azaldı.",
+  },
+
+  // === OPERASYON (5) ===
+  {
+    company: "Demir Lojistik",
+    initials: "DL",
+    category: 'ops',
+    type: "Sunucu",
+    demand: "Eski paylaşımlı hostingden VPS'e taşınma.",
+    solution: "Zero-downtime DNS geçişi ile Hetzner VPS taşıma.",
+    demandDetail: "20 GB veritabanı ve eski PHP altyapısı yüklü olan sitemiz paylaşımlı hostingde sık sık çöküyordu. Yoğun saatlerde sayfalar açılmıyordu, müşteri talepleri kayboluyordu. Kesinti yaşamadan modern bir VPS'e taşınmak istedik.",
+    solutionDetail: "Hetzner VPS'e Ubuntu 22.04 + nginx + PHP-FPM + MariaDB kurduk. Eski hostingden full database dump'ı senkronlayıp DNS TTL'i 60 saniyeye indirerek geçişi yaptık. Toplam kesinti 8 dakika; performans 4 kat arttı, ortalama TTFB 1.8s'den 290ms'ye düştü.",
+  },
+  {
+    company: "Erdem Hukuk",
+    initials: "EH",
+    category: 'ops',
+    type: "E-Posta",
+    demand: "Eski cPanel mailden Google Workspace'e geçiş.",
+    solution: "IMAP migration + MX kayıt geçişi + tüm alias taşıma.",
+    demandDetail: "12 kişilik hukuk bürosu cPanel'in yetersiz mail altyapısını kullanıyordu — spam filtresi zayıftı, mobil sync çalışmıyordu, 5 GB üzerinde kotalar doluyordu. Tüm geçmiş yazışmaları kaybetmeden Google Workspace'e geçmek istediler.",
+    solutionDetail: "Google Workspace hesabını kurup IMAP migration tool ile 12 kullanıcının ortalama 8 GB'lık geçmiş yazışmalarını taşıdık. MX, SPF, DKIM, DMARC kayıtlarını yapılandırdık. Hiçbir mail kaybı yok; spam oranı %70 azaldı.",
+  },
+  {
+    company: "Anka Yapı",
+    initials: "AY",
+    category: 'ops',
+    type: "DNS",
+    demand: "Yavaş yabancı hostingden yerel altyapıya geçiş ve Cloudflare.",
+    solution: "Cloudflare DNS + Türkiye lokasyonlu hosting + CDN cache.",
+    demandDetail: "ABD'deki hostingden dolayı sayfa açılma süreleri 6-8 saniyeyi buluyordu, Türkiye'deki ziyaretçi deneyimi çok kötüydü. Sayfaları korumak ve yerel CDN ile hızlandırmak için altyapı geçişi istediler.",
+    solutionDetail: "Cloudflare DNS + ücretsiz SSL + WAF yapılandırması yaptık, hosting'i Türkiye konumlu provider'a taşıdık. CDN edge cache ile statik dosyalar kullanıcıya en yakın PoP'tan servis ediliyor. TTFB 3.2s'den 180ms'ye düştü; bounce rate %42 azaldı.",
+  },
+  {
+    company: "Mavi Sağlık",
+    initials: "MS",
+    category: 'ops',
+    type: "Güvenlik",
+    demand: "KVKK uyumlu, dayanıklı site güvenliği altyapısı.",
+    solution: "Wildcard SSL + WAF + DDoS koruma + günlük yedek.",
+    demandDetail: "Hasta verisi tutan portal sistemimiz vardı; düzensiz SSL, eski güvenlik header'ları ve hiç yedek planı yoktu. Hem KVKK uyumu hem de saldırılara karşı dayanıklı bir altyapıya geçmek istediler.",
+    solutionDetail: "Wildcard SSL kurulumu, OWASP Top 10 WAF kuralları, Cloudflare DDoS koruma, otomatik günlük şifreli yedek (28 günlük retention), TLS 1.3, HSTS preload listesine eklenme. Aylık güvenlik raporu da paket dahil; KVKK denetiminden sorunsuz geçtiler.",
+  },
+  {
+    company: "Bilgin Trade",
+    initials: "BT",
+    category: 'ops',
+    type: "Bakım",
+    demand: "WordPress sitede malware temizliği ve sertleştirme.",
+    solution: "Full malware temizliği + 2FA + WP-CLI ile güncelleme otomasyonu.",
+    demandDetail: "Sitemiz Google tarafından 'phishing içerik' olarak işaretlenmişti; arka planda kullanıcıları yönlendiren bir malware vardı. Site komple temizlenmeli ve bir daha hacklenmemesi için sertleştirilmeliydi.",
+    solutionDetail: "Tüm sitenin temiz kopyasını çıkarıp 142 enfekte dosyayı temizledik. Kullanıcı şifrelerini sıfırladık, 2FA ekledik, wp-config.php sertleştirdik, debug bilgilerini gizledik. WP-CLI ile otomatik plugin/core güncellemesi kurduk. Google Search Console üzerinden re-review başvurusu yapıp site uyarısı kaldırıldı.",
+  },
+]
+
 const typewriterWords = [
   { text: "düşünürüz", holdDuration: 2000 },
   { text: "tasarlarız", holdDuration: 2000 },
@@ -801,6 +973,793 @@ function TestimonialPopup({
   )
 
   return createPortal(popupContent, document.body)
+}
+
+// "Neler yapıyoruz?" — mirrors the hero testimonial carousel: vertical
+// auto-advancing stack, hover/tap popup, mobile swipe. Differences from
+// testimonials: wider cards (180px tall) with TALEP/ÇÖZÜM sections, a
+// segmented control above the carousel to switch between Geliştirmeler
+// (dev) and Operasyonlar (ops) project lists.
+
+function ProjectCard({
+  project,
+  isFocused,
+  opacity,
+  isHovered,
+  onMouseEnter,
+  onMouseLeave,
+  onClick,
+  cardRef,
+}: {
+  project: Project
+  isFocused: boolean
+  opacity: number
+  isHovered: boolean
+  isMobile: boolean
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+  onClick: () => void
+  cardRef?: React.Ref<HTMLDivElement>
+}) {
+  return (
+    <div
+      ref={cardRef}
+      onClick={onClick}
+      className="box-border h-full cursor-pointer rounded-xl px-5 py-5"
+      style={{
+        opacity: isHovered ? 1 : opacity,
+        transform: isFocused ? 'scale(1.04)' : 'scale(1)',
+        transformOrigin: 'center',
+        background: '#ffffff',
+        border: isHovered
+          ? '1px solid rgba(60, 99, 159, 0.30)'
+          : isFocused
+            ? '1px solid rgba(60, 99, 159, 0.20)'
+            : '0.5px solid rgba(0, 0, 0, 0.04)',
+        boxShadow: isHovered
+          ? '0 2px 4px 0 rgba(60, 99, 159, 0.08), 0 8px 20px -1px rgba(60, 99, 159, 0.16), 0 20px 44px -8px rgba(60, 99, 159, 0.18), 0 36px 76px -20px rgba(15, 23, 42, 0.12)'
+          : isFocused
+            ? '0 1px 3px 0 rgba(60, 99, 159, 0.06), 0 6px 16px -1px rgba(60, 99, 159, 0.14), 0 16px 36px -6px rgba(60, 99, 159, 0.16), 0 28px 60px -16px rgba(15, 23, 42, 0.12)'
+            : '0 1px 2px 0 rgba(15, 23, 42, 0.02), 0 3px 10px -1px rgba(15, 23, 42, 0.04), 0 10px 24px -6px rgba(15, 23, 42, 0.05)',
+        transition:
+          'opacity 300ms ease-out, transform 500ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 350ms ease-out, border-color 200ms ease-out',
+      }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      {/* Header — wide logo placeholder (left), company name (middle), type
+          chip (right). The placeholder is intentionally rectangular so real
+          horizontal wordmarks will drop in cleanly later. Larger sizing
+          kicks in only at lg+ so mobile keeps the original compact look. */}
+      <div className="flex items-center gap-3">
+        <div
+          className="flex h-12 w-20 shrink-0 items-center justify-center rounded-md lg:h-14 lg:w-24"
+          style={{
+            background: '#ffffff',
+            border: '1px solid rgba(60, 99, 159, 0.10)',
+            boxShadow: '0 1px 2px rgba(60, 99, 159, 0.04)',
+          }}
+        >
+          <span className="text-[15px] font-bold tracking-tight text-[#3c639f] lg:text-[16px]">
+            {project.initials}
+          </span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-[14px] font-semibold text-[#0a0a0a] lg:text-[15px]">
+            {project.company}
+          </div>
+        </div>
+        <span
+          className="shrink-0 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.06em]"
+          style={{
+            background: 'rgba(60, 99, 159, 0.08)',
+            color: '#3c639f',
+          }}
+        >
+          {project.type}
+        </span>
+      </div>
+
+      {/* Talep — pastel blue pill with the copy INLINE next to it */}
+      <div className="mt-3.5 flex items-center gap-2">
+        <span
+          className="inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em]"
+          style={{
+            background: '#dbeafe',
+            color: '#1d4ed8',
+          }}
+        >
+          <ArrowRight size={11} strokeWidth={3} />
+          Talep
+        </span>
+        <p className="min-w-0 flex-1 truncate text-[12.5px] leading-[1.45] text-black/75 lg:text-[13px]">
+          {project.demand}
+        </p>
+      </div>
+
+      {/* Çözüm — pastel green pill with the copy INLINE next to it */}
+      <div className="mt-3 flex items-center gap-2">
+        <span
+          className="inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em]"
+          style={{
+            background: '#dcfce7',
+            color: '#15803d',
+          }}
+        >
+          <CheckCircle2 size={11} strokeWidth={3} />
+          Çözüm
+        </span>
+        <p className="min-w-0 flex-1 truncate text-[12.5px] leading-[1.45] text-black/75 lg:text-[13px]">
+          {project.solution}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function ProjectPopup({
+  project,
+  position,
+  isMobile,
+  onMouseEnter,
+  onMouseLeave,
+  onClose,
+}: {
+  project: Project
+  position: { left: number; top: number } | null
+  isMobile: boolean
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+  onClose: () => void
+}) {
+  const [mounted, setMounted] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    requestAnimationFrame(() => setIsVisible(true))
+  }, [])
+
+  if (!mounted) return null
+
+  const popupWidth = 420
+  const isMobileLayout = isMobile || !position
+
+  const body = (
+    <>
+      {/* Header */}
+      <div className="flex shrink-0 items-center gap-3">
+        <div
+          className="flex h-14 w-24 shrink-0 items-center justify-center rounded-md"
+          style={{
+            background: '#ffffff',
+            border: '1px solid rgba(60, 99, 159, 0.10)',
+            boxShadow: '0 1px 2px rgba(60, 99, 159, 0.04)',
+          }}
+        >
+          <span className="text-[16px] font-bold tracking-tight text-[#3c639f]">
+            {project.initials}
+          </span>
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-[15px] font-semibold text-[#0a0a0a]">
+            {project.company}
+          </div>
+          <div className="text-[12px] text-black/50">{project.type}</div>
+        </div>
+        {isMobileLayout && (
+          <button
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-full text-black/40 transition-colors hover:bg-black/5 hover:text-black/80"
+            aria-label="Kapat"
+          >
+            <X size={18} />
+          </button>
+        )}
+      </div>
+
+      <div className="my-4 h-px shrink-0 bg-black/[0.06]" />
+
+      {/* Talep — pastel blue pill (same as card, scaled up) */}
+      <div className="shrink-0">
+        <span
+          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em]"
+          style={{
+            background: '#dbeafe',
+            color: '#1d4ed8',
+          }}
+        >
+          <ArrowRight size={12} strokeWidth={3} />
+          Talep
+        </span>
+        <p className="mt-2 text-[14px] leading-[1.6] text-black/80">
+          {project.demandDetail}
+        </p>
+      </div>
+
+      <div className="my-4 h-px shrink-0 bg-black/[0.06]" />
+
+      {/* Çözüm — pastel green pill (same as card, scaled up) */}
+      <div className="shrink-0">
+        <span
+          className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em]"
+          style={{
+            background: '#dcfce7',
+            color: '#15803d',
+          }}
+        >
+          <CheckCircle2 size={12} strokeWidth={3} />
+          Çözüm
+        </span>
+        <p className="mt-2 text-[14px] leading-[1.6] text-black/80">
+          {project.solutionDetail}
+        </p>
+      </div>
+    </>
+  )
+
+  const popupContent = isMobileLayout ? (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-6"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+    >
+      <div
+        className="absolute inset-0 bg-black/20 transition-opacity"
+        style={{ opacity: isVisible ? 1 : 0 }}
+      />
+      <div
+        className="relative mx-auto flex w-full flex-col overflow-y-auto rounded-xl bg-white p-5"
+        style={{
+          maxWidth: `${popupWidth}px`,
+          maxHeight: '80vh',
+          border: '0.5px solid rgba(0, 0, 0, 0.08)',
+          boxShadow:
+            '0 8px 32px -4px rgba(0, 0, 0, 0.08), 0 24px 64px -12px rgba(0, 0, 0, 0.12)',
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'scale(1)' : 'scale(0.95)',
+          transition: 'opacity 150ms ease-out, transform 150ms ease-out',
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'rgba(60, 99, 159, 0.3) transparent',
+        }}
+      >
+        {body}
+      </div>
+    </div>
+  ) : (
+    <div
+      className="fixed z-[100]"
+      style={{
+        left: `${position.left}px`,
+        top: `${position.top}px`,
+        transform: 'translateY(-50%)',
+        width: `${popupWidth}px`,
+        opacity: isVisible ? 1 : 0,
+        transition: 'opacity 150ms ease-out, top 200ms ease-out, left 200ms ease-out',
+      }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <div
+        className="relative flex flex-col overflow-y-auto rounded-xl bg-white p-5"
+        style={{
+          maxHeight: '440px',
+          border: '0.5px solid rgba(0, 0, 0, 0.08)',
+          boxShadow:
+            '0 8px 32px -4px rgba(0, 0, 0, 0.08), 0 24px 64px -12px rgba(0, 0, 0, 0.12)',
+        }}
+      >
+        {/* Arrow pointing back to the card on the right */}
+        <div
+          className="absolute right-0 top-1/2 h-3 w-3 -translate-y-1/2 translate-x-1/2 rotate-45 bg-white"
+          style={{
+            border: '0.5px solid rgba(0, 0, 0, 0.08)',
+            borderLeft: 'none',
+            borderBottom: 'none',
+          }}
+        />
+        {body}
+      </div>
+    </div>
+  )
+
+  return createPortal(popupContent, document.body)
+}
+
+function ProjectsSection() {
+  const isMobile = useIsMobile()
+
+  const [activeTab, setActiveTab] = useState<ProjectCategory>('dev')
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(true)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [tappedIndex, setTappedIndex] = useState<number | null>(null)
+  const [popupPosition, setPopupPosition] = useState<{ left: number; top: number } | null>(null)
+  // Once the visitor clicks the Operasyonlar tab, the pulse stops for the
+  // remainder of the session. Otherwise it fires every 3s to draw the eye.
+  const [opsPulsing, setOpsPulsing] = useState(true)
+  // Mobile swipe hint — shown once when the carousel scrolls into view, or
+  // until the first finger touch dismisses it.
+  const [hintActive, setHintActive] = useState(false)
+  const hintShownRef = useRef(false)
+
+  const sectionRef = useRef<HTMLElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const columnRef = useRef<HTMLDivElement>(null)
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  const leaveTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const wheelLockRef = useRef(false)
+
+  // Inline pill + single-line copy is more compact than the old stacked
+  // layout, so the card can be shorter. Mobile keeps the original compact
+  // type sizing so its height differs slightly from desktop.
+  const CARD_HEIGHT = isMobile ? 200 : 200
+  const CARD_GAP = isMobile ? 24 : 16
+  const STEP = CARD_HEIGHT + CARD_GAP
+  const VISIBLE_HEIGHT = STEP * 3 + CARD_HEIGHT * 0.4
+
+  const activeProjects = useMemo(
+    () => projects.filter(p => p.category === activeTab),
+    [activeTab],
+  )
+  const totalOriginal = activeProjects.length
+  // Duplicated list enables seamless infinite loop
+  const allCards = useMemo(
+    () => [...activeProjects, ...activeProjects],
+    [activeProjects],
+  )
+
+  // Reset to first card whenever the tab changes
+  useEffect(() => {
+    setIsTransitioning(false)
+    setCurrentIndex(0)
+    setHoveredIndex(null)
+    setTappedIndex(null)
+    setPopupPosition(null)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setIsTransitioning(true))
+    })
+  }, [activeTab])
+
+  // Auto-advance on desktop (paused on hover or while a popup is open).
+  // 2s per card — slightly faster than the testimonial column above so the
+  // section reads as "active" but still legible.
+  useEffect(() => {
+    if (isPaused || isMobile || totalOriginal === 0) return
+    const interval = setInterval(() => {
+      setCurrentIndex(prev => prev + 1)
+    }, 2000)
+    return () => clearInterval(interval)
+  }, [isPaused, isMobile, totalOriginal])
+
+  // Seamless loop reset — once we've fully advanced through the original
+  // list, snap back to index 0 without transition while we're still showing
+  // a duplicated card, so the user never sees the jump.
+  useEffect(() => {
+    if (totalOriginal === 0) return
+    if (currentIndex >= totalOriginal) {
+      const t = setTimeout(() => {
+        setIsTransitioning(false)
+        setCurrentIndex(0)
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => setIsTransitioning(true))
+        })
+      }, 600)
+      return () => clearTimeout(t)
+    }
+  }, [currentIndex, totalOriginal])
+
+  // Mouse wheel — one card per gesture, debounced. Bound to the carousel
+  // CONTAINER (the masked card viewport) only, so the wheel hijacks page
+  // scroll only when the cursor is directly over the visible cards.
+  // Hovering over the decorative hand, side copy, or empty space scrolls
+  // the page normally. Active on every device type so DevTools mobile
+  // emulation, which still dispatches wheel events, can also use it.
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const handleWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) < 6) return
+      e.preventDefault()
+      if (wheelLockRef.current) return
+      wheelLockRef.current = true
+      setCurrentIndex(prev => prev + (e.deltaY > 0 ? 1 : -1))
+      setTimeout(() => {
+        wheelLockRef.current = false
+      }, 650)
+    }
+    el.addEventListener('wheel', handleWheel, { passive: false })
+    return () => el.removeEventListener('wheel', handleWheel)
+  }, [])
+
+  // Touch swipe (mobile). Mirrors the testimonial carousel: 30px threshold,
+  // 400ms debounce, seamless loop reset done inline so the user sees no jump.
+  useEffect(() => {
+    if (!isMobile) return
+    const el = containerRef.current
+    if (!el) return
+
+    let touchStartY = 0
+    let touchEndY = 0
+    let lastSwipeTime = 0
+    const SWIPE_DEBOUNCE = 400
+    const SWIPE_THRESHOLD = 30
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY
+      touchEndY = touchStartY
+      // Any touch dismisses the swipe hint immediately
+      setHintActive(false)
+      hintShownRef.current = true
+    }
+    const handleTouchMove = (e: TouchEvent) => {
+      touchEndY = e.touches[0].clientY
+    }
+    const handleTouchEnd = () => {
+      const delta = touchStartY - touchEndY
+      if (Math.abs(delta) < SWIPE_THRESHOLD) return
+      const now = Date.now()
+      if (now - lastSwipeTime < SWIPE_DEBOUNCE) return
+      lastSwipeTime = now
+
+      if (delta > 0) {
+        setCurrentIndex(prev => {
+          const next = prev + 1
+          if (next >= totalOriginal) {
+            setIsTransitioning(false)
+            setTimeout(() => setIsTransitioning(true), 50)
+            return 0
+          }
+          return next
+        })
+      } else {
+        setCurrentIndex(prev => {
+          if (prev <= 0) {
+            setIsTransitioning(false)
+            setTimeout(() => setIsTransitioning(true), 50)
+            return totalOriginal - 1
+          }
+          return prev - 1
+        })
+      }
+    }
+
+    el.addEventListener('touchstart', handleTouchStart, { passive: true })
+    el.addEventListener('touchmove', handleTouchMove, { passive: true })
+    el.addEventListener('touchend', handleTouchEnd, { passive: true })
+    return () => {
+      el.removeEventListener('touchstart', handleTouchStart)
+      el.removeEventListener('touchmove', handleTouchMove)
+      el.removeEventListener('touchend', handleTouchEnd)
+    }
+  }, [isMobile, totalOriginal])
+
+  // Mobile swipe hint — show once when the projects carousel scrolls into
+  // view. Mirrors the testimonial column's hint so the gesture feels
+  // discoverable on a first visit.
+  useEffect(() => {
+    if (!isMobile || hintShownRef.current) return
+    const el = containerRef.current
+    if (!el) return
+    let hideTimeout: NodeJS.Timeout | undefined
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hintShownRef.current) {
+          hintShownRef.current = true
+          setHintActive(true)
+          observer.disconnect()
+          hideTimeout = setTimeout(() => setHintActive(false), 2800)
+        }
+      },
+      { threshold: 0.5 },
+    )
+    observer.observe(el)
+    return () => {
+      observer.disconnect()
+      if (hideTimeout) clearTimeout(hideTimeout)
+    }
+  }, [isMobile])
+
+  // Position the popup to the right of the focused card on desktop. On
+  // mobile the popup is a centered modal so this is a no-op.
+  const computePopupPosition = useCallback((index: number) => {
+    if (isMobile) return null
+    const card = cardRefs.current[index]
+    if (!card) return null
+    const r = card.getBoundingClientRect()
+    return { left: r.right + 24, top: r.top + r.height / 2 }
+  }, [isMobile])
+
+  const handleCardEnter = (index: number) => {
+    if (isMobile) return
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current)
+      leaveTimerRef.current = null
+    }
+    setHoveredIndex(index)
+    setIsPaused(true)
+    const pos = computePopupPosition(index)
+    if (pos) setPopupPosition(pos)
+  }
+
+  const handleCardLeave = () => {
+    if (isMobile) return
+    leaveTimerRef.current = setTimeout(() => {
+      setHoveredIndex(null)
+      setPopupPosition(null)
+      setIsPaused(false)
+    }, 120)
+  }
+
+  const handlePopupEnter = () => {
+    if (isMobile) return
+    if (leaveTimerRef.current) {
+      clearTimeout(leaveTimerRef.current)
+      leaveTimerRef.current = null
+    }
+    setIsPaused(true)
+  }
+  const handlePopupLeave = () => {
+    if (isMobile) return
+    setHoveredIndex(null)
+    setPopupPosition(null)
+    setIsPaused(false)
+  }
+  const handleCardTap = (index: number) => {
+    if (!isMobile) return
+    setTappedIndex(prev => (prev === index ? null : index))
+  }
+  const handlePopupClose = () => {
+    setTappedIndex(null)
+    setHoveredIndex(null)
+    setPopupPosition(null)
+  }
+
+  const handleContainerMouseEnter = () => setIsPaused(true)
+  const handleContainerMouseLeave = () => {
+    if (hoveredIndex === null) setIsPaused(false)
+  }
+
+  const translateY = -(currentIndex * STEP)
+
+  return (
+    <section ref={sectionRef} className="relative mx-auto max-w-[1280px] px-6 pb-16 md:px-12 md:pb-20">
+      {/* Section heading — title and segmented control sit together on the
+          same baseline. The control hugs the right edge of the title rather
+          than being pushed to the far right of the section. */}
+      <div className="mb-8">
+        <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
+          Çalışmalarımız
+        </span>
+        <div className="mt-2 flex flex-wrap items-center gap-4">
+          <h2 className="text-[28px] leading-[1.1] tracking-[-0.02em] text-[#0a0a0a] md:text-[36px]">
+            Neler yapıyoruz?
+          </h2>
+
+          {/* Segmented control */}
+          <div
+            className="inline-flex shrink-0 items-center rounded-full p-1"
+            style={{
+              background: '#f1f3f7',
+              border: '1px solid rgba(60, 99, 159, 0.08)',
+            }}
+          >
+            {([
+              { id: 'dev', label: 'Geliştirmeler' },
+              { id: 'ops', label: 'Operasyonlar' },
+            ] as const).map(tab => {
+              const active = activeTab === tab.id
+              // The Operasyonlar tab pulses every 3s until the visitor clicks
+              // it — keyframes fire a quick double-tap then settle.
+              const shouldPulse = tab.id === 'ops' && opsPulsing && !active
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(tab.id)
+                    if (tab.id === 'ops') setOpsPulsing(false)
+                  }}
+                  className="relative rounded-full px-4 py-2 text-[13px] font-medium transition-colors md:px-5"
+                  style={{
+                    background: active ? '#ffffff' : 'transparent',
+                    color: active ? '#3c639f' : 'rgba(0,0,0,0.5)',
+                    boxShadow: active
+                      ? '0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px -4px rgba(60, 99, 159, 0.18)'
+                      : 'none',
+                    animation: shouldPulse ? 'opsPulse 3s ease-in-out infinite' : 'none',
+                    transformOrigin: 'center',
+                  }}
+                >
+                  {tab.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Two column layout — left carousel, right copy + CTA. A decorative
+          halftone OK-hand is absolutely positioned behind both columns so
+          it bleeds across the seam: bottom of the hand sits behind the
+          last carousel card, fingers reach up into the right column. */}
+      <div className="relative flex flex-col gap-12 lg:flex-row lg:items-stretch lg:gap-16">
+        {/* Halftone OK-hand. Same treatment as the hero peace-hand:
+            mix-blend-mode multiply drops the JPEG's near-white background
+            against the page, and a bottom mask softly fades the wrist out.
+            Desktop-only — on mobile the layout collapses to one column and
+            there's no horizontal room for the image. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute hidden select-none lg:block"
+          style={{
+            left: 'calc(50% - 110px)',
+            top: '-40px',
+            width: '380px',
+            zIndex: 0,
+            mixBlendMode: 'multiply',
+            maskImage:
+              'linear-gradient(to bottom, black 0%, black 48%, rgba(0,0,0,0.55) 68%, transparent 88%)',
+            WebkitMaskImage:
+              'linear-gradient(to bottom, black 0%, black 48%, rgba(0,0,0,0.55) 68%, transparent 88%)',
+          }}
+        >
+          <Image
+            src="/brand/ok-hand.jpg"
+            alt=""
+            width={525}
+            height={945}
+            className="h-auto w-full"
+            draggable={false}
+          />
+        </div>
+
+        {/* Brand-blue line-ring pulses emanating from the centre of the OK
+            loop. Three concentric outlined circles with staggered delays
+            spread far past the hand for a "radio wave" feel. Wrapper
+            z-index sits between the hand (z:0) and the columns (z:10) so
+            the rings bloom above the fingers but stay behind every project
+            card. Hand aspect ratio 525:945 → at 380px wide that's ~684px
+            tall; the ring centre is placed at roughly 60%/32% which
+            matches the visual centre of the OK loop. */}
+
+        {/* Left — projects carousel. Narrower than before so the right
+            negative space breathes and the cards feel less wide. */}
+        <div ref={columnRef} className="relative z-10 w-full lg:w-[50%]">
+          <div
+            ref={containerRef}
+            className="relative overflow-hidden -mx-6 px-6 lg:-mx-12 lg:px-12"
+            style={{
+              height: `${VISIBLE_HEIGHT}px`,
+              maskImage:
+                'linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%)',
+              WebkitMaskImage:
+                'linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%)',
+              touchAction: isMobile ? 'none' : 'auto',
+            }}
+            onMouseEnter={handleContainerMouseEnter}
+            onMouseLeave={handleContainerMouseLeave}
+          >
+            <div
+              style={{
+                transform: `translateY(${translateY}px)`,
+                transition: isTransitioning ? 'transform 600ms ease-in-out' : 'none',
+              }}
+            >
+              {allCards.map((project, index) => {
+                const slot = index - currentIndex
+                const opacity = getCardOpacity(slot)
+                const isFocused = slot === 1
+                return (
+                  <div
+                    key={`${activeTab}-${index}`}
+                    className="relative box-border w-full"
+                    style={{
+                      height: `${CARD_HEIGHT}px`,
+                      marginBottom: `${CARD_GAP}px`,
+                      zIndex: isFocused ? 10 : 1,
+                    }}
+                  >
+                    <ProjectCard
+                      project={project}
+                      isFocused={isFocused}
+                      opacity={opacity}
+                      isHovered={hoveredIndex === index || tappedIndex === index}
+                      isMobile={isMobile}
+                      onMouseEnter={() => handleCardEnter(index)}
+                      onMouseLeave={handleCardLeave}
+                      onClick={() => handleCardTap(index)}
+                      cardRef={(el: HTMLDivElement | null) => { cardRefs.current[index] = el }}
+                    />
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Mobile swipe hint — same look/timing as the testimonial
+                carousel: hand icon + "Kaydırın" caption, brand-blue with a
+                soft white drop-shadow, animated top→bottom for 2 cycles. */}
+            {hintActive && (
+              <div
+                className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center"
+                style={{ animation: 'hintFade 2.8s ease-in-out forwards' }}
+              >
+                <div
+                  className="flex flex-col items-center gap-2 text-[#3c639f]"
+                  style={{
+                    animation: 'swipeDrop 1.4s ease-in-out 2',
+                    filter:
+                      'drop-shadow(0 1px 2px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.7))',
+                  }}
+                >
+                  <Image
+                    src="/swipe-down.png"
+                    alt=""
+                    width={60}
+                    height={60}
+                    priority
+                  />
+                  <span className="text-[15px] font-semibold tracking-wide">
+                    Kaydırın
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right — approach blurb + Teklif al CTA, anchored to the BOTTOM
+            of the column with justify-end. Negative left margin pulls the
+            copy further toward the hand/centre, and the paragraph is
+            allowed to stretch wider (max-w 560) so it can occupy the
+            empty band beneath the wrist all the way to the right edge. */}
+        <div className="relative z-10 hidden lg:-ml-4 lg:flex lg:w-[calc(50%+16px)] lg:flex-col lg:justify-end lg:gap-6 lg:pb-16 xl:-ml-6 xl:w-[calc(50%+24px)] xl:pb-20">
+          <div>
+            {/* Eyebrow label hidden but its space preserved so the rest
+                of the block doesn't jump upward. */}
+            <span
+              aria-hidden
+              className="invisible text-[11px] font-medium uppercase tracking-[0.08em] text-black/40"
+            >
+              Yaklaşımımız
+            </span>
+            <h3 className="mt-3 text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[52px]">
+              <span className="font-normal">Her projeye sıfırdan,</span>
+              <br />
+              <span className="font-bold text-[#3c639f]">ihtiyaca özel.</span>
+            </h3>
+            <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-black/60">
+              Hazır şablon kullanmıyoruz. Talebinizi dinleyip size özel çözüm
+              kurguluyoruz; web sitesinden eklentiye, sunucu taşımadan
+              güvenlik kurulumuna kadar her adımı sizin işinize göre tasarlıyoruz.
+            </p>
+          </div>
+
+          <a
+            href="#teklif"
+            className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#3c639f] px-[22px] py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]"
+          >
+            Teklif al
+            <ArrowRight size={16} />
+          </a>
+        </div>
+      </div>
+
+      {/* Popup */}
+      {((hoveredIndex !== null && popupPosition && !isMobile) || (tappedIndex !== null && isMobile)) && (
+        <ProjectPopup
+          project={allCards[isMobile ? tappedIndex! : hoveredIndex!]}
+          position={isMobile ? null : popupPosition}
+          isMobile={isMobile}
+          onMouseEnter={handlePopupEnter}
+          onMouseLeave={handlePopupLeave}
+          onClose={handlePopupClose}
+        />
+      )}
+    </section>
+  )
 }
 
 export default function Home() {
@@ -1796,6 +2755,12 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* "Neler yapıyoruz?" — projects carousel mirroring the testimonial
+            UX: vertical auto-advancing stack on the left, segmented control
+            (Geliştirmeler / Operasyonlar) above it, popup on hover/tap.
+            Right column is intentionally empty for now. */}
+        <ProjectsSection />
 
         {/* Quote Wizard — 4-step pricing tool. Stepper at top, animated
             step content in the middle, Back/Next buttons at the bottom.
@@ -3025,6 +3990,38 @@ export default function Home() {
           10% { opacity: 1; transform: scale(1); }
           90% { opacity: 1; transform: scale(1); }
           100% { opacity: 0; transform: scale(0.96); }
+        }
+        /* Operasyonlar tab pulse — ONE slow neon tap every 3s, then idle.
+           The tap takes its time expanding (long ring travel, bright cyan
+           core + brand-blue outer glow). Stops on first click via the
+           opsPulsing state. */
+        @keyframes opsPulse {
+          0% {
+            transform: scale(1);
+            box-shadow:
+              0 0 0 0 rgba(99, 165, 245, 0),
+              0 0 0 0 rgba(60, 99, 159, 0);
+          }
+          /* Peak */
+          8% {
+            transform: scale(1.06);
+            box-shadow:
+              0 0 10px 2px rgba(99, 165, 245, 0.65),
+              0 0 0 0 rgba(60, 99, 159, 0.55);
+          }
+          /* Ring fully travelled, fading */
+          45% {
+            transform: scale(1.02);
+            box-shadow:
+              0 0 6px 1px rgba(99, 165, 245, 0),
+              0 0 0 22px rgba(60, 99, 159, 0);
+          }
+          55%, 100% {
+            transform: scale(1);
+            box-shadow:
+              0 0 0 0 rgba(99, 165, 245, 0),
+              0 0 0 0 rgba(60, 99, 159, 0);
+          }
         }
         /* Brand-blue text shimmer for the "devamını gör" button. A lighter
            blue highlight sweeps left→right through the text via a moving
