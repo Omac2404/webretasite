@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
-import { ArrowRight, ArrowLeft, Menu, X, Star, Check, ExternalLink, Compass, Palette, Code2, Rocket, Phone, Mail, Calendar, Clock, CheckCircle2, Sparkles, RefreshCw, Globe, Layers, Boxes } from "lucide-react"
+import { ArrowRight, ArrowLeft, Menu, X, Star, Check, ChevronLeft, ChevronRight, ExternalLink, Compass, Palette, Code2, Rocket, Phone, Mail, Calendar, Clock, CheckCircle2, Sparkles, RefreshCw, Globe, Layers, Boxes } from "lucide-react"
 import Image from "next/image"
 import { createPortal } from "react-dom"
 
@@ -368,6 +368,7 @@ const MONTH_NAMES = [
 
 type QuoteForm = {
   industry: string
+  services: string
   service: string
   existingSiteUrl: string
   projectType: string
@@ -386,6 +387,7 @@ type QuoteForm = {
 
 const QUOTE_DEFAULT: QuoteForm = {
   industry: "",
+  services: "",
   service: "",
   existingSiteUrl: "",
   projectType: "",
@@ -823,6 +825,11 @@ export default function Home() {
   const [redesignAnchor, setRedesignAnchor] = useState<{ top: number; left: number } | null>(null)
   const [kobiModalOpen, setKobiModalOpen] = useState(false)
   const [kobiAnchor, setKobiAnchor] = useState<{ top: number; left: number } | null>(null)
+  const redesignModalRef = useRef<HTMLDivElement | null>(null)
+  const kobiModalRef = useRef<HTMLDivElement | null>(null)
+  const pkgScrollerRef = useRef<HTMLDivElement | null>(null)
+  const [pkgCanScrollLeft, setPkgCanScrollLeft] = useState(false)
+  const [pkgCanScrollRight, setPkgCanScrollRight] = useState(false)
 
   // Earliest selectable time on today. We require a 4-hour heads-up:
   // if it's 10:00 now, the earliest slot today is 14:00. Past 14:00 (so
@@ -1031,6 +1038,7 @@ export default function Home() {
   }
 
   const containerRef = useRef<HTMLDivElement>(null)
+  const testimonialColumnRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const openTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -1082,6 +1090,115 @@ export default function Home() {
     }
   }, [visibleTimeSlots, quote.time])
 
+  // When a wizard popup opens, nudge the page so the entire popup is in
+  // view. Without this, popups anchored to cards near the bottom of the
+  // viewport get clipped and the user has to scroll manually.
+  useEffect(() => {
+    if (!redesignModalOpen) return
+    const id = requestAnimationFrame(() => {
+      const el = redesignModalRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const margin = 24
+      if (rect.bottom > window.innerHeight - margin) {
+        window.scrollBy({
+          top: rect.bottom - window.innerHeight + margin,
+          behavior: "smooth",
+        })
+      }
+    })
+    return () => cancelAnimationFrame(id)
+  }, [redesignModalOpen])
+
+  useEffect(() => {
+    if (!kobiModalOpen) return
+    const id = requestAnimationFrame(() => {
+      const el = kobiModalRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const margin = 24
+      if (rect.bottom > window.innerHeight - margin) {
+        window.scrollBy({
+          top: rect.bottom - window.innerHeight + margin,
+          behavior: "smooth",
+        })
+      }
+    })
+    return () => cancelAnimationFrame(id)
+  }, [kobiModalOpen])
+
+  // Package strip wheel-to-horizontal-scroll + arrow availability. The
+  // native scrollbar is hidden; navigation is via the top-right arrow
+  // buttons or the mouse wheel. A single rAF-driven easing loop drives
+  // both: each input nudges a `target` scrollLeft, the loop eases the
+  // real scrollLeft toward it. This blends consecutive wheel ticks into
+  // one continuous glide instead of the discrete jumps a native
+  // scrollBy("smooth") chain produces.
+  const pkgAnimateToRef = useRef<((delta: number) => void) | null>(null)
+  useEffect(() => {
+    if (quoteStep !== 1) return
+    const el = pkgScrollerRef.current
+    if (!el) return
+
+    let target = el.scrollLeft
+    let raf = 0
+
+    const tick = () => {
+      const current = el.scrollLeft
+      const diff = target - current
+      if (Math.abs(diff) < 0.4) {
+        el.scrollLeft = target
+        raf = 0
+        return
+      }
+      el.scrollLeft = current + diff * 0.18
+      raf = requestAnimationFrame(tick)
+    }
+
+    const animateBy = (delta: number) => {
+      const max = el.scrollWidth - el.clientWidth
+      const base = raf ? target : el.scrollLeft
+      target = Math.max(0, Math.min(max, base + delta))
+      if (!raf) raf = requestAnimationFrame(tick)
+    }
+
+    pkgAnimateToRef.current = animateBy
+
+    const updateArrows = () => {
+      setPkgCanScrollLeft(el.scrollLeft > 1)
+      setPkgCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1)
+    }
+    updateArrows()
+
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault()
+        animateBy(e.deltaY)
+      }
+    }
+    el.addEventListener("wheel", onWheel, { passive: false })
+    el.addEventListener("scroll", updateArrows, { passive: true })
+    window.addEventListener("resize", updateArrows)
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      pkgAnimateToRef.current = null
+      el.removeEventListener("wheel", onWheel)
+      el.removeEventListener("scroll", updateArrows)
+      window.removeEventListener("resize", updateArrows)
+    }
+  }, [quoteStep])
+
+  const scrollPkgs = (dir: -1 | 1) => {
+    const el = pkgScrollerRef.current
+    if (!el) return
+    const delta = dir * el.clientWidth * 0.6
+    if (pkgAnimateToRef.current) {
+      pkgAnimateToRef.current(delta)
+    } else {
+      el.scrollBy({ left: delta, behavior: "smooth" })
+    }
+  }
+
   // Process section auto-advance: cycles through the 4 stages on the same
   // cadence as the progress bar animation. Pauses on hover; skipped on
   // mobile where the user expands panels themselves via tap.
@@ -1093,10 +1210,14 @@ export default function Home() {
     return () => clearInterval(t)
   }, [isProcessPaused, activeStep, isMobile])
 
-  // Mousewheel scrolling: capture wheel over the testimonial area and advance
-  // the carousel one card per gesture (debounced to match the slide animation).
+  // Mousewheel scrolling: capture wheel over the entire testimonial
+  // column (Google reviews card + carousel + the surrounding negative
+  // space) and advance the carousel one card per gesture, debounced to
+  // match the slide animation. Bound to the whole column rather than
+  // just the carousel so wheel events over the summary card don't fall
+  // through to the page.
   useEffect(() => {
-    const el = containerRef.current
+    const el = testimonialColumnRef.current
     if (!el) return
 
     let lastWheelTime = 0
@@ -1360,13 +1481,15 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b border-black/[0.06] bg-[#fafafa]/80 backdrop-blur-md">
         <nav className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-6 md:px-12">
           {/* Logo */}
-          <a href="/" className="flex items-baseline gap-0">
-            <span className="text-[22px] font-normal tracking-[-0.02em] text-[#3c639f]">
-              web
-            </span>
-            <span className="text-[22px] font-bold tracking-[-0.02em] text-[#0a0a0a]">
-              reta
-            </span>
+          <a href="/" aria-label="Webreta" className="flex items-center">
+            <Image
+              src="/brand/webreta-logo.webp"
+              alt="Webreta"
+              width={364}
+              height={64}
+              priority
+              className="h-7 w-auto"
+            />
           </a>
 
           {/* Desktop Nav Links */}
@@ -1501,10 +1624,43 @@ export default function Home() {
             </div>
 
             {/* Right Column - Testimonials */}
-            <div className="relative w-full lg:w-[45%]">
+            <div ref={testimonialColumnRef} className="relative w-full lg:w-[45%]">
+              {/* Decorative halftone peace-hand reaching up behind the
+                  testimonial stack. Sits in DOM before the cards so they
+                  paint on top — one V finger naturally tucks behind the
+                  first card. `mix-blend-mode: multiply` drops the JPEG's
+                  white background against the page surface, and a
+                  bottom mask softly fades the wrist out. Desktop-only;
+                  on narrow viewports the columns stack and there's no
+                  visual room for it. */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute hidden select-none lg:block"
+                style={{
+                  left: '-160px',
+                  top: '-40px',
+                  width: '235px',
+                  zIndex: 0,
+                  mixBlendMode: 'multiply',
+                  maskImage:
+                    'linear-gradient(to bottom, black 0%, black 55%, rgba(0,0,0,0.55) 78%, transparent 96%)',
+                  WebkitMaskImage:
+                    'linear-gradient(to bottom, black 0%, black 55%, rgba(0,0,0,0.55) 78%, transparent 96%)',
+                }}
+              >
+                <Image
+                  src="/brand/peace-hand.jpg"
+                  alt=""
+                  width={607}
+                  height={1382}
+                  className="h-auto w-full"
+                  draggable={false}
+                />
+              </div>
+
               {/* Google Reviews Summary Card - Floating style with soft shadow */}
               <div
-                className="rounded-xl bg-white p-4"
+                className="relative rounded-xl bg-white p-4"
                 style={{
                   border: '1px solid rgba(60, 99, 159, 0.08)',
                   marginBottom: '16px',
@@ -1704,13 +1860,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div
-              className="overflow-hidden rounded-2xl border border-black/[0.06] bg-white"
-              style={{
-                boxShadow:
-                  '0 1px 2px rgba(60,99,159,0.04), 0 24px 60px -20px rgba(60,99,159,0.18), 0 4px 16px -4px rgba(60,99,159,0.06)',
-              }}
-            >
+            <div className="quote-card-pulse overflow-hidden rounded-2xl border border-black/[0.06] bg-white">
               {quoteSubmitted ? (
                 /* ─── Success state ───────────────────────────────── */
                 <div className="flex flex-col items-center px-6 py-16 text-center md:px-12 md:py-20">
@@ -1769,7 +1919,7 @@ export default function Home() {
                               <div
                                 className={`flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-semibold transition-all ${
                                   isActive
-                                    ? 'bg-[#3c639f] text-white shadow-[0_4px_12px_-2px_rgba(60,99,159,0.35)]'
+                                    ? 'step-circle-active bg-[#3c639f] text-white'
                                     : isDone
                                     ? 'bg-[#3c639f]/[0.12] text-[#3c639f]'
                                     : 'border border-black/[0.1] bg-white text-black/35'
@@ -1812,29 +1962,48 @@ export default function Home() {
                       }
                     >
                       {quoteStep === 0 && (
-                        <div className="flex flex-col gap-8">
-                          <div>
-                            <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                              Sektörünüz / iş kolunuz nedir?{' '}
-                              <span className="text-[#3c639f]">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              value={quote.industry}
-                              onChange={e =>
-                                setQuote(p => ({ ...p, industry: e.target.value }))
-                              }
-                              placeholder="Örn. butik kafe, mimari ofis, online butik..."
-                              className="mt-3 w-full rounded-xl border border-black/[0.1] bg-white px-4 py-3.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                            />
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-7">
+                          <div className="flex flex-col gap-5">
+                            <div>
+                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
+                                Sektörünüz / iş kolunuz{' '}
+                                <span className="text-[#3c639f]">*</span>
+                              </label>
+                              <input
+                                type="text"
+                                value={quote.industry}
+                                onChange={e =>
+                                  setQuote(p => ({ ...p, industry: e.target.value }))
+                                }
+                                placeholder="Örn. butik kafe, mimari ofis, online butik..."
+                                className="mt-2.5 w-full rounded-xl border border-black/[0.1] bg-white px-4 py-3.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
+                              />
+                            </div>
+                            <div className="flex flex-col md:flex-1">
+                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
+                                Verdiğiniz hizmetler{' '}
+                                <span className="text-[12px] font-normal text-black/45">
+                                  (kısaca)
+                                </span>
+                              </label>
+                              <textarea
+                                value={quote.services}
+                                onChange={e =>
+                                  setQuote(p => ({ ...p, services: e.target.value }))
+                                }
+                                placeholder="Örn. kahvaltı servisi, tatlı/pasta üretimi, paket servis..."
+                                rows={3}
+                                className="mt-2.5 w-full resize-none rounded-xl border border-black/[0.1] bg-white px-4 py-3.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08] md:flex-1"
+                              />
+                            </div>
                           </div>
 
-                          <div>
+                          <div className="flex flex-col">
                             <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
                               Hangi hizmete ihtiyacınız var?{' '}
                               <span className="text-[#3c639f]">*</span>
                             </label>
-                            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+                            <div className="mt-2.5 flex flex-1 flex-col gap-3">
                               {QUOTE_SERVICES.map(s => {
                                 const isSel = quote.service === s.id
                                 const Icon = s.Icon
@@ -1847,7 +2016,7 @@ export default function Home() {
                                     key={s.id}
                                     type="button"
                                     onClick={e => handleServiceSelect(s.id, e)}
-                                    className={`relative flex items-start gap-4 rounded-2xl border p-5 text-left transition-all ${
+                                    className={`relative flex flex-1 items-start gap-4 rounded-2xl border p-5 text-left transition-all ${
                                       isSel
                                         ? 'border-[#3c639f]/40 bg-[#3c639f]/[0.04]'
                                         : 'border-black/[0.08] bg-white hover:border-black/[0.18]'
@@ -1916,8 +2085,8 @@ export default function Home() {
                       )}
 
                       {quoteStep === 1 && (
-                        <div className="flex flex-col gap-7">
-                          <div>
+                        <div className="flex flex-col gap-4">
+                          <div className="flex items-end justify-between gap-3">
                             <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
                               Hangi paket size uygun?{' '}
                               <span className="text-[#3c639f]">*</span>
@@ -1925,7 +2094,32 @@ export default function Home() {
                                 emin değilseniz size yardımcı oluruz
                               </span>
                             </label>
-                            <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+                            <div className="flex shrink-0 items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => scrollPkgs(-1)}
+                                disabled={!pkgCanScrollLeft}
+                                aria-label="Önceki paketler"
+                                className="flex h-8 w-8 items-center justify-center rounded-full border border-black/[0.08] bg-white text-[#3c639f] transition-all hover:border-[#3c639f]/30 hover:bg-[#3c639f]/[0.06] disabled:cursor-not-allowed disabled:border-black/[0.06] disabled:bg-white disabled:text-black/20"
+                              >
+                                <ChevronLeft size={16} strokeWidth={2.25} />
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => scrollPkgs(1)}
+                                disabled={!pkgCanScrollRight}
+                                aria-label="Sonraki paketler"
+                                className="flex h-8 w-8 items-center justify-center rounded-full border border-black/[0.08] bg-white text-[#3c639f] transition-all hover:border-[#3c639f]/30 hover:bg-[#3c639f]/[0.06] disabled:cursor-not-allowed disabled:border-black/[0.06] disabled:bg-white disabled:text-black/20"
+                              >
+                                <ChevronRight size={16} strokeWidth={2.25} />
+                              </button>
+                            </div>
+                          </div>
+                          <div className="quote-pkg-scroll-wrap -mx-6 md:-mx-12">
+                            <div
+                              ref={pkgScrollerRef}
+                              className="quote-pkg-scroll flex items-stretch gap-3 overflow-x-auto px-6 md:px-12"
+                            >
                               {QUOTE_PROJECT_TYPES.map(t => {
                                 const isSel = quote.projectType === t.id
                                 const Icon = t.Icon
@@ -1934,7 +2128,7 @@ export default function Home() {
                                     key={t.id}
                                     type="button"
                                     onClick={e => handleProjectTypeSelect(t.id, e)}
-                                    className={`group relative flex flex-col gap-4 overflow-hidden rounded-2xl border p-5 text-left transition-all ${
+                                    className={`group relative flex shrink-0 grow-0 basis-[78%] flex-col gap-4 overflow-hidden rounded-2xl border p-5 text-left transition-all md:basis-[calc((100%_-_24px)_/_2.5)] ${
                                       isSel
                                         ? 'border-[#3c639f]/40 bg-[#3c639f]/[0.04]'
                                         : 'border-black/[0.08] bg-white hover:border-black/[0.18]'
@@ -2367,10 +2561,12 @@ export default function Home() {
                       type="button"
                       onClick={quoteNext}
                       disabled={!isQuoteStepValid(quoteStep)}
-                      className="inline-flex items-center gap-2 rounded-lg bg-[#3c639f] px-5 py-2.5 text-[14px] font-medium text-white shadow-[0_4px_12px_-2px_rgba(60,99,159,0.35)] transition-all hover:bg-[#2f5288] disabled:cursor-not-allowed disabled:bg-black/15 disabled:text-white/80 disabled:shadow-none"
+                      className="cta-primary relative inline-flex items-center gap-2 overflow-hidden rounded-lg px-5 py-2.5 text-[14px] font-semibold tracking-[-0.005em]"
                     >
-                      {quoteStep === QUOTE_STEPS.length - 1 ? 'Gönder' : 'Devam'}
-                      <ArrowRight size={16} />
+                      <span className="relative z-[1] inline-flex items-center gap-2">
+                        {quoteStep === QUOTE_STEPS.length - 1 ? 'Gönder' : 'Devam'}
+                        <ArrowRight size={16} />
+                      </span>
                     </button>
                   </div>
                 </>
@@ -2634,6 +2830,7 @@ export default function Home() {
               <div aria-hidden className="absolute inset-0 bg-black/15" />
             </div>
             <div
+              ref={redesignModalRef}
               role="dialog"
               aria-modal="true"
               className="absolute z-[100] w-[360px] max-w-[calc(100vw-24px)] overflow-visible rounded-2xl bg-white"
@@ -2727,6 +2924,7 @@ export default function Home() {
               <div aria-hidden className="absolute inset-0 bg-black/15" />
             </div>
             <div
+              ref={kobiModalRef}
               role="dialog"
               aria-modal="true"
               className="absolute z-[100] w-[380px] max-w-[calc(100vw-24px)] overflow-hidden rounded-2xl bg-white"
@@ -2939,6 +3137,76 @@ export default function Home() {
           scrollbar-width: none;
         }
         .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        /* Quote wizard — soft breathing shadow on the white card. Adds
+           gentle "alive" energy without movement; slow enough not to
+           distract. Drops to a static shadow under reduced motion. */
+        .quote-card-pulse {
+          box-shadow:
+            0 1px 2px rgba(60,99,159,0.04),
+            0 24px 60px -20px rgba(60,99,159,0.18),
+            0 4px 16px -4px rgba(60,99,159,0.06);
+          animation: quoteCardPulse 6s ease-in-out infinite;
+        }
+        @keyframes quoteCardPulse {
+          0%, 100% {
+            box-shadow:
+              0 1px 2px rgba(60,99,159,0.04),
+              0 24px 60px -20px rgba(60,99,159,0.18),
+              0 4px 16px -4px rgba(60,99,159,0.06);
+          }
+          50% {
+            box-shadow:
+              0 1px 2px rgba(60,99,159,0.06),
+              0 30px 84px -16px rgba(60,99,159,0.32),
+              0 6px 22px -4px rgba(60,99,159,0.14);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .quote-card-pulse { animation: none; }
+        }
+
+        /* Stepper active circle — soft pulsing ring radiating outward.
+           Cycles every 2.4s, fades to fully transparent so the static
+           drop shadow stays as the resting state. */
+        .step-circle-active {
+          box-shadow:
+            0 4px 12px -2px rgba(60,99,159,0.35),
+            0 0 0 0 rgba(60,99,159,0.45);
+          animation: stepCirclePulse 2.4s ease-out infinite;
+        }
+        @keyframes stepCirclePulse {
+          0% {
+            box-shadow:
+              0 4px 12px -2px rgba(60,99,159,0.35),
+              0 0 0 0 rgba(60,99,159,0.45);
+          }
+          70% {
+            box-shadow:
+              0 4px 12px -2px rgba(60,99,159,0.35),
+              0 0 0 10px rgba(60,99,159,0);
+          }
+          100% {
+            box-shadow:
+              0 4px 12px -2px rgba(60,99,159,0.35),
+              0 0 0 10px rgba(60,99,159,0);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .step-circle-active { animation: none; }
+        }
+
+        /* Quote wizard — package picker horizontal strip. Scrollbar is
+           hidden; user navigates with the top-right arrow buttons or by
+           rotating the mouse wheel (a wheel listener converts deltaY to
+           horizontal scroll). Touch and drag still work natively. */
+        .quote-pkg-scroll {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          -webkit-overflow-scrolling: touch;
+        }
+        .quote-pkg-scroll::-webkit-scrollbar {
           display: none;
         }
         /* Quote wizard modals — backdrop fade and card scale-in entrance. */
