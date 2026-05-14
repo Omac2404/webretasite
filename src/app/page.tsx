@@ -159,6 +159,7 @@ type Project = {
   initials: string
   category: ProjectCategory
   type: string
+  date: string
   demand: string
   solution: string
   demandDetail: string
@@ -172,6 +173,7 @@ const projects: Project[] = [
     initials: "SM",
     category: 'dev',
     type: "Web Sitesi",
+    date: "5 Mart 2025",
     demand: "Projelerimizi sergileyebileceğimiz minimalist bir portföy sitesi.",
     solution: "Görsel ağırlıklı, Lighthouse 98 puanlı kurumsal kimlik sitesi.",
     demandDetail: "Mevcut sitemiz çok eskiydi, projelerimizi düzgün sergileyemiyorduk. Hızlı, mobil uyumlu, fotoğrafları öne çıkaran kurumsal bir kimlik istiyorduk. Aynı zamanda potansiyel müşterilerden direkt teklif talebi alabileceğimiz bir form da gerekiyordu.",
@@ -182,6 +184,7 @@ const projects: Project[] = [
     initials: "AP",
     category: 'dev',
     type: "Web Sitesi",
+    date: "20 Şubat 2025",
     demand: "Hukuk bürosu için güvenli ve şık kurumsal site.",
     solution: "KVKK uyumlu danışmanlık talep formu içeren modern site.",
     demandDetail: "Eski sitemiz hem yavaştı hem güvensiz görünüyordu. Kurumsal kimliğimize uygun, şık ve hızlı bir site; ayrıca potansiyel müvekkillerden başvuru toplayabileceğimiz KVKK uyumlu bir form istiyorduk.",
@@ -192,6 +195,7 @@ const projects: Project[] = [
     initials: "MK",
     category: 'dev',
     type: "E-Ticaret",
+    date: "8 Şubat 2025",
     demand: "Online sipariş ve masa rezervasyonu yapılabilen kafe sitesi.",
     solution: "Stripe entegreli sipariş + Google Takvim bağlantılı rezervasyon.",
     demandDetail: "Şehir merkezindeki kafemizde paket servis ve rezervasyon talebi çok yüksekti ama telefonu açacak personel bulamıyorduk. Müşterilerin doğrudan menüden sipariş verebileceği, masa rezervasyonu yapabileceği bir sistem istiyorduk.",
@@ -202,6 +206,7 @@ const projects: Project[] = [
     initials: "AK",
     category: 'dev',
     type: "Portal",
+    date: "24 Ocak 2025",
     demand: "Hasta randevu ve SMS hatırlatma sistemi.",
     solution: "Doktor takvimine bağlı online randevu portalı.",
     demandDetail: "Diş hekimliği muayenehanemizde randevu kaçırma oranı çok yüksekti, sekreterimiz tüm gününü telefon hatırlatmasıyla geçiriyordu. Hastaların doktor müsait saatlerini görüp kendi randevularını alabilecekleri bir portal istedik.",
@@ -212,6 +217,7 @@ const projects: Project[] = [
     initials: "VC",
     category: 'dev',
     type: "E-Ticaret",
+    date: "10 Ocak 2025",
     demand: "Mağaza ve online satış için ortak envanterli sistem.",
     solution: "Headless e-ticaret + barkod entegreli stok senkronu.",
     demandDetail: "Fiziksel mağazamız ve online satışımız ayrı sistemlerde çalışıyordu; stok tutarsızlıkları ve aşırı satış sürekli sorun yaratıyordu. Tek panelden yönetebileceğimiz birleşik bir sisteme ihtiyacımız vardı.",
@@ -222,6 +228,7 @@ const projects: Project[] = [
     initials: "KH",
     category: 'dev',
     type: "Portal",
+    date: "26 Aralık 2024",
     demand: "Direkt rezervasyon platformu ile aracı komisyonunu düşürmek.",
     solution: "Müsaitlik takvimli, ödeme entegreli rezervasyon sistemi.",
     demandDetail: "Butik otelimiz Booking ve Expedia'ya yüksek komisyonlar ödüyordu. Direkt rezervasyon kanalı oluşturup misafirleri kendi sitemizden çekmek istiyorduk; fiyatlandırmayı sezon, oda tipi ve gece sayısına göre dinamik kontrol etmemiz şarttı.",
@@ -232,6 +239,7 @@ const projects: Project[] = [
     initials: "PA",
     category: 'dev',
     type: "Portal",
+    date: "12 Aralık 2024",
     demand: "Online ders ve ödev takip portalı.",
     solution: "Veli/öğrenci/öğretmen rollü LMS sistemi.",
     demandDetail: "Pandemi sonrası hibrit eğitime geçtik ama elimizdeki çözümler ya çok pahalı ya çok kısıtlıydı. Video ders, ödev takibi, sınav modülü ve veli paneli içeren özel bir öğrenci portalına ihtiyacımız vardı.",
@@ -242,6 +250,7 @@ const projects: Project[] = [
     initials: "SE",
     category: 'dev',
     type: "Portal",
+    date: "28 Kasım 2024",
     demand: "Harita entegrasyonlu, gelişmiş filtreli emlak ilan sitesi.",
     solution: "Google Maps + 360° sanal tur destekli ilan platformu.",
     demandDetail: "Sahibinden'e bağımlı kalmak istemiyorduk; kendi marka ilan sitemizi kurmak ve müşterilere harita üzerinde filtrelenebilen, sanal turlu ilanlar sunmak istiyorduk. Admin panelinin de hızlı ilan girişine elverişli olması şarttı.",
@@ -252,6 +261,7 @@ const projects: Project[] = [
     initials: "NT",
     category: 'dev',
     type: "Web Sitesi",
+    date: "14 Kasım 2024",
     demand: "Teknik içerik üreten, SEO odaklı kurumsal blog ve site.",
     solution: "MDX bazlı blog + headless CMS + otomatik sitemap.",
     demandDetail: "B2B yazılım firmamızın eski WordPress sitesi yavaştı, içerik girişi hantaldı. SEO odaklı, hızlı, ekibimizin Markdown ile rahat içerik üretebileceği modern bir altyapı istiyorduk; aynı zamanda mevcut blog yazılarının URL'lerini korumalıydık.",
@@ -262,6 +272,7 @@ const projects: Project[] = [
     initials: "NB",
     category: 'dev',
     type: "Eklenti",
+    date: "30 Ekim 2024",
     demand: "Mevcut WordPress siteye personel-bazlı randevu eklentisi.",
     solution: "Bookly üzerine özel kod + WhatsApp bildirim entegrasyonu.",
     demandDetail: "Mevcut WP sitemiz vardı ama hazır randevu eklentileri kuaförümüze uymuyordu — personel bazlı saat seçimi, hizmet kombinasyonları ve WhatsApp bildirimi yoktu. Sitemizi baştan yapmadan bu özelliği eklemek istedik.",
@@ -274,6 +285,7 @@ const projects: Project[] = [
     initials: "DL",
     category: 'ops',
     type: "Sunucu",
+    date: "16 Ekim 2024",
     demand: "Eski paylaşımlı hostingden VPS'e taşınma.",
     solution: "Zero-downtime DNS geçişi ile Hetzner VPS taşıma.",
     demandDetail: "20 GB veritabanı ve eski PHP altyapısı yüklü olan sitemiz paylaşımlı hostingde sık sık çöküyordu. Yoğun saatlerde sayfalar açılmıyordu, müşteri talepleri kayboluyordu. Kesinti yaşamadan modern bir VPS'e taşınmak istedik.",
@@ -284,6 +296,7 @@ const projects: Project[] = [
     initials: "EH",
     category: 'ops',
     type: "E-Posta",
+    date: "2 Ekim 2024",
     demand: "Eski cPanel mailden Google Workspace'e geçiş.",
     solution: "IMAP migration + MX kayıt geçişi + tüm alias taşıma.",
     demandDetail: "12 kişilik hukuk bürosu cPanel'in yetersiz mail altyapısını kullanıyordu — spam filtresi zayıftı, mobil sync çalışmıyordu, 5 GB üzerinde kotalar doluyordu. Tüm geçmiş yazışmaları kaybetmeden Google Workspace'e geçmek istediler.",
@@ -294,6 +307,7 @@ const projects: Project[] = [
     initials: "AY",
     category: 'ops',
     type: "DNS",
+    date: "18 Eylül 2024",
     demand: "Yavaş yabancı hostingden yerel altyapıya geçiş ve Cloudflare.",
     solution: "Cloudflare DNS + Türkiye lokasyonlu hosting + CDN cache.",
     demandDetail: "ABD'deki hostingden dolayı sayfa açılma süreleri 6-8 saniyeyi buluyordu, Türkiye'deki ziyaretçi deneyimi çok kötüydü. Sayfaları korumak ve yerel CDN ile hızlandırmak için altyapı geçişi istediler.",
@@ -304,6 +318,7 @@ const projects: Project[] = [
     initials: "MS",
     category: 'ops',
     type: "Güvenlik",
+    date: "4 Eylül 2024",
     demand: "KVKK uyumlu, dayanıklı site güvenliği altyapısı.",
     solution: "Wildcard SSL + WAF + DDoS koruma + günlük yedek.",
     demandDetail: "Hasta verisi tutan portal sistemimiz vardı; düzensiz SSL, eski güvenlik header'ları ve hiç yedek planı yoktu. Hem KVKK uyumu hem de saldırılara karşı dayanıklı bir altyapıya geçmek istediler.",
@@ -314,6 +329,7 @@ const projects: Project[] = [
     initials: "BT",
     category: 'ops',
     type: "Bakım",
+    date: "20 Ağustos 2024",
     demand: "WordPress sitede malware temizliği ve sertleştirme.",
     solution: "Full malware temizliği + 2FA + WP-CLI ile güncelleme otomasyonu.",
     demandDetail: "Sitemiz Google tarafından 'phishing içerik' olarak işaretlenmişti; arka planda kullanıcıları yönlendiren bir malware vardı. Site komple temizlenmeli ve bir daha hacklenmemesi için sertleştirilmeliydi.",
@@ -1005,7 +1021,7 @@ function ProjectCard({
     <div
       ref={cardRef}
       onClick={onClick}
-      className="box-border h-full cursor-pointer rounded-xl px-5 py-5"
+      className="box-border flex h-full cursor-pointer flex-col rounded-xl px-5 py-5"
       style={{
         opacity: isHovered ? 1 : opacity,
         transform: isFocused ? 'scale(1.04)' : 'scale(1)',
@@ -1093,6 +1109,13 @@ function ProjectCard({
           {project.solution}
         </p>
       </div>
+
+      {/* Publish date — sits in the empty bottom space, right-aligned and
+          subtle so it reads as metadata, not content. mt-auto pushes it to
+          the bottom of the flex column regardless of header/copy length. */}
+      <div className="mt-auto pt-3 text-right text-[11px] text-black/35">
+        {project.date}
+      </div>
     </div>
   )
 }
@@ -1145,7 +1168,9 @@ function ProjectPopup({
           <div className="truncate text-[15px] font-semibold text-[#0a0a0a]">
             {project.company}
           </div>
-          <div className="text-[12px] text-black/50">{project.type}</div>
+          <div className="text-[12px] text-black/50">
+            {project.type} · {project.date}
+          </div>
         </div>
         {isMobileLayout && (
           <button
@@ -1325,31 +1350,25 @@ function ProjectsSection() {
 
   // Auto-advance on desktop (paused on hover or while a popup is open).
   // 2s per card — slightly faster than the testimonial column above so the
-  // section reads as "active" but still legible.
+  // section reads as "active" but still legible. Reset is done inline
+  // (matches the testimonial carousel): when about to step past the end,
+  // disable the transition and snap to 0 in the same render — the slot 0
+  // card is mask-faded so the swap reads as a wheel turning, not a jump.
   useEffect(() => {
     if (isPaused || isMobile || totalOriginal === 0) return
     const interval = setInterval(() => {
-      setCurrentIndex(prev => prev + 1)
+      setCurrentIndex(prev => {
+        const next = prev + 1
+        if (next >= totalOriginal) {
+          setIsTransitioning(false)
+          setTimeout(() => setIsTransitioning(true), 50)
+          return 0
+        }
+        return next
+      })
     }, 2000)
     return () => clearInterval(interval)
   }, [isPaused, isMobile, totalOriginal])
-
-  // Seamless loop reset — once we've fully advanced through the original
-  // list, snap back to index 0 without transition while we're still showing
-  // a duplicated card, so the user never sees the jump.
-  useEffect(() => {
-    if (totalOriginal === 0) return
-    if (currentIndex >= totalOriginal) {
-      const t = setTimeout(() => {
-        setIsTransitioning(false)
-        setCurrentIndex(0)
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => setIsTransitioning(true))
-        })
-      }, 600)
-      return () => clearTimeout(t)
-    }
-  }, [currentIndex, totalOriginal])
 
   // Mouse wheel — one card per gesture, debounced. Bound to the carousel
   // CONTAINER (the masked card viewport) only, so the wheel hijacks page
@@ -1361,18 +1380,40 @@ function ProjectsSection() {
     const el = containerRef.current
     if (!el) return
     const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) < 6) return
+      // macOS trackpad inertia fires many sub-pixel deltaY events; let only
+      // the truly-zero ones through, and preventDefault on everything else
+      // so the page doesn't co-scroll while the cards advance.
+      if (Math.abs(e.deltaY) < 1) return
       e.preventDefault()
       if (wheelLockRef.current) return
       wheelLockRef.current = true
-      setCurrentIndex(prev => prev + (e.deltaY > 0 ? 1 : -1))
+      if (e.deltaY > 0) {
+        setCurrentIndex(prev => {
+          const next = prev + 1
+          if (next >= totalOriginal) {
+            setIsTransitioning(false)
+            setTimeout(() => setIsTransitioning(true), 50)
+            return 0
+          }
+          return next
+        })
+      } else {
+        setCurrentIndex(prev => {
+          if (prev <= 0) {
+            setIsTransitioning(false)
+            setTimeout(() => setIsTransitioning(true), 50)
+            return totalOriginal - 1
+          }
+          return prev - 1
+        })
+      }
       setTimeout(() => {
         wheelLockRef.current = false
       }, 650)
     }
     el.addEventListener('wheel', handleWheel, { passive: false })
     return () => el.removeEventListener('wheel', handleWheel)
-  }, [])
+  }, [totalOriginal])
 
   // Touch swipe (mobile). Mirrors the testimonial carousel: 30px threshold,
   // 400ms debounce, seamless loop reset done inline so the user sees no jump.
@@ -1601,9 +1642,9 @@ function ProjectsSection() {
             zIndex: 0,
             mixBlendMode: 'multiply',
             maskImage:
-              'linear-gradient(to bottom, black 0%, black 48%, rgba(0,0,0,0.55) 68%, transparent 88%)',
+              'linear-gradient(to bottom, black 0%, black 42%, rgba(0,0,0,0.40) 60%, transparent 80%)',
             WebkitMaskImage:
-              'linear-gradient(to bottom, black 0%, black 48%, rgba(0,0,0,0.55) 68%, transparent 88%)',
+              'linear-gradient(to bottom, black 0%, black 42%, rgba(0,0,0,0.40) 60%, transparent 80%)',
           }}
         >
           <Image
@@ -1615,6 +1656,31 @@ function ProjectsSection() {
             draggable={false}
           />
         </div>
+
+        {/* Soft brand-blue dot pattern blooming to the right of the OK-hand.
+            Two stacked backgrounds: a faint radial wash gives the area a
+            warm blue tint, and a finer dot grid rides on top for texture.
+            A radial mask fades both to nothing past the edges so the
+            decoration reads as a soft cloud, not a hard tile. Sits at
+            z-0 behind the right-column copy; desktop-only to match the
+            hand. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute hidden select-none lg:block"
+          style={{
+            right: '-60px',
+            top: '-120px',
+            width: '560px',
+            height: '760px',
+            zIndex: 0,
+            background:
+              'radial-gradient(rgba(60, 99, 159, 0.38) 1.4px, transparent 1.8px) 0 0 / 22px 22px, radial-gradient(circle at 55% 45%, rgba(60, 99, 159, 0.18) 0%, transparent 65%)',
+            maskImage:
+              'radial-gradient(closest-side, black 0%, black 15%, rgba(0,0,0,0.7) 50%, transparent 85%)',
+            WebkitMaskImage:
+              'radial-gradient(closest-side, black 0%, black 15%, rgba(0,0,0,0.7) 50%, transparent 85%)',
+          }}
+        />
 
         {/* Brand-blue line-ring pulses emanating from the centre of the OK
             loop. Three concentric outlined circles with staggered delays
