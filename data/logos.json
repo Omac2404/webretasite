@@ -1,0 +1,173 @@
+{
+  "mode": "logos",
+  "logos": [
+    {
+      "id": "seed-1",
+      "name": "Aksel & Partners",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-2",
+      "name": "Mira Kafe",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-3",
+      "name": "Sönmez Mimarlık",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-4",
+      "name": "Polat Akademi",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-5",
+      "name": "Vural Concept",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-6",
+      "name": "NovaTech",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-7",
+      "name": "Kılıç Hotels",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-8",
+      "name": "Mutlu Sigorta",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-9",
+      "name": "Yıldız Danışmanlık",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-10",
+      "name": "Sezer Emlak",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-11",
+      "name": "Bozkurt Vet",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-12",
+      "name": "Aydın Klinik",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-13",
+      "name": "Rençber Otomotiv",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-14",
+      "name": "Nazlı Beauty",
+      "imageUrl": "",
+      "row": "a"
+    },
+    {
+      "id": "seed-15",
+      "name": "Yılmaz Florist",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "seed-16",
+      "name": "Tan Sport",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "seed-17",
+      "name": "Aksu Living",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "seed-18",
+      "name": "Demir Lojistik",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "seed-19",
+      "name": "Eren Tekstil",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "seed-20",
+      "name": "Bilgin Trade",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "seed-21",
+      "name": "Karya Eğitim",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "seed-22",
+      "name": "Mavi Sağlık",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "seed-23",
+      "name": "Erdem Hukuk",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "seed-24",
+      "name": "Anka Yapı",
+      "imageUrl": "",
+      "row": "b"
+    },
+    {
+      "id": "1778874278222-19e45s",
+      "name": "Odemor",
+      "imageUrl": "/logos/odemor-1778874278217.png",
+      "row": "b"
+    },
+    {
+      "id": "1778874486740-joyiku",
+      "name": "Kırgöz Turizm",
+      "imageUrl": "/logos/kirgoz-turizm-1778874486736.png",
+      "row": "b"
+    },
+    {
+      "id": "1778874502190-goprh0",
+      "name": "D&D Petshop",
+      "imageUrl": "/logos/d-d-petshop-1778874502185.png",
+      "row": "b"
+    },
+    {
+      "id": "1778874515972-rpcxin",
+      "name": "Astrolog Lale Leyla Okay",
+      "imageUrl": "/logos/astrolog-lale-leyla-okay-1778874515968.png",
+      "row": "b"
+    }
+  ]
+}

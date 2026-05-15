@@ -592,7 +592,24 @@ const QUOTE_DEFAULT: QuoteForm = {
   kvkk: false,
 }
 
-function LogoTile({ name }: { name: string }) {
+type LogoEntry = {
+  id: string
+  name: string
+  imageUrl: string
+  row: "a" | "b"
+}
+type LogoDisplayMode = "logos" | "names"
+
+function LogoTile({
+  entry,
+  mode,
+}: {
+  entry: LogoEntry
+  mode: LogoDisplayMode
+}) {
+  // In logos mode, fall back to the name when an entry has no image yet
+  // so the marquee never has empty tiles.
+  const showImage = mode === "logos" && entry.imageUrl
   return (
     <div
       className="flex h-[72px] w-[190px] shrink-0 items-center justify-center rounded-xl bg-white px-4"
@@ -602,9 +619,19 @@ function LogoTile({ name }: { name: string }) {
           '0 1px 2px rgba(0, 0, 0, 0.02), 0 8px 24px -8px rgba(60, 99, 159, 0.06)',
       }}
     >
-      <span className="select-none text-center text-[15px] font-semibold tracking-[-0.01em] text-black/55">
-        {name}
-      </span>
+      {showImage ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={entry.imageUrl}
+          alt={entry.name}
+          className="max-h-[44px] max-w-full select-none object-contain"
+          draggable={false}
+        />
+      ) : (
+        <span className="select-none text-center text-[15px] font-semibold tracking-[-0.01em] text-black/55">
+          {entry.name}
+        </span>
+      )}
     </div>
   )
 }
@@ -1856,6 +1883,96 @@ export default function Home() {
   const [pkgCanScrollLeft, setPkgCanScrollLeft] = useState(false)
   const [pkgCanScrollRight, setPkgCanScrollRight] = useState(false)
 
+  // Partner logos — fetched from the admin store. Seeded with the
+  // hardcoded list so the marquee renders something on first paint,
+  // then replaced once /api/logos resolves. Admin-managed via the
+  // panel; we'll migrate this to Postgres later.
+  const [logoMode, setLogoMode] = useState<LogoDisplayMode>("names")
+  const [logoEntries, setLogoEntries] = useState<LogoEntry[]>(() => [
+    ...partnersRowA.map((name, i) => ({
+      id: `fallback-a-${i}`,
+      name,
+      imageUrl: "",
+      row: "a" as const,
+    })),
+    ...partnersRowB.map((name, i) => ({
+      id: `fallback-b-${i}`,
+      name,
+      imageUrl: "",
+      row: "b" as const,
+    })),
+  ])
+  useEffect(() => {
+    let cancelled = false
+    fetch("/api/logos")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { mode?: LogoDisplayMode; logos?: LogoEntry[] } | null) => {
+        if (cancelled || !data) return
+        if (data.mode) setLogoMode(data.mode)
+        if (Array.isArray(data.logos) && data.logos.length > 0) {
+          setLogoEntries(data.logos)
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
+  const logoRows = useMemo(
+    () => ({
+      rowA: logoEntries.filter((l) => l.row === "a"),
+      rowB: logoEntries.filter((l) => l.row === "b"),
+    }),
+    [logoEntries],
+  )
+
+  // Testimonials source — admin can flip between the hardcoded preset
+  // list and the curated real reviews. While we don't have any real
+  // reviews yet (no Google sync), the homepage falls back to preset so
+  // the section never looks empty.
+  const [activeTestimonials, setActiveTestimonials] = useState<
+    typeof testimonials
+  >(testimonials)
+  useEffect(() => {
+    let cancelled = false
+    type ApiReview = {
+      id: string
+      author: string
+      authorPhotoUrl?: string
+      rating: number
+      text: string
+      date: string
+    }
+    fetch("/api/reviews")
+      .then((r) => (r.ok ? r.json() : null))
+      .then(
+        (data: { source?: "preset" | "real"; reviews?: ApiReview[] } | null) => {
+          if (cancelled || !data) return
+          if (data.source === "real" && data.reviews && data.reviews.length > 0) {
+            const mapped: typeof testimonials = data.reviews.map((r) => ({
+              text: r.text,
+              name: r.author,
+              role: "",
+              initials: r.author
+                .split(" ")
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((p) => p[0])
+                .join("")
+                .toUpperCase()
+                .slice(0, 2),
+              date: r.date,
+            }))
+            setActiveTestimonials(mapped)
+          }
+        },
+      )
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   // Earliest selectable time on today. We require a 4-hour heads-up:
   // if it's 10:00 now, the earliest slot today is 14:00. Past 14:00 (so
   // earliest + 4h crosses 18:00 last slot), today drops off entirely.
@@ -2081,9 +2198,10 @@ export default function Home() {
   const STEP = CARD_HEIGHT + CARD_GAP
   const VISIBLE_HEIGHT = STEP * 3.5
 
-  // Duplicate testimonials for infinite loop
-  const allCards = [...testimonials, ...testimonials]
-  const totalOriginal = testimonials.length
+  // Duplicate testimonials for infinite loop. Use the live source so
+  // flipping preset ↔ real in the admin reflects here on next load.
+  const allCards = [...activeTestimonials, ...activeTestimonials]
+  const totalOriginal = activeTestimonials.length
 
   // Auto-advance every 2 seconds — desktop only. On mobile the user drives
   // the carousel themselves via touch swipe, so we skip the timer entirely.
@@ -2636,13 +2754,13 @@ export default function Home() {
                 }}
               >
                 <div className="logo-track logo-track-left flex w-max gap-3 pb-2">
-                  {[...partnersRowA, ...partnersRowA].map((name, i) => (
-                    <LogoTile key={`a-${i}`} name={name} />
+                  {[...logoRows.rowA, ...logoRows.rowA].map((entry, i) => (
+                    <LogoTile key={`a-${entry.id}-${i}`} entry={entry} mode={logoMode} />
                   ))}
                 </div>
                 <div className="logo-track logo-track-right flex w-max gap-3 pt-2">
-                  {[...partnersRowB, ...partnersRowB].map((name, i) => (
-                    <LogoTile key={`b-${i}`} name={name} />
+                  {[...logoRows.rowB, ...logoRows.rowB].map((entry, i) => (
+                    <LogoTile key={`b-${entry.id}-${i}`} entry={entry} mode={logoMode} />
                   ))}
                 </div>
               </div>
