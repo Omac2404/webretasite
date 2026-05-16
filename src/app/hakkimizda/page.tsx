@@ -1,0 +1,24 @@
+import SiteHeader from "@/components/SiteHeader"
+
+export const metadata = {
+  title: "Hakkımızda | Webreta",
+}
+
+export default function HakkimizdaPage() {
+  return (
+    <div className="min-h-screen bg-[#fafafa]">
+      <SiteHeader />
+      <main className="mx-auto max-w-[1280px] px-6 py-24 md:px-12 md:py-32">
+        <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
+          Hakkımızda
+        </span>
+        <h1 className="mt-3 text-[36px] leading-[1.1] tracking-[-0.02em] text-[#0a0a0a] md:text-[52px]">
+          Bu sayfa hazırlanıyor.
+        </h1>
+        <p className="mt-4 max-w-[520px] text-[15px] leading-relaxed text-black/60">
+          Webreta hakkında detaylı bilgiyi yakında burada bulabileceksiniz.
+        </p>
+      </main>
+    </div>
+  )
+}

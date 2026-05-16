@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
-import { ArrowRight, ArrowLeft, Menu, X, Star, Check, ChevronLeft, ChevronRight, ExternalLink, Compass, Palette, Code2, Rocket, Phone, Mail, Calendar, Clock, CheckCircle2, Sparkles, RefreshCw, Globe, Layers, Boxes } from "lucide-react"
+import { ArrowRight, Menu, X, Star, Check, ExternalLink, CheckCircle2, Code2, TrendingUp } from "lucide-react"
 import Image from "next/image"
 import { createPortal } from "react-dom"
 
@@ -376,222 +376,6 @@ const partnersRowB = [
   "Anka Yapı",
 ]
 
-// 4-step process for the "Nasıl Çalışıyoruz" section. Each step renders in
-// its own panel with a crossfade transition between them. Icon is a
-// placeholder — swap with custom illustration when ready.
-const processSteps = [
-  {
-    num: "01",
-    title: "Keşif & Strateji",
-    description:
-      "Önce sizi dinliyoruz. İşinizi, hedef kitlenizi ve sizi rakiplerinizden ayıran noktayı çıkarıyoruz.",
-    bullets: [
-      "Detaylı brief görüşmesi ve hedef belirleme",
-      "Rakip analizi ve sektör araştırması",
-      "Site haritası ve içerik mimarisi planı",
-    ],
-    Icon: Compass,
-  },
-  {
-    num: "02",
-    title: "Tasarım",
-    description:
-      "Markanıza özel tasarım sunumları. Her ekran sıfırdan çiziliyor — hazır tema yok.",
-    bullets: [
-      "Wireframe ve görsel kimlik çalışması",
-      "İnteraktif Figma prototip",
-      "Geri bildirimle revizyon turları",
-    ],
-    Icon: Palette,
-  },
-  {
-    num: "03",
-    title: "Geliştirme",
-    description:
-      "Modern teknoloji yığını, temiz kod, optimum performans. Mobil ve masaüstünde aynı pürüzsüz deneyim.",
-    bullets: [
-      "Next.js + TypeScript ile modern altyapı",
-      "Lighthouse 95+ performans hedefi",
-      "SEO odaklı semantik yapı",
-    ],
-    Icon: Code2,
-  },
-  {
-    num: "04",
-    title: "Yayın & Destek",
-    description:
-      "Devreye alma, test ve canlı geçiş — sonrasında 7/24 yanınızdayız.",
-    bullets: [
-      "Kapsamlı test ve QA süreci",
-      "Canlı geçiş ve domain entegrasyonu",
-      "7/24 teknik destek ve bakım",
-    ],
-    Icon: Rocket,
-  },
-]
-
-const STEP_DURATION_MS = 6000
-
-// ─── Quote wizard data ───────────────────────────────────────────────────
-// Multi-step pricing/quote tool. Steps in QUOTE_STEPS are rendered as a
-// stepper at the top; the form body shows one step at a time with a
-// slide-fade transition. Submit handler is a stub — wire it to email/API
-// in a follow-up.
-
-// Two-option service choice on step 1. Redesign reveals an extra URL input
-// so the user can drop their existing site.
-const QUOTE_SERVICES = [
-  {
-    id: "new-site",
-    label: "Yeni web sitesi yapımı",
-    desc: "Sıfırdan, markanıza özel tasarım ve geliştirme.",
-    Icon: Sparkles,
-  },
-  {
-    id: "redesign",
-    label: "Mevcut site yenileme",
-    desc: "Var olan sitenizi modern bir tasarım ve teknoloji ile baştan kuruyoruz.",
-    Icon: RefreshCw,
-  },
-]
-
-// 4 project packages with rich descriptions and a one-word descriptor
-// in place of an explicit price (prices are sensitive — discussed in the
-// first meeting). Selecting "landing" or "mini" surfaces a recommendation
-// to also check Webreta KOBI (handled in the wizard).
-const QUOTE_PROJECT_TYPES = [
-  {
-    id: "landing",
-    label: "Landing Sayfa",
-    tagline: "Tek sayfa · dönüşüm odaklı",
-    descriptor: "Pratik",
-    desc: "Tek sayfada hikayenizi anlatan, dönüşüm odaklı tasarım. Ürün lansmanları, kampanyalar veya tek bir hizmete odaklanan işletmeler için ideal.",
-    bullets: ["1 sayfa", "Form ve CTA optimizasyonu", "Hızlı yayına alma"],
-    Icon: Layers,
-  },
-  {
-    id: "mini",
-    label: "Kompakt Kurumsal Site",
-    tagline: "5 sayfaya kadar · statik",
-    descriptor: "Bütçe dostu",
-    desc: "5 sayfaya kadar statik kurumsal site. Hakkımızda, hizmetler, referanslar ve iletişim — hızlı yüklenen, şık bir dijital vitrin.",
-    bullets: ["5 sayfaya kadar", "Mobil + masaüstü uyumlu", "Temel SEO"],
-    Icon: Globe,
-  },
-  {
-    id: "pro",
-    label: "Profesyonel Kurumsal Site",
-    tagline: "50 sayfaya kadar · CMS",
-    descriptor: "İdeal",
-    desc: "50 sayfaya kadar genişleyebilen, blog modülü, içerik yönetim paneli ve gelişmiş form yönetimi içeren tam donanımlı kurumsal site.",
-    bullets: [
-      "50 sayfaya kadar",
-      "İçerik yönetim paneli (CMS)",
-      "Blog + gelişmiş form yönetimi",
-    ],
-    Icon: Boxes,
-  },
-  {
-    id: "webapp",
-    label: "Web Uygulamalı Kurumsal Site",
-    tagline: "Sınırsız ölçek · amaca özel uygulama",
-    descriptor: "Profesyonel",
-    desc: "Sektörünüze özel iş akışlarını dijitalleştiren güçlü uygulamalar: online randevu, sipariş takip, müşteri/hasta portalı, lojistik ve stok yönetimi gibi sınırsız özelleştirilebilir çözümler.",
-    bullets: [
-      "Online randevu / rezervasyon",
-      "Sipariş, hasta veya müşteri takip paneli",
-      "Sektörünüze özel iş akışı tasarımı",
-    ],
-    Icon: Rocket,
-  },
-]
-
-// External URL for the Webreta KOBI recommendation. Replace with the real
-// link when ready.
-const WEBRETA_KOBI_URL = "https://kobi.webreta.com"
-
-// Contact channels — multi-select with per-channel color treatment.
-// WhatsApp uses its official brand green and inline SVG glyph.
-function WhatsAppIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden
-    >
-      <path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
-    </svg>
-  )
-}
-
-const QUOTE_CHANNELS = [
-  { id: "whatsapp", label: "WhatsApp", color: "#25D366", Icon: WhatsAppIcon },
-  { id: "phone", label: "Telefon", color: "#f59e0b", Icon: Phone },
-  { id: "email", label: "E-posta", color: "#3c639f", Icon: Mail },
-]
-
-const QUOTE_STEPS = [
-  { num: "01", title: "Sektör & Hizmet" },
-  { num: "02", title: "Paket Seçimi" },
-  { num: "03", title: "Örnek Siteler" },
-  { num: "04", title: "İletişim" },
-]
-
-// 30-minute appointment slots. Adjust the window if you want different
-// working hours.
-const TIME_SLOTS = [
-  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-  "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
-  "18:00",
-]
-
-const DAY_NAMES = ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"]
-const MONTH_NAMES = [
-  "Oca", "Şub", "Mar", "Nis", "May", "Haz",
-  "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara",
-]
-
-type QuoteForm = {
-  industry: string
-  services: string
-  service: string
-  existingSiteUrl: string
-  projectType: string
-  description: string
-  refs: string[]
-  refNotes: string
-  name: string
-  company: string
-  email: string
-  phone: string
-  channels: string[]
-  date: string
-  time: string
-  kvkk: boolean
-}
-
-const QUOTE_DEFAULT: QuoteForm = {
-  industry: "",
-  services: "",
-  service: "",
-  existingSiteUrl: "",
-  projectType: "",
-  description: "",
-  refs: ["", "", ""],
-  refNotes: "",
-  name: "",
-  company: "",
-  email: "",
-  phone: "",
-  channels: [],
-  date: "",
-  time: "",
-  kvkk: false,
-}
-
 type LogoEntry = {
   id: string
   name: string
@@ -919,10 +703,7 @@ function TestimonialPopup({
           </button>
         </div>
 
-        <div
-          className="mt-4 flex-1 overflow-y-auto pr-2"
-          style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(60, 99, 159, 0.3) transparent' }}
-        >
+        <div className="popup-scroll mt-4 flex-1 pr-2">
           <p className="text-[15px] leading-[1.6] text-black/80">{testimonial.text}</p>
         </div>
 
@@ -986,10 +767,7 @@ function TestimonialPopup({
           <GoogleIcon />
         </div>
 
-        <div
-          className="mt-4 flex-1 overflow-y-auto pr-1"
-          style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(60, 99, 159, 0.3) transparent' }}
-        >
+        <div className="popup-scroll mt-4 flex-1 pr-1">
           <p className="text-[15px] leading-[1.6] text-black/80">{testimonial.text}</p>
         </div>
 
@@ -1262,7 +1040,7 @@ function ProjectPopup({
         style={{ opacity: isVisible ? 1 : 0 }}
       />
       <div
-        className="relative mx-auto flex w-full flex-col overflow-y-auto rounded-xl bg-white p-5"
+        className="popup-scroll relative mx-auto flex w-full flex-col rounded-xl bg-white p-5"
         style={{
           maxWidth: `${popupWidth}px`,
           maxHeight: '80vh',
@@ -1272,8 +1050,6 @@ function ProjectPopup({
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? 'scale(1)' : 'scale(0.95)',
           transition: 'opacity 150ms ease-out, transform 150ms ease-out',
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'rgba(60, 99, 159, 0.3) transparent',
         }}
       >
         {body}
@@ -1294,7 +1070,7 @@ function ProjectPopup({
       onMouseLeave={onMouseLeave}
     >
       <div
-        className="relative flex flex-col overflow-y-auto rounded-xl bg-white p-5"
+        className="popup-scroll relative flex flex-col rounded-xl bg-white p-5"
         style={{
           maxHeight: '440px',
           border: '0.5px solid rgba(0, 0, 0, 0.08)',
@@ -1342,7 +1118,7 @@ function ProjectsSection() {
   const columnRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
   const leaveTimerRef = useRef<NodeJS.Timeout | null>(null)
-  const wheelLockRef = useRef(false)
+  const wheelAccumRef = useRef(0)
 
   // Inline pill + single-line copy is more compact than the old stacked
   // layout, so the card can be shorter. Mobile keeps the original compact
@@ -1397,46 +1173,47 @@ function ProjectsSection() {
     return () => clearInterval(interval)
   }, [isPaused, isMobile, totalOriginal])
 
-  // Mouse wheel — one card per gesture, debounced. Bound to the carousel
-  // CONTAINER (the masked card viewport) only, so the wheel hijacks page
-  // scroll only when the cursor is directly over the visible cards.
-  // Hovering over the decorative hand, side copy, or empty space scrolls
-  // the page normally. Active on every device type so DevTools mobile
-  // emulation, which still dispatches wheel events, can also use it.
+  // Mouse wheel — accumulator-based stepping. Each wheel event adds to a
+  // running deltaY total; every WHEEL_PX_PER_STEP pixels accumulated advances
+  // one card. Bigger gestures (or trackpad inertia) batch multiple steps in
+  // a single event, so the carousel feels like a wheel that spins faster
+  // when you scroll harder. Bound to the carousel CONTAINER only so the
+  // page scrolls normally over the hand, copy, and empty space.
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
+    const WHEEL_PX_PER_STEP = 80
     const handleWheel = (e: WheelEvent) => {
-      // macOS trackpad inertia fires many sub-pixel deltaY events; let only
-      // the truly-zero ones through, and preventDefault on everything else
-      // so the page doesn't co-scroll while the cards advance.
-      if (Math.abs(e.deltaY) < 1) return
+      // Normalize line-mode deltas to pixels (Firefox occasionally uses line
+      // mode); ignore truly-zero deltas.
+      const deltaY = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY
+      if (Math.abs(deltaY) < 1) return
       e.preventDefault()
-      if (wheelLockRef.current) return
-      wheelLockRef.current = true
-      if (e.deltaY > 0) {
-        setCurrentIndex(prev => {
-          const next = prev + 1
-          if (next >= totalOriginal) {
-            setIsTransitioning(false)
-            setTimeout(() => setIsTransitioning(true), 50)
-            return 0
-          }
-          return next
-        })
-      } else {
-        setCurrentIndex(prev => {
-          if (prev <= 0) {
-            setIsTransitioning(false)
-            setTimeout(() => setIsTransitioning(true), 50)
-            return totalOriginal - 1
-          }
-          return prev - 1
-        })
+      if (totalOriginal === 0) return
+
+      wheelAccumRef.current += deltaY
+      let steps = 0
+      while (wheelAccumRef.current >= WHEEL_PX_PER_STEP) {
+        steps += 1
+        wheelAccumRef.current -= WHEEL_PX_PER_STEP
       }
-      setTimeout(() => {
-        wheelLockRef.current = false
-      }, 650)
+      while (wheelAccumRef.current <= -WHEEL_PX_PER_STEP) {
+        steps -= 1
+        wheelAccumRef.current += WHEEL_PX_PER_STEP
+      }
+      if (steps === 0) return
+
+      setCurrentIndex(prev => {
+        let next = prev + steps
+        if (next < 0 || next >= totalOriginal) {
+          // Past either end: snap-wrap without animation to preserve the
+          // seamless infinite loop, then re-enable transitions next tick.
+          setIsTransitioning(false)
+          setTimeout(() => setIsTransitioning(true), 50)
+          next = ((next % totalOriginal) + totalOriginal) % totalOriginal
+        }
+        return next
+      })
     }
     el.addEventListener('wheel', handleWheel, { passive: false })
     return () => el.removeEventListener('wheel', handleWheel)
@@ -1602,8 +1379,9 @@ function ProjectsSection() {
           Çalışmalarımız
         </span>
         <div className="mt-2 flex flex-wrap items-center gap-4">
-          <h2 className="text-[28px] leading-[1.1] tracking-[-0.02em] text-[#0a0a0a] md:text-[36px]">
-            Neler yapıyoruz?
+          <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
+            <span className="font-normal">Neler </span>
+            <span className="font-bold text-[#3c639f]">Yaptık?</span>
           </h2>
 
           {/* Segmented control */}
@@ -1738,7 +1516,7 @@ function ProjectsSection() {
             <div
               style={{
                 transform: `translateY(${translateY}px)`,
-                transition: isTransitioning ? 'transform 600ms ease-in-out' : 'none',
+                transition: isTransitioning ? 'transform 420ms cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
               }}
             >
               {allCards.map((project, index) => {
@@ -1864,24 +1642,41 @@ export default function Home() {
   const [popupPosition, setPopupPosition] = useState<{ left: number; top: number } | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(true)
   const [hintActive, setHintActive] = useState(false)
-  const [activeStep, setActiveStep] = useState(0)
-  const [isProcessPaused, setIsProcessPaused] = useState(false)
 
-  // Quote wizard state
-  const [quoteStep, setQuoteStep] = useState(0)
-  const [quoteDir, setQuoteDir] = useState<1 | -1>(1)
-  const [quoteSubmitted, setQuoteSubmitted] = useState(false)
-  const [quote, setQuote] = useState<QuoteForm>(QUOTE_DEFAULT)
-  const [redesignModalOpen, setRedesignModalOpen] = useState(false)
-  const [redesignDraftUrl, setRedesignDraftUrl] = useState("")
-  const [redesignAnchor, setRedesignAnchor] = useState<{ top: number; left: number } | null>(null)
-  const [kobiModalOpen, setKobiModalOpen] = useState(false)
-  const [kobiAnchor, setKobiAnchor] = useState<{ top: number; left: number } | null>(null)
-  const redesignModalRef = useRef<HTMLDivElement | null>(null)
-  const kobiModalRef = useRef<HTMLDivElement | null>(null)
-  const pkgScrollerRef = useRef<HTMLDivElement | null>(null)
-  const [pkgCanScrollLeft, setPkgCanScrollLeft] = useState(false)
-  const [pkgCanScrollRight, setPkgCanScrollRight] = useState(false)
+  // Service-card scroll-in + hover replay. Each card has its own observer,
+  // and a `playKey` counter that increments to trigger a remount of the
+  // decorative SVG so its CSS animations restart from scratch. On desktop
+  // both cards typically enter the viewport together — the reklam card has
+  // a fixed delay so the two animations play in sequence (web first, then
+  // reklam). On mobile the cards stack and each fires independently when
+  // its threshold is crossed.
+  const webCardRef = useRef<HTMLAnchorElement>(null)
+  const reklamCardRef = useRef<HTMLAnchorElement>(null)
+  const [webPlayKey, setWebPlayKey] = useState(0)
+  const [reklamPlayKey, setReklamPlayKey] = useState(0)
+  const webEnteredRef = useRef(false)
+  const reklamEnteredRef = useRef(false)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          if (entry.target === webCardRef.current && !webEnteredRef.current) {
+            webEnteredRef.current = true
+            setWebPlayKey((k) => k + 1)
+          } else if (entry.target === reklamCardRef.current && !reklamEnteredRef.current) {
+            reklamEnteredRef.current = true
+            // Stagger after the web card so on desktop they play in sequence.
+            setTimeout(() => setReklamPlayKey((k) => k + 1), 700)
+          }
+        })
+      },
+      { threshold: 0.7 },
+    )
+    if (webCardRef.current) observer.observe(webCardRef.current)
+    if (reklamCardRef.current) observer.observe(reklamCardRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   // Partner logos — fetched from the admin store. Seeded with the
   // hardcoded list so the marquee renders something on first paint,
@@ -1973,212 +1768,6 @@ export default function Home() {
     }
   }, [])
 
-  // Earliest selectable time on today. We require a 4-hour heads-up:
-  // if it's 10:00 now, the earliest slot today is 14:00. Past 14:00 (so
-  // earliest + 4h crosses 18:00 last slot), today drops off entirely.
-  const earliestTodaySlot = useMemo(() => {
-    const now = new Date()
-    const earliest = new Date(now.getTime() + 4 * 60 * 60 * 1000)
-    // Round up to the next 30-min slot.
-    const mins = earliest.getMinutes()
-    if (mins === 0) {
-      earliest.setSeconds(0, 0)
-    } else if (mins <= 30) {
-      earliest.setMinutes(30, 0, 0)
-    } else {
-      earliest.setHours(earliest.getHours() + 1, 0, 0, 0)
-    }
-    const today = new Date()
-    // If rounding pushed earliest past today (e.g. now=23:00 → earliest=03:00 next day), skip today.
-    const sameDay =
-      earliest.getFullYear() === today.getFullYear() &&
-      earliest.getMonth() === today.getMonth() &&
-      earliest.getDate() === today.getDate()
-    if (!sameDay) return null
-    const lastSlot = new Date(today)
-    lastSlot.setHours(18, 0, 0, 0)
-    if (earliest > lastSlot) return null
-    const hh = String(earliest.getHours()).padStart(2, "0")
-    const mm = String(earliest.getMinutes()).padStart(2, "0")
-    return `${hh}:${mm}`
-  }, [])
-
-  const todayIso = useMemo(() => {
-    const d = new Date()
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
-      d.getDate(),
-    ).padStart(2, "0")}`
-  }, [])
-
-  // Next 14 selectable days for the date picker. Skips today entirely when
-  // the 4-hour minimum heads-up can't be met before 18:00.
-  const next14Days = useMemo(() => {
-    const days: {
-      iso: string
-      dayName: string
-      dayNum: number
-      monthShort: string
-      isToday: boolean
-    }[] = []
-    const now = new Date()
-    const offset = earliestTodaySlot === null ? 1 : 0
-    for (let i = 0; i < 14; i++) {
-      const d = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + offset + i,
-      )
-      const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-        2,
-        "0",
-      )}-${String(d.getDate()).padStart(2, "0")}`
-      days.push({
-        iso,
-        dayName: DAY_NAMES[d.getDay()],
-        dayNum: d.getDate(),
-        monthShort: MONTH_NAMES[d.getMonth()],
-        isToday: offset === 0 && i === 0,
-      })
-    }
-    return days
-  }, [earliestTodaySlot])
-
-  // Time slots filtered for the selected date: today is trimmed to slots ≥
-  // earliestTodaySlot; future days show the full window.
-  const visibleTimeSlots = useMemo(() => {
-    if (quote.date === todayIso && earliestTodaySlot !== null) {
-      return TIME_SLOTS.filter(t => t >= earliestTodaySlot)
-    }
-    return TIME_SLOTS
-  }, [quote.date, earliestTodaySlot, todayIso])
-
-  const isWaPhoneSelected =
-    quote.channels.includes("whatsapp") && quote.channels.includes("phone")
-
-  const toggleWaPhone = () => {
-    setQuote(prev => {
-      const filtered = prev.channels.filter(
-        c => c !== "whatsapp" && c !== "phone",
-      )
-      return isWaPhoneSelected
-        ? { ...prev, channels: filtered }
-        : { ...prev, channels: [...filtered, "whatsapp", "phone"] }
-    })
-  }
-
-  // Anchor a popup just below a clicked card. Coordinates are
-  // document-relative (include scroll offsets) so the popup scrolls with
-  // the page along with its source element instead of sticking to the
-  // viewport.
-  const anchorFor = (target: HTMLElement) => {
-    const rect = target.getBoundingClientRect()
-    return {
-      top: rect.bottom + window.scrollY + 10,
-      left: rect.left + window.scrollX + rect.width / 2,
-    }
-  }
-
-  const handleServiceSelect = (
-    id: string,
-    e: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    if (id === "redesign") {
-      // Open the URL-capture popup anchored to the clicked card. Service
-      // is only marked as selected once the user confirms inside.
-      setRedesignDraftUrl(quote.existingSiteUrl)
-      setRedesignAnchor(anchorFor(e.currentTarget))
-      setRedesignModalOpen(true)
-      return
-    }
-    setQuote(prev => ({ ...prev, service: id }))
-  }
-
-  const handleRedesignConfirm = () => {
-    if (redesignDraftUrl.trim() === "") return
-    setQuote(prev => ({
-      ...prev,
-      service: "redesign",
-      existingSiteUrl: redesignDraftUrl.trim(),
-    }))
-    setRedesignModalOpen(false)
-  }
-
-  const handleProjectTypeSelect = (
-    id: string,
-    e: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    setQuote(prev => ({ ...prev, projectType: id }))
-    if (id === "landing" || id === "mini") {
-      setKobiAnchor(anchorFor(e.currentTarget))
-      setKobiModalOpen(true)
-    }
-  }
-
-  const toggleChannel = (id: string) => {
-    setQuote(prev => ({
-      ...prev,
-      channels: prev.channels.includes(id)
-        ? prev.channels.filter(c => c !== id)
-        : [...prev.channels, id],
-    }))
-  }
-
-  const updateRef = (idx: number, v: string) => {
-    setQuote(prev => ({
-      ...prev,
-      refs: prev.refs.map((r, i) => (i === idx ? v : r)),
-    }))
-  }
-
-  const isQuoteStepValid = (i: number) => {
-    if (i === 0) {
-      const hasIndustry = quote.industry.trim() !== ""
-      const hasService = quote.service !== ""
-      const redesignNeedsUrl =
-        quote.service === "redesign" && quote.existingSiteUrl.trim() === ""
-      return hasIndustry && hasService && !redesignNeedsUrl
-    }
-    if (i === 1) return quote.projectType !== ""
-    if (i === 2) return true
-    if (i === 3)
-      return (
-        quote.name.trim() !== "" &&
-        quote.email.trim() !== "" &&
-        quote.phone.trim() !== "" &&
-        quote.channels.length > 0 &&
-        quote.date !== "" &&
-        quote.time !== "" &&
-        quote.kvkk
-      )
-    return false
-  }
-
-  const quoteNext = () => {
-    if (!isQuoteStepValid(quoteStep)) return
-    if (quoteStep === QUOTE_STEPS.length - 1) {
-      // TODO: replace with real submission — POST to /api/quote or
-      // email/admin-panel endpoint. For now just simulate success.
-      console.log("Quote submitted:", quote)
-      setQuoteSubmitted(true)
-      return
-    }
-    setQuoteDir(1)
-    setQuoteStep(s => s + 1)
-  }
-
-  const quoteBack = () => {
-    if (quoteStep === 0) return
-    setQuoteDir(-1)
-    setQuoteStep(s => s - 1)
-  }
-
-  const quoteReset = () => {
-    setQuote(QUOTE_DEFAULT)
-    setQuoteStep(0)
-    setQuoteDir(1)
-    setQuoteSubmitted(false)
-  }
-
   const containerRef = useRef<HTMLDivElement>(null)
   const testimonialColumnRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -2223,135 +1812,6 @@ export default function Home() {
 
     return () => clearInterval(interval)
   }, [isPaused, totalOriginal, isMobile])
-
-  // If the selected time isn't valid for the selected date (e.g. user
-  // selected 09:00 on a future date, then switched to today where 09:00
-  // is too soon), clear it so validation requires a new pick.
-  useEffect(() => {
-    if (quote.time !== "" && !visibleTimeSlots.includes(quote.time)) {
-      setQuote(p => ({ ...p, time: "" }))
-    }
-  }, [visibleTimeSlots, quote.time])
-
-  // When a wizard popup opens, nudge the page so the entire popup is in
-  // view. Without this, popups anchored to cards near the bottom of the
-  // viewport get clipped and the user has to scroll manually.
-  useEffect(() => {
-    if (!redesignModalOpen) return
-    const id = requestAnimationFrame(() => {
-      const el = redesignModalRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const margin = 24
-      if (rect.bottom > window.innerHeight - margin) {
-        window.scrollBy({
-          top: rect.bottom - window.innerHeight + margin,
-          behavior: "smooth",
-        })
-      }
-    })
-    return () => cancelAnimationFrame(id)
-  }, [redesignModalOpen])
-
-  useEffect(() => {
-    if (!kobiModalOpen) return
-    const id = requestAnimationFrame(() => {
-      const el = kobiModalRef.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const margin = 24
-      if (rect.bottom > window.innerHeight - margin) {
-        window.scrollBy({
-          top: rect.bottom - window.innerHeight + margin,
-          behavior: "smooth",
-        })
-      }
-    })
-    return () => cancelAnimationFrame(id)
-  }, [kobiModalOpen])
-
-  // Package strip wheel-to-horizontal-scroll + arrow availability. The
-  // native scrollbar is hidden; navigation is via the top-right arrow
-  // buttons or the mouse wheel. A single rAF-driven easing loop drives
-  // both: each input nudges a `target` scrollLeft, the loop eases the
-  // real scrollLeft toward it. This blends consecutive wheel ticks into
-  // one continuous glide instead of the discrete jumps a native
-  // scrollBy("smooth") chain produces.
-  const pkgAnimateToRef = useRef<((delta: number) => void) | null>(null)
-  useEffect(() => {
-    if (quoteStep !== 1) return
-    const el = pkgScrollerRef.current
-    if (!el) return
-
-    let target = el.scrollLeft
-    let raf = 0
-
-    const tick = () => {
-      const current = el.scrollLeft
-      const diff = target - current
-      if (Math.abs(diff) < 0.4) {
-        el.scrollLeft = target
-        raf = 0
-        return
-      }
-      el.scrollLeft = current + diff * 0.18
-      raf = requestAnimationFrame(tick)
-    }
-
-    const animateBy = (delta: number) => {
-      const max = el.scrollWidth - el.clientWidth
-      const base = raf ? target : el.scrollLeft
-      target = Math.max(0, Math.min(max, base + delta))
-      if (!raf) raf = requestAnimationFrame(tick)
-    }
-
-    pkgAnimateToRef.current = animateBy
-
-    const updateArrows = () => {
-      setPkgCanScrollLeft(el.scrollLeft > 1)
-      setPkgCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1)
-    }
-    updateArrows()
-
-    const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault()
-        animateBy(e.deltaY)
-      }
-    }
-    el.addEventListener("wheel", onWheel, { passive: false })
-    el.addEventListener("scroll", updateArrows, { passive: true })
-    window.addEventListener("resize", updateArrows)
-    return () => {
-      if (raf) cancelAnimationFrame(raf)
-      pkgAnimateToRef.current = null
-      el.removeEventListener("wheel", onWheel)
-      el.removeEventListener("scroll", updateArrows)
-      window.removeEventListener("resize", updateArrows)
-    }
-  }, [quoteStep])
-
-  const scrollPkgs = (dir: -1 | 1) => {
-    const el = pkgScrollerRef.current
-    if (!el) return
-    const delta = dir * el.clientWidth * 0.6
-    if (pkgAnimateToRef.current) {
-      pkgAnimateToRef.current(delta)
-    } else {
-      el.scrollBy({ left: delta, behavior: "smooth" })
-    }
-  }
-
-  // Process section auto-advance: cycles through the 4 stages on the same
-  // cadence as the progress bar animation. Pauses on hover; skipped on
-  // mobile where the user expands panels themselves via tap.
-  useEffect(() => {
-    if (isProcessPaused || isMobile) return
-    const t = setInterval(() => {
-      setActiveStep(prev => (prev + 1) % processSteps.length)
-    }, STEP_DURATION_MS)
-    return () => clearInterval(t)
-  }, [isProcessPaused, activeStep, isMobile])
 
   // Mousewheel scrolling: capture wheel over the entire testimonial
   // column (Google reviews card + carousel + the surrounding negative
@@ -2637,13 +2097,18 @@ export default function Home() {
 
           {/* Desktop Nav Links */}
           <div className="hidden items-center gap-8 md:flex">
-            {["Hizmet", "Çalışmalar", "Süreç", "İletişim"].map((item) => (
+            {[
+              { label: "Hakkımızda", href: "/hakkimizda" },
+              { label: "Web Site", href: "/web-site" },
+              { label: "Dijital Reklamlar", href: "/dijital-reklamlar" },
+              { label: "İletişim", href: "/iletisim" },
+            ].map((item) => (
               <a
-                key={item}
-                href="#"
+                key={item.label}
+                href={item.href}
                 className="text-[14px] text-black/60 transition-colors hover:text-[#0a0a0a]"
               >
-                {item}
+                {item.label}
               </a>
             ))}
           </div>
@@ -2667,13 +2132,18 @@ export default function Home() {
         {mobileMenuOpen && (
           <div className="border-t border-black/[0.06] bg-[#fafafa] px-6 py-4 md:hidden">
             <div className="flex flex-col gap-3">
-              {["Hizmet", "Çalışmalar", "Süreç", "İletişim"].map((item) => (
+              {[
+                { label: "Hakkımızda", href: "/hakkimizda" },
+                { label: "Web Site", href: "/web-site" },
+                { label: "Dijital Reklamlar", href: "/dijital-reklamlar" },
+                { label: "İletişim", href: "/iletisim" },
+              ].map((item) => (
                 <a
-                  key={item}
-                  href="#"
+                  key={item.label}
+                  href={item.href}
                   className="py-2 text-[15px] text-black/70 transition-colors hover:text-[#0a0a0a]"
                 >
-                  {item}
+                  {item.label}
                 </a>
               ))}
               <button className="mt-2 w-full rounded-md bg-[#3c639f] px-4 py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]">
@@ -2946,1209 +2416,345 @@ export default function Home() {
             Right column is intentionally empty for now. */}
         <ProjectsSection />
 
-        {/* Quote Wizard — 4-step pricing tool. Stepper at top, animated
-            step content in the middle, Back/Next buttons at the bottom.
-            On submit, swaps to a success state. Submission is currently a
-            console.log stub; backend wiring (email + admin panel) is a
-            follow-up. */}
-        <section
-          id="teklif"
-          className="relative overflow-hidden border-t border-black/[0.06] py-12 md:py-16"
-          style={{
-            background:
-              'linear-gradient(180deg, #ffffff 0%, #f5f8ff 35%, #eef3fb 65%, #ffffff 100%)',
-          }}
-        >
-          {/* Decorative background — soft brand-blue blobs at corners +
-              subtle dot grid overlay for a modern feel. Pointer-events
-              none and behind content via z-0/relative wrapper. */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-32 -top-32 h-[520px] w-[520px] rounded-full"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(60,99,159,0.22) 0%, transparent 70%)',
-              filter: 'blur(60px)',
-            }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-32 -left-40 h-[480px] w-[480px] rounded-full"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(60,99,159,0.18) 0%, transparent 70%)',
-              filter: 'blur(60px)',
-            }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-50"
-            style={{
-              backgroundImage:
-                'radial-gradient(rgba(60,99,159,0.12) 1px, transparent 1px)',
-              backgroundSize: '28px 28px',
-              maskImage:
-                'radial-gradient(ellipse at center, black 30%, transparent 75%)',
-              WebkitMaskImage:
-                'radial-gradient(ellipse at center, black 30%, transparent 75%)',
-            }}
-          />
-
-          <div className="relative mx-auto max-w-[1280px] px-6 md:px-12">
-            <div className="mb-8 md:mb-10">
-              <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-                Ücretsiz Teklif
-              </span>
-              <h2 className="mt-2 text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[48px]">
-                <span className="font-normal">Projenize özel </span>
-                <span className="font-bold text-[#3c639f]">fiyat teklifi</span>
+        {/* "Neler yaparız?" — two service spotlights side by side. Each card
+            has a distinct motif (code lines for Web Site, rising chart for
+            Reklamlar) and a hover-animated pill CTA. Matches the spacing
+            and structure of the projects section above (no top border, just
+            bottom padding) so the two read as one continuous block. */}
+        <section className="relative mx-auto max-w-[1280px] px-6 pb-16 md:px-12 md:pb-20">
+          <div className="mb-8">
+            <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
+              Hizmetler
+            </span>
+            <div className="mt-2">
+              <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
+                <span className="font-normal">Neler </span>
+                <span className="font-bold text-[#3c639f]">yaparız?</span>
               </h2>
-              <p className="mt-4 max-w-[520px] text-[15px] leading-relaxed text-black/60">
-                Dört kısa adımda projenizi tanıyalım. Cevaplarınıza göre size en
-                uygun çözümü ve net bir fiyat aralığını sunalım.
+              <p className="mt-3 max-w-[560px] text-[15px] leading-relaxed text-black/60">
+                Aynı ekip, iki uzmanlık. Markanızı dijital dünyada hem inşa
+                ediyor, hem büyütüyoruz.
               </p>
             </div>
-
-            <div className="quote-card-pulse overflow-hidden rounded-2xl border border-black/[0.06] bg-white">
-              {quoteSubmitted ? (
-                /* ─── Success state ───────────────────────────────── */
-                <div className="flex flex-col items-center px-6 py-16 text-center md:px-12 md:py-20">
-                  <div
-                    className="flex h-20 w-20 items-center justify-center rounded-full bg-[#3c639f]/[0.08]"
-                    style={{ animation: 'quoteSuccessPop 0.6s ease-out' }}
-                  >
-                    <CheckCircle2
-                      size={44}
-                      className="text-[#3c639f]"
-                      strokeWidth={1.8}
-                    />
-                  </div>
-                  <h3 className="mt-6 text-[26px] font-semibold tracking-[-0.02em] text-[#0a0a0a] md:text-[32px]">
-                    Teşekkürler {quote.name.split(' ')[0]}!
-                  </h3>
-                  <p className="mt-3 max-w-[480px] text-[15px] leading-relaxed text-black/60">
-                    Teklifiniz bize ulaştı.{' '}
-                    <span className="font-medium text-[#0a0a0a]">
-                      {quote.channels
-                        .map(id => QUOTE_CHANNELS.find(c => c.id === id)?.label)
-                        .filter(Boolean)
-                        .join(' / ')}
-                    </span>{' '}
-                    üzerinden{' '}
-                    <span className="font-medium text-[#0a0a0a]">
-                      {quote.date} {quote.time}
-                    </span>{' '}
-                    için sizinle iletişime geçeceğiz.
-                  </p>
-                  <button
-                    onClick={quoteReset}
-                    className="mt-8 inline-flex items-center gap-2 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
-                  >
-                    Yeni teklif gönder
-                    <ArrowRight size={14} />
-                  </button>
-                </div>
-              ) : (
-                <>
-                  {/* ─── Stepper ──────────────────────────────────── */}
-                  <div className="border-b border-black/[0.06] bg-[#fafafa] px-6 py-6 md:px-10 md:py-7">
-                    <div className="flex items-center">
-                      {QUOTE_STEPS.map((s, i) => {
-                        const isActive = i === quoteStep
-                        const isDone = i < quoteStep
-                        const isLast = i === QUOTE_STEPS.length - 1
-                        return (
-                          <div
-                            key={s.num}
-                            className={`flex items-center ${
-                              isLast ? 'shrink-0' : 'flex-1'
-                            }`}
-                          >
-                            <div className="flex shrink-0 flex-col items-center">
-                              <div
-                                className={`flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-semibold transition-all ${
-                                  isActive
-                                    ? 'step-circle-active bg-[#3c639f] text-white'
-                                    : isDone
-                                    ? 'bg-[#3c639f]/[0.12] text-[#3c639f]'
-                                    : 'border border-black/[0.1] bg-white text-black/35'
-                                }`}
-                              >
-                                {isDone ? <Check size={16} strokeWidth={2.5} /> : s.num}
-                              </div>
-                              <div
-                                className={`mt-2 hidden whitespace-nowrap text-[11px] font-medium tracking-[-0.01em] transition-colors sm:block ${
-                                  isActive
-                                    ? 'text-[#0a0a0a]'
-                                    : isDone
-                                    ? 'text-[#3c639f]'
-                                    : 'text-black/40'
-                                }`}
-                              >
-                                {s.title}
-                              </div>
-                            </div>
-                            {!isLast && (
-                              <div className="mx-2 h-[2px] flex-1 overflow-hidden rounded-full bg-black/[0.06] sm:mx-3">
-                                <div
-                                  className="h-full bg-[#3c639f] transition-all duration-500 ease-out"
-                                  style={{ width: i < quoteStep ? '100%' : '0%' }}
-                                />
-                              </div>
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-
-                  {/* ─── Step body ────────────────────────────────── */}
-                  <div className="relative px-6 py-8 md:px-12 md:py-10">
-                    <div
-                      key={quoteStep}
-                      className={
-                        quoteDir === 1 ? 'quote-step-fwd' : 'quote-step-bwd'
-                      }
-                    >
-                      {quoteStep === 0 && (
-                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-7">
-                          <div className="flex flex-col gap-5">
-                            <div>
-                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                Sektörünüz / iş kolunuz{' '}
-                                <span className="text-[#3c639f]">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                value={quote.industry}
-                                onChange={e =>
-                                  setQuote(p => ({ ...p, industry: e.target.value }))
-                                }
-                                placeholder="Örn. butik kafe, mimari ofis, online butik..."
-                                className="mt-2.5 w-full rounded-xl border border-black/[0.1] bg-white px-4 py-3.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                              />
-                            </div>
-                            <div className="flex flex-col md:flex-1">
-                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                Verdiğiniz hizmetler{' '}
-                                <span className="text-[12px] font-normal text-black/45">
-                                  (kısaca)
-                                </span>
-                              </label>
-                              <textarea
-                                value={quote.services}
-                                onChange={e =>
-                                  setQuote(p => ({ ...p, services: e.target.value }))
-                                }
-                                placeholder="Örn. kahvaltı servisi, tatlı/pasta üretimi, paket servis..."
-                                rows={3}
-                                className="mt-2.5 w-full resize-none rounded-xl border border-black/[0.1] bg-white px-4 py-3.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08] md:flex-1"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex flex-col">
-                            <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                              Hangi hizmete ihtiyacınız var?{' '}
-                              <span className="text-[#3c639f]">*</span>
-                            </label>
-                            <div className="mt-2.5 flex flex-1 flex-col gap-3">
-                              {QUOTE_SERVICES.map(s => {
-                                const isSel = quote.service === s.id
-                                const Icon = s.Icon
-                                const showUrl =
-                                  s.id === 'redesign' &&
-                                  isSel &&
-                                  quote.existingSiteUrl !== ''
-                                return (
-                                  <button
-                                    key={s.id}
-                                    type="button"
-                                    onClick={e => handleServiceSelect(s.id, e)}
-                                    className={`relative flex flex-1 items-start gap-4 rounded-2xl border p-5 text-left transition-all ${
-                                      isSel
-                                        ? 'border-[#3c639f]/40 bg-[#3c639f]/[0.04]'
-                                        : 'border-black/[0.08] bg-white hover:border-black/[0.18]'
-                                    }`}
-                                  >
-                                    <div
-                                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors ${
-                                        isSel
-                                          ? 'bg-[#3c639f] text-white'
-                                          : 'bg-[#3c639f]/[0.08] text-[#3c639f]'
-                                      }`}
-                                    >
-                                      <Icon size={20} strokeWidth={1.75} />
-                                    </div>
-                                    <div className="flex-1">
-                                      <div className="flex items-center justify-between gap-2">
-                                        <span
-                                          className={`text-[15px] font-semibold tracking-[-0.01em] ${
-                                            isSel ? 'text-[#0a0a0a]' : 'text-black/80'
-                                          }`}
-                                        >
-                                          {s.label}
-                                        </span>
-                                        <div
-                                          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full transition-all ${
-                                            isSel
-                                              ? 'bg-[#3c639f]'
-                                              : 'border border-black/[0.2] bg-white'
-                                          }`}
-                                        >
-                                          {isSel && (
-                                            <Check
-                                              size={13}
-                                              strokeWidth={3}
-                                              className="text-white"
-                                            />
-                                          )}
-                                        </div>
-                                      </div>
-                                      <p className="mt-1 text-[13px] leading-relaxed text-black/55">
-                                        {s.desc}
-                                      </p>
-                                      {showUrl && (
-                                        <div
-                                          className="mt-3 flex items-center gap-2 rounded-lg bg-white px-3 py-2"
-                                          style={{
-                                            border: '1px solid rgba(60,99,159,0.15)',
-                                          }}
-                                        >
-                                          <Globe
-                                            size={13}
-                                            className="shrink-0 text-[#3c639f]"
-                                          />
-                                          <span className="truncate text-[12px] font-medium text-[#0a0a0a]">
-                                            {quote.existingSiteUrl}
-                                          </span>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </button>
-                                )
-                              })}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {quoteStep === 1 && (
-                        <div className="flex flex-col gap-4">
-                          <div className="flex items-end justify-between gap-3">
-                            <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                              Hangi paket size uygun?{' '}
-                              <span className="text-[#3c639f]">*</span>
-                              <span className="ml-2 text-[12px] font-normal text-black/45">
-                                emin değilseniz size yardımcı oluruz
-                              </span>
-                            </label>
-                            <div className="flex shrink-0 items-center gap-1.5">
-                              <button
-                                type="button"
-                                onClick={() => scrollPkgs(-1)}
-                                disabled={!pkgCanScrollLeft}
-                                aria-label="Önceki paketler"
-                                className="flex h-8 w-8 items-center justify-center rounded-full border border-black/[0.08] bg-white text-[#3c639f] transition-all hover:border-[#3c639f]/30 hover:bg-[#3c639f]/[0.06] disabled:cursor-not-allowed disabled:border-black/[0.06] disabled:bg-white disabled:text-black/20"
-                              >
-                                <ChevronLeft size={16} strokeWidth={2.25} />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => scrollPkgs(1)}
-                                disabled={!pkgCanScrollRight}
-                                aria-label="Sonraki paketler"
-                                className="flex h-8 w-8 items-center justify-center rounded-full border border-black/[0.08] bg-white text-[#3c639f] transition-all hover:border-[#3c639f]/30 hover:bg-[#3c639f]/[0.06] disabled:cursor-not-allowed disabled:border-black/[0.06] disabled:bg-white disabled:text-black/20"
-                              >
-                                <ChevronRight size={16} strokeWidth={2.25} />
-                              </button>
-                            </div>
-                          </div>
-                          <div className="quote-pkg-scroll-wrap -mx-6 md:-mx-12">
-                            <div
-                              ref={pkgScrollerRef}
-                              className="quote-pkg-scroll flex items-stretch gap-3 overflow-x-auto px-6 md:px-12"
-                            >
-                              {QUOTE_PROJECT_TYPES.map(t => {
-                                const isSel = quote.projectType === t.id
-                                const Icon = t.Icon
-                                return (
-                                  <button
-                                    key={t.id}
-                                    type="button"
-                                    onClick={e => handleProjectTypeSelect(t.id, e)}
-                                    className={`group relative flex shrink-0 grow-0 basis-[78%] flex-col gap-4 overflow-hidden rounded-2xl border p-5 text-left transition-all md:basis-[calc((100%_-_24px)_/_2.5)] ${
-                                      isSel
-                                        ? 'border-[#3c639f]/40 bg-[#3c639f]/[0.04]'
-                                        : 'border-black/[0.08] bg-white hover:border-black/[0.18]'
-                                    }`}
-                                  >
-                                    {isSel && (
-                                      <div
-                                        aria-hidden
-                                        className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full bg-[#3c639f] text-white"
-                                      >
-                                        <Check size={14} strokeWidth={3} />
-                                      </div>
-                                    )}
-                                    <div className="flex items-start gap-3">
-                                      <div
-                                        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors ${
-                                          isSel
-                                            ? 'bg-[#3c639f] text-white'
-                                            : 'bg-[#3c639f]/[0.08] text-[#3c639f]'
-                                        }`}
-                                      >
-                                        <Icon size={20} strokeWidth={1.75} />
-                                      </div>
-                                      <div className="flex-1 pt-0.5 pr-8">
-                                        <div className="text-[16px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                          {t.label}
-                                        </div>
-                                        <div className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.06em] text-[#3c639f]">
-                                          {t.tagline}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <p className="text-[13px] leading-relaxed text-black/60">
-                                      {t.desc}
-                                    </p>
-                                    <ul className="flex flex-col gap-1.5">
-                                      {t.bullets.map(b => (
-                                        <li
-                                          key={b}
-                                          className="flex items-start gap-2 text-[12.5px] text-black/65"
-                                        >
-                                          <Check
-                                            size={13}
-                                            className="mt-[3px] shrink-0 text-[#3c639f]"
-                                            strokeWidth={2.5}
-                                          />
-                                          <span>{b}</span>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                    <div className="mt-1 flex items-center gap-2 border-t border-black/[0.06] pt-4">
-                                      <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-                                        Karakter
-                                      </span>
-                                      <span className="text-[15px] font-bold tracking-[-0.01em] text-[#3c639f]">
-                                        {t.descriptor}
-                                      </span>
-                                    </div>
-                                  </button>
-                                )
-                              })}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {quoteStep === 2 && (
-                        <div className="flex flex-col gap-7">
-                          <div>
-                            <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                              Tarzını beğendiğiniz örnek siteler
-                              <span className="ml-2 text-[12px] font-normal text-black/45">
-                                opsiyonel · en fazla 3
-                              </span>
-                            </label>
-                            <div className="mt-3 flex flex-col gap-2">
-                              {[0, 1, 2].map(idx => (
-                                <div key={idx} className="relative">
-                                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[12px] font-medium text-black/35">
-                                    {idx + 1}
-                                  </span>
-                                  <input
-                                    type="url"
-                                    value={quote.refs[idx]}
-                                    onChange={e => updateRef(idx, e.target.value)}
-                                    placeholder="https://ornek-site.com"
-                                    className="w-full rounded-xl border border-black/[0.1] bg-white py-3 pl-10 pr-4 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Two textareas side-by-side. Order swapped so the
-                              site-comparison question (which follows the
-                              URL list above) sits on the left, and the
-                              free-form project description is on the right. */}
-                          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <div>
-                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                Bu sitelerde ne hoşunuza gidiyor?
-                                <span className="ml-2 text-[12px] font-normal text-black/45">
-                                  opsiyonel
-                                </span>
-                              </label>
-                              <textarea
-                                value={quote.refNotes}
-                                onChange={e =>
-                                  setQuote(p => ({
-                                    ...p,
-                                    refNotes: e.target.value,
-                                  }))
-                                }
-                                rows={5}
-                                placeholder="Renkler, tipografi, animasyon, akış, içerik düzeni..."
-                                className="mt-3 w-full resize-none rounded-xl border border-black/[0.1] bg-white px-4 py-3 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                              />
-                            </div>
-                            <div>
-                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                Projenizi kısaca anlatın
-                                <span className="ml-2 text-[12px] font-normal text-black/45">
-                                  opsiyonel
-                                </span>
-                              </label>
-                              <textarea
-                                value={quote.description}
-                                onChange={e =>
-                                  setQuote(p => ({
-                                    ...p,
-                                    description: e.target.value,
-                                  }))
-                                }
-                                rows={5}
-                                placeholder="Aklınızdaki konsepti, hedefleri, özel istekleri..."
-                                className="mt-3 w-full resize-none rounded-xl border border-black/[0.1] bg-white px-4 py-3 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                              />
-                            </div>
-                          </div>
-
-                          <div
-                            className="flex items-center gap-3 rounded-xl px-4 py-3"
-                            style={{
-                              background: 'rgba(60, 99, 159, 0.04)',
-                              border: '1px solid rgba(60, 99, 159, 0.1)',
-                            }}
-                          >
-                            <Sparkles
-                              size={16}
-                              className="shrink-0 text-[#3c639f]"
-                            />
-                            <p className="text-[12.5px] leading-relaxed text-black/65">
-                              Bu adım opsiyonel — atlayabilirsiniz, ama doldurursanız
-                              tasarım yönümüzü ilk görüşmede çok daha hızlı
-                              netleştiririz.
-                            </p>
-                          </div>
-                        </div>
-                      )}
-
-                      {quoteStep === 3 && (
-                        <div className="flex flex-col gap-7">
-                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                Ad Soyad{' '}
-                                <span className="text-[#3c639f]">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                value={quote.name}
-                                onChange={e =>
-                                  setQuote(p => ({ ...p, name: e.target.value }))
-                                }
-                                placeholder="Adınız Soyadınız"
-                                className="mt-2 w-full rounded-xl border border-black/[0.1] bg-white px-4 py-3 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                              />
-                            </div>
-                            <div>
-                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                Firma
-                                <span className="ml-2 text-[12px] font-normal text-black/45">
-                                  opsiyonel
-                                </span>
-                              </label>
-                              <input
-                                type="text"
-                                value={quote.company}
-                                onChange={e =>
-                                  setQuote(p => ({ ...p, company: e.target.value }))
-                                }
-                                placeholder="Şirket adı"
-                                className="mt-2 w-full rounded-xl border border-black/[0.1] bg-white px-4 py-3 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div>
-                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                E-posta{' '}
-                                <span className="text-[#3c639f]">*</span>
-                              </label>
-                              <input
-                                type="email"
-                                value={quote.email}
-                                onChange={e =>
-                                  setQuote(p => ({ ...p, email: e.target.value }))
-                                }
-                                placeholder="siz@firma.com"
-                                className="mt-2 w-full rounded-xl border border-black/[0.1] bg-white px-4 py-3 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                              />
-                            </div>
-                            <div>
-                              <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                Telefon{' '}
-                                <span className="text-[#3c639f]">*</span>
-                              </label>
-                              <input
-                                type="tel"
-                                value={quote.phone}
-                                onChange={e =>
-                                  setQuote(p => ({ ...p, phone: e.target.value }))
-                                }
-                                placeholder="+90 5XX XXX XX XX"
-                                className="mt-2 w-full rounded-xl border border-black/[0.1] bg-white px-4 py-3 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                              />
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                              Sizinle nasıl iletişime geçelim?{' '}
-                              <span className="text-[#3c639f]">*</span>
-                              <span className="ml-2 text-[12px] font-normal text-black/45">
-                                birden fazla seçebilirsiniz
-                              </span>
-                            </label>
-                            <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                              {/* Combined WhatsApp + Telefon — single button
-                                  that selects both channels together. White
-                                  by default; on hover and when selected,
-                                  background fades from WhatsApp green to
-                                  brand blue. */}
-                              <button
-                                type="button"
-                                onClick={toggleWaPhone}
-                                className={`wa-phone-combo flex h-[52px] items-center justify-center gap-3 rounded-xl border text-[14px] font-semibold transition-all sm:col-span-2 ${
-                                  isWaPhoneSelected ? 'wa-phone-combo-active' : ''
-                                }`}
-                              >
-                                <WhatsAppIcon size={18} />
-                                <span>WhatsApp ya da Telefon</span>
-                                <Phone size={16} strokeWidth={2.2} />
-                              </button>
-
-                              {/* Email — solo button on the right */}
-                              <button
-                                type="button"
-                                onClick={() => toggleChannel('email')}
-                                style={
-                                  quote.channels.includes('email')
-                                    ? {
-                                        backgroundColor: '#3c639f',
-                                        borderColor: '#3c639f',
-                                        boxShadow:
-                                          '0 2px 12px -2px rgba(60,99,159,0.4)',
-                                        color: '#ffffff',
-                                      }
-                                    : undefined
-                                }
-                                className={`flex h-[52px] items-center justify-center gap-2 rounded-xl border text-[14px] font-semibold transition-all ${
-                                  quote.channels.includes('email')
-                                    ? ''
-                                    : 'border-black/[0.1] bg-white text-[#3c639f] hover:border-[#3c639f]/40'
-                                }`}
-                              >
-                                <Mail size={16} strokeWidth={2.2} />
-                                E-posta
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Date + Time — only appear after at least one
-                              channel is selected. grid-rows trick smoothly
-                              expands the section. */}
-                          <div
-                            className={`grid transition-[grid-template-rows] duration-500 ease-out ${
-                              quote.channels.length > 0
-                                ? 'grid-rows-[1fr]'
-                                : 'grid-rows-[0fr]'
-                            }`}
-                          >
-                            <div className="overflow-hidden">
-                              <div className="flex flex-col gap-7 pt-1">
-                                {/* Date picker — 14-day horizontal chip strip */}
-                                <div>
-                                  <label className="flex items-center gap-2 text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                    <Calendar size={15} className="text-[#3c639f]" />
-                                    Hangi gün müsaitsiniz?{' '}
-                                    <span className="text-[#3c639f]">*</span>
-                                  </label>
-                                  <div className="mt-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-2 scrollbar-hide">
-                                    {next14Days.map(d => {
-                                      const isSel = quote.date === d.iso
-                                      return (
-                                        <button
-                                          key={d.iso}
-                                          type="button"
-                                          onClick={() =>
-                                            setQuote(p => ({ ...p, date: d.iso }))
-                                          }
-                                          className={`flex min-w-[72px] shrink-0 flex-col items-center gap-1 rounded-xl border px-3 py-3 transition-all ${
-                                            isSel
-                                              ? 'border-[#3c639f] bg-[#3c639f] text-white shadow-[0_4px_12px_-2px_rgba(60,99,159,0.35)]'
-                                              : 'border-black/[0.08] bg-white hover:border-[#3c639f]/40'
-                                          }`}
-                                        >
-                                          <span
-                                            className={`text-[10px] font-medium uppercase tracking-[0.06em] ${
-                                              isSel ? 'text-white/75' : 'text-black/45'
-                                            }`}
-                                          >
-                                            {d.isToday ? 'Bugün' : d.dayName}
-                                          </span>
-                                          <span
-                                            className={`text-[22px] font-bold leading-none tracking-[-0.02em] ${
-                                              isSel ? 'text-white' : 'text-[#0a0a0a]'
-                                            }`}
-                                          >
-                                            {d.dayNum}
-                                          </span>
-                                          <span
-                                            className={`text-[10px] ${
-                                              isSel ? 'text-white/75' : 'text-black/45'
-                                            }`}
-                                          >
-                                            {d.monthShort}
-                                          </span>
-                                        </button>
-                                      )
-                                    })}
-                                  </div>
-                                </div>
-
-                                {/* Time picker — 30-min slot chips */}
-                                <div>
-                                  <label className="flex items-center gap-2 text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                                    <Clock size={15} className="text-[#3c639f]" />
-                                    Saat aralığı{' '}
-                                    <span className="text-[#3c639f]">*</span>
-                                  </label>
-                                  <div className="mt-3 grid grid-cols-4 gap-2 sm:grid-cols-6 lg:grid-cols-7">
-                                    {visibleTimeSlots.map(t => {
-                                      const isSel = quote.time === t
-                                      return (
-                                        <button
-                                          key={t}
-                                          type="button"
-                                          onClick={() =>
-                                            setQuote(p => ({ ...p, time: t }))
-                                          }
-                                          className={`rounded-lg border py-2.5 text-[13px] font-medium transition-all ${
-                                            isSel
-                                              ? 'border-[#3c639f] bg-[#3c639f] text-white shadow-[0_2px_8px_-2px_rgba(60,99,159,0.35)]'
-                                              : 'border-black/[0.08] bg-white text-black/70 hover:border-[#3c639f]/40 hover:text-[#0a0a0a]'
-                                          }`}
-                                        >
-                                          {t}
-                                        </button>
-                                      )
-                                    })}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <label className="flex cursor-pointer items-start gap-3">
-                            <input
-                              type="checkbox"
-                              checked={quote.kvkk}
-                              onChange={e =>
-                                setQuote(p => ({ ...p, kvkk: e.target.checked }))
-                              }
-                              className="peer sr-only"
-                            />
-                            <span
-                              className={`mt-[2px] flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-md border transition-all ${
-                                quote.kvkk
-                                  ? 'border-[#3c639f] bg-[#3c639f]'
-                                  : 'border-black/[0.2] bg-white'
-                              }`}
-                            >
-                              {quote.kvkk && (
-                                <Check
-                                  size={12}
-                                  strokeWidth={3}
-                                  className="text-white"
-                                />
-                              )}
-                            </span>
-                            <span className="text-[13px] leading-relaxed text-black/65">
-                              <span className="font-medium text-[#0a0a0a]">KVKK</span>{' '}
-                              aydınlatma metnini okudum, kişisel verilerimin işlenmesini
-                              kabul ediyorum.{' '}
-                              <span className="text-[#3c639f]">*</span>
-                            </span>
-                          </label>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* ─── Navigation ───────────────────────────────── */}
-                  <div className="flex items-center justify-between gap-3 border-t border-black/[0.06] bg-[#fafafa] px-6 py-5 md:px-10">
-                    <button
-                      type="button"
-                      onClick={quoteBack}
-                      disabled={quoteStep === 0}
-                      className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-[14px] font-medium text-black/65 transition-all hover:bg-white hover:text-[#0a0a0a] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
-                    >
-                      <ArrowLeft size={16} />
-                      Geri
-                    </button>
-                    <div className="text-[12px] font-medium tracking-[0.04em] text-black/40">
-                      Adım {quoteStep + 1} / {QUOTE_STEPS.length}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={quoteNext}
-                      disabled={!isQuoteStepValid(quoteStep)}
-                      className="cta-primary relative inline-flex items-center gap-2 overflow-hidden rounded-lg px-5 py-2.5 text-[14px] font-semibold tracking-[-0.005em]"
-                    >
-                      <span className="relative z-[1] inline-flex items-center gap-2">
-                        {quoteStep === QUOTE_STEPS.length - 1 ? 'Gönder' : 'Devam'}
-                        <ArrowRight size={16} />
-                      </span>
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
           </div>
-        </section>
 
-        {/* Process Section — "Nasıl Çalışıyoruz". Horizontal accordion of
-            4 stages. The active panel expands to dominant width; the others
-            compress to a slim column showing the step number, vertical
-            title and icon. Auto-advances every STEP_DURATION_MS, pauses on
-            hover, clickable to jump. On mobile, falls back to a vertical
-            accordion that the user expands by tap. */}
-        <section className="border-t border-black/[0.06] bg-[#fafafa] py-20 md:py-28">
-          <div className="mx-auto max-w-[1280px] px-6 md:px-12">
-            <div className="mb-12 text-center md:mb-16">
-              <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-                Nasıl Çalışıyoruz
-              </span>
-              <h2 className="mt-3 text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
-                <span className="font-normal">Düşünceden yayına, </span>
-                <span className="font-bold text-[#3c639f]">dört adımda</span>
-              </h2>
-              <p className="mx-auto mt-4 max-w-[520px] text-[15px] leading-relaxed text-black/60">
-                Her projeyi aynı şekilde götürmüyoruz, ama omurga hep aynı. İşte
-                sizinle başlayıp sonuna kadar yan yana yürüdüğümüz dört durak.
-              </p>
-            </div>
-
-            {/* DESKTOP: horizontal accordion. grid-template-columns is
-                interpolated across panels so the active panel grows and the
-                rest shrink in a single smooth transition. */}
+          <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+            {/* Center seam — slim vertical gradient line with a tiny `&`
+                badge nestled in the middle. Desktop only. */}
             <div
-              className="hidden overflow-hidden rounded-2xl border border-black/[0.06] bg-white shadow-[0_4px_24px_-8px_rgba(60,99,159,0.08)] md:grid"
-              style={{
-                gridTemplateColumns: processSteps
-                  .map((_, i) => (i === activeStep ? '6fr' : '1fr'))
-                  .join(' '),
-                transition:
-                  'grid-template-columns 700ms cubic-bezier(0.22, 1, 0.36, 1)',
-                minHeight: '480px',
-              }}
-              onMouseEnter={() => setIsProcessPaused(true)}
-              onMouseLeave={() => setIsProcessPaused(false)}
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-0 hidden h-full -translate-x-1/2 md:block"
             >
-              {processSteps.map((step, i) => {
-                const isActive = i === activeStep
-                const StepIcon = step.Icon
-                return (
-                  <button
-                    key={step.title}
-                    onClick={() => setActiveStep(i)}
-                    aria-label={`${step.num} ${step.title}`}
-                    className={`group relative h-full overflow-hidden text-left transition-colors duration-500 ${
-                      i > 0 ? 'border-l border-black/[0.06]' : ''
-                    } ${isActive ? 'bg-white' : 'bg-[#fafafa] hover:bg-white'}`}
-                  >
-                    {/* Compressed view: vertical strip with number + rotated
-                        title + icon. Hidden when active. */}
-                    <div
-                      className={`absolute inset-0 flex flex-col items-center justify-between py-10 transition-opacity duration-300 ${
-                        isActive
-                          ? 'pointer-events-none opacity-0'
-                          : 'opacity-100 delay-200'
-                      }`}
-                    >
-                      <div className="text-[13px] font-semibold tracking-[0.1em] text-[#3c639f]">
-                        {step.num}
-                      </div>
-                      <div
-                        className="text-[15px] font-semibold tracking-[-0.01em] text-black/70 transition-colors group-hover:text-[#0a0a0a]"
-                        style={{
-                          writingMode: 'vertical-rl',
-                          transform: 'rotate(180deg)',
-                        }}
-                      >
-                        {step.title}
-                      </div>
-                      <StepIcon size={20} className="text-black/30" strokeWidth={1.5} />
-                    </div>
-
-                    {/* Expanded view: full content. Fades in after the panel
-                        has had time to start widening so text doesn't appear
-                        crammed mid-transition. */}
-                    <div
-                      className={`relative grid h-full grid-cols-1 transition-opacity duration-500 lg:grid-cols-[1fr_260px] ${
-                        isActive
-                          ? 'opacity-100 delay-200'
-                          : 'pointer-events-none opacity-0'
-                      }`}
-                    >
-                      <div className="flex flex-col justify-center p-10 lg:p-12">
-                        <div className="flex items-baseline gap-3">
-                          <span className="text-[80px] font-bold leading-none tracking-[-0.04em] text-[#3c639f]/15">
-                            {step.num}
-                          </span>
-                          <h3 className="text-[28px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-                            {step.title}
-                          </h3>
-                        </div>
-                        <p className="mt-5 max-w-[440px] text-[16px] leading-relaxed text-black/65">
-                          {step.description}
-                        </p>
-                        <ul className="mt-7 flex flex-col gap-3">
-                          {step.bullets.map((b) => (
-                            <li
-                              key={b}
-                              className="flex items-start gap-3 text-[14px] leading-relaxed text-black/70"
-                            >
-                              <Check
-                                size={16}
-                                className="mt-[3px] shrink-0 text-[#3c639f]"
-                                strokeWidth={2.5}
-                              />
-                              <span>{b}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Right visual panel — placeholder for a future custom
-                          illustration. Hidden on md (only shows lg+). */}
-                      <div
-                        className="relative hidden items-center justify-center overflow-hidden lg:flex"
-                        style={{
-                          background:
-                            'linear-gradient(135deg, rgba(60,99,159,0.07) 0%, rgba(60,99,159,0.02) 100%)',
-                        }}
-                      >
-                        <div
-                          aria-hidden
-                          className="pointer-events-none absolute -right-10 -top-10 h-48 w-48 rounded-full"
-                          style={{
-                            background:
-                              'radial-gradient(circle, rgba(60,99,159,0.2) 0%, rgba(60,99,159,0) 70%)',
-                            filter: 'blur(6px)',
-                          }}
-                        />
-                        <div className="relative flex flex-col items-center gap-4">
-                          <div
-                            className="flex h-24 w-24 items-center justify-center rounded-2xl bg-white"
-                            style={{
-                              boxShadow:
-                                '0 1px 2px rgba(60,99,159,0.04), 0 12px 32px -8px rgba(60,99,159,0.2)',
-                            }}
-                          >
-                            <StepIcon size={42} className="text-[#3c639f]" strokeWidth={1.5} />
-                          </div>
-                          <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-black/30">
-                            Buraya görsel gelecek
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Progress bar under the active panel only. */}
-                    {isActive && (
-                      <div className="absolute inset-x-0 bottom-0 h-[3px] bg-black/[0.04]">
-                        <div
-                          key={activeStep}
-                          className={`step-progress h-full origin-left bg-[#3c639f] ${
-                            isProcessPaused ? 'step-progress-paused' : ''
-                          }`}
-                        />
-                      </div>
-                    )}
-                  </button>
-                )
-              })}
+              <div className="h-full w-px bg-gradient-to-b from-transparent via-[#3c639f]/15 to-transparent" />
+              <div className="absolute left-1/2 top-1/2 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#fafafa]">
+                <span className="text-[14px] font-semibold tracking-[-0.02em] text-[#3c639f]">
+                  &
+                </span>
+              </div>
             </div>
 
-            {/* MOBILE: vertical accordion. Tap a header to expand/collapse. */}
-            <div className="flex flex-col gap-3 md:hidden">
-              {processSteps.map((step, i) => {
-                const isActive = i === activeStep
-                const StepIcon = step.Icon
-                return (
-                  <div
-                    key={step.title}
-                    className={`overflow-hidden rounded-xl border transition-all ${
-                      isActive
-                        ? 'border-[#3c639f]/30 bg-white shadow-[0_4px_12px_-2px_rgba(60,99,159,0.1)]'
-                        : 'border-black/[0.06] bg-white'
-                    }`}
-                  >
-                    <button
-                      onClick={() => setActiveStep(isActive ? -1 : i)}
-                      className="flex w-full items-center gap-4 p-5 text-left"
-                    >
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#3c639f]/[0.08]">
-                        <StepIcon size={22} className="text-[#3c639f]" strokeWidth={1.5} />
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-[11px] font-medium tracking-[0.08em] text-[#3c639f]">
-                          {step.num}
-                        </div>
-                        <div className="mt-0.5 text-[16px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                          {step.title}
-                        </div>
-                      </div>
-                      <ArrowRight
-                        size={18}
-                        className={`shrink-0 text-black/40 transition-transform duration-300 ${
-                          isActive ? 'rotate-90' : ''
-                        }`}
-                      />
-                    </button>
-                    {/* Collapsible content using grid-template-rows trick:
-                        0fr → 1fr animates row height without measuring the
-                        child. */}
-                    <div
-                      className={`grid transition-[grid-template-rows] duration-500 ease-out ${
-                        isActive ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-                      }`}
-                    >
-                      <div className="overflow-hidden">
-                        <div className="px-5 pb-5 pt-1">
-                          <p className="text-[14px] leading-relaxed text-black/65">
-                            {step.description}
-                          </p>
-                          <ul className="mt-4 flex flex-col gap-2.5">
-                            {step.bullets.map((b) => (
-                              <li
-                                key={b}
-                                className="flex items-start gap-3 text-[13px] leading-relaxed text-black/70"
-                              >
-                                <Check
-                                  size={14}
-                                  className="mt-[3px] shrink-0 text-[#3c639f]"
-                                  strokeWidth={2.5}
-                                />
-                                <span>{b}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* Quote wizard popups — portaled to body, anchored just below the
-          clicked card (like the testimonial popups). Lightweight backdrop
-          dismisses on click-out. */}
-      {redesignModalOpen &&
-        redesignAnchor &&
-        typeof window !== 'undefined' &&
-        createPortal(
-          <>
-            <div
-              onClick={() => setRedesignModalOpen(false)}
-              className="fixed inset-0 z-[99]"
-              style={{ animation: 'modalBackdropIn 0.2s ease-out' }}
+            {/* Card 1: Web Site — page-mockup that builds itself: outer frame
+                strokes in, top bar + window dots appear, then hero/content
+                blocks stagger-fade in. Plays once when the card scrolls into
+                view, replays on hover. */}
+            <a
+              ref={webCardRef}
+              href="/web-site"
+              onMouseEnter={() => setWebPlayKey((k) => k + 1)}
+              className="service-card group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-8 transition-all duration-500 hover:-translate-y-1 hover:border-[#3c639f]/20 hover:shadow-[0_12px_40px_-12px_rgba(60,99,159,0.18)] md:p-10"
             >
-              <div aria-hidden className="absolute inset-0 bg-black/15" />
-            </div>
-            <div
-              ref={redesignModalRef}
-              role="dialog"
-              aria-modal="true"
-              className="absolute z-[100] w-[360px] max-w-[calc(100vw-24px)] overflow-visible rounded-2xl bg-white"
-              style={{
-                top: redesignAnchor.top,
-                left: redesignAnchor.left,
-                transform: 'translateX(-50%)',
-                boxShadow:
-                  '0 8px 32px -4px rgba(60,99,159,0.12), 0 24px 64px -12px rgba(60,99,159,0.18)',
-                border: '0.5px solid rgba(0,0,0,0.08)',
-                animation: 'modalCardIn 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
-              }}
-            >
-              {/* Arrow pointing up to the source card */}
-              <div
+              {/* Page mockup decoration. Key remount restarts the CSS
+                  animations from scratch every time it changes. */}
+              <svg
+                key={webPlayKey}
                 aria-hidden
-                className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white"
-                style={{
-                  borderTop: '0.5px solid rgba(0,0,0,0.08)',
-                  borderLeft: '0.5px solid rgba(0,0,0,0.08)',
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => setRedesignModalOpen(false)}
-                aria-label="Kapat"
-                className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full text-black/40 transition-colors hover:bg-black/[0.04] hover:text-black/70"
+                className="web-mockup pointer-events-none absolute -right-6 -top-6 h-[230px] w-[230px] opacity-65 transition-opacity duration-500 group-hover:opacity-95 md:-right-10 md:-top-10 md:h-[340px] md:w-[340px]"
+                viewBox="0 0 176 176"
               >
-                <X size={16} />
-              </button>
-              <div className="px-6 pb-5 pt-6">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#3c639f]/[0.08]">
-                  <Globe
-                    size={18}
-                    className="text-[#3c639f]"
-                    strokeWidth={1.75}
+                <defs>
+                  <linearGradient id="webFade" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#3c639f" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#3c639f" stopOpacity="0" />
+                  </linearGradient>
+                  <mask id="webMask">
+                    <rect width="176" height="176" fill="url(#webFade)" />
+                  </mask>
+                </defs>
+                <g mask="url(#webMask)">
+                  {/* Outer browser/page frame — draws with stroke-dasharray */}
+                  <rect
+                    className="web-frame"
+                    x="14" y="20" width="148" height="124" rx="4"
+                    fill="none" stroke="#3c639f" strokeWidth="2"
                   />
-                </div>
-                <h3 className="mt-3 text-[16px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
-                  Mevcut sitenizin linkini girin
-                </h3>
-                <p className="mt-1.5 text-[12.5px] leading-relaxed text-black/55">
-                  Mevcut sitenizi inceleyip neyi koruyup neyi modernize
-                  edeceğimize karar verebilmemiz için linkinizi paylaşın.
-                </p>
-                <input
-                  type="url"
-                  autoFocus
-                  value={redesignDraftUrl}
-                  onChange={e => setRedesignDraftUrl(e.target.value)}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter') handleRedesignConfirm()
-                  }}
-                  placeholder="https://www.firmaadresi.com"
-                  className="mt-4 w-full rounded-lg border border-black/[0.1] bg-white px-3.5 py-2.5 text-[13.5px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                />
-                <div className="mt-4 flex items-center justify-end gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => setRedesignModalOpen(false)}
-                    className="rounded-lg px-3 py-2 text-[13px] font-medium text-black/60 transition-colors hover:bg-black/[0.04]"
-                  >
-                    İptal
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleRedesignConfirm}
-                    disabled={redesignDraftUrl.trim() === ''}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#3c639f] px-4 py-2 text-[13px] font-medium text-white shadow-[0_4px_12px_-2px_rgba(60,99,159,0.35)] transition-all hover:bg-[#2f5288] disabled:cursor-not-allowed disabled:bg-black/15 disabled:shadow-none"
-                  >
-                    Onayla
-                    <ArrowRight size={14} />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </>,
-          document.body,
-        )}
+                  {/* Top bar separator */}
+                  <line
+                    className="web-topbar"
+                    x1="14" y1="38" x2="162" y2="38"
+                    stroke="#3c639f" strokeWidth="1.5"
+                  />
+                  {/* Window dots */}
+                  <circle className="web-el web-dot-1" cx="22" cy="29" r="1.8" fill="#3c639f" />
+                  <circle className="web-el web-dot-2" cx="28" cy="29" r="1.8" fill="#3c639f" />
+                  <circle className="web-el web-dot-3" cx="34" cy="29" r="1.8" fill="#3c639f" />
+                  {/* Nav bar — logo on the left, 3 menu items + a filled
+                      login pill on the right. */}
+                  <rect className="web-el web-logo" x="22" y="46" width="20" height="7" rx="1.5" fill="#3c639f" fillOpacity="0.6" />
+                  <rect className="web-el web-nav-1" x="98" y="48" width="10" height="3" rx="1" fill="#3c639f" fillOpacity="0.45" />
+                  <rect className="web-el web-nav-2" x="112" y="48" width="10" height="3" rx="1" fill="#3c639f" fillOpacity="0.45" />
+                  <rect className="web-el web-nav-3" x="126" y="48" width="10" height="3" rx="1" fill="#3c639f" fillOpacity="0.45" />
+                  <rect className="web-el web-login" x="140" y="46" width="16" height="7" rx="2" fill="#3c639f" fillOpacity="0.78" />
+                  {/* Hero text — title, two subtitle lines, and a filled CTA
+                      button on the left half. */}
+                  <rect className="web-el web-title" x="22" y="63" width="60" height="11" rx="2" fill="#3c639f" fillOpacity="0.55" />
+                  <rect className="web-el web-sub-1" x="22" y="80" width="60" height="3" rx="1" fill="#3c639f" fillOpacity="0.42" />
+                  <rect className="web-el web-sub-2" x="22" y="88" width="44" height="3" rx="1" fill="#3c639f" fillOpacity="0.42" />
+                  {/* Primary CTA — solid brand-blue button that pops in. */}
+                  <rect className="web-btn" x="22" y="96" width="28" height="11" rx="2.5" fill="#3c639f" fillOpacity="0.92" />
+                  {/* Hero image area — a mini device mockup on the right
+                      side showing a tiny site preview. The "browser within
+                      a browser" reinforces the web-design identity. */}
+                  <g className="web-img">
+                    <rect x="88" y="62" width="68" height="44" rx="3" fill="#3c639f" fillOpacity="0.13" />
+                    <line x1="88" y1="70" x2="156" y2="70" stroke="#3c639f" strokeOpacity="0.28" strokeWidth="0.8" />
+                    <circle cx="92" cy="66" r="1" fill="#3c639f" fillOpacity="0.5" />
+                    <circle cx="96" cy="66" r="1" fill="#3c639f" fillOpacity="0.5" />
+                    <rect x="92" y="74" width="26" height="3" rx="1" fill="#3c639f" fillOpacity="0.58" />
+                    <rect x="92" y="80" width="52" height="1.6" rx="0.8" fill="#3c639f" fillOpacity="0.4" />
+                    <rect x="92" y="84" width="40" height="1.6" rx="0.8" fill="#3c639f" fillOpacity="0.4" />
+                    <rect x="92" y="90" width="24" height="12" rx="1.5" fill="#3c639f" fillOpacity="0.22" />
+                    <rect x="120" y="90" width="24" height="12" rx="1.5" fill="#3c639f" fillOpacity="0.22" />
+                    <rect x="148" y="90" width="6" height="6" rx="1.2" fill="#3c639f" fillOpacity="0.72" />
+                  </g>
+                  {/* Three feature cards — each has a mini icon dot + 2 text
+                      lines, mimicking a typical features section. */}
+                  <g className="web-feat web-feat-1">
+                    <rect x="22" y="116" width="40" height="24" rx="2" fill="#3c639f" fillOpacity="0.18" />
+                    <circle cx="32" cy="124" r="3" fill="#3c639f" fillOpacity="0.6" />
+                    <rect x="38" y="123" width="20" height="2" rx="1" fill="#3c639f" fillOpacity="0.5" />
+                    <rect x="26" y="132" width="32" height="2" rx="1" fill="#3c639f" fillOpacity="0.38" />
+                  </g>
+                  <g className="web-feat web-feat-2">
+                    <rect x="68" y="116" width="40" height="24" rx="2" fill="#3c639f" fillOpacity="0.18" />
+                    <circle cx="78" cy="124" r="3" fill="#3c639f" fillOpacity="0.6" />
+                    <rect x="84" y="123" width="20" height="2" rx="1" fill="#3c639f" fillOpacity="0.5" />
+                    <rect x="72" y="132" width="32" height="2" rx="1" fill="#3c639f" fillOpacity="0.38" />
+                  </g>
+                  <g className="web-feat web-feat-3">
+                    <rect x="114" y="116" width="40" height="24" rx="2" fill="#3c639f" fillOpacity="0.18" />
+                    <circle cx="124" cy="124" r="3" fill="#3c639f" fillOpacity="0.6" />
+                    <rect x="130" y="123" width="20" height="2" rx="1" fill="#3c639f" fillOpacity="0.5" />
+                    <rect x="118" y="132" width="32" height="2" rx="1" fill="#3c639f" fillOpacity="0.38" />
+                  </g>
+                </g>
+              </svg>
 
-      {kobiModalOpen &&
-        kobiAnchor &&
-        typeof window !== 'undefined' &&
-        createPortal(
-          <>
-            <div
-              onClick={() => setKobiModalOpen(false)}
-              className="fixed inset-0 z-[99]"
-              style={{ animation: 'modalBackdropIn 0.2s ease-out' }}
+              <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-[#3c639f]/[0.08] transition-all duration-500 group-hover:scale-105 group-hover:bg-[#3c639f]/[0.14]">
+                <Code2 size={26} className="text-[#3c639f]" strokeWidth={1.75} />
+              </div>
+
+              <h3 className="relative mt-8 text-[28px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+                Web Site
+              </h3>
+              <p className="relative mt-2 text-[15px] leading-relaxed text-black/55">
+                Sıfırdan, markanıza özel. Hızlı, modern ve dönüşüm odaklı.
+              </p>
+
+              <ul className="relative mt-6 flex flex-col gap-3">
+                {[
+                  "Next.js + TypeScript ile modern altyapı",
+                  "Tasarımdan SEO'ya uçtan uca süreç",
+                  "Lighthouse 95+ performans hedefi",
+                ].map((b) => (
+                  <li
+                    key={b}
+                    className="flex items-start gap-3 text-[14px] leading-relaxed text-black/70"
+                  >
+                    <Check size={16} className="mt-[3px] shrink-0 text-[#3c639f]" strokeWidth={2.5} />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="relative mt-8">
+                <span className="service-cta relative inline-flex items-center gap-2 overflow-hidden rounded-md border border-[#3c639f]/25 bg-white px-5 py-2.5 text-[13px] font-medium text-[#3c639f] transition-colors duration-500 group-hover:border-transparent group-hover:text-white">
+                  <span aria-hidden className="service-cta-bg absolute inset-0" />
+                  <span className="relative">Detayları gör</span>
+                  <ArrowRight
+                    size={15}
+                    className="relative transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </span>
+              </div>
+            </a>
+
+            {/* Card 2: Dijital Reklamlar — rising line chart motif. Same
+                viewport-entry + hover replay pattern as the web card. */}
+            <a
+              ref={reklamCardRef}
+              href="/dijital-reklamlar"
+              onMouseEnter={() => setReklamPlayKey((k) => k + 1)}
+              className="service-card group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-8 transition-all duration-500 hover:-translate-y-1 hover:border-[#3c639f]/20 hover:shadow-[0_12px_40px_-12px_rgba(60,99,159,0.18)] md:p-10"
             >
-              <div aria-hidden className="absolute inset-0 bg-black/15" />
-            </div>
-            <div
-              ref={kobiModalRef}
-              role="dialog"
-              aria-modal="true"
-              className="absolute z-[100] w-[380px] max-w-[calc(100vw-24px)] overflow-hidden rounded-2xl bg-white"
-              style={{
-                top: kobiAnchor.top,
-                left: kobiAnchor.left,
-                transform: 'translateX(-50%)',
-                boxShadow:
-                  '0 8px 32px -4px rgba(60,99,159,0.12), 0 24px 64px -12px rgba(60,99,159,0.18)',
-                animation: 'modalCardIn 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
-              }}
-            >
-              {/* Arrow pointing up to the source card */}
-              <div
+              {/* Rising chart decoration — ascending line with peaks and a
+                  soft area fill underneath. Spreads into the card as a
+                  background pattern. */}
+              <svg
+                key={reklamPlayKey}
                 aria-hidden
-                className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 z-10"
-                style={{ background: '#3c639f' }}
-              />
-              <button
-                type="button"
-                onClick={() => setKobiModalOpen(false)}
-                aria-label="Kapat"
-                className="absolute right-3 top-3 z-10 flex h-7 w-7 items-center justify-center rounded-full text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+                className="chart-mockup pointer-events-none absolute -right-6 -top-6 h-[230px] w-[230px] opacity-65 transition-opacity duration-500 group-hover:opacity-95 md:-right-10 md:-top-10 md:h-[340px] md:w-[340px]"
+                viewBox="0 0 176 176"
               >
-                <X size={16} />
-              </button>
-              {/* Branded header band */}
-              <div
-                className="relative overflow-hidden px-6 py-5 text-white"
-                style={{
-                  background:
-                    'linear-gradient(135deg, #3c639f 0%, #2f5288 100%)',
-                }}
-              >
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute right-0 top-0 h-24 w-24"
-                  style={{
-                    background:
-                      'radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)',
-                  }}
-                />
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/15 backdrop-blur-sm">
-                  <Sparkles size={18} strokeWidth={1.75} />
-                </div>
-                <h3 className="mt-3 text-[17px] font-semibold tracking-[-0.01em]">
-                  Webreta KOBİ&apos;yi de tavsiye ederiz!
-                </h3>
-                <p className="mt-1.5 text-[12.5px] leading-relaxed text-white/85">
-                  Küçük ve orta ölçekli işletmeler için tasarlanmış, daha hızlı
-                  ve daha uygun fiyatlı kurumsal site çözümlerimiz var.
-                </p>
+                <defs>
+                  <linearGradient id="chartFade" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#3c639f" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#3c639f" stopOpacity="0" />
+                  </linearGradient>
+                  <mask id="chartMask">
+                    <rect width="176" height="176" fill="url(#chartFade)" />
+                  </mask>
+                </defs>
+                <g mask="url(#chartMask)">
+                  {/* Browser/page frame — matches the web card for visual
+                      parity. Strokes in first, then the topbar separator
+                      and window dots, then the chart contents appear
+                      inside. */}
+                  <rect
+                    className="chart-frame"
+                    x="14" y="20" width="148" height="124" rx="4"
+                    fill="none" stroke="#3c639f" strokeWidth="2"
+                  />
+                  <line
+                    className="chart-topbar"
+                    x1="14" y1="38" x2="162" y2="38"
+                    stroke="#3c639f" strokeWidth="1.5"
+                  />
+                  <circle className="chart-windot chart-windot-1" cx="22" cy="29" r="1.8" fill="#3c639f" />
+                  <circle className="chart-windot chart-windot-2" cx="28" cy="29" r="1.8" fill="#3c639f" />
+                  <circle className="chart-windot chart-windot-3" cx="34" cy="29" r="1.8" fill="#3c639f" />
+                  {/* Baseline guide — subtle horizontal line below the bars */}
+                  <line
+                    className="chart-baseline"
+                    x1="20" y1="136" x2="156" y2="136"
+                    stroke="#3c639f" strokeOpacity="0.18" strokeWidth="1"
+                  />
+                  {/* 6 zigzag bars inside the frame — alternating low/high
+                      with overall upward tendency. Reads like a real
+                      performance dashboard: dips and recoveries, ending
+                      on the highest peak. */}
+                  <rect className="chart-bar chart-bar-1" x="31"  y="112" width="14" height="24" rx="2" fill="#3c639f" fillOpacity="0.30" />
+                  <rect className="chart-bar chart-bar-2" x="51"  y="74"  width="14" height="62" rx="2" fill="#3c639f" fillOpacity="0.36" />
+                  <rect className="chart-bar chart-bar-3" x="71"  y="102" width="14" height="34" rx="2" fill="#3c639f" fillOpacity="0.34" />
+                  <rect className="chart-bar chart-bar-4" x="91"  y="60"  width="14" height="76" rx="2" fill="#3c639f" fillOpacity="0.42" />
+                  <rect className="chart-bar chart-bar-5" x="111" y="88"  width="14" height="48" rx="2" fill="#3c639f" fillOpacity="0.4" />
+                  <rect className="chart-bar chart-bar-6" x="131" y="48"  width="14" height="88" rx="2" fill="#3c639f" fillOpacity="0.5" />
+                  {/* Trend line zigzagging across the bar tops */}
+                  <path
+                    className="trend-line"
+                    d="M 38 108 L 58 70 L 78 98 L 98 56 L 118 84 L 138 44"
+                    fill="none"
+                    stroke="#3c639f"
+                    strokeOpacity="0.85"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  {/* Peak dot — bounces in at the final highest point */}
+                  <circle className="trend-peak" cx="138" cy="44" r="5" fill="#3c639f" />
+                  {/* Pulse ring expanding outward from the peak */}
+                  <circle
+                    className="trend-peak-ring"
+                    cx="138" cy="44" r="5"
+                    fill="none"
+                    stroke="#3c639f"
+                    strokeWidth="1.5"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                </g>
+                {/* Floating ₺ growth annotation — no pill/border so it
+                    reads as part of the chart's decorative layer rather
+                    than a separate UI element. Pops in after the peak as
+                    a "+38%" revenue growth callout. */}
+                <g className="chart-stat">
+                  <text
+                    x="24" y="56"
+                    fontFamily="system-ui, -apple-system, sans-serif"
+                    fontSize="11"
+                    fontWeight="700"
+                    fill="#3c639f"
+                    fillOpacity="0.6"
+                  >₺</text>
+                  <g className="chart-stat-arrow">
+                    <path
+                      d="M 36 54 L 39 50 L 42 54"
+                      fill="none"
+                      stroke="#3c639f"
+                      strokeOpacity="0.62"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <line
+                      x1="39" y1="50.5" x2="39" y2="55"
+                      stroke="#3c639f"
+                      strokeOpacity="0.62"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                    />
+                  </g>
+                  <text
+                    x="44" y="56"
+                    fontFamily="system-ui, -apple-system, sans-serif"
+                    fontSize="7.5"
+                    fontWeight="600"
+                    fill="#3c639f"
+                    fillOpacity="0.58"
+                  >38%</text>
+                </g>
+              </svg>
+
+              <div className="relative flex h-14 w-14 items-center justify-center rounded-xl bg-[#3c639f]/[0.08] transition-all duration-500 group-hover:scale-105 group-hover:bg-[#3c639f]/[0.14]">
+                <TrendingUp size={26} className="text-[#3c639f]" strokeWidth={1.75} />
               </div>
-              <div className="flex items-center justify-between gap-2 px-6 py-4">
-                <button
-                  type="button"
-                  onClick={() => setKobiModalOpen(false)}
-                  className="rounded-lg px-3 py-2 text-[12.5px] font-medium text-black/60 transition-colors hover:bg-black/[0.04] hover:text-[#0a0a0a]"
-                >
-                  Bu pakette devam et
-                </button>
-                <a
-                  href={WEBRETA_KOBI_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-[#3c639f] px-4 py-2 text-[13px] font-medium text-white shadow-[0_4px_12px_-2px_rgba(60,99,159,0.35)] transition-all hover:bg-[#2f5288]"
-                >
-                  Webreta KOBİ
-                  <ExternalLink size={13} />
-                </a>
+
+              <h3 className="relative mt-8 text-[28px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+                Dijital Reklamlar
+              </h3>
+              <p className="relative mt-2 text-[15px] leading-relaxed text-black/55">
+                Bütçenizden en yüksek dönüşümü çıkaran kampanyalar.
+              </p>
+
+              <ul className="relative mt-6 flex flex-col gap-3">
+                {[
+                  "Google Ads & Meta Ads yönetimi",
+                  "Performans odaklı kampanya stratejisi",
+                  "Şeffaf ve sade raporlama paneli",
+                ].map((b) => (
+                  <li
+                    key={b}
+                    className="flex items-start gap-3 text-[14px] leading-relaxed text-black/70"
+                  >
+                    <Check size={16} className="mt-[3px] shrink-0 text-[#3c639f]" strokeWidth={2.5} />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="relative mt-8">
+                <span className="service-cta relative inline-flex items-center gap-2 overflow-hidden rounded-md border border-[#3c639f]/25 bg-white px-5 py-2.5 text-[13px] font-medium text-[#3c639f] transition-colors duration-500 group-hover:border-transparent group-hover:text-white">
+                  <span aria-hidden className="service-cta-bg absolute inset-0" />
+                  <span className="relative">Detayları gör</span>
+                  <ArrowRight
+                    size={15}
+                    className="relative transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </span>
               </div>
-            </div>
-          </>,
-          document.body,
-        )}
+            </a>
+          </div>
+        </section>
+
+      </main>
 
       {/* Cursor blink + mobile swipe hint animations. Global because the
           @keyframes are referenced from inline style={{ animation: ... }};
@@ -4158,6 +2764,245 @@ export default function Home() {
         @keyframes blink {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
+        }
+        /* Service card CTA — pill button. Idle: white with brand-blue text
+           and a 1px brand tint border. Hover (driven by .group on the parent
+           card): the absolute bg layer fades in with an animated gradient
+           sweep, the text turns white. Combined with the card lift + arrow
+           translate it reads as a single coordinated reveal. */
+        .service-cta-bg {
+          background: linear-gradient(110deg, #2f5288 0%, #3c639f 35%, #6a93ce 55%, #3c639f 75%, #2f5288 100%);
+          background-size: 220% 100%;
+          background-position: 100% 0;
+          opacity: 0;
+          transition: opacity 400ms ease;
+          border-radius: 6px;
+        }
+        .group:hover .service-cta-bg {
+          opacity: 1;
+          animation: serviceCtaSweep 2.4s linear infinite;
+        }
+        @keyframes serviceCtaSweep {
+          0% { background-position: 100% 0; }
+          100% { background-position: -120% 0; }
+        }
+        /* Service card 1 — page mockup that builds itself: outer frame
+           strokes in, top bar + window dots appear, then content blocks
+           stagger-fade in. Driven entirely by autoplay on mount (the SVG
+           is keyed so a key change remounts it and the animations restart
+           from scratch). No hover-only state — entry and hover-replay use
+           the same animation by remounting the SVG. */
+        .web-mockup .web-frame {
+          stroke-dasharray: 600;
+          stroke-dashoffset: 600;
+          animation: webFrameDraw 1100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .web-mockup .web-topbar {
+          stroke-dasharray: 160;
+          stroke-dashoffset: 160;
+          animation: webBarDraw 500ms cubic-bezier(0.22, 1, 0.36, 1) 850ms forwards;
+        }
+        .web-mockup .web-el {
+          opacity: 0;
+          transform-origin: left center;
+          transform: scaleX(0.78);
+        }
+        .web-mockup .web-dot-1 { animation: webElIn 400ms ease 1100ms forwards; }
+        .web-mockup .web-dot-2 { animation: webElIn 400ms ease 1180ms forwards; }
+        .web-mockup .web-dot-3 { animation: webElIn 400ms ease 1260ms forwards; }
+        /* Landing page content — nav, hero, CTA button, image, features */
+        .web-mockup .web-logo  { animation: webElIn 500ms cubic-bezier(0.22, 1, 0.36, 1) 1320ms forwards; }
+        .web-mockup .web-nav-1 { animation: webElIn 400ms ease 1380ms forwards; }
+        .web-mockup .web-nav-2 { animation: webElIn 400ms ease 1440ms forwards; }
+        .web-mockup .web-nav-3 { animation: webElIn 400ms ease 1500ms forwards; }
+        .web-mockup .web-login { animation: webElIn 420ms ease 1560ms forwards; }
+        .web-mockup .web-title { animation: webElIn 550ms cubic-bezier(0.22, 1, 0.36, 1) 1620ms forwards; }
+        .web-mockup .web-sub-1 { animation: webElIn 450ms ease 1760ms forwards; }
+        .web-mockup .web-sub-2 { animation: webElIn 450ms ease 1840ms forwards; }
+        /* CTA button — solid filled rectangle that pops in with a bouncy
+           overshoot. The key visual cue that this is a real site landing. */
+        .web-mockup .web-btn {
+          opacity: 0;
+          transform: scale(0);
+          transform-origin: 50% 50%;
+          transform-box: fill-box;
+          animation: webBtnPop 480ms cubic-bezier(0.34, 1.5, 0.4, 1) 1960ms forwards;
+        }
+        @keyframes webBtnPop {
+          0% { opacity: 0; transform: scale(0); }
+          60% { opacity: 1; transform: scale(1.15); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        /* Hero image — mini device mockup. Scales up gently as one unit
+           alongside the hero text so the right column reads as a single
+           block (a tiny website preview) rather than scattered shapes. */
+        .web-mockup .web-img {
+          opacity: 0;
+          transform: scale(0.95);
+          transform-origin: 50% 50%;
+          transform-box: fill-box;
+          animation: webImgIn 700ms cubic-bezier(0.22, 1, 0.36, 1) 1720ms forwards;
+        }
+        @keyframes webImgIn {
+          to { opacity: 1; transform: scale(1); }
+        }
+        /* Feature cards — fade in as groups. Translate from below for a
+           gentle "rising up" feel rather than scaleX since g-element
+           transform-origin can be unreliable across browsers. */
+        .web-mockup .web-feat {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        .web-mockup .web-feat-1 { animation: webFeatIn 550ms cubic-bezier(0.22, 1, 0.36, 1) 2280ms forwards; }
+        .web-mockup .web-feat-2 { animation: webFeatIn 550ms cubic-bezier(0.22, 1, 0.36, 1) 2400ms forwards; }
+        .web-mockup .web-feat-3 { animation: webFeatIn 550ms cubic-bezier(0.22, 1, 0.36, 1) 2520ms forwards; }
+        @keyframes webFeatIn {
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes webFrameDraw {
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes webBarDraw {
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes webElIn {
+          to { opacity: 1; transform: scaleX(1); }
+        }
+        /* Service card 2 — browser frame mirrors the web card, then a
+           zigzag bar chart with a trend line and peak pulse fills in
+           inside the frame. Sequence: frame strokes in → topbar + window
+           dots → baseline → bars grow (stagger) → trend line draws →
+           peak dot bounces → pulse ring expands outward. */
+        .chart-mockup .chart-frame {
+          stroke-dasharray: 600;
+          stroke-dashoffset: 600;
+          animation: chartFrameDraw 1100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .chart-mockup .chart-topbar {
+          stroke-dasharray: 160;
+          stroke-dashoffset: 160;
+          animation: chartTopbarDraw 500ms cubic-bezier(0.22, 1, 0.36, 1) 850ms forwards;
+        }
+        .chart-mockup .chart-windot {
+          opacity: 0;
+          animation: chartWindotIn 350ms ease forwards;
+        }
+        .chart-mockup .chart-windot-1 { animation-delay: 1100ms; }
+        .chart-mockup .chart-windot-2 { animation-delay: 1180ms; }
+        .chart-mockup .chart-windot-3 { animation-delay: 1260ms; }
+        .chart-mockup .chart-baseline {
+          opacity: 0;
+          animation: chartBaselineIn 400ms ease 1300ms forwards;
+        }
+        .chart-mockup .chart-bar {
+          transform: scaleY(0);
+          transform-origin: 50% 100%;
+          transform-box: fill-box;
+          animation: chartBarGrow 480ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .chart-mockup .chart-bar-1 { animation-delay: 1400ms; }
+        .chart-mockup .chart-bar-2 { animation-delay: 1490ms; }
+        .chart-mockup .chart-bar-3 { animation-delay: 1580ms; }
+        .chart-mockup .chart-bar-4 { animation-delay: 1670ms; }
+        .chart-mockup .chart-bar-5 { animation-delay: 1760ms; }
+        .chart-mockup .chart-bar-6 { animation-delay: 1850ms; }
+        .chart-mockup .trend-line {
+          stroke-dasharray: 280;
+          stroke-dashoffset: 280;
+          /* Near-linear easing so the visual end of the draw matches its
+             actual finish time — no slow tail that makes the peak feel
+             "late" when it actually arrives. */
+          animation: chartTrendDraw 1300ms cubic-bezier(0.4, 0, 0.6, 1) 2400ms forwards;
+        }
+        .chart-mockup .trend-peak {
+          opacity: 0;
+          transform: scale(0);
+          transform-origin: 50% 50%;
+          transform-box: fill-box;
+          /* Pops exactly when the line completes (3700ms). Short duration
+             and snappy bezier so the appearance is instantaneous, not a
+             slow bounce. */
+          animation: chartPeakPop 220ms cubic-bezier(0.34, 1.5, 0.4, 1) 3680ms forwards;
+        }
+        .chart-mockup .trend-peak-ring {
+          opacity: 0;
+          transform-origin: 50% 50%;
+          transform-box: fill-box;
+          animation: chartRingPulse 1100ms ease-out 3850ms forwards;
+        }
+        /* ₺ growth annotation — gentle fade-in after the peak, no bouncy
+           overshoot so it blends into the chart's decorative layer rather
+           than announcing itself as a UI badge. The arrow does a single
+           subtle upward nudge after the annotation settles. */
+        .chart-mockup .chart-stat {
+          opacity: 0;
+          transform: translateY(4px);
+          animation: chartStatIn 600ms cubic-bezier(0.22, 1, 0.36, 1) 3800ms forwards;
+        }
+        @keyframes chartStatIn {
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-mockup .chart-stat-arrow {
+          transform-origin: 50% 50%;
+          transform-box: fill-box;
+          animation: chartArrowJump 700ms ease-out 4500ms;
+        }
+        @keyframes chartArrowJump {
+          0%   { transform: translateY(0); }
+          35%  { transform: translateY(-2px); }
+          70%  { transform: translateY(0); }
+          100% { transform: translateY(0); }
+        }
+        @keyframes chartFrameDraw {
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes chartTopbarDraw {
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes chartWindotIn {
+          to { opacity: 1; }
+        }
+        @keyframes chartBaselineIn {
+          to { opacity: 1; }
+        }
+        @keyframes chartBarGrow {
+          to { transform: scaleY(1); }
+        }
+        @keyframes chartTrendDraw {
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes chartPeakPop {
+          0% { opacity: 0; transform: scale(0); }
+          60% { opacity: 1; transform: scale(1.35); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes chartRingPulse {
+          0% { opacity: 0.85; transform: scale(1); }
+          100% { opacity: 0; transform: scale(4.5); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .service-cta-bg { animation: none; }
+          .web-mockup .web-frame,
+          .web-mockup .web-topbar,
+          .web-mockup .web-el,
+          .web-mockup .web-btn,
+          .web-mockup .web-img,
+          .web-mockup .web-feat,
+          .chart-mockup .chart-frame,
+          .chart-mockup .chart-topbar,
+          .chart-mockup .chart-windot,
+          .chart-mockup .chart-baseline,
+          .chart-mockup .chart-bar,
+          .chart-mockup .trend-line,
+          .chart-mockup .trend-peak,
+          .chart-mockup .trend-peak-ring,
+          .chart-mockup .chart-stat,
+          .chart-mockup .chart-stat-arrow {
+            animation: none;
+            stroke-dashoffset: 0;
+            opacity: 1;
+            transform: none;
+          }
         }
         /* Hand+label travel from near the top of the carousel down toward
            the bottom, fading in at the start and out at the end of each
@@ -4261,179 +3106,31 @@ export default function Home() {
         @media (prefers-reduced-motion: reduce) {
           .logo-track { animation: none; }
         }
-        /* Process section — progress bar fills from 0 to 100% over the
-           step duration. Keyed remount restarts the animation on step
-           change; pause class freezes it while hovered. */
-        .step-progress {
-          transform: scaleX(0);
-          animation: stepProgress 6s linear forwards;
+        /* Popup scroll regions — vertical only, minimal thumb. Horizontal
+           scrollbar is suppressed entirely. Matches across Firefox and
+           Chrome/WebKit. */
+        .popup-scroll {
+          overflow-y: auto;
+          overflow-x: hidden;
+          scrollbar-width: thin;
+          scrollbar-color: rgba(60, 99, 159, 0.28) transparent;
         }
-        .step-progress-paused {
-          animation-play-state: paused;
+        .popup-scroll::-webkit-scrollbar {
+          width: 5px;
+          height: 0;
         }
-        @keyframes stepProgress {
-          from { transform: scaleX(0); }
-          to { transform: scaleX(1); }
+        .popup-scroll::-webkit-scrollbar-track {
+          background: transparent;
         }
-        /* Right-panel icon/caption gentle entrance on step change. */
-        .process-visual-in {
-          animation: visualIn 0.6s ease-out;
+        .popup-scroll::-webkit-scrollbar-thumb {
+          background: rgba(60, 99, 159, 0.28);
+          border-radius: 4px;
         }
-        @keyframes visualIn {
-          0% { opacity: 0; transform: translateY(8px) scale(0.98); }
-          100% { opacity: 1; transform: translateY(0) scale(1); }
+        .popup-scroll::-webkit-scrollbar-thumb:hover {
+          background: rgba(60, 99, 159, 0.5);
         }
-        @media (prefers-reduced-motion: reduce) {
-          .step-progress, .process-visual-in { animation: none; }
-        }
-        /* Quote wizard — step body slide+fade. Direction class determines
-           which side the new step enters from. Keyed remount on step
-           change retriggers the animation. */
-        .quote-step-fwd {
-          animation: quoteStepFwd 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .quote-step-bwd {
-          animation: quoteStepBwd 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        @keyframes quoteStepFwd {
-          0% { opacity: 0; transform: translateX(28px); }
-          100% { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes quoteStepBwd {
-          0% { opacity: 0; transform: translateX(-28px); }
-          100% { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes quoteSuccessPop {
-          0% { opacity: 0; transform: scale(0.6); }
-          60% { opacity: 1; transform: scale(1.08); }
-          100% { opacity: 1; transform: scale(1); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .quote-step-fwd, .quote-step-bwd { animation: none; }
-        }
-        /* Hide scrollbar on the date chip strip — keeps the picker clean
-           on desktop where the scrollbar would otherwise show below. */
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        /* Quote wizard — soft breathing shadow on the white card. Adds
-           gentle "alive" energy without movement; slow enough not to
-           distract. Drops to a static shadow under reduced motion. */
-        .quote-card-pulse {
-          box-shadow:
-            0 1px 2px rgba(60,99,159,0.04),
-            0 24px 60px -20px rgba(60,99,159,0.18),
-            0 4px 16px -4px rgba(60,99,159,0.06);
-          animation: quoteCardPulse 6s ease-in-out infinite;
-        }
-        @keyframes quoteCardPulse {
-          0%, 100% {
-            box-shadow:
-              0 1px 2px rgba(60,99,159,0.04),
-              0 24px 60px -20px rgba(60,99,159,0.18),
-              0 4px 16px -4px rgba(60,99,159,0.06);
-          }
-          50% {
-            box-shadow:
-              0 1px 2px rgba(60,99,159,0.06),
-              0 30px 84px -16px rgba(60,99,159,0.32),
-              0 6px 22px -4px rgba(60,99,159,0.14);
-          }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .quote-card-pulse { animation: none; }
-        }
-
-        /* Stepper active circle — soft pulsing ring radiating outward.
-           Cycles every 2.4s, fades to fully transparent so the static
-           drop shadow stays as the resting state. */
-        .step-circle-active {
-          box-shadow:
-            0 4px 12px -2px rgba(60,99,159,0.35),
-            0 0 0 0 rgba(60,99,159,0.45);
-          animation: stepCirclePulse 2.4s ease-out infinite;
-        }
-        @keyframes stepCirclePulse {
-          0% {
-            box-shadow:
-              0 4px 12px -2px rgba(60,99,159,0.35),
-              0 0 0 0 rgba(60,99,159,0.45);
-          }
-          70% {
-            box-shadow:
-              0 4px 12px -2px rgba(60,99,159,0.35),
-              0 0 0 10px rgba(60,99,159,0);
-          }
-          100% {
-            box-shadow:
-              0 4px 12px -2px rgba(60,99,159,0.35),
-              0 0 0 10px rgba(60,99,159,0);
-          }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .step-circle-active { animation: none; }
-        }
-
-        /* Quote wizard — package picker horizontal strip. Scrollbar is
-           hidden; user navigates with the top-right arrow buttons or by
-           rotating the mouse wheel (a wheel listener converts deltaY to
-           horizontal scroll). Touch and drag still work natively. */
-        .quote-pkg-scroll {
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-          -webkit-overflow-scrolling: touch;
-        }
-        .quote-pkg-scroll::-webkit-scrollbar {
-          display: none;
-        }
-        /* Quote wizard modals — backdrop fade and card scale-in entrance. */
-        @keyframes modalBackdropIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes modalCardIn {
-          0% { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(0.96); }
-          100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-        }
-        /* Combined WhatsApp + Telefon channel button. White by default,
-           soft green→blue gradient on hover; full vibrant gradient when
-           selected. The active state keeps the gradient on hover too. */
-        .wa-phone-combo {
-          background: #ffffff;
-          border-color: rgba(0, 0, 0, 0.1);
-          color: rgba(0, 0, 0, 0.7);
-          background-image: linear-gradient(
-            90deg,
-            #25D366 0%,
-            #3c639f 100%
-          );
-          background-size: 100% 100%;
-          background-position: center;
-          background-clip: padding-box;
-          background-origin: border-box;
-          background: #ffffff;
-        }
-        .wa-phone-combo:hover {
-          background: linear-gradient(
-            90deg,
-            rgba(37, 211, 102, 0.92) 0%,
-            rgba(60, 99, 159, 0.92) 100%
-          );
-          border-color: transparent;
-          color: #ffffff;
-        }
-        .wa-phone-combo-active {
-          background: linear-gradient(90deg, #25D366 0%, #3c639f 100%);
-          border-color: transparent;
-          color: #ffffff;
-          box-shadow: 0 2px 12px -2px rgba(60, 99, 159, 0.4);
-        }
-        .wa-phone-combo-active:hover {
-          background: linear-gradient(90deg, #25D366 0%, #3c639f 100%);
+        .popup-scroll::-webkit-scrollbar-corner {
+          background: transparent;
         }
       `}</style>
     </div>
