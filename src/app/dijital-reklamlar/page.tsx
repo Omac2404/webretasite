@@ -1,4 +1,5 @@
 import SiteHeader from "@/components/SiteHeader"
+import SiteFooter from "@/components/SiteFooter"
 import DijitalReklamlarClient from "@/components/DijitalReklamlarClient"
 import { readPackages } from "@/lib/packages-store"
 
@@ -16,6 +17,7 @@ export default async function DijitalReklamlarPage() {
     <div className="min-h-screen bg-[#fafafa]">
       <SiteHeader />
       <DijitalReklamlarClient channels={channels} />
+      <SiteFooter />
     </div>
   )
 }

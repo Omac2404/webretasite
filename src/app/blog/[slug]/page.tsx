@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
 import SiteHeader from "@/components/SiteHeader"
+import SiteFooter from "@/components/SiteFooter"
 import { BlogCard } from "@/components/BlogCard"
 import { AuthorAvatar } from "@/components/AuthorChip"
 import { getPostBySlug, listPublished } from "@/lib/blog-store"
@@ -142,6 +143,7 @@ export default async function BlogPostPage({
           </aside>
         )}
       </main>
+      <SiteFooter />
     </div>
   )
 }

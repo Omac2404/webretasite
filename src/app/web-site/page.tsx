@@ -1,4 +1,5 @@
 import SiteHeader from "@/components/SiteHeader"
+import SiteFooter from "@/components/SiteFooter"
 import QuoteWizardSection from "@/components/QuoteWizardSection"
 
 export const metadata = {
@@ -12,6 +13,7 @@ export default function WebSitePage() {
       <main>
         <QuoteWizardSection />
       </main>
+      <SiteFooter />
     </div>
   )
 }

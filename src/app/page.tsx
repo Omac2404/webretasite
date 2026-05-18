@@ -5,6 +5,7 @@ import { ArrowRight, Menu, X, Star, Check, ExternalLink, CheckCircle2, Code2, Tr
 import Image from "next/image"
 import { createPortal } from "react-dom"
 import HomeBlogSection from "@/components/HomeBlogSection"
+import SiteFooter from "@/components/SiteFooter"
 
 // 20 testimonials with varied lengths (6 short, 8 medium, 6 long)
 const testimonials = [
@@ -2765,6 +2766,8 @@ export default function Home() {
         <HomeBlogSection />
 
       </main>
+
+      <SiteFooter />
 
       {/* Cursor blink + mobile swipe hint animations. Global because the
           @keyframes are referenced from inline style={{ animation: ... }};

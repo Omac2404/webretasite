@@ -1,4 +1,5 @@
 import SiteHeader from "@/components/SiteHeader"
+import SiteFooter from "@/components/SiteFooter"
 
 export const metadata = {
   title: "Hakkımızda | Webreta",
@@ -19,6 +20,7 @@ export default function HakkimizdaPage() {
           Webreta hakkında detaylı bilgiyi yakında burada bulabileceksiniz.
         </p>
       </main>
+      <SiteFooter />
     </div>
   )
 }
