@@ -53,7 +53,7 @@ function parseRow(value: FormDataEntryValue | null): LogoRow {
 }
 
 function revalidateBoth(): void {
-  revalidatePath("/admin/logolar")
+  revalidatePath("/admin/referanslar")
   revalidatePath("/")
 }
 

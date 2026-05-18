@@ -1,0 +1,31 @@
+{
+  "titleLeading": "Sıradaki",
+  "titleHighlight": "başarı hikayesi",
+  "titleTrailing": "sizinki olsun.",
+  "subtitle": "Bir e-posta, bir mesaj, bir telefon — yeterli. 24 saat içinde dönüş yapıyoruz.",
+  "ctaLabel": "Bize Ulaşın",
+  "ctaHref": "/iletisim",
+  "copyright": "© {year} Webreta · İzmir merkezli web ajansı",
+  "contact": {
+    "email": "hello@webreta.com",
+    "phone": "+90 (XXX) XXX XX XX",
+    "address": "İzmir, Türkiye"
+  },
+  "socials": {
+    "instagram": "",
+    "linkedin": "",
+    "x": "",
+    "facebook": "",
+    "youtube": ""
+  },
+  "navHrefs": [
+    "/hakkimizda",
+    "/web-site",
+    "/dijital-reklamlar",
+    "/blog",
+    "/iletisim"
+  ],
+  "legalPageIds": [
+    "1779141742597-o5dylc"
+  ]
+}

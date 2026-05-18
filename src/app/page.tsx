@@ -159,6 +159,9 @@ type ProjectCategory = 'dev' | 'ops'
 type Project = {
   company: string
   initials: string
+  // When set, the card/popup shows the referans logo image in place of
+  // the initials placeholder. Empty string falls back to initials.
+  imageUrl?: string
   category: ProjectCategory
   type: string
   date: string
@@ -856,16 +859,26 @@ function ProjectCard({
           kicks in only at lg+ so mobile keeps the original compact look. */}
       <div className="flex items-center gap-3">
         <div
-          className="flex h-12 w-20 shrink-0 items-center justify-center rounded-md lg:h-14 lg:w-24"
+          className="flex h-12 w-20 shrink-0 items-center justify-center overflow-hidden rounded-md lg:h-14 lg:w-24"
           style={{
             background: '#ffffff',
             border: '1px solid rgba(60, 99, 159, 0.10)',
             boxShadow: '0 1px 2px rgba(60, 99, 159, 0.04)',
           }}
         >
-          <span className="text-[15px] font-bold tracking-tight text-[#3c639f] lg:text-[16px]">
-            {project.initials}
-          </span>
+          {project.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={project.imageUrl}
+              alt={project.company}
+              className="max-h-full max-w-full object-contain p-1"
+              draggable={false}
+            />
+          ) : (
+            <span className="text-[15px] font-bold tracking-tight text-[#3c639f] lg:text-[16px]">
+              {project.initials}
+            </span>
+          )}
         </div>
         <div className="min-w-0 flex-1">
           <div className="truncate text-[14px] font-semibold text-[#0a0a0a] lg:text-[15px]">
@@ -960,23 +973,44 @@ function ProjectPopup({
       {/* Header */}
       <div className="flex shrink-0 items-center gap-3">
         <div
-          className="flex h-14 w-24 shrink-0 items-center justify-center rounded-md"
+          className="flex h-14 w-24 shrink-0 items-center justify-center overflow-hidden rounded-md"
           style={{
             background: '#ffffff',
             border: '1px solid rgba(60, 99, 159, 0.10)',
             boxShadow: '0 1px 2px rgba(60, 99, 159, 0.04)',
           }}
         >
-          <span className="text-[16px] font-bold tracking-tight text-[#3c639f]">
-            {project.initials}
-          </span>
+          {project.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={project.imageUrl}
+              alt={project.company}
+              className="max-h-full max-w-full object-contain p-1"
+              draggable={false}
+            />
+          ) : (
+            <span className="text-[16px] font-bold tracking-tight text-[#3c639f]">
+              {project.initials}
+            </span>
+          )}
         </div>
         <div className="min-w-0 flex-1">
-          <div className="truncate text-[15px] font-semibold text-[#0a0a0a]">
-            {project.company}
+          <div className="flex items-center gap-2">
+            <span className="truncate text-[15px] font-semibold text-[#0a0a0a]">
+              {project.company}
+            </span>
+            <span
+              className="shrink-0 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.06em]"
+              style={{
+                background: 'rgba(60, 99, 159, 0.08)',
+                color: '#3c639f',
+              }}
+            >
+              {project.type}
+            </span>
           </div>
-          <div className="text-[12px] text-black/50">
-            {project.type} · {project.date}
+          <div className="mt-0.5 text-[12px] text-black/50">
+            {project.date}
           </div>
         </div>
         {isMobileLayout && (
@@ -1097,7 +1131,7 @@ function ProjectPopup({
   return createPortal(popupContent, document.body)
 }
 
-function ProjectsSection() {
+function ProjectsSection({ projects: projectsProp }: { projects: Project[] }) {
   const isMobile = useIsMobile()
 
   const [activeTab, setActiveTab] = useState<ProjectCategory>('dev')
@@ -1131,8 +1165,8 @@ function ProjectsSection() {
   const VISIBLE_HEIGHT = STEP * 3 + CARD_HEIGHT * 0.4
 
   const activeProjects = useMemo(
-    () => projects.filter(p => p.category === activeTab),
-    [activeTab],
+    () => projectsProp.filter(p => p.category === activeTab),
+    [activeTab, projectsProp],
   )
   const totalOriginal = activeProjects.length
   // Duplicated list enables seamless infinite loop
@@ -1377,10 +1411,7 @@ function ProjectsSection() {
           same baseline. The control hugs the right edge of the title rather
           than being pushed to the far right of the section. */}
       <div className="mb-8">
-        <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-          Çalışmalarımız
-        </span>
-        <div className="mt-2 flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
             <span className="font-normal">Neler </span>
             <span className="font-bold text-[#3c639f]">Yaptık?</span>
@@ -1593,15 +1624,7 @@ function ProjectsSection() {
             empty band beneath the wrist all the way to the right edge. */}
         <div className="relative z-10 hidden lg:-ml-4 lg:flex lg:w-[calc(50%+16px)] lg:flex-col lg:justify-end lg:gap-6 lg:pb-16 xl:-ml-6 xl:w-[calc(50%+24px)] xl:pb-20">
           <div>
-            {/* Eyebrow label hidden but its space preserved so the rest
-                of the block doesn't jump upward. */}
-            <span
-              aria-hidden
-              className="invisible text-[11px] font-medium uppercase tracking-[0.08em] text-black/40"
-            >
-              Yaklaşımımız
-            </span>
-            <h3 className="mt-3 text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[52px]">
+            <h3 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[52px]">
               <span className="font-normal">Her projeye sıfırdan,</span>
               <br />
               <span className="font-bold text-[#3c639f]">ihtiyaca özel.</span>
@@ -1725,6 +1748,100 @@ export default function Home() {
     }),
     [logoEntries],
   )
+
+  // Service cards ("Neler yaparız?" — Web Site & Dijital Reklamlar).
+  // Same pattern as the other admin-managed sections: seed with the
+  // current defaults so the cards render instantly, replace once
+  // /api/services responds.
+  const [serviceCards, setServiceCards] = useState<{
+    web: { title: string; bullets: string[] }
+    reklam: { title: string; bullets: string[] }
+  }>({
+    web: {
+      title: "Web Site",
+      bullets: [
+        "Next.js + TypeScript ile modern altyapı",
+        "Tasarımdan SEO'ya uçtan uca süreç",
+        "Lighthouse 95+ performans hedefi",
+      ],
+    },
+    reklam: {
+      title: "Dijital Reklamlar",
+      bullets: [
+        "Google Ads & Meta Ads yönetimi",
+        "Performans odaklı kampanya stratejisi",
+        "Şeffaf ve sade raporlama paneli",
+      ],
+    },
+  })
+  useEffect(() => {
+    let cancelled = false
+    type ApiCard = { key: "web" | "reklam"; title: string; bullets: string[] }
+    fetch("/api/services")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { cards?: ApiCard[] } | null) => {
+        if (cancelled || !data || !Array.isArray(data.cards)) return
+        const next = { ...serviceCards }
+        for (const c of data.cards) {
+          if (c.key === "web" || c.key === "reklam") {
+            next[c.key] = { title: c.title, bullets: c.bullets }
+          }
+        }
+        setServiceCards(next)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+    // We seed once at mount; subsequent edits in the admin reach us
+    // through a fresh page load (revalidatePath("/")), so no deps.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Projects — fetched from the admin store. Seeded with the hardcoded
+  // list so the carousel renders something on first paint, then replaced
+  // once /api/projects resolves. Each API row already carries the joined
+  // referans data (company name, logo image, initials, formatted date).
+  const [activeProjects, setActiveProjects] = useState<Project[]>(projects)
+  useEffect(() => {
+    let cancelled = false
+    type ApiProject = {
+      id: string
+      company: string
+      initials: string
+      imageUrl: string
+      category: ProjectCategory
+      type: string
+      dateLabel: string
+      demand: string
+      solution: string
+      demandDetail: string
+      solutionDetail: string
+    }
+    fetch("/api/projects")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { projects?: ApiProject[] } | null) => {
+        if (cancelled || !data || !Array.isArray(data.projects)) return
+        if (data.projects.length === 0) return
+        const mapped: Project[] = data.projects.map((p) => ({
+          company: p.company,
+          initials: p.initials,
+          imageUrl: p.imageUrl,
+          category: p.category,
+          type: p.type,
+          date: p.dateLabel,
+          demand: p.demand,
+          solution: p.solution,
+          demandDetail: p.demandDetail,
+          solutionDetail: p.solutionDetail,
+        }))
+        setActiveProjects(mapped)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // Testimonials source — admin can flip between the hardcoded preset
   // list and the curated real reviews. While we don't have any real
@@ -2419,7 +2536,7 @@ export default function Home() {
             UX: vertical auto-advancing stack on the left, segmented control
             (Geliştirmeler / Operasyonlar) above it, popup on hover/tap.
             Right column is intentionally empty for now. */}
-        <ProjectsSection />
+        <ProjectsSection projects={activeProjects} />
 
         {/* "Neler yaparız?" — two service spotlights side by side. Each card
             has a distinct motif (code lines for Web Site, rising chart for
@@ -2428,10 +2545,7 @@ export default function Home() {
             bottom padding) so the two read as one continuous block. */}
         <section className="relative mx-auto max-w-[1280px] px-6 pb-16 md:px-12 md:pb-20">
           <div className="mb-8">
-            <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-              Hizmetler
-            </span>
-            <div className="mt-2">
+            <div>
               <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
                 <span className="font-normal">Neler </span>
                 <span className="font-bold text-[#3c639f]">yaparız?</span>
@@ -2561,18 +2675,14 @@ export default function Home() {
               </div>
 
               <h3 className="relative mt-8 text-[28px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-                Web Site
+                {serviceCards.web.title}
               </h3>
               <p className="relative mt-2 text-[15px] leading-relaxed text-black/55">
                 Sıfırdan, markanıza özel. Hızlı, modern ve dönüşüm odaklı.
               </p>
 
               <ul className="relative mt-6 flex flex-col gap-3">
-                {[
-                  "Next.js + TypeScript ile modern altyapı",
-                  "Tasarımdan SEO'ya uçtan uca süreç",
-                  "Lighthouse 95+ performans hedefi",
-                ].map((b) => (
+                {serviceCards.web.bullets.map((b) => (
                   <li
                     key={b}
                     className="flex items-start gap-3 text-[14px] leading-relaxed text-black/70"
@@ -2727,18 +2837,14 @@ export default function Home() {
               </div>
 
               <h3 className="relative mt-8 text-[28px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-                Dijital Reklamlar
+                {serviceCards.reklam.title}
               </h3>
               <p className="relative mt-2 text-[15px] leading-relaxed text-black/55">
                 Bütçenizden en yüksek dönüşümü çıkaran kampanyalar.
               </p>
 
               <ul className="relative mt-6 flex flex-col gap-3">
-                {[
-                  "Google Ads & Meta Ads yönetimi",
-                  "Performans odaklı kampanya stratejisi",
-                  "Şeffaf ve sade raporlama paneli",
-                ].map((b) => (
+                {serviceCards.reklam.bullets.map((b) => (
                   <li
                     key={b}
                     className="flex items-start gap-3 text-[14px] leading-relaxed text-black/70"

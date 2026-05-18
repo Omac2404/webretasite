@@ -1,0 +1,22 @@
+{
+  "cards": [
+    {
+      "key": "web",
+      "title": "Web Site",
+      "bullets": [
+        "Next.js + TypeScript ile modern altyapı",
+        "Tasarımdan SEO'ya uçtan uca süreç",
+        "Lighthouse 95+ performans hedefi"
+      ]
+    },
+    {
+      "key": "reklam",
+      "title": "Dijital Reklamlar",
+      "bullets": [
+        "Google Ads & Meta Ads yönetimi",
+        "Performans odaklı kampanya stratejisi",
+        "Şeffaf ve sade raporlama paneli"
+      ]
+    }
+  ]
+}

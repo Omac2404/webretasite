@@ -19,12 +19,12 @@ export default async function LogosAdminPage() {
     <div className="mx-auto flex max-w-[1080px] flex-col gap-8">
       <div>
         <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-          Logolar
+          Referanslar
         </h1>
         <p className="mt-1.5 text-[13.5px] text-black/55">
-          Anasayfadaki kayan logo şeridini buradan yönet. Üst sıra hızlı (38s,
-          sola), alt sıra yavaş (58s, sağa) akıyor. Sürükle-bırak yerine şimdilik
-          ok tuşlarıyla sıralarsın.
+          Anasayfadaki kayan logo şeridini ve proje firmalarını buradan yönet.
+          Üst sıra hızlı (38s, sola), alt sıra yavaş (58s, sağa) akıyor.
+          Burada eklediğin firmalar Projeler sekmesinden seçilebilir hale gelir.
         </p>
       </div>
 

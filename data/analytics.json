@@ -1934,6 +1934,195 @@
       },
       "ip": "::1",
       "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
+    },
+    {
+      "id": "e1574241-6380-4bd7-af56-4eb08d5cc2f9",
+      "ts": "2026-05-18T21:28:39.590Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_view",
+      "data": {
+        "section": "projects"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "d0327ee0-19f0-46de-9fd0-f3fab5c175f5",
+      "ts": "2026-05-18T21:28:39.930Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_view",
+      "data": {
+        "section": "testimonials"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "caab0177-29d6-4710-b9a9-47be60418c37",
+      "ts": "2026-05-18T21:28:40.965Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_dwell",
+      "data": {
+        "section": "testimonials",
+        "durationMs": 1035
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "503b5034-ee89-45c3-b9dd-347b48d5ace6",
+      "ts": "2026-05-18T21:28:41.498Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "0f27c0a5-c5d0-428f-be04-49575a2ce4b8",
+      "ts": "2026-05-18T21:28:43.037Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "talep-edin:google:basic",
+        "label": "Talep Edin (Google Ads – Başlangıç Paketi)"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "58d48456-d42d-4390-99aa-dfa54654ecf3",
+      "ts": "2026-05-18T21:28:51.830Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "randevu-olustur",
+        "label": "Randevu oluşturdu (Google Ads – Başlangıç Paketi)"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "4cb1aff6-cbe4-45e6-a1d2-e32f79c754fd",
+      "ts": "2026-05-18T21:29:16.617Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "fc4d3e82-b6dd-4bf3-800b-32f0bfc2103d",
+      "ts": "2026-05-18T21:31:44.715Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "4fc9a506-8621-4f1c-b81e-ffbf64fd7f22",
+      "ts": "2026-05-18T21:31:44.732Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_view",
+      "data": {
+        "section": "testimonials"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "a357547b-6cfd-4dd4-857c-b4139c596eac",
+      "ts": "2026-05-18T21:31:44.848Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_view",
+      "data": {
+        "section": "projects"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "2ed053a7-19af-46c7-ab31-2006edfc42e6",
+      "ts": "2026-05-18T21:31:45.670Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_dwell",
+      "data": {
+        "section": "projects",
+        "durationMs": 822
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "f59c02cb-eb78-45c3-9bd3-cdf58f1cf18a",
+      "ts": "2026-05-18T21:31:51.260Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_view",
+      "data": {
+        "section": "projects"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "b95f9c16-a623-478c-b882-7fd0e008b3ce",
+      "ts": "2026-05-18T21:31:52.404Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_view",
+      "data": {
+        "section": "testimonials"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "1d0d9528-729a-42e8-b45a-9bbec2160015",
+      "ts": "2026-05-18T21:31:52.440Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_dwell",
+      "data": {
+        "section": "projects",
+        "durationMs": 1179
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+    },
+    {
+      "id": "caf831b8-c869-4c0e-809f-bc3374f5617c",
+      "ts": "2026-05-18T21:31:54.029Z",
+      "sessionId": "c20a0725-539c-4296-b585-12f26a700b59",
+      "path": "/",
+      "type": "section_dwell",
+      "data": {
+        "section": "testimonials",
+        "durationMs": 1625
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
     }
   ]
 }

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
-import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity } from "lucide-react"
+import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom } from "lucide-react"
 import { SESSION_COOKIE, verifySession } from "@/lib/admin-session"
 import { logoutAction } from "../(auth)/login/actions"
 
@@ -37,8 +37,14 @@ export default async function PanelLayout({
           <SideLink href="/admin" icon={<LayoutDashboard size={16} />} active>
             Anasayfa
           </SideLink>
-          <SideLink href="/admin/logolar" icon={<ImageIcon size={16} />}>
-            Logolar
+          <SideLink href="/admin/referanslar" icon={<ImageIcon size={16} />}>
+            Referanslar
+          </SideLink>
+          <SideLink href="/admin/projeler" icon={<FolderKanban size={16} />}>
+            Projeler
+          </SideLink>
+          <SideLink href="/admin/hizmetler" icon={<Sparkles size={16} />}>
+            Hizmetler
           </SideLink>
           <SideLink href="/admin/yorumlar" icon={<MessageSquare size={16} />}>
             Yorumlar
@@ -54,6 +60,12 @@ export default async function PanelLayout({
           </SideLink>
           <SideLink href="/admin/analitik" icon={<Activity size={16} />}>
             Analitik
+          </SideLink>
+          <SideLink href="/admin/footer" icon={<PanelBottom size={16} />}>
+            Footer
+          </SideLink>
+          <SideLink href="/admin/yasal-sayfalar" icon={<Scale size={16} />}>
+            Yasal Sayfalar
           </SideLink>
           <SideLink href="#" icon={<Briefcase size={16} />} disabled>
             Teklifler
