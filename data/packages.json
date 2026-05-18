@@ -1,0 +1,195 @@
+{
+  "channels": [
+    {
+      "key": "google",
+      "label": "Google Ads",
+      "short": "Google",
+      "intro": "Google Ads reklam yönetimi paketlerimiz ile bütçenize en uygun çözümü bulun.",
+      "packages": [
+        {
+          "key": "basic",
+          "name": "Başlangıç Paketi",
+          "tagline": "Temel Google Ads reklam kurulumu ve yönetimi hizmeti.",
+          "price": "₺8.000",
+          "audience": [
+            "Yeni reklam veren işletmeler",
+            "Yerel hizmet firmaları",
+            "Bütçesi sınırlı ama görünmek isteyenler"
+          ],
+          "items": [
+            "Google Ads hesap kurulumu",
+            "1 arama (Search) kampanyası",
+            "Anahtar kelime araştırması",
+            "Aylık 1 raporlama toplantısı",
+            "Temel dönüşüm takibi kurulumu"
+          ]
+        },
+        {
+          "key": "growth",
+          "name": "Büyüme Paketi",
+          "tagline": "Segmentasyonlu Google Ads reklam yönetimi çözümü.",
+          "price": "₺12.500",
+          "audience": [
+            "Düzenli müşteri akışı isteyen işletmeler",
+            "Lead ve satış dengesini kurmak isteyen firmalar",
+            "Reklamı profesyonel ve sistemli yönetmek isteyenler"
+          ],
+          "items": [
+            "Search + Display kampanya yönetimi",
+            "Remarketing kurulumu",
+            "Performance Max kampanyası",
+            "A/B reklam metni testleri",
+            "Aylık 2 raporlama toplantısı",
+            "Gelişmiş dönüşüm takibi (GTM + GA4)"
+          ]
+        },
+        {
+          "key": "premium",
+          "name": "Premium Paket",
+          "tagline": "Gelişmiş hedeflemeli Google Ads reklam yönetimi.",
+          "price": "₺20.000",
+          "audience": [
+            "Rekabeti yüksek sektörler (hukuk, estetik, e-ticaret, yazılım vb.)",
+            "Aylık 50.000 TL+ reklam bütçesi yöneten firmalar",
+            "E-ticaret siteleri"
+          ],
+          "items": [
+            "Tüm kampanya tipleri (Search, Display, PMax, Shopping, YouTube)",
+            "Google Merchant Center entegrasyonu",
+            "Gelişmiş kitle segmentasyonu",
+            "Haftalık optimizasyon",
+            "Aylık 4 raporlama toplantısı",
+            "Özel dashboard ve attribution modelleme"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "meta",
+      "label": "Meta Ads",
+      "short": "Meta",
+      "intro": "Meta Ads reklam yönetimi paketlerimiz ile Instagram ve Facebook'ta doğru kitleye ulaşın.",
+      "packages": [
+        {
+          "key": "basic",
+          "name": "Başlangıç Paketi",
+          "tagline": "Meta Ads'e yeni başlayanlar için temel reklam kurulumu ve yönetimi.",
+          "price": "₺5.000",
+          "audience": [
+            "Reklama yeni başlayacak markalar",
+            "Butik işletmeler",
+            "Yerel firmalar"
+          ],
+          "items": [
+            "Business Manager + Pixel kurulumu",
+            "1 kampanya yönetimi",
+            "Temel kitle hedefleme",
+            "Aylık 1 raporlama toplantısı",
+            "Reklam metni desteği"
+          ]
+        },
+        {
+          "key": "growth",
+          "name": "Büyüme Paketi",
+          "tagline": "Satış ve lead odaklı, segmentasyonlu Meta reklam yönetimi.",
+          "price": "₺7.500",
+          "audience": [
+            "Düzenli satış ve lead isteyen markalar",
+            "Aylık 20.000 – 50.000 TL reklam bütçesi olan firmalar",
+            "Sektöründe ilk sayfada görünmek isteyen markalar"
+          ],
+          "items": [
+            "Çoklu kampanya yönetimi (Instagram + Facebook)",
+            "Remarketing ve lookalike kitleler",
+            "A/B yaratıcı testleri",
+            "Aylık 2 raporlama toplantısı",
+            "Gelişmiş dönüşüm takibi (Conversions API)"
+          ]
+        },
+        {
+          "key": "premium",
+          "name": "Premium Paket",
+          "tagline": "Gelişmiş hedefleme ve performans optimizasyonlu Meta Ads yönetimi.",
+          "price": "₺15.000",
+          "audience": [
+            "E-ticaret",
+            "Marka büyütmek isteyen firmalar",
+            "Yüksek bütçeli kampanyalar"
+          ],
+          "items": [
+            "Tüm yerleşimler (Reels, Stories, Feed, Marketplace)",
+            "Catalog Ads ve Advantage+ Shopping",
+            "Gelişmiş kitle segmentasyonu ve dinamik retargeting",
+            "Haftalık optimizasyon",
+            "Aylık 4 raporlama toplantısı",
+            "Özel dashboard ve attribution modelleme"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "360",
+      "label": "Google + Meta",
+      "short": "G + M",
+      "intro": "Google ve Meta'yı tek elden, koordineli bir stratejiyle yöneten paketlerimiz.",
+      "packages": [
+        {
+          "key": "basic",
+          "name": "Başlangıç Paketi",
+          "tagline": "Google ve Meta'yı tek elden başlatın — temel 360° reklam yönetimi.",
+          "price": "₺10.000",
+          "audience": [
+            "İki kanalda da görünür olmak isteyen işletmeler",
+            "Reklama yeni başlayan markalar",
+            "Yerel hizmet firmaları"
+          ],
+          "items": [
+            "Google Ads + Meta Ads hesap kurulumu",
+            "1 kampanya / kanal",
+            "Çapraz kanal raporlaması",
+            "Aylık 1 raporlama toplantısı",
+            "Birleşik dönüşüm takibi"
+          ]
+        },
+        {
+          "key": "growth",
+          "name": "Büyüme Paketi",
+          "tagline": "Segmentasyonlu, çoklu kampanyalı entegre Google + Meta yönetimi.",
+          "price": "₺18.000",
+          "audience": [
+            "Düzenli müşteri akışı isteyen işletmeler",
+            "Aylık 30.000 – 80.000 TL reklam bütçesi olan firmalar",
+            "Reklamı profesyonel yönetmek isteyenler"
+          ],
+          "items": [
+            "Google + Meta çoklu kampanya yönetimi",
+            "Remarketing (her iki kanalda)",
+            "A/B yaratıcı ve metin testleri",
+            "Aylık 2 raporlama toplantısı",
+            "Gelişmiş dönüşüm takibi (GA4 + CAPI)",
+            "Kanallar arası bütçe optimizasyonu"
+          ]
+        },
+        {
+          "key": "premium",
+          "name": "Premium Paket",
+          "tagline": "Tüm kanallar, gelişmiş segmentasyon ve haftalık optimizasyon ile 360° yönetim.",
+          "price": "₺30.000",
+          "audience": [
+            "Yüksek rekabetli sektörler",
+            "Aylık 100.000 TL+ reklam bütçesi yöneten markalar",
+            "E-ticaret ve büyük lead odaklı firmalar"
+          ],
+          "items": [
+            "Google + Meta'da tüm kampanya tipleri",
+            "Merchant Center + Catalog entegrasyonu",
+            "Gelişmiş kitle segmentasyonu ve attribution",
+            "Haftalık optimizasyon",
+            "Aylık 4 raporlama toplantısı",
+            "Özel dashboard ve stratejik danışmanlık"
+          ]
+        }
+      ]
+    }
+  ]
+}

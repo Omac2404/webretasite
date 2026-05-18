@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Tracker from "@/components/Tracker";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -29,6 +30,7 @@ export default function RootLayout({
     <html lang="tr" className="bg-[#fafafa]">
       <body className={`${inter.variable} font-sans antialiased`}>
         {children}
+        <Tracker />
       </body>
     </html>
   );

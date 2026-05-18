@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { ArrowRight, Menu, X, Star, Check, ExternalLink, CheckCircle2, Code2, TrendingUp } from "lucide-react"
 import Image from "next/image"
 import { createPortal } from "react-dom"
+import HomeBlogSection from "@/components/HomeBlogSection"
 
 // 20 testimonials with varied lengths (6 short, 8 medium, 6 long)
 const testimonials = [
@@ -1370,7 +1371,7 @@ function ProjectsSection() {
   const translateY = -(currentIndex * STEP)
 
   return (
-    <section ref={sectionRef} className="relative mx-auto max-w-[1280px] px-6 pb-16 md:px-12 md:pb-20">
+    <section ref={sectionRef} data-section="projects" className="relative mx-auto max-w-[1280px] px-6 pb-16 md:px-12 md:pb-20">
       {/* Section heading — title and segmented control sit together on the
           same baseline. The control hugs the right edge of the title rather
           than being pushed to the far right of the section. */}
@@ -1404,6 +1405,9 @@ function ProjectsSection() {
                 <button
                   key={tab.id}
                   type="button"
+                  data-track-tab-control="projects"
+                  data-track-tab-value={tab.id}
+                  data-track-label={tab.label}
                   onClick={() => {
                     setActiveTab(tab.id)
                     if (tab.id === 'ops') setOpsPulsing(false)
@@ -2237,7 +2241,7 @@ export default function Home() {
             </div>
 
             {/* Right Column - Testimonials */}
-            <div ref={testimonialColumnRef} className="relative w-full lg:w-[45%]">
+            <div ref={testimonialColumnRef} data-section="testimonials" className="relative w-full lg:w-[45%]">
               {/* Decorative halftone peace-hand reaching up behind the
                   testimonial stack. Sits in DOM before the cards so they
                   paint on top — one V finger naturally tucks behind the
@@ -2460,8 +2464,10 @@ export default function Home() {
             <a
               ref={webCardRef}
               href="/web-site"
+              data-track="home:service-card:web-site"
+              data-track-label="Web Site kartı"
               onMouseEnter={() => setWebPlayKey((k) => k + 1)}
-              className="service-card group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-8 transition-all duration-500 hover:-translate-y-1 hover:border-[#3c639f]/20 hover:shadow-[0_12px_40px_-12px_rgba(60,99,159,0.18)] md:p-10"
+              className="service-card group relative overflow-hidden rounded-2xl border border-black/[0.10] bg-white p-8 transition-all duration-500 hover:-translate-y-1 hover:border-[#3c639f]/25 hover:shadow-[0_12px_40px_-12px_rgba(60,99,159,0.18)] md:p-10"
             >
               {/* Page mockup decoration. Key remount restarts the CSS
                   animations from scratch every time it changes. */}
@@ -2593,8 +2599,10 @@ export default function Home() {
             <a
               ref={reklamCardRef}
               href="/dijital-reklamlar"
+              data-track="home:service-card:dijital-reklamlar"
+              data-track-label="Dijital Reklamlar kartı"
               onMouseEnter={() => setReklamPlayKey((k) => k + 1)}
-              className="service-card group relative overflow-hidden rounded-2xl border border-black/[0.06] bg-white p-8 transition-all duration-500 hover:-translate-y-1 hover:border-[#3c639f]/20 hover:shadow-[0_12px_40px_-12px_rgba(60,99,159,0.18)] md:p-10"
+              className="service-card group relative overflow-hidden rounded-2xl border border-black/[0.10] bg-white p-8 transition-all duration-500 hover:-translate-y-1 hover:border-[#3c639f]/25 hover:shadow-[0_12px_40px_-12px_rgba(60,99,159,0.18)] md:p-10"
             >
               {/* Rising chart decoration — ascending line with peaks and a
                   soft area fill underneath. Spreads into the card as a
@@ -2753,6 +2761,8 @@ export default function Home() {
             </a>
           </div>
         </section>
+
+        <HomeBlogSection />
 
       </main>
 

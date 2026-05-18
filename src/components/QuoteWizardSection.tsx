@@ -576,10 +576,7 @@ export default function QuoteWizardSection() {
 
         <div className="relative mx-auto max-w-[1280px] px-6 md:px-12">
           <div className="mb-8 md:mb-10">
-            <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-              Ücretsiz Teklif
-            </span>
-            <h2 className="mt-2 text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[48px]">
+            <h2 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[48px]">
               <span className="font-normal">Projenize özel </span>
               <span className="font-bold text-[#3c639f]">fiyat teklifi</span>
             </h2>

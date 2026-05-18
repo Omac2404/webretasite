@@ -1,0 +1,111 @@
+import Link from "next/link"
+import { Layers, Star } from "lucide-react"
+import {
+  CHANNEL_ORDER,
+  MAX_AUDIENCE,
+  MAX_ITEMS,
+  readPackages,
+  type ChannelKey,
+} from "@/lib/packages-store"
+import { ChannelForm } from "./channel-form"
+import { PackageForm } from "./package-form"
+
+export const dynamic = "force-dynamic"
+
+function isChannelKey(v: string | undefined): v is ChannelKey {
+  return v !== undefined && (CHANNEL_ORDER as readonly string[]).includes(v)
+}
+
+export default async function PackagesAdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ channel?: string }>
+}) {
+  const params = await searchParams
+  const activeKey: ChannelKey = isChannelKey(params.channel)
+    ? params.channel
+    : "google"
+
+  const data = await readPackages()
+  const channel = data.channels.find((c) => c.key === activeKey)!
+
+  return (
+    <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
+      <div>
+        <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+          Paketler
+        </h1>
+        <p className="mt-1.5 text-[13.5px] text-black/55">
+          /dijital-reklamlar sayfasındaki paket kartlarını ve detay
+          popup&apos;ını buradan düzenle. Her paket için ad, kısa açıklama,
+          fiyat, &quot;Kimler için uygun&quot; listesi (max {MAX_AUDIENCE}) ve
+          detay maddeleri (max {MAX_ITEMS}).
+        </p>
+      </div>
+
+      {/* Channel tabs — server-rendered, switched via URL query so each
+          tab is bookmarkable. Active tab matches the public page's pill. */}
+      <div className="flex gap-1 border-b border-black/[0.08]">
+        {data.channels.map((c) => {
+          const active = c.key === activeKey
+          return (
+            <Link
+              key={c.key}
+              href={`/admin/paketler?channel=${c.key}`}
+              className={
+                active
+                  ? "-mb-px border-b-2 border-[#3c639f] px-4 py-2.5 text-[13px] font-medium text-[#3c639f]"
+                  : "border-b-2 border-transparent px-4 py-2.5 text-[13px] font-medium text-black/55 transition-colors hover:text-[#0a0a0a]"
+              }
+            >
+              {c.label}
+            </Link>
+          )
+        })}
+      </div>
+
+      {/* Channel-level fields */}
+      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
+        <div className="flex items-center gap-2">
+          <Layers size={15} className="text-[#3c639f]" />
+          <div className="text-[13px] font-semibold text-[#0a0a0a]">
+            Kanal bilgileri
+          </div>
+        </div>
+        <p className="mt-1 text-[12.5px] text-black/50">
+          Sekme adı, kısa adı ve sayfa başlığı altındaki açıklama.
+        </p>
+        <div className="mt-4">
+          <ChannelForm
+            channelKey={channel.key}
+            label={channel.label}
+            short={channel.short}
+            intro={channel.intro}
+          />
+        </div>
+      </section>
+
+      {/* Three package forms */}
+      <div className="flex flex-col gap-5">
+        {channel.packages.map((pkg) => (
+          <PackageForm
+            key={pkg.key}
+            channelKey={channel.key}
+            pkg={pkg}
+            featured={pkg.key === "growth"}
+          />
+        ))}
+      </div>
+
+      <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50/60 p-4">
+        <Star size={14} className="mt-0.5 shrink-0 text-amber-700" />
+        <p className="text-[12.5px] leading-relaxed text-amber-900/85">
+          &quot;En Popüler&quot; vurgusu her zaman <strong>Büyüme</strong>{" "}
+          paketinde — bu kuralı buradan değiştiremiyorsun. Yapısal değişiklik
+          (yeni kanal, yeni paket veya popüler rozetinin yeri) gerekiyorsa
+          söyle, kodu güncelleyelim.
+        </p>
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,95 @@
+{
+  "posts": [
+    {
+      "id": "seed-1",
+      "authorId": "auth-mert",
+      "category": "teknik",
+      "slug": "web-sitenizin-yuklenme-hizi-neden-onemli",
+      "title": "Web sitenizin yüklenme hızı neden iş kaybı yaratıyor?",
+      "excerpt": "Bir saniyelik gecikme bile dönüşümleri yaklaşık %10 düşürebiliyor. Performansın doğrudan ciroya yansıyan etkisini ve hızlı bir sitenin nasıl kurulduğunu inceledik.",
+      "content": "Sayfa açılış süresi artık sadece kullanıcı deneyimi meselesi değil; doğrudan iş sonuçlarını etkileyen bir KPI. Google'ın yıllık raporlarına göre 3 saniyenin üstünde açılan mobil sayfaların ziyaretçilerinin %53'ü daha sayfayı görmeden vazgeçiyor. Bir saniyelik fazladan gecikme, e-ticarette ortalama %7 dönüşüm kaybına denk geliyor.\r\n\r\n## Hız neden bu kadar belirleyici?\r\n\r\nKullanıcı bir reklamla sitenize geldiğinde zaten ödediğiniz bir maliyet var. Hızlı yüklenen bir sayfa o ödenen reklamı satışa çevirir; yavaş yüklenen sayfa ise bütçenizi geri dönüşsüz harcatır. Google Ads ve Meta Ads algoritmaları da kaliteli (yani hızlı, kullanıcıyı tutabilen) sayfalara daha düşük CPC sunar — yani yavaş site, hem dönüşüm kaybı hem de tıklama başı maliyet artışı demek.\r\n\r\n## Modern bir hızlı site nasıl kurulur?\r\n\r\nHız tek bir ayarla gelmiyor; mimari kararlarla başlıyor. Tercih ettiğimiz Next.js + Vercel kombinasyonu, sayfaların büyük kısmını sunucuda statik olarak üretip CDN'e dağıtarak ziyaretçiye milisaniyeler içinde teslim ediyor. Görseller modern formatlara (WebP, AVIF) çevriliyor, font'lar self-host ediliyor, JavaScript ise yalnızca gerekli sayfalarda yükleniyor.\r\n\r\n## Webreta'da neyi hedefliyoruz?\r\n\r\nTeslim ettiğimiz tüm projelerde mobil Lighthouse skorumuz 95'in üzerinde. Bu sayı kulağa teknik gelebilir ama anlamı şu: ortalama bir kullanıcı sitenizin tam olarak çalışır halini ilk 1.5 saniyede görüyor. İlk teklif formu doldurma oranlarımız da bu sayede sektör ortalamasının ciddi şekilde üzerinde seyrediyor.\r\n\r\nKısacası, sitenizin hızı satışınızdır. Yavaş yüklenen bir site, sürekli sızdıran bir kova gibi: ne kadar reklam dökersen dök, sonuç sınırlı kalıyor.",
+      "coverImage": "/blog/web-sitenizin-yuklenme-hizi-neden-is-kay-1779111831371.jpg",
+      "createdAt": "2026-05-12T09:00:00.000Z",
+      "updatedAt": "2026-05-18T13:44:02.715Z",
+      "published": true
+    },
+    {
+      "id": "seed-2",
+      "authorId": "auth-kerem",
+      "category": "teknik",
+      "slug": "google-ads-mi-meta-ads-mi",
+      "title": "Google Ads mi, Meta Ads mi? Bütçenizi hangisine ayırmalısınız?",
+      "excerpt": "İki dev platform, iki farklı satın alma niyeti. Bu yazıda bütçenizi nereye yönlendireceğinizi belirleyen 4 temel kriteri inceliyoruz.",
+      "content": "Yeni reklam veren işletmelerin en çok sorduğu soru bu: Bütçemi Google'a mı, Instagram'a mı yatırayım? Cevap, ne sattığınıza ve kimi hedeflediğinize göre değişiyor.\r\n\r\n## Niyet farkı: arıyor mu, geziyor mu?\r\n\r\nGoogle Ads, kullanıcının zaten bir ihtiyacı olduğunda devreye girer. Birisi \"İstanbul hukuk bürosu\" araması yaptığında size geliyorsa, satın alma niyeti çok yüksektir. Meta Ads ise tam tersine, kullanıcı bir şey aramazken onun karşısına çıkar — yani talebi siz yaratırsınız. Bu yüzden Google daha ucuz tıklama almasa da çoğu sektörde daha hızlı dönüşür.\r\n\r\n## Hangi sektör hangisinde başarılı?\r\n\r\nB2B hizmetler, hukuk, sağlık, yazılım gibi \"problem çözen\" sektörler Google'da güçlü. Moda, kozmetik, ev dekorasyonu, restoran gibi \"keşfettiren\" sektörlerde Meta öne çıkıyor. Eğitim ve e-ticarette ikisi de işliyor — sıralama satış döngünüze bağlı.\r\n\r\n## Bütçe büyüklüğü\r\n\r\nGoogle Ads'in en büyük dezavantajı, yüksek rekabetli anahtar kelimelerde tıklama başı maliyetin 50-100 TL'ye kadar çıkabilmesi. Düşük bütçelerde Meta Ads daha verimli olabilir; çünkü görsel/video reklamla geniş kitleye ucuza erişebilirsiniz.\r\n\r\n## 360° yaklaşımı\r\n\r\nMüşterilerimizin büyük çoğunluğunda en iyi sonuçları iki platformun birlikte yönetildiği 360° paketlerde aldık. Google ile arayan kullanıcıyı yakalıyoruz, Meta ile de marka bilinirliğini ayakta tutuyoruz. Aynı bütçe, ikisinin koordineli yönetildiği bir setup'ta tek başına Google ya da tek başına Meta'dan ortalama %30-40 daha verimli çalışıyor.\r\n\r\nKısacası, sorunun doğru cevabı genelde \"ikisi birden\" — ama yeni başlıyorsanız Google'la başlayıp Meta'yı 2-3 ay sonra eklemenizi öneriyoruz.",
+      "coverImage": "",
+      "createdAt": "2026-05-08T10:30:00.000Z",
+      "updatedAt": "2026-05-18T13:45:18.426Z",
+      "published": true
+    },
+    {
+      "id": "seed-3",
+      "authorId": "auth-mert",
+      "category": "teknik",
+      "slug": "modern-bir-web-sitesinde-olmasi-gereken-ozellikler",
+      "title": "Modern bir web sitesinde olması gereken 7 özellik",
+      "excerpt": "2026'da yeni bir site kuracaksanız, başlamadan önce bu listeyi okuyun. Yazılım tarafında neyi neden istemeniz gerektiğini gözden geçiriyoruz.",
+      "content": "Web sitesi yenilemek, sadece tasarımı güzelleştirmek değil. Aşağıdaki 7 özellik artık \"olsa iyi olur\" değil, \"olmazsa rakip kazanır\" listesinde.\n\n## 1. Mobil-öncelikli tasarım\n\nTürkiye'deki ziyaretçilerin %78'i siteleri mobilden açıyor. Buna rağmen hâlâ desktop'ta güzel görünüp telefonda kırıklı çalışan siteler görüyoruz. Modern bir tasarım sürecinde mobil layout önce çiziliyor, desktop ona göre genişletiliyor.\n\n## 2. 95+ Lighthouse skoru\n\nPerformans, SEO, accessibility ve best practices — bu dört metriğin ortalaması 90'ın altında olan bir siteyi yayına almıyoruz. Bu skor hem Google sıralamasını hem dönüşüm oranını doğrudan etkiliyor.\n\n## 3. SEO altyapısı\n\nHer sayfanın kendi meta etiketleri, yapısal verisi (schema.org), Open Graph görselleri ve dinamik sitemap'i olmalı. Bunlar görünmeyen ama sıralamayı doğrudan etkileyen detaylar.\n\n## 4. Analitik entegrasyonu\n\nGA4, Google Tag Manager, Meta Pixel ve Conversions API'nin doğru kurulması, reklam yatırımının ölçülebilir olması için şart. Yanlış kurulmuş bir Pixel, aylarca veri eksiği demek.\n\n## 5. Form ve teklif yönetimi\n\nWeb sitesi sadece vitrin değil; aynı zamanda bir lead toplama makinesi olmalı. Çok adımlı, akıllı form, anti-spam koruması ve admin paneline düşen bir bildirim sistemi olmazsa olmaz.\n\n## 6. İçerik yönetimi\n\nBlog, referans listesi, hizmet detayı gibi içeriklerin admin panelinden güncellenebiliyor olması, sitenin canlı kalmasını sağlar. Statik HTML siteleri 2026'da yapılmaz.\n\n## 7. Hız ve güvenlik\n\nTümleşik HTTPS, otomatik backup, DDoS koruması ve global CDN — bunlar artık standart. Bu özelliklerden birinin eksik olduğu bir hosting seçilirse, 6 ay sonra problem yaşıyorsunuz.\n\nWebreta olarak teslim ettiğimiz tüm projelerde bu 7 maddeyi varsayılan olarak sunuyoruz. Yeni bir site planlıyorsanız bu listeyi teklif sürecinde size mutlaka soracağımız ilk kontrol noktasıdır.",
+      "coverImage": "",
+      "createdAt": "2026-05-04T14:00:00.000Z",
+      "updatedAt": "2026-05-04T14:00:00.000Z",
+      "published": true
+    },
+    {
+      "id": "seed-4",
+      "authorId": "auth-selin",
+      "category": "teknik",
+      "slug": "lead-donusum-oraninizi-artirmanin-5-yolu",
+      "title": "Lead dönüşüm oranınızı artırmanın 5 pratik yolu",
+      "excerpt": "Sitenize gelen ziyaretçileri müşteriye çeviren, uygulanması kolay ama etkisi büyük 5 değişiklik.",
+      "content": "Trafik almak yetmiyor; gelen trafiği müşteri yapmak asıl iş. Aşağıdaki 5 değişikliği uyguladığımız projelerde dönüşüm oranlarının ortalama 2x katlandığını gördük.\n\n## 1. CTA'yı sayfanın üst yarısına taşıyın\n\nKullanıcıların %57'si scroll yapmadan karar veriyor. Ana CTA butonunuz \"fold\" üstünde, dikkat çekici bir renkte ve net bir vaatle olmalı. \"İletişime geç\" yerine \"Ücretsiz teklif al — 24 saat içinde\" çok daha etkili.\n\n## 2. Form alanlarını azaltın\n\nHer ek form alanı dönüşümü %5-10 düşürüyor. İlk teklif aşamasında yalnızca isim, telefon ve sektör isteyin. Detayları aramada toplayın. Çok adımlı (wizard) formlar tek-sayfa formlardan ortalama %20 daha iyi dönüşüyor.\n\n## 3. Sosyal kanıt yerleştirin\n\nReferans logoları, müşteri yorumları ve sayısal başarılar (\"500+ proje\", \"%40 dönüşüm artışı\") güveni hızla kuruyor. Bu öğeleri CTA'nın hemen yanına koyduğumuz projelerde tıklama oranı belirgin yükseliyor.\n\n## 4. Live chat veya WhatsApp butonu ekleyin\n\nİnsanlar artık form doldurmak yerine direkt mesaj atmayı tercih ediyor. Sağ alt köşeye eklenen bir WhatsApp butonu, dönüşüm oranını çoğu projede %15-25 arttırıyor.\n\n## 5. Sayfa hızını iyileştirin\n\nİlk üç maddeyi yapsanız bile sayfa 5 saniyede açılıyorsa hiçbir şey değişmez. Lighthouse 90+ skoru, dönüşüm artırma çalışmalarının ön koşulu.\n\nBu beş madde teknik anlamda kolay; zor olan, her birini ölçüp veriye göre optimize etmek. A/B testleri olmadan tahminle çalışmak, çoğu zaman geri gidiş demek.",
+      "coverImage": "",
+      "createdAt": "2026-04-28T11:15:00.000Z",
+      "updatedAt": "2026-04-28T11:15:00.000Z",
+      "published": true
+    },
+    {
+      "id": "seed-5",
+      "authorId": "auth-selin",
+      "category": "teknik",
+      "slug": "seo-2026-degisen-kurallar",
+      "title": "SEO'nun 2026'da değişen kuralları",
+      "excerpt": "AI destekli aramalar, Core Web Vitals ve E-E-A-T'nin yeni dengesi. SEO oyunu nasıl değişti, neyi yapmaya devam etmeli neyi bırakmalı?",
+      "content": "Klasik SEO öldü mü? Tam olarak değil — ama eskisi gibi çalışmıyor. AI destekli arama özetleri, yapay zeka ile üretilmiş içerik bolluğu ve Google'ın E-E-A-T sinyallerine verdiği yeni ağırlık, oyunu yeniden tanımladı.\n\n## AI Overviews artık standart\n\nKullanıcının arattığı sorunun cevabı, sıralama sonuçlarının üstünde AI Overview olarak çıkıyor. Bu da klasik organik tıklama oranlarının %30-40 düşmesi anlamına geliyor. Çözüm: AI'nın referans aldığı kaynaklardan biri olmak. Bunun için içeriği uzman gözünden yazmak, kaynak göstermek, yapısal veri (FAQ, HowTo, Article schema) eklemek şart.\n\n## E-E-A-T: yazar kimliği önemli\n\nGoogle artık \"deneyim, uzmanlık, otorite, güvenilirlik\" sinyallerine eskisinden çok daha fazla bakıyor. Yazıyı kimin yazdığı, hangi kanıtlara dayandığı, sitenin domain otoritesi — hepsi sıralamaya yansıyor. Generic, kimsiz yazılmış \"SEO içeriği\" artık sıralanmıyor.\n\n## Core Web Vitals hâlâ kritik\n\nLighthouse skoru, mobil dostluk, INP (Interaction to Next Paint) — bunların hepsi 2026'da sıralama faktörü olmaya devam ediyor. Yavaş bir site, ne kadar iyi içerik üretirse üretsin üst sıralara çıkamıyor.\n\n## Anahtar kelime değil, niyet odaklı içerik\n\nEski \"%2-3 keyword density\" yaklaşımı bitti. Bunun yerine kullanıcının sorduğu soruyu kapsamlı, doğal bir dille cevaplayan içerikler ön planda. Bir konuda gerçekten uzman görünen 1500 kelimelik bir yazı, aynı anahtar kelimeyi 20 kez tekrarlayan 500 kelimelik yazıyı geride bırakıyor.\n\n## Backlink: hâlâ önemli, ama farklı\n\nLink çiftliklerinden alınan toplu backlink'ler artık ceza getiriyor. Yerine geçen şey: gerçek medyalardan, sektörel sitelerden, anlamlı bir bağlamla verilmiş tek bir kaliteli link. Az ama nitelikli backlink stratejisi daha kazançlı.\n\nKısacası, 2026 SEO'su \"sistemi kandırma\" değil, \"gerçekten yararlı içerik üretip ölçtüğün metriklerle iyileştirme\" üzerine kurulu. Webreta'da SEO çalışmalarımızı bu yeni dengeye göre yapılandırıyoruz.",
+      "coverImage": "",
+      "createdAt": "2026-04-22T08:45:00.000Z",
+      "updatedAt": "2026-04-22T08:45:00.000Z",
+      "published": true
+    },
+    {
+      "id": "seed-6",
+      "authorId": "auth-ekip",
+      "category": "haberler",
+      "slug": "webreta-mayis-projeleri-2026",
+      "title": "Mayıs 2026: yeni teslim ettiğimiz 4 proje ve aldığımız ödül",
+      "excerpt": "Mayıs ayında 4 yeni projemizi yayına aldık ve Webrazzi'nin yılın ajansları listesine girdik. Kısa bir özet.",
+      "content": "Mayıs Webreta için yoğun ama keyifli bir aydı. Aşağıda hem yeni teslim ettiğimiz projeleri hem de gelen güzel haberi paylaşıyoruz.\n\n## Webrazzi 2026 listesinde Webreta\n\nWebrazzi'nin geçen hafta yayınladığı \"Yılın Dijital Ajansları\" listesinde Webreta, küçük ölçek kategorisinde **ilk 10 ajans** arasında yer aldı. Listeye girmek bizim için ekibin son bir yıldaki sıkı çalışmasının görünür hale gelmesi anlamına geliyor.\n\n![Webrazzi ödülünü teslim alırken çekilen ekip fotoğrafı](/brand/ok-hand.jpg)\n\n## Yeni teslim ettiğimiz projeler\n\nMayıs boyunca aşağıdaki dört yeni projeyi yayına aldık:\n\n### 1. Astrolog Lale Leyla Okay — kurumsal kimlik + site\n\nAstroloji danışmanlığı veren Lale Leyla Okay için sıfırdan kurumsal kimlik tasarımı, randevu sistemi entegrasyonlu kurumsal web site ve Google Ads kampanyalarının ilk fazını teslim ettik. İlk hafta dönüşüm oranı %3.8.\n\n### 2. D&D Petshop — e-ticaret altyapısı\n\nD&D için Shopify altyapısıyla 700+ ürünlü bir e-ticaret sitesi kurduk. Stok yönetimi mevcut ERP sistemleriyle entegre, Meta Catalog Ads otomasyonu da dahil.\n\n### 3. Kırgöz Turizm — multi-language site\n\nKırgöz Turizm için TR/EN/AR dilli kurumsal site. Rezervasyon formunda anlık fiyat hesabı yapan custom logic yazdık.\n\n### 4. Ödemor — landing page + ads\n\nÖdemor'un yeni ürün lansmanı için tek sayfalık dönüşüm odaklı landing page ve eş zamanlı Google + Meta kampanyalarını yönettik. İlk ay 2.400 lead.\n\n## Aşağıdaki videoda kısa bir geriye dönüş yapıyoruz\n\nGeçen hafta Webrazzi sahnesinde yaptığımız kısa konuşma:\n\n[youtube](https://www.youtube.com/watch?v=dQw4w9WgXcQ)\n\nHaziran ayında 3 yeni projemizin yayına alma takvimi var. Bizi takipte kalın.",
+      "coverImage": "",
+      "createdAt": "2026-05-16T12:00:00.000Z",
+      "updatedAt": "2026-05-16T12:00:00.000Z",
+      "published": true
+    },
+    {
+      "id": "seed-7",
+      "authorId": "auth-mert",
+      "category": "teknik",
+      "slug": "next-js-server-actions-formlar",
+      "title": "Next.js Server Actions ile modern form yönetimi",
+      "excerpt": "Server Actions, klasik API route'larına göre çok daha az kod ile form yönetimi yapmamızı sağlıyor. Webreta'da nasıl kullandığımızı anlattık.",
+      "content": "Next.js 14 ile gelen Server Actions, modern web uygulamalarında form yönetimini kökten değiştiriyor. Klasik bir API route + fetch + state yönetimi yerine, formdan direkt sunucudaki bir fonksiyona veri gönderebiliyoruz.\n\n## Klasik yaklaşım: API route + fetch\n\nDaha önce form gönderimi şöyle çalışıyordu: client tarafında bir state, submit handler, fetch ile API route'a POST, dönüş, hata kontrolü. Bu yaklaşım hem 30-40 satır boilerplate hem de iki ayrı yerde (client + server) validasyon mantığı yazılmasını gerektiriyordu.\n\n![Klasik API + fetch yaklaşımının zincirini gösteren diyagram](/brand/peace-hand.jpg)\n\n## Server Actions ile aynı işin görünüşü\n\n`\"use server\"` direktifiyle başlayan basit bir async fonksiyon yazıyorsun. Form'un `action` attribute'una bu fonksiyonu veriyorsun. Bitti. Validasyon, veritabanı yazma, revalidation — hepsi tek fonksiyonun içinde.\n\n### Önemli avantajlar\n\n- **Daha az kod**: API route + fetch çağrısı + state yönetimi hepsi gitti.\n- **Tip güvenliği**: fonksiyon imzası TypeScript ile zaten korunuyor.\n- **Otomatik revalidation**: `revalidatePath` ile aynı turda cache temizleniyor.\n- **Progressive enhancement**: JavaScript yüklenmese bile form çalışıyor.\n\n## useActionState ile pending state'i\n\nBir butonun \"Yükleniyor..\" durumunu göstermek için `useActionState` hook'unu kullanıyoruz. Hook hem son sonucu (success/error) hem de `pending` flag'ini döndürüyor. Aşağıdaki kısa videoda kullanım örneklerini gösteriyoruz:\n\n[youtube](https://www.youtube.com/watch?v=YE7VzlLtp-4)\n\n## Webreta'da nereye uyguluyoruz?\n\nWebreta'nın admin paneli — logolar, yorumlar, paketler, blog yazıları, yazarlar — tamamen Server Actions üzerine kurulu. Bir formu submit ettiğinde direkt JSON dosyalarını güncelliyor, ilgili sayfaların cache'ini temizliyor, kullanıcıya da success/error bildiriyor.\n\nKlasik bir SPA'da bu işler için en az 4-5 ayrı endpoint + 4-5 React hook yazmak gerekirdi. Server Actions ile tek bir fonksiyon + form yeterli.\n\n## Dikkat edilmesi gereken yerler\n\nServer Actions her zaman doğru çözüm değil. Sık yapılan istekler, gerçek zamanlı güncelleme gerektiren akışlar, dış sistem entegrasyonları için hâlâ klasik API route'ları tercih ediyoruz. Ama form bazlı, kullanıcı-bazlı işlemler için artık varsayılan yaklaşımımız bu.",
+      "coverImage": "",
+      "createdAt": "2026-05-14T16:30:00.000Z",
+      "updatedAt": "2026-05-14T16:30:00.000Z",
+      "published": true
+    }
+  ]
+}

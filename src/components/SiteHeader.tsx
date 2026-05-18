@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { useState } from "react"
-import { Menu, X } from "lucide-react"
+import { Menu, X, BookOpen } from "lucide-react"
 
 const NAV_ITEMS = [
   { label: "Hakkımızda", href: "/hakkimizda" },
@@ -41,10 +41,18 @@ export default function SiteHeader() {
         </div>
 
         <a
-          href="/web-site"
-          className="hidden rounded-md bg-[#3c639f] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-[#2f5288] md:block"
+          href="/blog"
+          data-track="header:blog-cta"
+          data-track-label="Header Blog butonu"
+          className="header-blog-cta cta-primary hidden items-center gap-1.5 rounded-md px-4 py-2 text-[13px] font-medium md:inline-flex"
+          style={{ transformOrigin: "center" }}
         >
-          Teklif al
+          <BookOpen
+            size={14}
+            strokeWidth={2.25}
+            className="header-blog-icon"
+          />
+          <span>Blog</span>
         </a>
 
         <button
@@ -69,10 +77,11 @@ export default function SiteHeader() {
               </a>
             ))}
             <a
-              href="/web-site"
-              className="mt-2 w-full rounded-md bg-[#3c639f] px-4 py-3 text-center text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]"
+              href="/blog"
+              className="cta-primary mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md px-4 py-3 text-[14px] font-medium"
             >
-              Teklif al
+              <BookOpen size={15} strokeWidth={2.25} />
+              Blog
             </a>
           </div>
         </div>

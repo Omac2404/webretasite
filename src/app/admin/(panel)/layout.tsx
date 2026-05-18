@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
-import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon } from "lucide-react"
+import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity } from "lucide-react"
 import { SESSION_COOKIE, verifySession } from "@/lib/admin-session"
 import { logoutAction } from "../(auth)/login/actions"
 
@@ -43,8 +43,17 @@ export default async function PanelLayout({
           <SideLink href="/admin/yorumlar" icon={<MessageSquare size={16} />}>
             Yorumlar
           </SideLink>
-          <SideLink href="#" icon={<Package size={16} />} disabled>
+          <SideLink href="/admin/paketler" icon={<Package size={16} />}>
             Paketler
+          </SideLink>
+          <SideLink href="/admin/blog" icon={<BookOpen size={16} />}>
+            Blog
+          </SideLink>
+          <SideLink href="/admin/yazarlar" icon={<Users size={16} />}>
+            Yazarlar
+          </SideLink>
+          <SideLink href="/admin/analitik" icon={<Activity size={16} />}>
+            Analitik
           </SideLink>
           <SideLink href="#" icon={<Briefcase size={16} />} disabled>
             Teklifler

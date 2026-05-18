@@ -1,0 +1,28 @@
+{
+  "authors": [
+    {
+      "id": "auth-mert",
+      "name": "Mert Aksoy",
+      "expertise": "Senior Full-stack Developer",
+      "photo": ""
+    },
+    {
+      "id": "auth-selin",
+      "name": "Selin Demir",
+      "expertise": "Dijital Pazarlama Uzmanı",
+      "photo": ""
+    },
+    {
+      "id": "auth-kerem",
+      "name": "Kerem Yılmaz",
+      "expertise": "Performans Pazarlama Uzmanı",
+      "photo": ""
+    },
+    {
+      "id": "auth-ekip",
+      "name": "Webreta Ekibi",
+      "expertise": "İçerik Editörü",
+      "photo": ""
+    }
+  ]
+}
