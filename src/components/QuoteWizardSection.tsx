@@ -417,9 +417,12 @@ export default function QuoteWizardSection() {
 
   // When a wizard popup opens, nudge the page so the entire popup is in
   // view. Without this, popups anchored to cards near the bottom of the
-  // viewport get clipped and the user has to scroll manually.
+  // viewport get clipped and the user has to scroll manually. Skipped on
+  // mobile — popups there render as fixed bottom sheets, so the viewport
+  // already shows them in full.
   useEffect(() => {
     if (!redesignModalOpen) return
+    if (window.matchMedia("(max-width: 767px)").matches) return
     const id = requestAnimationFrame(() => {
       const el = redesignModalRef.current
       if (!el) return
@@ -437,6 +440,7 @@ export default function QuoteWizardSection() {
 
   useEffect(() => {
     if (!kobiModalOpen) return
+    if (window.matchMedia("(max-width: 767px)").matches) return
     const id = requestAnimationFrame(() => {
       const el = kobiModalRef.current
       if (!el) return
@@ -589,7 +593,22 @@ export default function QuoteWizardSection() {
             ) : (
               <>
                 {/* ─── Stepper ──────────────────────────────────── */}
-                <div className="border-b border-black/[0.06] bg-[#fafafa] px-6 py-6 md:px-10 md:py-7">
+                <div className="border-b border-black/[0.06] bg-[#fafafa] px-6 py-5 md:px-10 md:py-7">
+                  {/* Mobile-only active-step title. On phones the per-step
+                      titles under each circle are hidden to keep the strip
+                      compact; this single label keeps the user oriented. */}
+                  <div className="mb-4 flex items-baseline justify-between sm:hidden">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#3c639f]">
+                      Adım {String(quoteStep + 1).padStart(2, "0")}
+                      <span className="text-black/30">
+                        {" "}
+                        / {String(QUOTE_STEPS.length).padStart(2, "0")}
+                      </span>
+                    </span>
+                    <span className="text-[14px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
+                      {QUOTE_STEPS[quoteStep].title}
+                    </span>
+                  </div>
                   <div className="flex items-center">
                     {QUOTE_STEPS.map((s, i) => {
                       const isActive = i === quoteStep
@@ -773,15 +792,18 @@ export default function QuoteWizardSection() {
 
                     {quoteStep === 1 && (
                       <div className="flex flex-col gap-4">
-                        <div className="flex items-end justify-between gap-3">
+                        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between md:gap-3">
                           <label className="text-[13px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
                             Hangi paket size uygun?{' '}
                             <span className="text-[#3c639f]">*</span>
-                            <span className="ml-2 text-[12px] font-normal text-black/45">
+                            <span className="mt-1 block text-[12px] font-normal text-black/45 md:ml-2 md:mt-0 md:inline">
                               emin değilseniz size yardımcı oluruz
                             </span>
                           </label>
-                          <div className="flex shrink-0 items-center gap-1.5">
+                          {/* Arrows: desktop-only. On touch the user swipes
+                              the strip directly — arrows would just take
+                              up label width with no real win. */}
+                          <div className="hidden shrink-0 items-center gap-1.5 md:flex">
                             <button
                               type="button"
                               onClick={() => scrollPkgs(-1)}
@@ -805,7 +827,7 @@ export default function QuoteWizardSection() {
                         <div className="quote-pkg-scroll-wrap -mx-6 md:-mx-12">
                           <div
                             ref={pkgScrollerRef}
-                            className="quote-pkg-scroll flex items-stretch gap-3 overflow-x-auto px-6 md:px-12"
+                            className="quote-pkg-scroll flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto px-6 md:snap-none md:px-12"
                           >
                             {QUOTE_PROJECT_TYPES.map(t => {
                               const isSel = quote.projectType === t.id
@@ -815,7 +837,7 @@ export default function QuoteWizardSection() {
                                   key={t.id}
                                   type="button"
                                   onClick={e => handleProjectTypeSelect(t.id, e)}
-                                  className={`group relative flex shrink-0 grow-0 basis-[78%] flex-col gap-4 overflow-hidden rounded-2xl border p-5 text-left transition-all md:basis-[calc((100%_-_24px)_/_2.5)] ${
+                                  className={`group relative flex shrink-0 grow-0 basis-[86%] snap-center flex-col gap-4 overflow-hidden rounded-2xl border p-5 text-left transition-all md:basis-[calc((100%_-_24px)_/_2.5)] ${
                                     isSel
                                       ? 'border-[#3c639f]/40 bg-[#3c639f]/[0.04]'
                                       : 'border-black/[0.08] bg-white hover:border-black/[0.18]'
@@ -1231,24 +1253,26 @@ export default function QuoteWizardSection() {
                 </div>
 
                 {/* ─── Navigation ───────────────────────────────── */}
-                <div className="flex items-center justify-between gap-3 border-t border-black/[0.06] bg-[#fafafa] px-6 py-5 md:px-10">
+                <div className="flex items-center justify-between gap-3 border-t border-black/[0.06] bg-[#fafafa] px-4 py-4 md:px-10 md:py-5">
                   <button
                     type="button"
                     onClick={quoteBack}
                     disabled={quoteStep === 0}
-                    className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-[14px] font-medium text-black/65 transition-all hover:bg-white hover:text-[#0a0a0a] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent"
+                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2.5 text-[14px] font-medium text-black/65 transition-all hover:bg-white hover:text-[#0a0a0a] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent md:gap-2 md:px-4"
                   >
                     <ArrowLeft size={16} />
                     Geri
                   </button>
-                  <div className="text-[12px] font-medium tracking-[0.04em] text-black/40">
+                  {/* Step counter — hidden on phones (the stepper already
+                      shows Adım NN / NN at the top), kept on tablet+. */}
+                  <div className="hidden text-[12px] font-medium tracking-[0.04em] text-black/40 sm:block">
                     Adım {quoteStep + 1} / {QUOTE_STEPS.length}
                   </div>
                   <button
                     type="button"
                     onClick={quoteNext}
                     disabled={!isQuoteStepValid(quoteStep)}
-                    className="cta-primary relative inline-flex items-center gap-2 overflow-hidden rounded-lg px-5 py-2.5 text-[14px] font-semibold tracking-[-0.005em]"
+                    className="cta-primary relative inline-flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-lg px-5 py-3 text-[14px] font-semibold tracking-[-0.005em] sm:flex-none sm:py-2.5"
                   >
                     <span className="relative z-[1] inline-flex items-center gap-2">
                       {quoteStep === QUOTE_STEPS.length - 1 ? 'Gönder' : 'Devam'}
@@ -1281,7 +1305,7 @@ export default function QuoteWizardSection() {
               ref={redesignModalRef}
               role="dialog"
               aria-modal="true"
-              className="absolute z-[100] w-[360px] max-w-[calc(100vw-24px)] overflow-visible rounded-2xl bg-white"
+              className="wizard-sheet absolute z-[100] w-[360px] max-w-[calc(100vw-24px)] overflow-visible rounded-2xl bg-white"
               style={{
                 top: redesignAnchor.top,
                 left: redesignAnchor.left,
@@ -1292,10 +1316,12 @@ export default function QuoteWizardSection() {
                 animation: 'modalCardIn 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
               }}
             >
-              {/* Arrow pointing up to the source card */}
+              {/* Mobile-only grab handle for the bottom sheet */}
+              <div aria-hidden className="wizard-sheet-grab" />
+              {/* Arrow pointing up to the source card (desktop only) */}
               <div
                 aria-hidden
-                className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white"
+                className="wizard-sheet-arrow absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white"
                 style={{
                   borderTop: '0.5px solid rgba(0,0,0,0.08)',
                   borderLeft: '0.5px solid rgba(0,0,0,0.08)',
@@ -1375,7 +1401,7 @@ export default function QuoteWizardSection() {
               ref={kobiModalRef}
               role="dialog"
               aria-modal="true"
-              className="absolute z-[100] w-[380px] max-w-[calc(100vw-24px)] overflow-hidden rounded-2xl bg-white"
+              className="wizard-sheet absolute z-[100] w-[380px] max-w-[calc(100vw-24px)] overflow-hidden rounded-2xl bg-white"
               style={{
                 top: kobiAnchor.top,
                 left: kobiAnchor.left,
@@ -1385,10 +1411,12 @@ export default function QuoteWizardSection() {
                 animation: 'modalCardIn 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
               }}
             >
-              {/* Arrow pointing up to the source card */}
+              {/* Mobile-only grab handle (sits on the blue header) */}
+              <div aria-hidden className="wizard-sheet-grab wizard-sheet-grab--on-dark" />
+              {/* Arrow pointing up to the source card (desktop only) */}
               <div
                 aria-hidden
-                className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 z-10"
+                className="wizard-sheet-arrow absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 z-10"
                 style={{ background: '#3c639f' }}
               />
               <button
@@ -1566,6 +1594,69 @@ export default function QuoteWizardSection() {
         @keyframes modalCardIn {
           0% { opacity: 0; transform: translateX(-50%) translateY(-6px) scale(0.96); }
           100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+        }
+
+        /* Mobile bottom-sheet mode for wizard popups. On phones the
+           card-anchored popups become a fixed sheet docked to the bottom
+           of the viewport: full width, rounded top corners, slide-up
+           entrance. Hides the desktop arrow indicator and shows a small
+           grab handle instead, matching the iOS/Android sheet pattern. */
+        .wizard-sheet-grab {
+          display: none;
+        }
+        @media (max-width: 767px) {
+          .wizard-sheet {
+            position: fixed !important;
+            top: auto !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            transform: none !important;
+            border-radius: 22px 22px 0 0 !important;
+            animation: sheetSlideUp 0.34s cubic-bezier(0.22, 1, 0.36, 1) !important;
+            box-shadow: 0 -8px 32px -4px rgba(0, 0, 0, 0.12),
+              0 -24px 64px -12px rgba(60, 99, 159, 0.18) !important;
+            max-height: 92vh;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+          }
+          .wizard-sheet-arrow {
+            display: none !important;
+          }
+          .wizard-sheet-grab {
+            display: block;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 38px;
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.18);
+            z-index: 20;
+          }
+          .wizard-sheet-grab--on-dark {
+            background: rgba(255, 255, 255, 0.45);
+          }
+        }
+        @keyframes sheetSlideUp {
+          0% {
+            opacity: 0;
+            transform: translateY(100%);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @media (max-width: 767px) {
+            .wizard-sheet {
+              animation: none !important;
+            }
+          }
         }
         /* Combined WhatsApp + Telefon channel button. White by default,
            soft green→blue gradient on hover; full vibrant gradient when

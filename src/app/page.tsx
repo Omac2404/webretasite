@@ -1,11 +1,12 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react"
-import { ArrowRight, Menu, X, Star, Check, ExternalLink, CheckCircle2, Code2, TrendingUp } from "lucide-react"
+import { ArrowRight, X, Star, Check, ExternalLink, CheckCircle2, Code2, TrendingUp } from "lucide-react"
 import Image from "next/image"
 import { createPortal } from "react-dom"
 import HomeBlogSection from "@/components/HomeBlogSection"
 import SiteFooter from "@/components/SiteFooter"
+import SiteHeader from "@/components/SiteHeader"
 
 type Testimonial = {
   text: string
@@ -458,12 +459,15 @@ function GoogleIcon() {
   )
 }
 
-// Hook to detect mobile/touch devices
+// Hook to detect mobile/touch devices. We key off (pointer: coarse) rather
+// than (hover: none): some phones (e.g. Samsung with S Pen) advertise hover
+// support and incorrectly fall into the desktop branch, breaking swipe,
+// tap-to-open popups, and the mobile "devamını gör" / close buttons.
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(hover: none)')
+    const mediaQuery = window.matchMedia('(pointer: coarse)')
     setIsMobile(mediaQuery.matches)
 
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
@@ -1708,7 +1712,6 @@ function ProjectsSection({ projects: projectsProp }: { projects: Project[] }) {
 }
 
 export default function Home() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -2263,79 +2266,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#fafafa]">
 
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b border-black/[0.06] bg-[#fafafa]/80 backdrop-blur-md">
-        <nav className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-6 md:px-12">
-          {/* Logo */}
-          <a href="/" aria-label="Webreta" className="flex items-center">
-            <Image
-              src="/brand/webreta-logo.webp"
-              alt="Webreta"
-              width={364}
-              height={64}
-              priority
-              className="h-7 w-auto"
-            />
-          </a>
-
-          {/* Desktop Nav Links */}
-          <div className="hidden items-center gap-8 md:flex">
-            {[
-              { label: "Hakkımızda", href: "/hakkimizda" },
-              { label: "Web Site", href: "/web-site" },
-              { label: "Dijital Reklamlar", href: "/dijital-reklamlar" },
-              { label: "İletişim", href: "/iletisim" },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-[14px] text-black/60 transition-colors hover:text-[#0a0a0a]"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-
-          {/* CTA Button */}
-          <button className="hidden rounded-md bg-[#3c639f] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-[#2f5288] md:block">
-            Teklif al
-          </button>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="flex h-10 w-10 items-center justify-center rounded-md text-black/60 transition-colors hover:bg-black/[0.04] md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </nav>
-
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="border-t border-black/[0.06] bg-[#fafafa] px-6 py-4 md:hidden">
-            <div className="flex flex-col gap-3">
-              {[
-                { label: "Hakkımızda", href: "/hakkimizda" },
-                { label: "Web Site", href: "/web-site" },
-                { label: "Dijital Reklamlar", href: "/dijital-reklamlar" },
-                { label: "İletişim", href: "/iletisim" },
-              ].map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="py-2 text-[15px] text-black/70 transition-colors hover:text-[#0a0a0a]"
-                >
-                  {item.label}
-                </a>
-              ))}
-              <button className="mt-2 w-full rounded-md bg-[#3c639f] px-4 py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]">
-                Teklif al
-              </button>
-            </div>
-          </div>
-        )}
-      </header>
+      <SiteHeader />
 
       {/* Hero Section */}
       <main>
