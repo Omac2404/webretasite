@@ -7,8 +7,17 @@ import { createPortal } from "react-dom"
 import HomeBlogSection from "@/components/HomeBlogSection"
 import SiteFooter from "@/components/SiteFooter"
 
+type Testimonial = {
+  text: string
+  name: string
+  role: string
+  initials: string
+  date: string
+  sourceUrl?: string
+}
+
 // 20 testimonials with varied lengths (6 short, 8 medium, 6 long)
-const testimonials = [
+const testimonials: Testimonial[] = [
   {
     text: "Şehir merkezindeki kafemiz için sıfırdan yeni bir site yaptırdık. Online sipariş ve rezervasyon sistemi hayatımızı kolaylaştırdı, paket servis siparişlerimiz neredeyse iki katına çıktı. Menüyü tek tıkla güncelleyebilmek de büyük artı, ekibimiz çok memnun.",
     name: "Ayşe Kaya",
@@ -586,7 +595,20 @@ function TestimonialCard({
             />
           ))}
         </div>
-        <GoogleIcon />
+        {testimonial.sourceUrl ? (
+          <a
+            href={testimonial.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            aria-label="Yorumu Google'da görüntüle"
+            className="inline-flex items-center transition-opacity hover:opacity-80"
+          >
+            <GoogleIcon />
+          </a>
+        ) : (
+          <GoogleIcon />
+        )}
       </div>
 
       {/* Testimonial text. Truncation is rendered differently per device:
@@ -726,14 +748,19 @@ function TestimonialPopup({
         <div className="my-4 h-px shrink-0 bg-black/[0.08]" />
 
         {/* Bottom: Google review link, right-aligned with the G icon at the
-            rightmost position — visually anchors the bottom-right corner. */}
-        <a
-          href="#"
-          className="ml-auto inline-flex shrink-0 items-center gap-2 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
-        >
-          {"Google'da görüntüle"}
-          <GoogleIcon />
-        </a>
+            rightmost position — visually anchors the bottom-right corner.
+            Yorumun orijinal Google linki yoksa link gösterilmez. */}
+        {testimonial.sourceUrl && (
+          <a
+            href={testimonial.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-auto inline-flex shrink-0 items-center gap-2 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
+          >
+            {"Google'da görüntüle"}
+            <GoogleIcon />
+          </a>
+        )}
       </div>
     </div>
   ) : (
@@ -769,7 +796,19 @@ function TestimonialPopup({
               <Star key={i} size={16} className="fill-[#FBBC04] text-[#FBBC04]" />
             ))}
           </div>
-          <GoogleIcon />
+          {testimonial.sourceUrl ? (
+            <a
+              href={testimonial.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Yorumu Google'da görüntüle"
+              className="inline-flex items-center transition-opacity hover:opacity-80"
+            >
+              <GoogleIcon />
+            </a>
+          ) : (
+            <GoogleIcon />
+          )}
         </div>
 
         <div className="popup-scroll mt-4 flex-1 pr-1">
@@ -789,11 +828,18 @@ function TestimonialPopup({
         <div className="mt-3 shrink-0 text-[12px] text-black/40">{testimonial.date}</div>
         <div className="my-4 h-px shrink-0 bg-black/[0.08]" />
 
-        <a href="#" className="inline-flex shrink-0 items-center gap-2 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]">
-          <GoogleIcon />
-          {"Google'da görüntüle"}
-          <ExternalLink size={14} />
-        </a>
+        {testimonial.sourceUrl && (
+          <a
+            href={testimonial.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center gap-2 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
+          >
+            <GoogleIcon />
+            {"Google'da görüntüle"}
+            <ExternalLink size={14} />
+          </a>
+        )}
       </div>
     </div>
   )
@@ -1843,13 +1889,19 @@ export default function Home() {
     }
   }, [])
 
-  // Testimonials source — admin can flip between the hardcoded preset
-  // list and the curated real reviews. While we don't have any real
-  // reviews yet (no Google sync), the homepage falls back to preset so
-  // the section never looks empty.
-  const [activeTestimonials, setActiveTestimonials] = useState<
-    typeof testimonials
-  >(testimonials)
+  // Testimonials kaynağı — admin elle eklediği yorumlar varsa onlar
+  // kullanılır; yoksa hardcoded preset listeye düşeriz ki bölüm asla boş
+  // görünmesin. Özet kartı (puan/yorum sayısı/firma adı/link) de aynı
+  // endpoint'ten geliyor.
+  const [activeTestimonials, setActiveTestimonials] = useState<Testimonial[]>(
+    testimonials,
+  )
+  const [reviewsSummary, setReviewsSummary] = useState({
+    rating: 5.0,
+    reviewCount: 0,
+    businessName: "Webreta Web Teknolojileri",
+    reviewsUrl: "",
+  })
   useEffect(() => {
     let cancelled = false
     type ApiReview = {
@@ -1859,14 +1911,22 @@ export default function Home() {
       rating: number
       text: string
       date: string
+      sourceUrl?: string
+    }
+    type ApiSummary = {
+      rating: number
+      reviewCount: number
+      businessName: string
+      reviewsUrl: string
     }
     fetch("/api/reviews")
       .then((r) => (r.ok ? r.json() : null))
       .then(
-        (data: { source?: "preset" | "real"; reviews?: ApiReview[] } | null) => {
+        (data: { summary?: ApiSummary; reviews?: ApiReview[] } | null) => {
           if (cancelled || !data) return
-          if (data.source === "real" && data.reviews && data.reviews.length > 0) {
-            const mapped: typeof testimonials = data.reviews.map((r) => ({
+          if (data.summary) setReviewsSummary(data.summary)
+          if (data.reviews && data.reviews.length > 0) {
+            const mapped: Testimonial[] = data.reviews.map((r) => ({
               text: r.text,
               name: r.author,
               role: "",
@@ -1879,6 +1939,7 @@ export default function Home() {
                 .toUpperCase()
                 .slice(0, 2),
               date: r.date,
+              sourceUrl: r.sourceUrl,
             }))
             setActiveTestimonials(mapped)
           }
@@ -2393,36 +2454,69 @@ export default function Home() {
                 />
               </div>
 
-              {/* Google Reviews Summary Card - Floating style with soft shadow */}
-              <div
-                className="relative rounded-xl bg-white p-4"
-                style={{
+              {/* Google Reviews Summary Card — admin tarafından düzenlenir.
+                  reviewsUrl varsa kartın tamamı tıklanabilir oluyor; yoksa
+                  düz div olarak kalıyor. */}
+              {(() => {
+                const cardCls =
+                  "relative block rounded-xl bg-white p-4 transition-shadow"
+                const cardStyle: React.CSSProperties = {
                   border: '1px solid rgba(60, 99, 159, 0.08)',
                   marginBottom: '16px',
-                  boxShadow: '0 2px 8px -2px rgba(60, 99, 159, 0.06), 0 16px 40px -12px rgba(60, 99, 159, 0.08), 0 32px 80px -20px rgba(0, 0, 0, 0.04)',
-                }}
-              >
-                <div className="flex items-center justify-between">
-                  {/* Left - Rating with stars */}
-                  <div className="flex items-center gap-2">
-                    <div className="text-[24px] font-bold text-[#0a0a0a]">5.0</div>
-                    <div className="flex gap-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={14} className="fill-[#FBBC04] text-[#FBBC04]" />
-                      ))}
+                  boxShadow:
+                    '0 2px 8px -2px rgba(60, 99, 159, 0.06), 0 16px 40px -12px rgba(60, 99, 159, 0.08), 0 32px 80px -20px rgba(0, 0, 0, 0.04)',
+                }
+                const ratingDisplay = Number.isInteger(reviewsSummary.rating)
+                  ? reviewsSummary.rating.toFixed(1)
+                  : String(reviewsSummary.rating)
+                const inner = (
+                  <div className="flex items-center justify-between">
+                    {/* Left - Rating with stars */}
+                    <div className="flex items-center gap-2">
+                      <div className="text-[24px] font-bold text-[#0a0a0a]">
+                        {ratingDisplay}
+                      </div>
+                      <div className="flex gap-0.5">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            size={14}
+                            className="fill-[#FBBC04] text-[#FBBC04]"
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Right - Google icon + two-line text */}
-                  <div className="flex items-center gap-2">
-                    <GoogleIconMedium />
-                    <div>
-                      <div className="text-[14px] font-medium text-[#0a0a0a]">85 Google Yorumu</div>
-                      <div className="text-[12px] text-black/50">Webreta Web Teknolojileri</div>
+                    {/* Right - Google icon + two-line text */}
+                    <div className="flex items-center gap-2">
+                      <GoogleIconMedium />
+                      <div>
+                        <div className="text-[14px] font-medium text-[#0a0a0a]">
+                          {reviewsSummary.reviewCount} Google Yorumu
+                        </div>
+                        <div className="text-[12px] text-black/50">
+                          {reviewsSummary.businessName}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                )
+                return reviewsSummary.reviewsUrl ? (
+                  <a
+                    href={reviewsSummary.reviewsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cardCls}
+                    style={cardStyle}
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <div className={cardCls} style={cardStyle}>
+                    {inner}
+                  </div>
+                )
+              })()}
 
               {/* Testimonial Carousel Container - Transparent, floating cards */}
               <div
@@ -2516,6 +2610,26 @@ export default function Home() {
                   </div>
                 )}
               </div>
+
+              {/* "Tüm yorumları gör" — outlined CTA, kart sütununun altında.
+                  Admin reviewsUrl girmediyse butonu hiç çıkarmıyoruz. */}
+              {reviewsSummary.reviewsUrl && (
+                <div className="mt-5 flex justify-end">
+                  <a
+                    href={reviewsSummary.reviewsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 rounded-lg border border-[#3c639f]/40 bg-white px-4 py-2.5 text-[13px] font-medium text-[#3c639f] shadow-[0_1px_2px_rgba(60,99,159,0.06)] transition-all hover:border-[#3c639f] hover:bg-[#3c639f]/[0.04] hover:shadow-[0_4px_12px_-2px_rgba(60,99,159,0.18)]"
+                  >
+                    <GoogleIcon />
+                    <span>Tüm yorumları gör</span>
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform duration-300 group-hover:translate-x-0.5"
+                    />
+                  </a>
+                </div>
+              )}
 
               {/* Popup */}
               {((hoveredIndex !== null && popupPosition && !isMobile) || (tappedIndex !== null && isMobile)) && (

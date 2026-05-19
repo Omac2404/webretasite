@@ -3,25 +3,26 @@ import { isReviewVisible, readReviews } from "@/lib/reviews-store"
 
 export const dynamic = "force-dynamic"
 
-// Public endpoint the homepage testimonials carousel uses. Returns the
-// active source plus — for the "real" mode — the filtered, visible
-// reviews. We pre-filter on the server so the client doesn't have to
-// know about the minStars / publishOverride rules.
+// Public endpoint the homepage testimonials carousel uses. Filtreyi sunucu
+// tarafında uyguluyoruz — minStars / publishOverride kuralları client'a
+// sızmaması için. Özet kartı (puan, yorum sayısı, firma adı, "tümünü gör"
+// linki) de aynı yanıttan geliyor.
 export async function GET() {
   const data = await readReviews()
   const visibleReviews = data.reviews
     .filter((r) => isReviewVisible(r, data.minStars))
-    .map(({ id, author, authorPhotoUrl, rating, text, date }) => ({
+    .map(({ id, author, authorPhotoUrl, rating, text, date, sourceUrl }) => ({
       id,
       author,
       authorPhotoUrl,
       rating,
       text,
       date,
+      sourceUrl,
     }))
 
   return NextResponse.json(
-    { source: data.source, reviews: visibleReviews },
+    { summary: data.summary, reviews: visibleReviews },
     { headers: { "Cache-Control": "no-store" } },
   )
 }

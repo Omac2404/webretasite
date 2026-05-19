@@ -1,7 +1,10 @@
 {
-  "source": "preset",
   "minStars": 4,
-  "googleConnected": false,
-  "lastGoogleSyncAt": null,
+  "summary": {
+    "rating": 5,
+    "reviewCount": 87,
+    "businessName": "Webreta Web Teknolojileri",
+    "reviewsUrl": ""
+  },
   "reviews": []
 }

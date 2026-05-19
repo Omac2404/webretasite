@@ -2,6 +2,7 @@ import { Mail, Phone, MapPin, Clock } from "lucide-react"
 import SiteHeader from "@/components/SiteHeader"
 import SiteFooter from "@/components/SiteFooter"
 import ContactForm from "@/components/ContactForm"
+import { readContact } from "@/lib/contact-store"
 
 export const metadata = {
   title: "İletişim | Webreta",
@@ -9,20 +10,22 @@ export const metadata = {
     "Webreta ile iletişime geçin. İzmir merkezli web tasarım ve dijital reklam ajansı. Projeniz için 24 saat içinde dönüş.",
 }
 
-// TODO: Replace placeholder values with real contact details when finalised.
-const CONTACT = {
-  email: "hello@webreta.com",
-  phone: "+90 (XXX) XXX XX XX",
-  address: "İzmir, Türkiye",
-  hours: "Pazartesi – Cuma · 09:00 – 18:00",
-}
+// Admin haritayı boş bıraktığında kullanılacak fallback — İzmir Konak.
+// OpenStreetMap embed'i API key istemiyor.
+const FALLBACK_MAP_SRC =
+  "https://www.openstreetmap.org/export/embed.html?bbox=27.0900,38.4100,27.1700,38.4500&layer=mapnik&marker=38.4192,27.1287"
+const FALLBACK_MAP_SHARE =
+  "https://www.openstreetmap.org/?mlat=38.4192&mlon=27.1287#map=14/38.4192/27.1287"
 
-// İzmir Konak generic coordinates — replace bbox + marker once the real
-// office address is known. OpenStreetMap embed doesn't need an API key.
-const MAP_BBOX = "27.0900,38.4100,27.1700,38.4500"
-const MAP_MARKER = "38.4192,27.1287"
+export const dynamic = "force-dynamic"
 
-export default function IletisimPage() {
+export default async function IletisimPage() {
+  const content = await readContact()
+  const mapSrc = content.map.embedSrc || FALLBACK_MAP_SRC
+  const mapShare =
+    content.map.shareUrl || (content.map.embedSrc ? "" : FALLBACK_MAP_SHARE)
+  const phoneHref = `tel:${content.info.phone.replace(/\s|\(|\)/g, "")}`
+
   return (
     <div className="min-h-screen bg-[#fafafa]">
       <SiteHeader />
@@ -30,16 +33,17 @@ export default function IletisimPage() {
         {/* Header band */}
         <section className="relative mx-auto max-w-[1280px] px-6 pb-10 pt-16 md:px-12 md:pb-14 md:pt-24">
           <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-            İletişim
+            {content.hero.kicker}
           </span>
           <h1 className="mt-3 text-[36px] leading-[1.05] tracking-[-0.03em] text-[#0a0a0a] md:text-[56px]">
-            <span className="font-normal">Bir kahve içelim, </span>
-            <span className="font-bold text-[#3c639f]">projenizi konuşalım.</span>
+            <TitleParts
+              leading={content.hero.titleLeading}
+              highlight={content.hero.titleHighlight}
+              trailing={content.hero.titleTrailing}
+            />
           </h1>
           <p className="mt-5 max-w-[600px] text-[16px] leading-relaxed text-black/60">
-            Yeni bir web projeniz, mevcut sitenizde iyileştirme fikriniz veya
-            dijital reklam stratejiniz için bizimle iletişime geçin. 24 saat
-            içinde geri dönüyoruz.
+            {content.hero.intro}
           </p>
         </section>
 
@@ -49,24 +53,24 @@ export default function IletisimPage() {
             <InfoCard
               icon={<Mail size={18} strokeWidth={1.75} />}
               label="E-posta"
-              value={CONTACT.email}
-              href={`mailto:${CONTACT.email}`}
+              value={content.info.email}
+              href={content.info.email ? `mailto:${content.info.email}` : undefined}
             />
             <InfoCard
               icon={<Phone size={18} strokeWidth={1.75} />}
               label="Telefon"
-              value={CONTACT.phone}
-              href={`tel:${CONTACT.phone.replace(/\s|\(|\)/g, "")}`}
+              value={content.info.phone}
+              href={content.info.phone ? phoneHref : undefined}
             />
             <InfoCard
               icon={<MapPin size={18} strokeWidth={1.75} />}
               label="Adres"
-              value={CONTACT.address}
+              value={content.info.address}
             />
             <InfoCard
               icon={<Clock size={18} strokeWidth={1.75} />}
               label="Çalışma saatleri"
-              value={CONTACT.hours}
+              value={content.info.hours}
             />
           </div>
         </section>
@@ -76,16 +80,17 @@ export default function IletisimPage() {
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12">
             <div>
               <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-                Mesaj gönderin
+                {content.form.kicker}
               </span>
               <h2 className="mt-2 text-[28px] leading-[1.15] tracking-[-0.02em] text-[#0a0a0a] md:text-[36px]">
-                <span className="font-normal">Formu </span>
-                <span className="font-bold text-[#3c639f]">doldurun</span>
-                <span className="font-normal">, dönelim.</span>
+                <TitleParts
+                  leading={content.form.titleLeading}
+                  highlight={content.form.titleHighlight}
+                  trailing={content.form.titleTrailing}
+                />
               </h2>
               <p className="mt-3 max-w-[480px] text-[14px] leading-relaxed text-black/55">
-                Projenizle ilgili kısa bir özet, hedef tarihiniz ve bütçe
-                aralığınızı paylaşırsanız daha hızlı ilerleyebiliriz.
+                {content.form.intro}
               </p>
 
               <div className="mt-8">
@@ -95,41 +100,64 @@ export default function IletisimPage() {
 
             <div className="flex flex-col">
               <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-                Konum
+                {content.map.kicker}
               </span>
               <h2 className="mt-2 text-[28px] leading-[1.15] tracking-[-0.02em] text-[#0a0a0a] md:text-[36px]">
-                <span className="font-normal">İzmir, </span>
-                <span className="font-bold text-[#3c639f]">Ege'nin merkezi.</span>
+                <TitleParts
+                  leading={content.map.titleLeading}
+                  highlight={content.map.titleHighlight}
+                  trailing={content.map.titleTrailing}
+                />
               </h2>
               <p className="mt-3 max-w-[480px] text-[14px] leading-relaxed text-black/55">
-                Ekip İzmir'de çalışıyor, projeleri Türkiye genelindeki
-                markalar için uzaktan yürütüyoruz.
+                {content.map.intro}
               </p>
 
               <div className="mt-6 flex-1 overflow-hidden rounded-2xl border border-black/[0.06] bg-white">
                 <iframe
                   title="Webreta konum haritası"
-                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${MAP_BBOX}&layer=mapnik&marker=${MAP_MARKER}`}
+                  src={mapSrc}
                   className="h-[420px] w-full lg:h-full lg:min-h-[460px]"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
                 />
               </div>
-              <a
-                href={`https://www.openstreetmap.org/?mlat=${MAP_MARKER.split(",")[0]}&mlon=${MAP_MARKER.split(",")[1]}#map=14/${MAP_MARKER.split(",")[0]}/${MAP_MARKER.split(",")[1]}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
-              >
-                Haritayı yeni sekmede aç
-                <MapPin size={13} />
-              </a>
+              {mapShare && (
+                <a
+                  href={mapShare}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
+                >
+                  Haritayı yeni sekmede aç
+                  <MapPin size={13} />
+                </a>
+              )}
             </div>
           </div>
         </section>
       </main>
       <SiteFooter />
     </div>
+  )
+}
+
+function TitleParts({
+  leading,
+  highlight,
+  trailing,
+}: {
+  leading: string
+  highlight: string
+  trailing: string
+}) {
+  return (
+    <>
+      {leading && <span className="font-normal">{leading} </span>}
+      <span className="font-bold text-[#3c639f]">{highlight}</span>
+      {trailing && <span className="font-normal">{trailing}</span>}
+    </>
   )
 }
 

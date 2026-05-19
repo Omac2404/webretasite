@@ -6,22 +6,15 @@ import {
   deleteReview,
   setMinStars,
   setPublishOverride,
-  setReviewSource,
-  type ReviewSource,
+  setSummary,
 } from "@/lib/reviews-store"
 
 export type AddManualState = { error?: string; ok?: boolean }
+export type SummaryState = { error?: string; ok?: boolean }
 
 function revalidateBoth(): void {
   revalidatePath("/admin/yorumlar")
   revalidatePath("/")
-}
-
-export async function setSourceAction(formData: FormData): Promise<void> {
-  const raw = String(formData.get("source") ?? "")
-  const source: ReviewSource = raw === "real" ? "real" : "preset"
-  await setReviewSource(source)
-  revalidateBoth()
 }
 
 export async function setMinStarsAction(formData: FormData): Promise<void> {
@@ -55,13 +48,38 @@ export async function addManualReviewAction(
   const text = String(formData.get("text") ?? "").trim()
   const rating = Number(formData.get("rating") ?? 0)
   const date = String(formData.get("date") ?? "").trim()
+  const sourceUrl = String(formData.get("sourceUrl") ?? "").trim()
 
   if (!author) return { error: "İsim gerekli." }
   if (!text) return { error: "Yorum metni gerekli." }
   if (text.length < 10) return { error: "Yorum çok kısa (en az 10 karakter)." }
   if (rating < 1 || rating > 5) return { error: "Yıldız 1-5 arasında olmalı." }
+  if (sourceUrl && !/^https?:\/\//i.test(sourceUrl)) {
+    return { error: "Yorum linki http:// veya https:// ile başlamalı." }
+  }
 
-  await addManualReview({ author, text, rating, date })
+  await addManualReview({ author, text, rating, date, sourceUrl })
+  revalidateBoth()
+  return { ok: true }
+}
+
+export async function saveSummaryAction(
+  _prev: SummaryState,
+  formData: FormData,
+): Promise<SummaryState> {
+  const rating = Number(formData.get("rating") ?? 0)
+  const reviewCount = Number(formData.get("reviewCount") ?? 0)
+  const businessName = String(formData.get("businessName") ?? "").trim()
+  const reviewsUrl = String(formData.get("reviewsUrl") ?? "").trim()
+
+  if (!businessName) return { error: "Firma adı boş bırakılamaz." }
+  if (rating < 0 || rating > 5) return { error: "Puan 0 ile 5 arasında olmalı." }
+  if (reviewCount < 0) return { error: "Yorum sayısı negatif olamaz." }
+  if (reviewsUrl && !/^https?:\/\//i.test(reviewsUrl)) {
+    return { error: "Tümünü gör linki http:// veya https:// ile başlamalı." }
+  }
+
+  await setSummary({ rating, reviewCount, businessName, reviewsUrl })
   revalidateBoth()
   return { ok: true }
 }

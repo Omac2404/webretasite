@@ -61,15 +61,19 @@ export default function SiteHeader() {
           href="/blog"
           data-track="header:blog-cta"
           data-track-label="Header Blog butonu"
-          className="header-blog-cta cta-primary hidden items-center gap-1.5 rounded-md px-4 py-2 text-[13px] font-medium md:inline-flex"
-          style={{ transformOrigin: "center" }}
+          className="header-blog-link group hidden items-center gap-1.5 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288] md:inline-flex"
         >
           <BookOpen
-            size={14}
+            size={15}
             strokeWidth={2.25}
-            className="header-blog-icon"
+            className="transition-transform duration-300 group-hover:-rotate-6"
           />
           <span>Blog</span>
+          <ArrowRight
+            size={14}
+            strokeWidth={2.25}
+            className="transition-transform duration-300 group-hover:translate-x-1"
+          />
         </a>
 
         <button

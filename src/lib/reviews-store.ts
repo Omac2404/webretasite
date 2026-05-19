@@ -1,52 +1,58 @@
-// File-based store for testimonials. Two modes:
-//   - "preset": the 20 hardcoded testimonials in page.tsx are shown
-//   - "real":   reviews curated below (manual entries + future Google sync)
-//
-// The Google Business Profile sync isn't wired yet — it's a Phase-2 task
-// once the OAuth + Google Cloud setup is done. For now the admin can
-// add reviews manually so the moderation UI is usable.
+// File-based store for testimonials. Tüm yorumlar admin tarafından elle
+// giriliyor; her yoruma orijinal Google linki eklenebiliyor. Üstteki özet
+// kartı (rating / yorum sayısı / firma adı / "tümünü gör" linki) da admin
+// tarafından düzenleniyor.
 
 import { promises as fs } from "node:fs"
 import path from "node:path"
 
-export type ReviewSource = "preset" | "real"
-export type ReviewOrigin = "google" | "manual"
-
 export type Review = {
   id: string
-  origin: ReviewOrigin
-  // For Google reviews this is the original Google review id, useful
-  // for de-duplicating on sync. Empty for manual entries.
-  externalId?: string
   author: string
   authorPhotoUrl?: string
   rating: number // 1..5
   text: string
-  // Display date — kept as a free string so we can pass through Google's
-  // relative phrasing ("2 ay önce") if we want, or use an ISO date for
-  // manual entries.
+  // Görüntülenecek tarih — serbest metin. ISO de Google'ın "2 ay önce" de
+  // olabilir; ne yapıştırılırsa o gösterilir.
   date: string
-  // Manual override: null = follow minStars filter, true = always show,
-  // false = always hide regardless of minStars.
+  // Yorumun orijinal kaynağına (Google review URL'i) link. Boşsa karttaki
+  // Google ikonu link olarak değil dekoratif olarak render edilir.
+  sourceUrl?: string
+  // Manuel override: null = minStars filtresine uy, true = her zaman göster,
+  // false = her zaman gizle.
   publishOverride: boolean | null
-  createdAt: string // ISO — when the entry landed in our store
+  createdAt: string // ISO — store'a düştüğü an
+}
+
+export type ReviewsSummary = {
+  // 0..5 — admin "5.0" gibi girer, ondalık tutuluyor
+  rating: number
+  // Toplam yorum sayısı — "85" gibi
+  reviewCount: number
+  // "Webreta Web Teknolojileri" — özet kartının altında çıkar
+  businessName: string
+  // "Tüm yorumları gör" butonu ve özet kartı tıklanınca açılan URL
+  reviewsUrl: string
 }
 
 export type ReviewsData = {
-  source: ReviewSource
   minStars: number // 0..5
-  googleConnected: boolean
-  lastGoogleSyncAt: string | null
+  summary: ReviewsSummary
   reviews: Review[]
 }
 
 const DATA_FILE = path.join(process.cwd(), "data", "reviews.json")
 
+export const DEFAULT_SUMMARY: ReviewsSummary = {
+  rating: 5.0,
+  reviewCount: 0,
+  businessName: "Webreta Web Teknolojileri",
+  reviewsUrl: "",
+}
+
 const EMPTY: ReviewsData = {
-  source: "preset",
   minStars: 4,
-  googleConnected: false,
-  lastGoogleSyncAt: null,
+  summary: { ...DEFAULT_SUMMARY },
   reviews: [],
 }
 
@@ -63,14 +69,36 @@ function clampRating(value: unknown): number {
   return n < 1 ? 1 : n
 }
 
-function normalizeOrigin(value: unknown): ReviewOrigin {
-  return value === "google" ? "google" : "manual"
+// Özet kart için ondalıklı rating (4.8 gibi) tutmak gerek. clampRating'in
+// 1..5 integer halini değil, 0..5 float halini istiyoruz.
+function clampSummaryRating(value: unknown): number {
+  const n = typeof value === "number" ? value : Number(value)
+  if (!Number.isFinite(n)) return 0
+  if (n < 0) return 0
+  if (n > 5) return 5
+  return Math.round(n * 10) / 10
+}
+
+function clampCount(value: unknown): number {
+  const n = typeof value === "number" ? value : Number(value)
+  if (!Number.isFinite(n) || n < 0) return 0
+  return Math.floor(n)
 }
 
 function normalizeOverride(value: unknown): boolean | null {
   if (value === true) return true
   if (value === false) return false
   return null
+}
+
+function normalizeSummary(raw: Partial<ReviewsSummary> | undefined): ReviewsSummary {
+  if (!raw) return { ...DEFAULT_SUMMARY }
+  return {
+    rating: clampSummaryRating(raw.rating ?? DEFAULT_SUMMARY.rating),
+    reviewCount: clampCount(raw.reviewCount ?? DEFAULT_SUMMARY.reviewCount),
+    businessName: String(raw.businessName ?? DEFAULT_SUMMARY.businessName),
+    reviewsUrl: String(raw.reviewsUrl ?? DEFAULT_SUMMARY.reviewsUrl),
+  }
 }
 
 export async function readReviews(): Promise<ReviewsData> {
@@ -80,18 +108,11 @@ export async function readReviews(): Promise<ReviewsData> {
       reviews?: Array<Partial<Review>>
     }
     return {
-      source: parsed.source === "real" ? "real" : "preset",
       minStars: clampStars(parsed.minStars),
-      googleConnected: Boolean(parsed.googleConnected),
-      lastGoogleSyncAt:
-        typeof parsed.lastGoogleSyncAt === "string"
-          ? parsed.lastGoogleSyncAt
-          : null,
+      summary: normalizeSummary(parsed.summary),
       reviews: Array.isArray(parsed.reviews)
         ? parsed.reviews.map((r) => ({
             id: String(r.id ?? ""),
-            origin: normalizeOrigin(r.origin),
-            externalId: r.externalId ? String(r.externalId) : undefined,
             author: String(r.author ?? ""),
             authorPhotoUrl: r.authorPhotoUrl
               ? String(r.authorPhotoUrl)
@@ -99,6 +120,7 @@ export async function readReviews(): Promise<ReviewsData> {
             rating: clampRating(r.rating),
             text: String(r.text ?? ""),
             date: String(r.date ?? ""),
+            sourceUrl: r.sourceUrl ? String(r.sourceUrl) : undefined,
             publishOverride: normalizeOverride(r.publishOverride),
             createdAt: String(r.createdAt ?? new Date().toISOString()),
           }))
@@ -115,15 +137,15 @@ async function writeReviews(data: ReviewsData): Promise<void> {
   await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2) + "\n", "utf8")
 }
 
-export async function setReviewSource(source: ReviewSource): Promise<void> {
-  const data = await readReviews()
-  data.source = source
-  await writeReviews(data)
-}
-
 export async function setMinStars(minStars: number): Promise<void> {
   const data = await readReviews()
   data.minStars = clampStars(minStars)
+  await writeReviews(data)
+}
+
+export async function setSummary(summary: ReviewsSummary): Promise<void> {
+  const data = await readReviews()
+  data.summary = normalizeSummary(summary)
   await writeReviews(data)
 }
 
@@ -132,15 +154,16 @@ export async function addManualReview(input: {
   rating: number
   text: string
   date: string
+  sourceUrl?: string
 }): Promise<Review> {
   const data = await readReviews()
   const review: Review = {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    origin: "manual",
     author: input.author,
     rating: clampRating(input.rating),
     text: input.text,
     date: input.date,
+    sourceUrl: input.sourceUrl?.trim() || undefined,
     publishOverride: null,
     createdAt: new Date().toISOString(),
   }
@@ -166,9 +189,8 @@ export async function setPublishOverride(
   await writeReviews(data)
 }
 
-// Decide whether a single review should be visible given the current
-// minStars filter. Manual overrides win; otherwise the rating must
-// meet the threshold.
+// Tek bir yorumun aktif minStars filtresi altında görünür olup olmadığını
+// karara bağla. Manuel override öncelikli; yoksa rating eşiğe uymalı.
 export function isReviewVisible(review: Review, minStars: number): boolean {
   if (review.publishOverride === true) return true
   if (review.publishOverride === false) return false

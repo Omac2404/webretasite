@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
-import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom } from "lucide-react"
+import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, Send } from "lucide-react"
 import { SESSION_COOKIE, verifySession } from "@/lib/admin-session"
 import { logoutAction } from "../(auth)/login/actions"
 
@@ -66,6 +66,12 @@ export default async function PanelLayout({
           </SideLink>
           <SideLink href="/admin/yasal-sayfalar" icon={<Scale size={16} />}>
             Yasal Sayfalar
+          </SideLink>
+          <SideLink href="/admin/iletisim" icon={<Mail size={16} />}>
+            İletişim
+          </SideLink>
+          <SideLink href="/admin/smtp" icon={<Send size={16} />}>
+            SMTP & Formlar
           </SideLink>
           <SideLink href="#" icon={<Briefcase size={16} />} disabled>
             Teklifler

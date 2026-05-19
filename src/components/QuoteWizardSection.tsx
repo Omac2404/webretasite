@@ -533,47 +533,8 @@ export default function QuoteWizardSection() {
           follow-up. */}
       <section
         id="teklif"
-        className="relative overflow-hidden border-t border-black/[0.06] py-12 md:py-16"
-        style={{
-          background:
-            'linear-gradient(180deg, #ffffff 0%, #f5f8ff 35%, #eef3fb 65%, #ffffff 100%)',
-        }}
+        className="relative border-t border-black/[0.06] py-12 md:py-16"
       >
-        {/* Decorative background — soft brand-blue blobs at corners +
-            subtle dot grid overlay for a modern feel. Pointer-events
-            none and behind content via z-0/relative wrapper. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-32 -top-32 h-[520px] w-[520px] rounded-full"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(60,99,159,0.22) 0%, transparent 70%)',
-            filter: 'blur(60px)',
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-32 -left-40 h-[480px] w-[480px] rounded-full"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(60,99,159,0.18) 0%, transparent 70%)',
-            filter: 'blur(60px)',
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-50"
-          style={{
-            backgroundImage:
-              'radial-gradient(rgba(60,99,159,0.12) 1px, transparent 1px)',
-            backgroundSize: '28px 28px',
-            maskImage:
-              'radial-gradient(ellipse at center, black 30%, transparent 75%)',
-            WebkitMaskImage:
-              'radial-gradient(ellipse at center, black 30%, transparent 75%)',
-          }}
-        />
-
         <div className="relative mx-auto max-w-[1280px] px-6 md:px-12">
           <div className="mb-8 md:mb-10">
             <h2 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[48px]">

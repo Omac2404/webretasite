@@ -1,13 +1,10 @@
 import {
-  MessageSquare,
   Star,
-  Sparkles,
-  RefreshCw,
   Trash2,
   Eye,
   EyeOff,
   Filter,
-  Info,
+  ExternalLink,
 } from "lucide-react"
 import {
   isReviewVisible,
@@ -18,9 +15,9 @@ import {
   deleteReviewAction,
   setMinStarsAction,
   setOverrideAction,
-  setSourceAction,
 } from "./actions"
 import { AddManualForm } from "./add-manual-form"
+import { SummaryForm } from "./summary-form"
 
 export const dynamic = "force-dynamic"
 
@@ -34,70 +31,23 @@ export default async function ReviewsAdminPage() {
           Yorumlar
         </h1>
         <p className="mt-1.5 text-[13.5px] text-black/55">
-          Anasayfadaki testimonial karuselini buradan yönet. Hazır yorumlardan
-          gerçek yorumlara geçiş yapabilir, yıldız filtresi koyabilir ve her
-          yorumu tek tek yayında / gizli olarak işaretleyebilirsin.
+          Anasayfadaki testimonial bloğunu buradan yönet. Üstteki özet kartı
+          (puan, yorum sayısı, firma adı, &quot;tümünü gör&quot; linki) ve tek
+          tek yorumlar — hepsi elle giriliyor.
         </p>
       </div>
 
-      {/* Source switch */}
+      {/* Summary card editor */}
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
         <div className="text-[13px] font-semibold text-[#0a0a0a]">
-          Yorum kaynağı
+          Özet kartı
         </div>
         <p className="mt-1 text-[12.5px] text-black/50">
-          Şu anda anasayfada{" "}
-          <span className="font-medium text-[#3c639f]">
-            {data.source === "real" ? "gerçek yorumlar" : "hazır yorumlar"}
-          </span>{" "}
-          gösteriliyor.
-          {data.source === "real" && data.reviews.length === 0 && (
-            <span className="text-amber-700">
-              {" "}
-              Hiç gerçek yorum yok — site geçici olarak hazır yorumlara
-              dönüyor.
-            </span>
-          )}
+          Yorum bloğunun üstündeki büyük kart — toplam puan, yorum sayısı ve
+          &quot;tüm yorumları gör&quot; butonunun bağlandığı link.
         </p>
-        <div className="mt-4 flex gap-2">
-          <form action={setSourceAction}>
-            <input type="hidden" name="source" value="preset" />
-            <SourceButton
-              active={data.source === "preset"}
-              icon={<Sparkles size={14} />}
-            >
-              Hazır yorumlar (20)
-            </SourceButton>
-          </form>
-          <form action={setSourceAction}>
-            <input type="hidden" name="source" value="real" />
-            <SourceButton
-              active={data.source === "real"}
-              icon={<MessageSquare size={14} />}
-            >
-              Gerçek yorumlar
-            </SourceButton>
-          </form>
-        </div>
-      </section>
-
-      {/* Google integration status (info-only for now) */}
-      <section className="rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
-        <div className="flex items-start gap-3">
-          <Info size={16} className="mt-0.5 shrink-0 text-amber-700" />
-          <div className="flex-1">
-            <div className="text-[13px] font-semibold text-amber-900">
-              Google Business Profile bağlantısı
-            </div>
-            <p className="mt-1 text-[12.5px] leading-relaxed text-amber-900/80">
-              Henüz Google hesabıyla eşleştirilmedi. Şimdilik yorumları aşağıdaki
-              formla elle ekleyebilirsin. OAuth kurulumu tamamlanınca buraya bir
-              <span className="mx-1 inline-flex items-center gap-1 rounded bg-amber-200/60 px-1.5 py-0.5 text-[11px] font-medium">
-                <RefreshCw size={10} /> Google&apos;dan çek
-              </span>
-              butonu gelecek, tüm yorumlarını tek tıkla buraya getirip yönetebileceksin.
-            </p>
-          </div>
+        <div className="mt-4">
+          <SummaryForm summary={data.summary} />
         </div>
       </section>
 
@@ -126,11 +76,11 @@ export default async function ReviewsAdminPage() {
       {/* Manual add */}
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
         <div className="text-[13px] font-semibold text-[#0a0a0a]">
-          Manuel yorum ekle
+          Yeni yorum ekle
         </div>
         <p className="mt-1 text-[12.5px] text-black/50">
-          Google bağlantısı kurulana kadar — ya da Google dışı kaynaklardan
-          (WhatsApp, e-posta, Trustpilot) gelen yorumları eklemek için.
+          Yazan, tarih, metin, yıldız. İstersen yorumun orijinal Google linkini
+          de ekleyebilirsin — karttaki Google ikonu o linke gider.
         </p>
         <div className="mt-4">
           <AddManualForm />
@@ -198,15 +148,16 @@ function ReviewRow({
             <Stars rating={review.rating} />
             <span className="text-[11px] text-black/40">·</span>
             <span className="text-[11px] text-black/40">{review.date}</span>
-            <span
-              className={
-                review.origin === "google"
-                  ? "rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-700"
-                  : "rounded bg-black/[0.04] px-1.5 py-0.5 text-[10px] font-medium text-black/55"
-              }
-            >
-              {review.origin === "google" ? "Google" : "Manuel"}
-            </span>
+            {review.sourceUrl && (
+              <a
+                href={review.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 rounded bg-[#3c639f]/[0.08] px-1.5 py-0.5 text-[10px] font-medium text-[#3c639f] hover:bg-[#3c639f]/[0.14]"
+              >
+                <ExternalLink size={10} /> Link
+              </a>
+            )}
             <VisibilityBadge visible={visible} override={override} />
           </div>
           <p className="mt-1.5 text-[13px] leading-relaxed text-black/75">
@@ -215,7 +166,6 @@ function ReviewRow({
         </div>
 
         <div className="flex shrink-0 flex-col gap-1">
-          {/* Override controls: 3-state — Auto / Force show / Force hide */}
           <OverrideControls id={review.id} value={override} />
           <form action={deleteReviewAction}>
             <input type="hidden" name="id" value={review.id} />
@@ -330,30 +280,6 @@ function Stars({ rating }: { rating: number }) {
         />
       ))}
     </span>
-  )
-}
-
-function SourceButton({
-  active,
-  icon,
-  children,
-}: {
-  active: boolean
-  icon: React.ReactNode
-  children: React.ReactNode
-}) {
-  return (
-    <button
-      type="submit"
-      className={
-        active
-          ? "flex items-center gap-1.5 rounded-lg bg-[#3c639f] px-3 py-2 text-[12.5px] font-medium text-white"
-          : "flex items-center gap-1.5 rounded-lg border border-black/[0.08] bg-white px-3 py-2 text-[12.5px] font-medium text-black/65 transition-colors hover:bg-black/[0.03]"
-      }
-    >
-      {icon}
-      {children}
-    </button>
   )
 }
 

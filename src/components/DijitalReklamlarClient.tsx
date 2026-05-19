@@ -16,6 +16,7 @@ import type {
   ChannelKey,
   Pkg,
 } from "@/lib/packages-types"
+import { bookAppointmentAction } from "@/app/dijital-reklamlar/actions"
 
 // Replace with the real Webreta WhatsApp number when ready. The wa.me
 // link is built from E.164 without the leading "+".
@@ -442,7 +443,9 @@ function RequestModal({
   const [selectedHour, setSelectedHour] = useState<number | null>(null)
   const [phone, setPhone] = useState("")
   const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
   const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -507,25 +510,33 @@ function RequestModal({
   )
   const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!canSubmit || !selectedDate || selectedHour === null) return
     setSubmitting(true)
-    // TODO: wire this to the backend. For now it's a stub so the UX is
-    // fully playable.
-    const payload = {
-      channel: channel.key,
-      pkg: pkg.key,
-      date: selectedDate.toISOString(),
-      hour: selectedHour,
-      phone: phoneDigits,
-      name: name.trim(),
-    }
-    console.log("[talep]", payload)
-    // Brief delay so the button shows a "submitting" feel.
-    setTimeout(() => {
+    setSubmitError(null)
+    try {
+      const res = await bookAppointmentAction({
+        channelKey: channel.key,
+        channelLabel: channel.label,
+        pkgKey: pkg.key,
+        pkgName: pkg.name,
+        pkgPrice: pkg.price,
+        name: name.trim(),
+        phone: phoneDigits,
+        email: email.trim(),
+        dateIso: selectedDate.toISOString(),
+        hour: selectedHour,
+      })
+      if (res.ok) {
+        setView("success")
+      } else {
+        setSubmitError(res.error)
+      }
+    } catch {
+      setSubmitError("Bir şeyler ters gitti. Lütfen tekrar deneyin.")
+    } finally {
       setSubmitting(false)
-      setView("success")
-    }, 350)
+    }
   }
 
   if (!mounted) return null
@@ -700,7 +711,25 @@ function RequestModal({
             className="rounded-lg border border-black/[0.10] bg-white px-3.5 py-2.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
           />
         </label>
+        <label className="flex flex-col gap-1.5 md:col-span-2">
+          <span className="text-[11.5px] font-medium text-black/55">
+            E-posta{" "}
+            <span className="text-black/30">
+              (opsiyonel — onay maili için)
+            </span>
+          </span>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="ornek@firma.com"
+            className="rounded-lg border border-black/[0.10] bg-white px-3.5 py-2.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
+          />
+        </label>
       </div>
+      {submitError && (
+        <p className="mt-4 text-[13px] text-red-600">{submitError}</p>
+      )}
     </div>
   )
 
