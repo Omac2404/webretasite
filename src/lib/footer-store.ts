@@ -31,7 +31,7 @@ function normalizeStringArray(value: unknown): string[] {
 }
 
 function normalize(raw: Partial<FooterConfig>): FooterConfig {
-  const contactRaw = raw.contact ?? {}
+  const contactRaw = (raw.contact ?? {}) as Partial<FooterConfig["contact"]>
   return {
     titleLeading: String(raw.titleLeading ?? DEFAULT_FOOTER.titleLeading),
     titleHighlight: String(

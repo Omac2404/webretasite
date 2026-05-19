@@ -69,7 +69,7 @@ export async function verifySession(
   const valid = await crypto.subtle.verify(
     "HMAC",
     key,
-    sigBytes,
+    sigBytes as BufferSource,
     encoder.encode(b64),
   )
   if (!valid) return null

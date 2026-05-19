@@ -117,12 +117,12 @@ export default function Tracker() {
     handlePathChange()
     const origPush = history.pushState
     const origReplace = history.replaceState
-    history.pushState = function (...args) {
+    history.pushState = function (this: History, ...args) {
       origPush.apply(this, args)
       // Defer so the URL has actually updated before we read it.
       setTimeout(handlePathChange, 0)
     } as typeof history.pushState
-    history.replaceState = function (...args) {
+    history.replaceState = function (this: History, ...args) {
       origReplace.apply(this, args)
       setTimeout(handlePathChange, 0)
     } as typeof history.replaceState
