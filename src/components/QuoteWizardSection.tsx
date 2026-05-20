@@ -50,7 +50,34 @@ const QUOTE_SERVICES = [
 // in place of an explicit price (prices are sensitive — discussed in the
 // first meeting). Selecting "landing" or "mini" surfaces a recommendation
 // to also check Webreta KOBI (handled in the wizard).
-const QUOTE_PROJECT_TYPES = [
+// Quote wizard project types — admin-managed via /admin/web-paketleri.
+// The constant below is the SEED used until /api/web-packages resolves on
+// first paint. Mirror the store's defaults so the picker renders even
+// when the API is slow or offline.
+type QuoteProjectType = {
+  id: string
+  label: string
+  tagline: string
+  descriptor: string
+  desc: string
+  bullets: string[]
+  iconKey: string
+  kobiRedirect: boolean
+}
+
+const QUOTE_ICONS: Record<
+  string,
+  React.ComponentType<{ size?: number; strokeWidth?: number }>
+> = {
+  layers: Layers,
+  globe: Globe,
+  boxes: Boxes,
+  rocket: Rocket,
+  sparkles: Sparkles,
+  refresh: RefreshCw,
+}
+
+const QUOTE_PROJECT_TYPES_SEED: QuoteProjectType[] = [
   {
     id: "landing",
     label: "Landing Sayfa",
@@ -58,7 +85,8 @@ const QUOTE_PROJECT_TYPES = [
     descriptor: "Pratik",
     desc: "Tek sayfada hikayenizi anlatan, dönüşüm odaklı tasarım. Ürün lansmanları, kampanyalar veya tek bir hizmete odaklanan işletmeler için ideal.",
     bullets: ["1 sayfa", "Form ve CTA optimizasyonu", "Hızlı yayına alma"],
-    Icon: Layers,
+    iconKey: "layers",
+    kobiRedirect: true,
   },
   {
     id: "mini",
@@ -67,7 +95,8 @@ const QUOTE_PROJECT_TYPES = [
     descriptor: "Bütçe dostu",
     desc: "5 sayfaya kadar statik kurumsal site. Hakkımızda, hizmetler, referanslar ve iletişim — hızlı yüklenen, şık bir dijital vitrin.",
     bullets: ["5 sayfaya kadar", "Mobil + masaüstü uyumlu", "Temel SEO"],
-    Icon: Globe,
+    iconKey: "globe",
+    kobiRedirect: true,
   },
   {
     id: "pro",
@@ -80,7 +109,8 @@ const QUOTE_PROJECT_TYPES = [
       "İçerik yönetim paneli (CMS)",
       "Blog + gelişmiş form yönetimi",
     ],
-    Icon: Boxes,
+    iconKey: "boxes",
+    kobiRedirect: false,
   },
   {
     id: "webapp",
@@ -93,7 +123,8 @@ const QUOTE_PROJECT_TYPES = [
       "Sipariş, hasta veya müşteri takip paneli",
       "Sektörünüze özel iş akışı tasarımı",
     ],
-    Icon: Rocket,
+    iconKey: "rocket",
+    kobiRedirect: false,
   },
 ]
 
@@ -200,6 +231,62 @@ export default function QuoteWizardSection() {
   const [pkgCanScrollLeft, setPkgCanScrollLeft] = useState(false)
   const [pkgCanScrollRight, setPkgCanScrollRight] = useState(false)
 
+  // Project types + wizard heading — admin-managed via /admin/web-paketleri.
+  // SEED renders on first paint; replaced once /api/web-packages resolves.
+  const [projectTypes, setProjectTypes] = useState<QuoteProjectType[]>(
+    QUOTE_PROJECT_TYPES_SEED,
+  )
+  const [wizardHeading, setWizardHeading] = useState<{
+    titleLeader: string
+    titleHighlight: string
+    subtitle: string
+  }>({
+    titleLeader: "Projenize özel",
+    titleHighlight: "fiyat teklifi",
+    subtitle:
+      "Dört kısa adımda projenizi tanıyalım. Cevaplarınıza göre size en uygun çözümü ve net bir fiyat aralığını sunalım.",
+  })
+  useEffect(() => {
+    let cancelled = false
+    fetch("/api/web-packages")
+      .then((r) => (r.ok ? r.json() : null))
+      .then(
+        (data: {
+          packages?: QuoteProjectType[]
+          wizardHeading?: {
+            titleLeader?: string
+            titleHighlight?: string
+            subtitle?: string
+          }
+        } | null) => {
+          if (cancelled || !data) return
+          if (Array.isArray(data.packages) && data.packages.length > 0) {
+            setProjectTypes(data.packages)
+          }
+          if (data.wizardHeading) {
+            setWizardHeading((prev) => ({
+              titleLeader:
+                typeof data.wizardHeading?.titleLeader === "string"
+                  ? data.wizardHeading.titleLeader
+                  : prev.titleLeader,
+              titleHighlight:
+                typeof data.wizardHeading?.titleHighlight === "string"
+                  ? data.wizardHeading.titleHighlight
+                  : prev.titleHighlight,
+              subtitle:
+                typeof data.wizardHeading?.subtitle === "string"
+                  ? data.wizardHeading.subtitle
+                  : prev.subtitle,
+            }))
+          }
+        },
+      )
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   // Earliest selectable time on today. We require a 4-hour heads-up:
   // if it's 10:00 now, the earliest slot today is 14:00. Past 14:00 (so
   // earliest + 4h crosses 18:00 last slot), today drops off entirely.
@@ -246,6 +333,7 @@ export default function QuoteWizardSection() {
       dayNum: number
       monthShort: string
       isToday: boolean
+      isTomorrow: boolean
     }[] = []
     const now = new Date()
     const offset = earliestTodaySlot === null ? 1 : 0
@@ -259,12 +347,18 @@ export default function QuoteWizardSection() {
         2,
         "0",
       )}-${String(d.getDate()).padStart(2, "0")}`
+      // Today is shown only when today's slots are still bookable
+      // (offset 0). Tomorrow is the day immediately after today — when
+      // today is skipped (offset 1) the first chip IS tomorrow.
+      const isToday = offset === 0 && i === 0
+      const isTomorrow = offset === 0 ? i === 1 : i === 0
       days.push({
         iso,
         dayName: DAY_NAMES[d.getDay()],
         dayNum: d.getDate(),
         monthShort: MONTH_NAMES[d.getMonth()],
-        isToday: offset === 0 && i === 0,
+        isToday,
+        isTomorrow,
       })
     }
     return days
@@ -335,7 +429,8 @@ export default function QuoteWizardSection() {
     e: React.MouseEvent<HTMLButtonElement>,
   ) => {
     setQuote(prev => ({ ...prev, projectType: id }))
-    if (id === "landing" || id === "mini") {
+    const picked = projectTypes.find(p => p.id === id)
+    if (picked?.kobiRedirect) {
       setKobiAnchor(anchorFor(e.currentTarget))
       setKobiModalOpen(true)
     }
@@ -542,13 +637,20 @@ export default function QuoteWizardSection() {
         <div className="relative mx-auto max-w-[1280px] px-6 md:px-12">
           <div className="mb-8 md:mb-10">
             <h2 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[48px]">
-              <span className="font-normal">Projenize özel </span>
-              <span className="font-bold text-[#3c639f]">fiyat teklifi</span>
+              {wizardHeading.titleLeader && (
+                <span className="font-normal">{wizardHeading.titleLeader} </span>
+              )}
+              {wizardHeading.titleHighlight && (
+                <span className="font-bold text-[#3c639f]">
+                  {wizardHeading.titleHighlight}
+                </span>
+              )}
             </h2>
-            <p className="mt-4 max-w-[520px] text-[15px] leading-relaxed text-black/60">
-              Dört kısa adımda projenizi tanıyalım. Cevaplarınıza göre size en
-              uygun çözümü ve net bir fiyat aralığını sunalım.
-            </p>
+            {wizardHeading.subtitle && (
+              <p className="mt-4 max-w-[520px] text-[15px] leading-relaxed text-black/60">
+                {wizardHeading.subtitle}
+              </p>
+            )}
           </div>
 
           <div className="quote-card-pulse overflow-hidden rounded-2xl border border-black/[0.06] bg-white">
@@ -829,9 +931,9 @@ export default function QuoteWizardSection() {
                             ref={pkgScrollerRef}
                             className="quote-pkg-scroll flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto px-6 md:snap-none md:px-12"
                           >
-                            {QUOTE_PROJECT_TYPES.map(t => {
+                            {projectTypes.map(t => {
                               const isSel = quote.projectType === t.id
-                              const Icon = t.Icon
+                              const Icon = QUOTE_ICONS[t.iconKey] ?? Layers
                               return (
                                 <button
                                   key={t.id}
@@ -1121,12 +1223,15 @@ export default function QuoteWizardSection() {
                           </div>
                         </div>
 
-                        {/* Date + Time — only appear after at least one
-                            channel is selected. grid-rows trick smoothly
-                            expands the section. */}
+                        {/* Date + Time — only appear when WhatsApp/Phone
+                            is one of the selected channels. E-posta-only
+                            requests don't need a callback slot so we
+                            collapse the section. grid-rows trick smoothly
+                            expands. */}
                         <div
                           className={`grid transition-[grid-template-rows] duration-500 ease-out ${
-                            quote.channels.length > 0
+                            quote.channels.includes('whatsapp') ||
+                            quote.channels.includes('phone')
                               ? 'grid-rows-[1fr]'
                               : 'grid-rows-[0fr]'
                           }`}
@@ -1161,7 +1266,11 @@ export default function QuoteWizardSection() {
                                             isSel ? 'text-white/75' : 'text-black/45'
                                           }`}
                                         >
-                                          {d.isToday ? 'Bugün' : d.dayName}
+                                          {d.isToday
+                                            ? 'Bugün'
+                                            : d.isTomorrow
+                                              ? 'Yarın'
+                                              : d.dayName}
                                         </span>
                                         <span
                                           className={`text-[22px] font-bold leading-none tracking-[-0.02em] ${

@@ -31,8 +31,29 @@ export type Project = {
   updatedAt: string
 }
 
+// Right-column sidebar for the "Neler Yaptık?" homepage section —
+// approach blurb + CTA, shown beside the projects carousel on desktop.
+// Admin-managed via /admin/projeler.
+export type ProjectsSidebar = {
+  titleLeading: string
+  titleHighlight: string
+  description: string
+  ctaLabel: string
+  ctaHref: string
+}
+
+export const DEFAULT_PROJECTS_SIDEBAR: ProjectsSidebar = {
+  titleLeading: "Her projeye sıfırdan,",
+  titleHighlight: "ihtiyaca özel.",
+  description:
+    "Hazır şablon kullanmıyoruz. Talebinizi dinleyip size özel çözüm kurguluyoruz; web sitesinden eklentiye, sunucu taşımadan güvenlik kurulumuna kadar her adımı sizin işinize göre tasarlıyoruz.",
+  ctaLabel: "Teklif al",
+  ctaHref: "#teklif",
+}
+
 export type ProjectsData = {
   projects: Project[]
+  sidebar?: ProjectsSidebar
 }
 
 // Derive 2-letter initials from a company name (e.g. "Aksel & Partners" → "AP").

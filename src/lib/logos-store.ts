@@ -22,17 +22,45 @@ export type Logo = {
   row: LogoRow
 }
 
+// Google Partner badge shown in the homepage hero. Admin can toggle
+// visibility and override the directory URL from the Referanslar tab.
+export type GooglePartnerSettings = {
+  enabled: boolean
+  url: string
+}
+
+const DEFAULT_GOOGLE_PARTNER: GooglePartnerSettings = {
+  enabled: true,
+  url: "https://www.google.com/partners/agency?id=7356236542",
+}
+
 export type LogosData = {
   mode: LogoDisplayMode
   logos: Logo[]
+  googlePartner: GooglePartnerSettings
 }
 
 const DATA_FILE = path.join(process.cwd(), "data", "logos.json")
 
-const EMPTY: LogosData = { mode: "names", logos: [] }
+const EMPTY: LogosData = {
+  mode: "names",
+  logos: [],
+  googlePartner: { ...DEFAULT_GOOGLE_PARTNER },
+}
 
 function normalizeRow(value: unknown): LogoRow {
   return value === "b" ? "b" : "a"
+}
+
+function normalizeGooglePartner(value: unknown): GooglePartnerSettings {
+  const v = (value ?? {}) as Partial<GooglePartnerSettings>
+  return {
+    enabled: typeof v.enabled === "boolean" ? v.enabled : DEFAULT_GOOGLE_PARTNER.enabled,
+    url:
+      typeof v.url === "string" && v.url.trim()
+        ? v.url.trim()
+        : DEFAULT_GOOGLE_PARTNER.url,
+  }
 }
 
 export async function readLogos(): Promise<LogosData> {
@@ -40,6 +68,7 @@ export async function readLogos(): Promise<LogosData> {
     const raw = await fs.readFile(DATA_FILE, "utf8")
     const parsed = JSON.parse(raw) as Partial<LogosData> & {
       logos?: Array<Partial<Logo>>
+      googlePartner?: Partial<GooglePartnerSettings>
     }
     return {
       mode: parsed.mode === "logos" ? "logos" : "names",
@@ -51,6 +80,7 @@ export async function readLogos(): Promise<LogosData> {
             row: normalizeRow(l.row),
           }))
         : [],
+      googlePartner: normalizeGooglePartner(parsed.googlePartner),
     }
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === "ENOENT") return EMPTY
@@ -128,5 +158,16 @@ export async function swapLogoRow(id: string): Promise<void> {
   const logo = data.logos.find((l) => l.id === id)
   if (!logo) return
   logo.row = logo.row === "a" ? "b" : "a"
+  await writeLogos(data)
+}
+
+export async function setGooglePartner(
+  input: Partial<GooglePartnerSettings>,
+): Promise<void> {
+  const data = await readLogos()
+  data.googlePartner = normalizeGooglePartner({
+    ...data.googlePartner,
+    ...input,
+  })
   await writeLogos(data)
 }

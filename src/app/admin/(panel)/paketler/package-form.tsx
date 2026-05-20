@@ -151,6 +151,26 @@ export function PackageForm({
         </div>
       </div>
 
+      {/* WhatsApp pre-filled message — when the visitor clicks the
+          "WhatsApp'tan yazın" CTA for this package, this text is loaded
+          into the chat. Boş bırakılırsa varsayılana (kanal + paket adı +
+          fiyat) düşer. */}
+      <div className="mt-5">
+        <SectionLabel
+          title="WhatsApp ön mesaj"
+          hint="Boş bırakılırsa otomatik bir mesaj oluşturulur."
+        />
+        <div className="mt-2.5">
+          <textarea
+            name="whatsappMessage"
+            rows={3}
+            defaultValue={pkg.whatsappMessage ?? ""}
+            placeholder={`Merhaba, ${pkg.name} (${pkg.price}/ay) hakkında bilgi almak istiyorum.`}
+            className={`${fieldInput} resize-none`}
+          />
+        </div>
+      </div>
+
       <div className="mt-5">
         <FormFooter
           pending={pending}

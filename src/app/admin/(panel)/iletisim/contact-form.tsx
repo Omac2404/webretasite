@@ -62,11 +62,14 @@ export function ContactAdminForm({ content }: { content: ContactContent }) {
           <Field label="Telefon">
             <input name="info_phone" type="text" defaultValue={content.info.phone} placeholder="+90 (XXX) XXX XX XX" className={inputCls} />
           </Field>
-          <Field label="Adres">
-            <input name="info_address" type="text" defaultValue={content.info.address} placeholder="İzmir, Türkiye" className={inputCls} />
+          <Field label="Adres - 1. satır (ülke / şehir)">
+            <input name="info_addressLine1" type="text" defaultValue={content.info.addressLine1} placeholder="İzmir, Türkiye" className={inputCls} />
           </Field>
           <Field label="Çalışma saatleri">
             <input name="info_hours" type="text" defaultValue={content.info.hours} placeholder="Pazartesi – Cuma · 09:00 – 18:00" className={inputCls} />
+          </Field>
+          <Field label="Adres - 2. satır (kalan detaylar)">
+            <input name="info_addressLine2" type="text" defaultValue={content.info.addressLine2} placeholder="Örn. Konak Mh. No:12" className={inputCls} />
           </Field>
         </div>
       </section>

@@ -47,7 +47,8 @@ export async function saveContactAction(
     info: {
       email: s(formData, "info_email"),
       phone: s(formData, "info_phone"),
-      address: s(formData, "info_address"),
+      addressLine1: s(formData, "info_addressLine1"),
+      addressLine2: s(formData, "info_addressLine2"),
       hours: s(formData, "info_hours"),
     },
     form: {

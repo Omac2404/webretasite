@@ -751,20 +751,35 @@ function TestimonialPopup({
         <div className="mt-3 shrink-0 text-[12px] text-black/40">{testimonial.date}</div>
         <div className="my-4 h-px shrink-0 bg-black/[0.08]" />
 
-        {/* Bottom: Google review link, right-aligned with the G icon at the
-            rightmost position — visually anchors the bottom-right corner.
-            Yorumun orijinal Google linki yoksa link gösterilmez. */}
-        {testimonial.sourceUrl && (
-          <a
-            href={testimonial.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ml-auto inline-flex shrink-0 items-center gap-2 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
+        {/* Bottom row — left: "Google" verified trust badge (G icon + word +
+            green check); right: outbound link to the review on Google.
+            sourceUrl yoksa link kısmı gösterilmez ama badge her zaman kalır
+            (yorum kaynağı Google. */}
+        <div className="flex shrink-0 items-center justify-between gap-3">
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-medium text-[#0a0a0a]"
+            style={{ background: 'rgba(60, 99, 159, 0.07)' }}
           >
-            {"Google'da görüntüle"}
             <GoogleIcon />
-          </a>
-        )}
+            Google
+            <Check
+              size={13}
+              strokeWidth={3}
+              className="text-[#34A853]"
+            />
+          </span>
+          {testimonial.sourceUrl && (
+            <a
+              href={testimonial.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
+            >
+              Google&apos;da görüntüle
+              <ArrowRight size={13} />
+            </a>
+          )}
+        </div>
       </div>
     </div>
   ) : (
@@ -794,25 +809,23 @@ function TestimonialPopup({
           style={{ border: '0.5px solid rgba(0, 0, 0, 0.08)', borderLeft: 'none', borderBottom: 'none' }}
         />
 
+        {/* Top row — stars (left) + "Google ✓" verified trust badge
+            (right). Matches the mobile popup so both layouts read the
+            same. */}
         <div className="flex shrink-0 items-center justify-between">
           <div className="flex gap-0.5">
             {[...Array(5)].map((_, i) => (
               <Star key={i} size={16} className="fill-[#FBBC04] text-[#FBBC04]" />
             ))}
           </div>
-          {testimonial.sourceUrl ? (
-            <a
-              href={testimonial.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Yorumu Google'da görüntüle"
-              className="inline-flex items-center transition-opacity hover:opacity-80"
-            >
-              <GoogleIcon />
-            </a>
-          ) : (
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-medium text-[#0a0a0a]"
+            style={{ background: 'rgba(60, 99, 159, 0.07)' }}
+          >
             <GoogleIcon />
-          )}
+            Google
+            <Check size={13} strokeWidth={3} className="text-[#34A853]" />
+          </span>
         </div>
 
         <div className="popup-scroll mt-4 flex-1 pr-1">
@@ -832,16 +845,16 @@ function TestimonialPopup({
         <div className="mt-3 shrink-0 text-[12px] text-black/40">{testimonial.date}</div>
         <div className="my-4 h-px shrink-0 bg-black/[0.08]" />
 
+        {/* Bottom — outbound Google review link with trailing arrow. */}
         {testimonial.sourceUrl && (
           <a
             href={testimonial.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center gap-2 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
+            className="inline-flex shrink-0 items-center gap-1.5 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
           >
-            <GoogleIcon />
-            {"Google'da görüntüle"}
-            <ExternalLink size={14} />
+            Google&apos;da görüntüle
+            <ArrowRight size={14} />
           </a>
         )}
       </div>
@@ -980,11 +993,19 @@ function ProjectCard({
         </p>
       </div>
 
-      {/* Publish date — sits in the empty bottom space, right-aligned and
-          subtle so it reads as metadata, not content. mt-auto pushes it to
-          the bottom of the flex column regardless of header/copy length. */}
-      <div className="mt-auto pt-3 text-right text-[11px] text-black/35">
-        {project.date}
+      {/* Bottom row — "Detaylar" affordance on the left signals the card is
+          clickable (popup opens with full case study); publish date sits
+          on the right as subtle metadata. The whole card already handles
+          the click, so the chip is a styled span (no nested button). */}
+      <div className="mt-auto flex items-center justify-between pt-3">
+        <span
+          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-semibold text-[#3c639f] transition-colors group-hover:bg-[#3c639f]/[0.14]"
+          style={{ background: 'rgba(60, 99, 159, 0.08)' }}
+        >
+          Detaylar
+          <ArrowRight size={11} strokeWidth={2.5} />
+        </span>
+        <span className="text-[11px] text-black/35">{project.date}</span>
       </div>
     </div>
   )
@@ -1181,7 +1202,19 @@ function ProjectPopup({
   return createPortal(popupContent, document.body)
 }
 
-function ProjectsSection({ projects: projectsProp }: { projects: Project[] }) {
+function ProjectsSection({
+  projects: projectsProp,
+  sidebar,
+}: {
+  projects: Project[]
+  sidebar: {
+    titleLeading: string
+    titleHighlight: string
+    description: string
+    ctaLabel: string
+    ctaHref: string
+  }
+}) {
   const isMobile = useIsMobile()
 
   const [activeTab, setActiveTab] = useState<ProjectCategory>('dev')
@@ -1582,89 +1615,88 @@ function ProjectsSection({ projects: projectsProp }: { projects: Project[] }) {
             tall; the ring centre is placed at roughly 60%/32% which
             matches the visual centre of the OK loop. */}
 
-        {/* Left — projects carousel. Narrower than before so the right
-            negative space breathes and the cards feel less wide. */}
+        {/* Left — projects carousel. Mobile uses horizontal snap (one
+            card focused + next peeking); desktop keeps the original
+            translateY stack with auto-advance + wheel control. */}
         <div ref={columnRef} className="relative z-10 w-full lg:w-[50%]">
-          <div
-            ref={containerRef}
-            className="relative overflow-hidden -mx-6 px-6 lg:-mx-12 lg:px-12"
-            style={{
-              height: `${VISIBLE_HEIGHT}px`,
-              maskImage:
-                'linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%)',
-              WebkitMaskImage:
-                'linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%)',
-              touchAction: isMobile ? 'none' : 'auto',
-            }}
-            onMouseEnter={handleContainerMouseEnter}
-            onMouseLeave={handleContainerMouseLeave}
-          >
+          {isMobile ? (
             <div
-              style={{
-                transform: `translateY(${translateY}px)`,
-                transition: isTransitioning ? 'transform 420ms cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
-              }}
+              className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-6 pb-2 pt-1"
+              style={{ scrollPaddingLeft: '24px' }}
             >
-              {allCards.map((project, index) => {
-                const slot = index - currentIndex
-                const opacity = getCardOpacity(slot)
-                const isFocused = slot === 1
-                return (
-                  <div
-                    key={`${activeTab}-${index}`}
-                    className="relative box-border w-full"
-                    style={{
-                      height: `${CARD_HEIGHT}px`,
-                      marginBottom: `${CARD_GAP}px`,
-                      zIndex: isFocused ? 10 : 1,
-                    }}
-                  >
-                    <ProjectCard
-                      project={project}
-                      isFocused={isFocused}
-                      opacity={opacity}
-                      isHovered={hoveredIndex === index || tappedIndex === index}
-                      isMobile={isMobile}
-                      onMouseEnter={() => handleCardEnter(index)}
-                      onMouseLeave={handleCardLeave}
-                      onClick={() => handleCardTap(index)}
-                      cardRef={(el: HTMLDivElement | null) => { cardRefs.current[index] = el }}
-                    />
-                  </div>
-                )
-              })}
-            </div>
-
-            {/* Mobile swipe hint — same look/timing as the testimonial
-                carousel: hand icon + "Kaydırın" caption, brand-blue with a
-                soft white drop-shadow, animated top→bottom for 2 cycles. */}
-            {hintActive && (
-              <div
-                className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center"
-                style={{ animation: 'hintFade 2.8s ease-in-out forwards' }}
-              >
+              {activeProjects.map((project, index) => (
                 <div
-                  className="flex flex-col items-center gap-2 text-[#3c639f]"
-                  style={{
-                    animation: 'swipeDrop 1.4s ease-in-out 2',
-                    filter:
-                      'drop-shadow(0 1px 2px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.7))',
-                  }}
+                  key={`${activeTab}-${index}`}
+                  className="snap-start shrink-0"
+                  style={{ width: '86%' }}
                 >
-                  <Image
-                    src="/swipe-down.png"
-                    alt=""
-                    width={60}
-                    height={60}
-                    priority
+                  <ProjectCard
+                    project={project}
+                    isFocused={false}
+                    opacity={1}
+                    isHovered={tappedIndex === index}
+                    isMobile
+                    onMouseEnter={() => {}}
+                    onMouseLeave={() => {}}
+                    onClick={() => handleCardTap(index)}
+                    cardRef={(el: HTMLDivElement | null) => {
+                      cardRefs.current[index] = el
+                    }}
                   />
-                  <span className="text-[15px] font-semibold tracking-wide">
-                    Kaydırın
-                  </span>
                 </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              ref={containerRef}
+              className="relative overflow-hidden -mx-6 px-6 lg:-mx-12 lg:px-12"
+              style={{
+                height: `${VISIBLE_HEIGHT}px`,
+                maskImage:
+                  'linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%)',
+                WebkitMaskImage:
+                  'linear-gradient(to bottom, transparent 0%, black 10%, black 88%, transparent 100%)',
+              }}
+              onMouseEnter={handleContainerMouseEnter}
+              onMouseLeave={handleContainerMouseLeave}
+            >
+              <div
+                style={{
+                  transform: `translateY(${translateY}px)`,
+                  transition: isTransitioning ? 'transform 420ms cubic-bezier(0.22, 1, 0.36, 1)' : 'none',
+                }}
+              >
+                {allCards.map((project, index) => {
+                  const slot = index - currentIndex
+                  const opacity = getCardOpacity(slot)
+                  const isFocused = slot === 1
+                  return (
+                    <div
+                      key={`${activeTab}-${index}`}
+                      className="relative box-border w-full"
+                      style={{
+                        height: `${CARD_HEIGHT}px`,
+                        marginBottom: `${CARD_GAP}px`,
+                        zIndex: isFocused ? 10 : 1,
+                      }}
+                    >
+                      <ProjectCard
+                        project={project}
+                        isFocused={isFocused}
+                        opacity={opacity}
+                        isHovered={hoveredIndex === index || tappedIndex === index}
+                        isMobile={isMobile}
+                        onMouseEnter={() => handleCardEnter(index)}
+                        onMouseLeave={handleCardLeave}
+                        onClick={() => handleCardTap(index)}
+                        cardRef={(el: HTMLDivElement | null) => { cardRefs.current[index] = el }}
+                      />
+                    </div>
+                  )
+                })}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Right — approach blurb + Teklif al CTA, anchored to the BOTTOM
@@ -1675,24 +1707,34 @@ function ProjectsSection({ projects: projectsProp }: { projects: Project[] }) {
         <div className="relative z-10 hidden lg:-ml-4 lg:flex lg:w-[calc(50%+16px)] lg:flex-col lg:justify-end lg:gap-6 lg:pb-16 xl:-ml-6 xl:w-[calc(50%+24px)] xl:pb-20">
           <div>
             <h3 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[52px]">
-              <span className="font-normal">Her projeye sıfırdan,</span>
-              <br />
-              <span className="font-bold text-[#3c639f]">ihtiyaca özel.</span>
+              {sidebar.titleLeading && (
+                <>
+                  <span className="font-normal">{sidebar.titleLeading}</span>
+                  {sidebar.titleHighlight && <br />}
+                </>
+              )}
+              {sidebar.titleHighlight && (
+                <span className="font-bold text-[#3c639f]">
+                  {sidebar.titleHighlight}
+                </span>
+              )}
             </h3>
-            <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-black/60">
-              Hazır şablon kullanmıyoruz. Talebinizi dinleyip size özel çözüm
-              kurguluyoruz; web sitesinden eklentiye, sunucu taşımadan
-              güvenlik kurulumuna kadar her adımı sizin işinize göre tasarlıyoruz.
-            </p>
+            {sidebar.description && (
+              <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-black/60">
+                {sidebar.description}
+              </p>
+            )}
           </div>
 
-          <a
-            href="#teklif"
-            className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#3c639f] px-[22px] py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]"
-          >
-            Teklif al
-            <ArrowRight size={16} />
-          </a>
+          {sidebar.ctaLabel && (
+            <a
+              href={sidebar.ctaHref}
+              className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#3c639f] px-[22px] py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]"
+            >
+              {sidebar.ctaLabel}
+              <ArrowRight size={16} />
+            </a>
+          )}
         </div>
       </div>
 
@@ -1774,17 +1816,113 @@ export default function Home() {
       row: "b" as const,
     })),
   ])
+  // Google Partner badge — admin-controlled via Referanslar tab. Default
+  // to enabled with the canonical directory URL so the badge renders on
+  // first paint; once /api/logos resolves we honor the saved settings.
+  const [googlePartner, setGooglePartner] = useState<{
+    enabled: boolean
+    url: string
+  }>({
+    enabled: true,
+    url: "https://www.google.com/partners/agency?id=7356236542",
+  })
+  // Hero subheadline + CTA buttons — admin-managed via /admin (the
+  // dashboard page). Seeded with the defaults so first paint renders the
+  // original copy; replaced once /api/hero resolves.
+  const [hero, setHero] = useState<{
+    subheadline: string
+    primaryButton: { label: string; href: string }
+    secondaryButton: { label: string; href: string }
+  }>({
+    subheadline:
+      "Hazır temalar değil. Hızlı, modern ve markanıza sıfırdan kodlanmış web çözümleri.",
+    primaryButton: { label: "Projemi konuşalım", href: "/web-site" },
+    secondaryButton: { label: "Çalışmalarımız", href: "/iletisim" },
+  })
+  useEffect(() => {
+    let cancelled = false
+    fetch("/api/hero")
+      .then((r) => (r.ok ? r.json() : null))
+      .then(
+        (
+          data: {
+            subheadline?: string
+            primaryButton?: { label?: string; href?: string }
+            secondaryButton?: { label?: string; href?: string }
+          } | null,
+        ) => {
+          if (cancelled || !data) return
+          setHero((prev) => ({
+            subheadline:
+              typeof data.subheadline === "string" && data.subheadline.trim()
+                ? data.subheadline.trim()
+                : prev.subheadline,
+            primaryButton: {
+              label:
+                typeof data.primaryButton?.label === "string" &&
+                data.primaryButton.label.trim()
+                  ? data.primaryButton.label.trim()
+                  : prev.primaryButton.label,
+              href:
+                typeof data.primaryButton?.href === "string" &&
+                data.primaryButton.href.trim()
+                  ? data.primaryButton.href.trim()
+                  : prev.primaryButton.href,
+            },
+            secondaryButton: {
+              label:
+                typeof data.secondaryButton?.label === "string" &&
+                data.secondaryButton.label.trim()
+                  ? data.secondaryButton.label.trim()
+                  : prev.secondaryButton.label,
+              href:
+                typeof data.secondaryButton?.href === "string" &&
+                data.secondaryButton.href.trim()
+                  ? data.secondaryButton.href.trim()
+                  : prev.secondaryButton.href,
+            },
+          }))
+        },
+      )
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
   useEffect(() => {
     let cancelled = false
     fetch("/api/logos")
       .then((r) => (r.ok ? r.json() : null))
-      .then((data: { mode?: LogoDisplayMode; logos?: LogoEntry[] } | null) => {
-        if (cancelled || !data) return
-        if (data.mode) setLogoMode(data.mode)
-        if (Array.isArray(data.logos) && data.logos.length > 0) {
-          setLogoEntries(data.logos)
-        }
-      })
+      .then(
+        (
+          data:
+            | {
+                mode?: LogoDisplayMode
+                logos?: LogoEntry[]
+                googlePartner?: { enabled?: boolean; url?: string }
+              }
+            | null,
+        ) => {
+          if (cancelled || !data) return
+          if (data.mode) setLogoMode(data.mode)
+          if (Array.isArray(data.logos) && data.logos.length > 0) {
+            setLogoEntries(data.logos)
+          }
+          if (data.googlePartner) {
+            setGooglePartner((prev) => ({
+              enabled:
+                typeof data.googlePartner!.enabled === "boolean"
+                  ? data.googlePartner!.enabled
+                  : prev.enabled,
+              url:
+                typeof data.googlePartner!.url === "string" &&
+                data.googlePartner!.url.trim()
+                  ? data.googlePartner!.url.trim()
+                  : prev.url,
+            }))
+          }
+        },
+      )
       .catch(() => {})
     return () => {
       cancelled = true
@@ -1852,6 +1990,20 @@ export default function Home() {
   // once /api/projects resolves. Each API row already carries the joined
   // referans data (company name, logo image, initials, formatted date).
   const [activeProjects, setActiveProjects] = useState<Project[]>(projects)
+  const [projectsSidebar, setProjectsSidebar] = useState<{
+    titleLeading: string
+    titleHighlight: string
+    description: string
+    ctaLabel: string
+    ctaHref: string
+  }>({
+    titleLeading: "Her projeye sıfırdan,",
+    titleHighlight: "ihtiyaca özel.",
+    description:
+      "Hazır şablon kullanmıyoruz. Talebinizi dinleyip size özel çözüm kurguluyoruz; web sitesinden eklentiye, sunucu taşımadan güvenlik kurulumuna kadar her adımı sizin işinize göre tasarlıyoruz.",
+    ctaLabel: "Teklif al",
+    ctaHref: "#teklif",
+  })
   useEffect(() => {
     let cancelled = false
     type ApiProject = {
@@ -1867,10 +2019,48 @@ export default function Home() {
       demandDetail: string
       solutionDetail: string
     }
+    type ApiSidebar = {
+      titleLeading?: string
+      titleHighlight?: string
+      description?: string
+      ctaLabel?: string
+      ctaHref?: string
+    }
     fetch("/api/projects")
       .then((r) => (r.ok ? r.json() : null))
-      .then((data: { projects?: ApiProject[] } | null) => {
-        if (cancelled || !data || !Array.isArray(data.projects)) return
+      .then(
+        (
+          data: {
+            projects?: ApiProject[]
+            sidebar?: ApiSidebar
+          } | null,
+        ) => {
+        if (cancelled || !data) return
+        if (data.sidebar) {
+          setProjectsSidebar((prev) => ({
+            titleLeading:
+              typeof data.sidebar?.titleLeading === "string"
+                ? data.sidebar.titleLeading
+                : prev.titleLeading,
+            titleHighlight:
+              typeof data.sidebar?.titleHighlight === "string"
+                ? data.sidebar.titleHighlight
+                : prev.titleHighlight,
+            description:
+              typeof data.sidebar?.description === "string"
+                ? data.sidebar.description
+                : prev.description,
+            ctaLabel:
+              typeof data.sidebar?.ctaLabel === "string"
+                ? data.sidebar.ctaLabel
+                : prev.ctaLabel,
+            ctaHref:
+              typeof data.sidebar?.ctaHref === "string"
+                ? data.sidebar.ctaHref
+                : prev.ctaHref,
+          }))
+        }
+        if (!Array.isArray(data.projects)) return
         if (data.projects.length === 0) return
         const mapped: Project[] = data.projects.map((p) => ({
           company: p.company,
@@ -2270,22 +2460,132 @@ export default function Home() {
 
       {/* Hero Section */}
       <main>
-        <section className="relative mx-auto max-w-[1280px] px-6 py-16 md:px-12 md:py-20">
+        <section className="relative mx-auto max-w-[1280px] px-6 pb-16 pt-[94px] md:px-12 md:pb-20 md:pt-[110px]">
+          {/* Mobile-only decorative peace-hand. On lg+ the testimonial
+              column carries its own peace-hand; below lg there's no right
+              column, so we paint a faded copy behind the hero copy/CTAs.
+              Anchored to the section's top-right and bleeding past the
+              right edge. `mix-blend-mode: multiply` drops the white
+              background; a bottom mask softly fades the wrist out. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-4 -top-4 z-0 w-[260px] select-none sm:right-0 sm:w-[300px] lg:hidden"
+            style={{
+              mixBlendMode: 'multiply',
+              opacity: 0.7,
+              maskImage:
+                'linear-gradient(to bottom, black 0%, black 55%, rgba(0,0,0,0.55) 78%, transparent 96%)',
+              WebkitMaskImage:
+                'linear-gradient(to bottom, black 0%, black 55%, rgba(0,0,0,0.55) 78%, transparent 96%)',
+            }}
+          >
+            <Image
+              src="/brand/peace-hand.png"
+              alt=""
+              width={1657}
+              height={3714}
+              className="h-auto w-full"
+              draggable={false}
+            />
+          </div>
+
           {/* Two Column Layout */}
-          <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
+          <div className="relative z-10 flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
             {/* Left Column - Main Content */}
             <div className="w-full lg:w-[55%]">
-              {/* Google Partner Badge */}
-              <div className="mb-6">
-                <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-                  Onaylı iş ortağı
-                </span>
-                <div className="mt-2">
-                  <div className="flex h-[46px] w-[140px] items-center justify-center rounded border border-black/[0.08] bg-white text-[10px] text-black/40">
-                    Google Partner
+              {/* Google Partner Badge — admin-controlled (Referanslar tab).
+                  Pill card with the official "Google" multi-color wordmark
+                  + grey "Partner" below it, a shimmer sweep, brand-blue
+                  verified check, and a "Tıklayın" hint with arrow. */}
+              {googlePartner.enabled && (
+                <div className="mb-6">
+                  <div className="relative inline-block">
+                    {/* Animated brand-blue halo behind the pill — soft
+                        conic-gradient blob that rotates slowly and breathes
+                        in scale + opacity to draw attention without being
+                        distracting. */}
+                    <span
+                      aria-hidden
+                      className="gp-halo pointer-events-none absolute -inset-2 rounded-full"
+                    />
+                  <a
+                    href={googlePartner.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Webreta'nın Google Partner profilini görüntüle"
+                    className="google-partner-badge group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white py-2.5 pl-4 pr-2 transition-all duration-300 hover:-translate-y-0.5"
+                    style={{
+                      border: '1px solid rgba(0,0,0,0.06)',
+                      boxShadow:
+                        '0 2px 8px -2px rgba(0,0,0,0.05), 0 12px 28px -10px rgba(60, 99, 159, 0.14)',
+                    }}
+                  >
+                    {/* Shimmer sweep across the whole pill */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background:
+                          'linear-gradient(100deg, transparent 0%, transparent 40%, rgba(255,255,255,0.55) 50%, transparent 60%, transparent 100%)',
+                        transform: 'translateX(-100%)',
+                        animation: 'gpShimmer 6s ease-in-out infinite',
+                        animationDelay: '2.4s',
+                      }}
+                    />
+
+                    {/* Google Partner wordmark lockup. "Google" uses per-letter
+                        brand colors (G=blue, o=red, o=yellow, g=blue, l=green,
+                        e=red); "Partner" sits below in Google's secondary
+                        grey, aligned left with the G. */}
+                    <span
+                      className="relative flex flex-col items-start leading-[1.0]"
+                      style={{
+                        fontFamily:
+                          '"Google Sans", "Product Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+                      }}
+                    >
+                      <span className="text-[18px] font-medium tracking-[-0.01em]">
+                        <span style={{ color: '#4285F4' }}>G</span>
+                        <span style={{ color: '#EA4335' }}>o</span>
+                        <span style={{ color: '#FBBC05' }}>o</span>
+                        <span style={{ color: '#4285F4' }}>g</span>
+                        <span style={{ color: '#34A853' }}>l</span>
+                        <span style={{ color: '#EA4335' }}>e</span>
+                      </span>
+                      <span
+                        className="mt-0.5 text-[18px] font-medium tracking-[-0.01em]"
+                        style={{ color: '#5F6368' }}
+                      >
+                        Partner
+                      </span>
+                    </span>
+
+                    {/* Brand-blue verified check */}
+                    <span
+                      className="relative ml-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white"
+                      style={{
+                        background:
+                          'linear-gradient(135deg, #5b8de6 0%, #3c639f 100%)',
+                        boxShadow: '0 2px 6px -1px rgba(60, 99, 159, 0.45)',
+                      }}
+                      aria-hidden
+                    >
+                      <Check size={11} strokeWidth={3.5} />
+                    </span>
+
+                    {/* Click hint with arrow — separated by a thin divider */}
+                    <span aria-hidden className="relative ml-1 h-7 w-px bg-black/[0.08]" />
+                    <span className="relative inline-flex items-center gap-1 pr-1.5 text-[11.5px] font-medium text-[#3c639f]">
+                      Tıklayın
+                      <ArrowRight
+                        size={12}
+                        className="transition-transform duration-200 group-hover:translate-x-0.5"
+                      />
+                    </span>
+                  </a>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Main Headline with Typewriter */}
               <h1 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[52px]">
@@ -2307,21 +2607,37 @@ export default function Home() {
                 </span>
               </h1>
 
-              {/* Subheadline */}
-              <p className="mt-6 max-w-[480px] text-[17px] leading-relaxed text-black/60">
-                Hazır temalar değil. Hızlı, modern ve markanıza sıfırdan kodlanmış
-                web çözümleri.
+              {/* Subheadline. On mobile/tablet a soft translucent white
+                  panel with backdrop blur sits behind it so the decorative
+                  peace-hand doesn't make the copy hard to read. Reverts to
+                  plain text from lg up where the hand lives in the other
+                  column. */}
+              <p
+                className="mt-6 inline-block max-w-[230px] rounded-xl bg-white/45 px-3 py-2 text-[17px] leading-relaxed text-black/60 backdrop-blur-[3px] sm:max-w-[280px] lg:block lg:max-w-[480px] lg:bg-transparent lg:px-0 lg:py-0 lg:backdrop-blur-none"
+                style={{
+                  WebkitBackdropFilter: 'blur(3px)',
+                }}
+              >
+                {hero.subheadline}
               </p>
 
-              {/* CTA Buttons */}
+              {/* CTA Buttons — both render in the same brand-blue + arrow
+                  style. Labels and hrefs are admin-managed via /admin. */}
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-3">
-                <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#3c639f] px-[22px] py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]">
-                  Projemi konuşalım
+                <a
+                  href={hero.primaryButton.href}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#3c639f] px-[22px] py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]"
+                >
+                  {hero.primaryButton.label}
                   <ArrowRight size={16} />
-                </button>
-                <button className="inline-flex items-center justify-center rounded-lg border border-black/[0.15] bg-white px-[22px] py-3 text-[14px] font-medium text-[#0a0a0a] transition-colors hover:bg-[#f5f5f5]">
-                  Çalışmalarımız
-                </button>
+                </a>
+                <a
+                  href={hero.secondaryButton.href}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#3c639f] px-[22px] py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]"
+                >
+                  {hero.secondaryButton.label}
+                  <ArrowRight size={16} />
+                </a>
               </div>
 
               {/* Partner Logo Marquee — replaces the stats row in the left
@@ -2364,9 +2680,9 @@ export default function Home() {
                 aria-hidden
                 className="pointer-events-none absolute hidden select-none lg:block"
                 style={{
-                  left: '-160px',
-                  top: '-40px',
-                  width: '235px',
+                  left: '-170px',
+                  top: '-75px',
+                  width: '260px',
                   zIndex: 0,
                   mixBlendMode: 'multiply',
                   maskImage:
@@ -2376,10 +2692,10 @@ export default function Home() {
                 }}
               >
                 <Image
-                  src="/brand/peace-hand.jpg"
+                  src="/brand/peace-hand.png"
                   alt=""
-                  width={607}
-                  height={1382}
+                  width={1657}
+                  height={3714}
                   className="h-auto w-full"
                   draggable={false}
                 />
@@ -2449,98 +2765,90 @@ export default function Home() {
                 )
               })()}
 
-              {/* Testimonial Carousel Container - Transparent, floating cards */}
-              <div
-                ref={containerRef}
-                className="relative overflow-hidden -mx-6 px-6 lg:-mx-12 lg:px-12"
-                style={{
-                  height: `${VISIBLE_HEIGHT}px`,
-                  // Vertical-only fade — keeps all card edges fully visible.
-                  // Horizontal shadow breathing room is provided by the
-                  // negative-margin + padding extension on the container, so
-                  // shadows can dissipate naturally before being clipped.
-                  maskImage:
-                    'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)',
-                  WebkitMaskImage:
-                    'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)',
-                  // Block vertical page-scroll inside the carousel on mobile
-                  // so swipes drive the cards instead of the page. Users can
-                  // still scroll the page from above/below the carousel.
-                  touchAction: isMobile ? 'none' : 'auto',
-                }}
-                onMouseEnter={handleContainerMouseEnter}
-                onMouseLeave={handleContainerMouseLeave}
-              >
+              {/* Testimonial Carousel — mobile uses native horizontal
+                  scroll-snap (one card focused, next peeking from the
+                  right). Desktop keeps the original translateY stack with
+                  auto-advance, wheel control, and mask fade. */}
+              {isMobile ? (
                 <div
-                  style={{
-                    transform: `translateY(${translateY}px)`,
-                    transition: isTransitioning ? 'transform 600ms ease-in-out' : 'none',
-                  }}
+                  className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-6 pb-2 pt-1"
+                  style={{ scrollPaddingLeft: '24px' }}
                 >
-                  {allCards.map((testimonial, index) => {
-                    const slot = index - currentIndex
-                    const opacity = getCardOpacity(slot)
-                    const isFocused = slot === 1
-
-                    return (
-                      <div
-                        key={index}
-                        className="relative box-border w-full"
-                        style={{
-                          height: `${CARD_HEIGHT}px`,
-                          marginBottom: `${CARD_GAP}px`,
-                          zIndex: isFocused ? 10 : 1,
-                        }}
-                      >
-                        <TestimonialCard
-                          testimonial={testimonial}
-                          isFocused={isFocused}
-                          opacity={opacity}
-                          isHovered={hoveredIndex === index || tappedIndex === index}
-                          isMobile={isMobile}
-                          onMouseEnter={() => handleCardEnter(index)}
-                          onMouseLeave={handleCardLeave}
-                          onClick={() => handleCardTap(index)}
-                          cardRef={(el: HTMLDivElement | null) => { cardRefs.current[index] = el }}
-                        />
-                      </div>
-                    )
-                  })}
-                </div>
-
-                {/* Mobile swipe hint — shown once when the carousel scrolls
-                    into view. The hand + label travel together top→bottom
-                    across most of the carousel for 2 cycles (2.8s) and
-                    fade in/out at the extremes. No background pill: brand
-                    blue with a soft white drop-shadow keeps the elements
-                    legible over the static testimonial cards.
-                    Any touch on the carousel dismisses it immediately. */}
-                {hintActive && (
-                  <div
-                    className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center"
-                    style={{ animation: 'hintFade 2.8s ease-in-out forwards' }}
-                  >
+                  {activeTestimonials.map((testimonial, index) => (
                     <div
-                      className="flex flex-col items-center gap-2 text-[#3c639f]"
-                      style={{
-                        animation: 'swipeDrop 1.4s ease-in-out 2',
-                        filter: 'drop-shadow(0 1px 2px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.7))',
-                      }}
+                      key={index}
+                      className="snap-start shrink-0"
+                      style={{ width: '86%' }}
                     >
-                      <Image
-                        src="/swipe-down.png"
-                        alt=""
-                        width={60}
-                        height={60}
-                        priority
+                      <TestimonialCard
+                        testimonial={testimonial}
+                        isFocused={false}
+                        opacity={1}
+                        isHovered={tappedIndex === index}
+                        isMobile
+                        onMouseEnter={() => {}}
+                        onMouseLeave={() => {}}
+                        onClick={() => handleCardTap(index)}
+                        cardRef={(el: HTMLDivElement | null) => {
+                          cardRefs.current[index] = el
+                        }}
                       />
-                      <span className="text-[15px] font-semibold tracking-wide">
-                        Kaydırın
-                      </span>
                     </div>
+                  ))}
+                </div>
+              ) : (
+                <div
+                  ref={containerRef}
+                  className="relative overflow-hidden -mx-6 px-6 lg:-mx-12 lg:px-12"
+                  style={{
+                    height: `${VISIBLE_HEIGHT}px`,
+                    // Vertical-only fade — keeps all card edges fully visible.
+                    maskImage:
+                      'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)',
+                    WebkitMaskImage:
+                      'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)',
+                  }}
+                  onMouseEnter={handleContainerMouseEnter}
+                  onMouseLeave={handleContainerMouseLeave}
+                >
+                  <div
+                    style={{
+                      transform: `translateY(${translateY}px)`,
+                      transition: isTransitioning ? 'transform 600ms ease-in-out' : 'none',
+                    }}
+                  >
+                    {allCards.map((testimonial, index) => {
+                      const slot = index - currentIndex
+                      const opacity = getCardOpacity(slot)
+                      const isFocused = slot === 1
+
+                      return (
+                        <div
+                          key={index}
+                          className="relative box-border w-full"
+                          style={{
+                            height: `${CARD_HEIGHT}px`,
+                            marginBottom: `${CARD_GAP}px`,
+                            zIndex: isFocused ? 10 : 1,
+                          }}
+                        >
+                          <TestimonialCard
+                            testimonial={testimonial}
+                            isFocused={isFocused}
+                            opacity={opacity}
+                            isHovered={hoveredIndex === index || tappedIndex === index}
+                            isMobile={isMobile}
+                            onMouseEnter={() => handleCardEnter(index)}
+                            onMouseLeave={handleCardLeave}
+                            onClick={() => handleCardTap(index)}
+                            cardRef={(el: HTMLDivElement | null) => { cardRefs.current[index] = el }}
+                          />
+                        </div>
+                      )
+                    })}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* "Tüm yorumları gör" — outlined CTA, kart sütununun altında.
                   Admin reviewsUrl girmediyse butonu hiç çıkarmıyoruz. */}
@@ -2553,7 +2861,7 @@ export default function Home() {
                     className="group inline-flex items-center gap-2 rounded-lg border border-[#3c639f]/40 bg-white px-4 py-2.5 text-[13px] font-medium text-[#3c639f] shadow-[0_1px_2px_rgba(60,99,159,0.06)] transition-all hover:border-[#3c639f] hover:bg-[#3c639f]/[0.04] hover:shadow-[0_4px_12px_-2px_rgba(60,99,159,0.18)]"
                   >
                     <GoogleIcon />
-                    <span>Tüm yorumları gör</span>
+                    <span>Yorumları Google&apos;da görüntüle</span>
                     <ArrowRight
                       size={14}
                       className="transition-transform duration-300 group-hover:translate-x-0.5"
@@ -2581,7 +2889,7 @@ export default function Home() {
             UX: vertical auto-advancing stack on the left, segmented control
             (Geliştirmeler / Operasyonlar) above it, popup on hover/tap.
             Right column is intentionally empty for now. */}
-        <ProjectsSection projects={activeProjects} />
+        <ProjectsSection projects={activeProjects} sidebar={projectsSidebar} />
 
         {/* "Neler yaparız?" — two service spotlights side by side. Each card
             has a distinct motif (code lines for Web Site, rising chart for
@@ -2590,16 +2898,10 @@ export default function Home() {
             bottom padding) so the two read as one continuous block. */}
         <section className="relative mx-auto max-w-[1280px] px-6 pb-16 md:px-12 md:pb-20">
           <div className="mb-8">
-            <div>
-              <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
-                <span className="font-normal">Neler </span>
-                <span className="font-bold text-[#3c639f]">yaparız?</span>
-              </h2>
-              <p className="mt-3 max-w-[560px] text-[15px] leading-relaxed text-black/60">
-                Aynı ekip, iki uzmanlık. Markanızı dijital dünyada hem inşa
-                ediyor, hem büyütüyoruz.
-              </p>
-            </div>
+            <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
+              <span className="font-normal">Neler </span>
+              <span className="font-bold text-[#3c639f]">yaparız?</span>
+            </h2>
           </div>
 
           <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">

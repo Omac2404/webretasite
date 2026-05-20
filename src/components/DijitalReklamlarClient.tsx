@@ -15,13 +15,16 @@ import type {
   Channel,
   ChannelKey,
   Pkg,
+  WhatsAppSettings,
 } from "@/lib/packages-types"
 import { bookAppointmentAction } from "@/app/dijital-reklamlar/actions"
 
-// Replace with the real Webreta WhatsApp number when ready. The wa.me
-// link is built from E.164 without the leading "+".
-const WHATSAPP_NUMBER = "905321234567"
-const WHATSAPP_DISPLAY = "+90 532 123 45 67"
+// Fallback WhatsApp values used only if /admin/paketler hasn't been
+// touched yet. Real value flows in via props (admin-managed).
+const FALLBACK_WHATSAPP: WhatsAppSettings = {
+  number: "905321234567",
+  display: "+90 532 123 45 67",
+}
 
 function WhatsAppIcon({ size = 16 }: { size?: number }) {
   return (
@@ -427,10 +430,12 @@ type RequestView = "choice" | "schedule" | "success"
 function RequestModal({
   pkg,
   channel,
+  whatsapp,
   onClose,
 }: {
   pkg: Pkg
   channel: Channel
+  whatsapp: WhatsAppSettings
   onClose: () => void
 }) {
   const theme = THEMES[channel.key]
@@ -505,10 +510,15 @@ function RequestModal({
   const canSubmit =
     selectedDate !== null && selectedHour !== null && phoneDigits.length >= 10
 
+  // Use the per-package pre-filled message from admin, falling back to a
+  // generic auto-template if the admin hasn't customized it.
+  const fallbackMessage = `Merhaba, ${channel.label} - ${pkg.name} (${pkg.price}/ay) hakkında bilgi almak istiyorum.`
   const waMessage = encodeURIComponent(
-    `Merhaba, ${channel.label} - ${pkg.name} (${pkg.price}/ay) hakkında bilgi almak istiyorum.`
+    pkg.whatsappMessage && pkg.whatsappMessage.trim()
+      ? pkg.whatsappMessage
+      : fallbackMessage,
   )
-  const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`
+  const waHref = `https://wa.me/${whatsapp.number}?text=${waMessage}`
 
   async function handleSubmit() {
     if (!canSubmit || !selectedDate || selectedHour === null) return
@@ -565,7 +575,7 @@ function RequestModal({
               Biz size ulaşalım
             </div>
             <p className="mt-1 text-[13px] leading-relaxed text-black/55">
-              Bir tarih ve saat seçin, sizi arayalım.
+              Bir tarih ve saat seçin.
             </p>
           </div>
           <ArrowRight
@@ -591,7 +601,7 @@ function RequestModal({
               WhatsApp&apos;tan hemen yazın
             </div>
             <p className="mt-1 text-[13px] leading-relaxed text-black/55">
-              {WHATSAPP_DISPLAY} numarasına mesaj atın.
+              {whatsapp.display}
             </p>
           </div>
           <ArrowRight
@@ -714,15 +724,13 @@ function RequestModal({
         <label className="flex flex-col gap-1.5 md:col-span-2">
           <span className="text-[11.5px] font-medium text-black/55">
             E-posta{" "}
-            <span className="text-black/30">
-              (opsiyonel — onay maili için)
-            </span>
+            <span className="text-black/30">(opsiyonel)</span>
           </span>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="ornek@firma.com"
+            placeholder="e-postanızı girin"
             className="rounded-lg border border-black/[0.10] bg-white px-3.5 py-2.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
           />
         </label>
@@ -831,30 +839,17 @@ function RequestModal({
         {view === "schedule" && (
           <div className="flex flex-col gap-3 border-t border-black/[0.06] bg-[#fafafa] px-7 py-5 md:flex-row md:items-center md:justify-between md:px-9">
             <PopupBrand />
-            <div className="flex flex-col-reverse gap-3 md:flex-row md:items-center">
-              <a
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-track="whatsapp:schedule"
-                data-track-label="WhatsApp (randevu sayfasından)"
-                className="inline-flex items-center justify-center gap-2 rounded-md border border-black/10 bg-white px-5 py-2.5 text-[13px] font-medium text-black/70 transition-colors hover:bg-black/[0.04]"
-              >
-                <WhatsAppIcon size={14} />
-                WhatsApp
-              </a>
-              <button
-                type="button"
-                disabled={!canSubmit || submitting}
-                onClick={handleSubmit}
-                data-track="randevu-olustur"
-                data-track-label={`Randevu oluşturdu (${channel.label} – ${pkg.name})`}
-                className="cta-primary inline-flex items-center justify-center gap-2 rounded-md px-6 py-2.5 text-[13px] font-medium"
-              >
-                {submitting ? "Gönderiliyor…" : "Randevu Oluştur"}
-                {!submitting && <ArrowRight size={15} />}
-              </button>
-            </div>
+            <button
+              type="button"
+              disabled={!canSubmit || submitting}
+              onClick={handleSubmit}
+              data-track="randevu-olustur"
+              data-track-label={`Randevu oluşturdu (${channel.label} – ${pkg.name})`}
+              className="cta-primary inline-flex items-center justify-center gap-2 rounded-md px-6 py-2.5 text-[13px] font-medium"
+            >
+              {submitting ? "Gönderiliyor…" : "Randevu Oluştur"}
+              {!submitting && <ArrowRight size={15} />}
+            </button>
           </div>
         )}
 
@@ -1068,9 +1063,12 @@ function PackageCard({
 
 export default function DijitalReklamlarClient({
   channels,
+  whatsapp,
 }: {
   channels: Channel[]
+  whatsapp?: WhatsAppSettings
 }) {
+  const whatsappCfg = whatsapp ?? FALLBACK_WHATSAPP
   // Fall through to "google" if the admin somehow ships an empty channels
   // array — keeps the page from crashing while we debug.
   const initialChannel: ChannelKey = channels[0]?.key ?? "google"
@@ -1198,6 +1196,7 @@ export default function DijitalReklamlarClient({
           key={`${requestPkg.channel.key}:${requestPkg.pkg.key}`}
           pkg={requestPkg.pkg}
           channel={requestPkg.channel}
+          whatsapp={whatsappCfg}
           onClose={() => setRequestPkg(null)}
         />
       )}

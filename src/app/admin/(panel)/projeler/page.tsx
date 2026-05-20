@@ -1,16 +1,19 @@
-import { Plus } from "lucide-react"
+import { Plus, MessageSquare } from "lucide-react"
 import { readProjects } from "@/lib/projects-store"
 import { readLogos } from "@/lib/logos-store"
+import { DEFAULT_PROJECTS_SIDEBAR } from "@/lib/projects-types"
 import { AddProjectForm } from "./add-project-form"
 import { ProjectsList } from "./projects-list"
+import { SidebarForm } from "./sidebar-form"
 
 export const dynamic = "force-dynamic"
 
 export default async function ProjectsAdminPage() {
-  const [{ projects }, { logos }] = await Promise.all([
+  const [{ projects, sidebar }, { logos }] = await Promise.all([
     readProjects(),
     readLogos(),
   ])
+  const activeSidebar = sidebar ?? DEFAULT_PROJECTS_SIDEBAR
   const logoById = new Map(logos.map((l) => [l.id, l]))
   // Render in stored order — the admin's drag-and-drop drives both this
   // list and the homepage carousel, so sorting by date would fight the
@@ -37,6 +40,21 @@ export default async function ProjectsAdminPage() {
           oradan otomatik bağlanır.
         </p>
       </div>
+
+      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
+        <div className="flex items-center gap-2">
+          <MessageSquare size={15} className="text-[#3c639f]" />
+          <div className="text-[13px] font-semibold text-[#0a0a0a]">
+            Sağ kolon: yaklaşım metni + Teklif al
+          </div>
+        </div>
+        <p className="mt-1 text-[12.5px] text-black/50">
+          &quot;Neler Yaptık?&quot; bölümünün sağındaki başlık, açıklama ve CTA.
+        </p>
+        <div className="mt-4">
+          <SidebarForm initial={activeSidebar} />
+        </div>
+      </section>
 
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
         <div className="flex items-center gap-2">

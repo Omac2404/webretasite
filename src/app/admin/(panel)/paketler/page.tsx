@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Layers, Star } from "lucide-react"
+import { Layers, Star, MessageCircle } from "lucide-react"
 import {
   CHANNEL_ORDER,
   MAX_AUDIENCE,
@@ -9,6 +9,7 @@ import {
 } from "@/lib/packages-store"
 import { ChannelForm } from "./channel-form"
 import { PackageForm } from "./package-form"
+import { WhatsAppForm } from "./whatsapp-form"
 
 export const dynamic = "force-dynamic"
 
@@ -28,6 +29,7 @@ export default async function PackagesAdminPage({
 
   const data = await readPackages()
   const channel = data.channels.find((c) => c.key === activeKey)!
+  const whatsapp = data.whatsapp ?? { number: "", display: "" }
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
@@ -42,6 +44,24 @@ export default async function PackagesAdminPage({
           detay maddeleri (max {MAX_ITEMS}).
         </p>
       </div>
+
+      {/* WhatsApp settings — global for all packages */}
+      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
+        <div className="flex items-center gap-2">
+          <MessageCircle size={15} className="text-[#25D366]" />
+          <div className="text-[13px] font-semibold text-[#0a0a0a]">
+            WhatsApp ayarları
+          </div>
+        </div>
+        <p className="mt-1 text-[12.5px] text-black/50">
+          Tüm paketlerin &quot;WhatsApp&apos;tan yazın&quot; butonunun
+          gideceği numara ve görünür format. Ön mesaj her paketin altından
+          ayrı düzenlenir.
+        </p>
+        <div className="mt-4">
+          <WhatsAppForm whatsapp={whatsapp} />
+        </div>
+      </section>
 
       {/* Channel tabs — server-rendered, switched via URL query so each
           tab is bookmarkable. Active tab matches the public page's pill. */}

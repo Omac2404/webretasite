@@ -12,9 +12,17 @@ type Status =
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>({ kind: "idle" })
   const [isPending, startTransition] = useTransition()
+  const [consent, setConsent] = useState(false)
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    if (!consent) {
+      setStatus({
+        kind: "error",
+        message: "Lütfen K.V.K.K. ve çerez onayını işaretleyin.",
+      })
+      return
+    }
     const form = e.currentTarget
     const data = new FormData(form)
     startTransition(async () => {
@@ -22,6 +30,7 @@ export default function ContactForm() {
       if (res.ok) {
         setStatus({ kind: "success" })
         form.reset()
+        setConsent(false)
       } else {
         setStatus({ kind: "error", message: res.error })
       }
@@ -75,7 +84,7 @@ export default function ContactForm() {
           required
           minLength={10}
           rows={5}
-          placeholder="Projeniz, zaman planınız, bütçeniz..."
+          placeholder="iletinizi yazın"
           className="mt-1.5 w-full resize-y rounded-md border border-black/[0.08] bg-[#fafafa] px-3.5 py-2.5 text-[14px] leading-relaxed text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3c639f]/15"
         />
       </div>
@@ -85,13 +94,19 @@ export default function ContactForm() {
       )}
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-[12px] leading-relaxed text-black/45">
-          Formu göndererek bilgilerinizin tarafımızca işlenmesini kabul edersiniz.
-        </p>
+        <label className="inline-flex cursor-pointer items-start gap-2 text-[12.5px] leading-relaxed text-black/65">
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            className="mt-[3px] h-4 w-4 shrink-0 rounded border-black/20 text-[#3c639f] focus:ring-[#3c639f]"
+          />
+          <span>K.V.K.K. ve çerezleri onaylıyorum.</span>
+        </label>
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center justify-center gap-2 rounded-md bg-[#3c639f] px-5 py-2.5 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288] disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-[#3c639f] px-6 py-2.5 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isPending ? (
             <>
@@ -100,7 +115,7 @@ export default function ContactForm() {
             </>
           ) : (
             <>
-              Mesajı gönder
+              Gönder
               <ArrowRight size={15} />
             </>
           )}

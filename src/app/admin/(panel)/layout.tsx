@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
-import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, Send } from "lucide-react"
+import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, Send, Globe } from "lucide-react"
 import { SESSION_COOKIE, verifySession } from "@/lib/admin-session"
 import { logoutAction } from "../(auth)/login/actions"
 
@@ -51,6 +51,9 @@ export default async function PanelLayout({
           </SideLink>
           <SideLink href="/admin/paketler" icon={<Package size={16} />}>
             Paketler
+          </SideLink>
+          <SideLink href="/admin/web-paketleri" icon={<Globe size={16} />}>
+            Web Paketleri
           </SideLink>
           <SideLink href="/admin/blog" icon={<BookOpen size={16} />}>
             Blog

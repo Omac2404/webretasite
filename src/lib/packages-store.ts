@@ -21,14 +21,28 @@ import {
   type PackageKey,
   type PackagesData,
   type Pkg,
+  type WhatsAppSettings,
 } from "./packages-types"
 
-export type { Channel, ChannelKey, PackageKey, PackagesData, Pkg }
+export type {
+  Channel,
+  ChannelKey,
+  PackageKey,
+  PackagesData,
+  Pkg,
+  WhatsAppSettings,
+}
 export { CHANNEL_ORDER, MAX_AUDIENCE, MAX_ITEMS, PACKAGE_ORDER }
+
+const DEFAULT_WHATSAPP: WhatsAppSettings = {
+  number: "905321234567",
+  display: "+90 532 123 45 67",
+}
 
 const DATA_FILE = path.join(process.cwd(), "data", "packages.json")
 
 const SEED: PackagesData = {
+  whatsapp: DEFAULT_WHATSAPP,
   channels: [
     {
       key: "google",
@@ -281,6 +295,10 @@ function normalizeData(input: unknown): PackagesData {
         price: foundPkg?.price?.toString().trim() || sp.price,
         audience: audience.length > 0 ? audience : sp.audience,
         items: items.length > 0 ? items : sp.items,
+        whatsappMessage:
+          typeof foundPkg?.whatsappMessage === "string"
+            ? foundPkg.whatsappMessage
+            : sp.whatsappMessage ?? "",
       }
     })
     return {
@@ -292,7 +310,20 @@ function normalizeData(input: unknown): PackagesData {
     }
   })
 
-  return { channels }
+  const incomingWa = (obj.whatsapp ?? {}) as Partial<WhatsAppSettings>
+  // Digits-only for the wa.me number, free-form for the display string.
+  const rawNumber =
+    typeof incomingWa.number === "string" ? incomingWa.number : ""
+  const cleanedNumber = rawNumber.replace(/\D+/g, "")
+  const whatsapp: WhatsAppSettings = {
+    number: cleanedNumber || DEFAULT_WHATSAPP.number,
+    display:
+      typeof incomingWa.display === "string" && incomingWa.display.trim()
+        ? incomingWa.display.trim()
+        : DEFAULT_WHATSAPP.display,
+  }
+
+  return { channels, whatsapp }
 }
 
 export async function readPackages(): Promise<PackagesData> {
@@ -332,6 +363,7 @@ export async function updatePackage(
     price: string
     audience: string[]
     items: string[]
+    whatsappMessage: string
   },
 ): Promise<void> {
   const data = await readPackages()
@@ -350,5 +382,19 @@ export async function updatePackage(
     fields.items.map((s) => s.trim()).filter((s) => s.length > 0),
     MAX_ITEMS,
   )
+  pkg.whatsappMessage = fields.whatsappMessage
+  await writePackages(data)
+}
+
+export async function updateWhatsApp(fields: {
+  number: string
+  display: string
+}): Promise<void> {
+  const data = await readPackages()
+  const cleanedNumber = fields.number.replace(/\D+/g, "")
+  data.whatsapp = {
+    number: cleanedNumber || DEFAULT_WHATSAPP.number,
+    display: fields.display.trim() || DEFAULT_WHATSAPP.display,
+  }
   await writePackages(data)
 }

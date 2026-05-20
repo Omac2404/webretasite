@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic"
 // Returns projects joined with referans (logo) data so the homepage
 // renders company name + logo without a second round-trip.
 export async function GET() {
-  const [{ projects }, { logos }] = await Promise.all([
+  const [{ projects, sidebar }, { logos }] = await Promise.all([
     readProjects(),
     readLogos(),
   ])
@@ -33,7 +33,7 @@ export async function GET() {
     }
   })
   return NextResponse.json(
-    { projects: enriched },
+    { projects: enriched, sidebar },
     { headers: { "Cache-Control": "no-store" } },
   )
 }

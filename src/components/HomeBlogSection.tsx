@@ -38,7 +38,7 @@ export default function HomeBlogSection() {
   if (posts === null || posts.length === 0) return null
 
   return (
-    <section className="relative mx-auto max-w-[1280px] px-6 pb-16 pt-4 md:px-12 md:pb-20 md:pt-6">
+    <section className="relative mx-auto max-w-[1280px] px-6 pb-2 pt-4 md:px-12 md:pb-3 md:pt-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">

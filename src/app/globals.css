@@ -191,3 +191,45 @@
   .cta-primary { transition: none; }
 }
 
+/* Google Partner badge — gentle shimmer sweep across the pill, plus an
+   animated brand-blue conic-gradient halo behind the pill that rotates
+   slowly and breathes in scale + opacity. On hover the pill gets a
+   deeper brand-tinted shadow. */
+@keyframes gpShimmer {
+  0%, 85%, 100% { transform: translateX(-110%); }
+  92%           { transform: translateX(110%); }
+}
+/* Hide native scrollbar on horizontal snap carousels (mobile testimonials
+   + projects). Visual gesture cue is the peek of the next card. */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* Soft brand-blue halo hugging the pill, gently throbbing in opacity
+   and scale. No rotation, no traveling — just a calm breathing glow. */
+.gp-halo {
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 50%, #5b8de6 0%, rgba(60,99,159,0.7) 35%, transparent 75%);
+  filter: blur(10px);
+  animation: gpHalo 2.6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+@keyframes gpHalo {
+  0%, 100% { transform: scale(1);    opacity: 0.55; }
+  50%      { transform: scale(1.06); opacity: 0.85; }
+}
+.google-partner-badge:hover {
+  box-shadow:
+    0 4px 14px -2px rgba(0, 0, 0, 0.07),
+    0 18px 40px -12px rgba(60, 99, 159, 0.24) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .google-partner-badge span[aria-hidden][style*="gpShimmer"],
+  .gp-halo {
+    animation: none !important;
+  }
+  .gp-halo { opacity: 0.5; }
+}
+

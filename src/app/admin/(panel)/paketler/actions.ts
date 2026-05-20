@@ -6,6 +6,7 @@ import {
   PACKAGE_ORDER,
   updateChannel,
   updatePackage,
+  updateWhatsApp,
   type ChannelKey,
   type PackageKey,
 } from "@/lib/packages-store"
@@ -68,7 +69,29 @@ export async function updatePackageAction(
   }
   const audience = parseList(formData, "audience")
   const items = parseList(formData, "items")
-  await updatePackage(channel, pkg, { name, tagline, price, audience, items })
+  const whatsappMessage = String(formData.get("whatsappMessage") ?? "").trim()
+  await updatePackage(channel, pkg, {
+    name,
+    tagline,
+    price,
+    audience,
+    items,
+    whatsappMessage,
+  })
+  revalidateBoth()
+  return { ok: true }
+}
+
+export async function updateWhatsAppAction(
+  _prev: UpdateState,
+  formData: FormData,
+): Promise<UpdateState> {
+  const number = String(formData.get("number") ?? "").trim()
+  const display = String(formData.get("display") ?? "").trim()
+  if (!number || !display) {
+    return { error: "Numara ve görünür format zorunlu." }
+  }
+  await updateWhatsApp({ number, display })
   revalidateBoth()
   return { ok: true }
 }

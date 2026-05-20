@@ -128,7 +128,7 @@ export default function SiteFooter() {
   const copyright = renderCopyright(config.copyright)
 
   return (
-    <footer className="relative mt-24 overflow-hidden bg-[#0a0e14] text-white">
+    <footer className="relative mt-10 overflow-hidden bg-[#0a0e14] text-white md:mt-12">
       <div
         aria-hidden
         className="pointer-events-none absolute -left-32 -top-40 h-[460px] w-[460px] rounded-full bg-[#3c639f]/[0.22] blur-[140px]"

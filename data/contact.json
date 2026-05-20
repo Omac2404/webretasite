@@ -1,0 +1,32 @@
+{
+  "hero": {
+    "kicker": "İletişim",
+    "titleLeading": "Bir kahve içelim,",
+    "titleHighlight": "projenizi konuşalım.",
+    "titleTrailing": "",
+    "intro": "Yeni bir web projeniz, mevcut sitenizde iyileştirme fikriniz veya dijital reklam stratejiniz için bizimle iletişime geçin. 24 saat içinde geri dönüyoruz."
+  },
+  "info": {
+    "email": "hello@webreta.com",
+    "phone": "+90 (XXX) XXX XX XX",
+    "addressLine1": "Türkiye, İzmir, Bornova",
+    "addressLine2": "Kazımdirik mah. 220 sok. no:3/A",
+    "hours": "Pazartesi – Cuma · 09:00 – 18:00"
+  },
+  "form": {
+    "kicker": "Mesaj gönderin",
+    "titleLeading": "Formu",
+    "titleHighlight": "doldurun",
+    "titleTrailing": ", dönelim.",
+    "intro": "Merak ettiğiniz ilgili her konu için bize danışabilirsiniz."
+  },
+  "map": {
+    "kicker": "Konum",
+    "titleLeading": "İzmir,",
+    "titleHighlight": "Bornova",
+    "titleTrailing": "",
+    "intro": "İzmirden Tüm Türkiye'ye ve Dünyaya.",
+    "embedSrc": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3124.2951562125813!2d27.2004766764428!3d38.45774667252489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b97dcdc1bc94c3%3A0x49bd615fd705cd!2sWebreta%20Web%20Teknolojileri!5e0!3m2!1str!2str!4v1779284740829!5m2!1str!2str",
+    "shareUrl": ""
+  }
+}

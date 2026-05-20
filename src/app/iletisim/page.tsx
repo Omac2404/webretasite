@@ -65,7 +65,10 @@ export default async function IletisimPage() {
             <InfoCard
               icon={<MapPin size={18} strokeWidth={1.75} />}
               label="Adres"
-              value={content.info.address}
+              value={content.info.addressLine2 || content.info.addressLine1}
+              topRight={
+                content.info.addressLine2 ? content.info.addressLine1 : ""
+              }
             />
             <InfoCard
               icon={<Clock size={18} strokeWidth={1.75} />}
@@ -165,17 +168,29 @@ function InfoCard({
   icon,
   label,
   value,
+  topRight,
   href,
 }: {
   icon: React.ReactNode
   label: string
   value: string
+  // İkonun yanında (sağında) görünen ek metin — örn. adres kartında
+  // ülke/şehir özetinin ana detaydan ayrı durması için. Verilmezse
+  // ikon yalnız durur, kart eski tek-satırlı düzene döner.
+  topRight?: string
   href?: string
 }) {
   const inner = (
     <>
-      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#3c639f]/[0.08] text-[#3c639f]">
-        {icon}
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#3c639f]/[0.08] text-[#3c639f]">
+          {icon}
+        </div>
+        {topRight && (
+          <span className="text-[13px] font-medium tracking-[-0.005em] text-[#0a0a0a]">
+            {topRight}
+          </span>
+        )}
       </div>
       <div className="mt-4">
         <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">

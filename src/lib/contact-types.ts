@@ -10,10 +10,12 @@ export type ContactContent = {
     intro: string
   }
   // 4 info kartının değerleri. label/icon sabit; sadece içerik düzenlenir.
+  // Adres kartı iki satırlıdır: üstte ülke + şehir, altta kalan detaylar.
   info: {
     email: string
     phone: string
-    address: string
+    addressLine1: string
+    addressLine2: string
     hours: string
   }
   // Form bloğu başlıkları
@@ -51,7 +53,8 @@ export const DEFAULT_CONTACT: ContactContent = {
   info: {
     email: "hello@webreta.com",
     phone: "+90 (XXX) XXX XX XX",
-    address: "İzmir, Türkiye",
+    addressLine1: "İzmir, Türkiye",
+    addressLine2: "",
     hours: "Pazartesi – Cuma · 09:00 – 18:00",
   },
   form: {
@@ -59,16 +62,15 @@ export const DEFAULT_CONTACT: ContactContent = {
     titleLeading: "Formu",
     titleHighlight: "doldurun",
     titleTrailing: ", dönelim.",
-    intro:
-      "Projenizle ilgili kısa bir özet, hedef tarihiniz ve bütçe aralığınızı paylaşırsanız daha hızlı ilerleyebiliriz.",
+    intro: "Merak ettiğiniz, ilgili her konu için bize ulaşın.",
   },
   map: {
     kicker: "Konum",
     titleLeading: "İzmir,",
-    titleHighlight: "Ege'nin merkezi.",
+    titleHighlight: "Bornova",
     titleTrailing: "",
     intro:
-      "Ekip İzmir'de çalışıyor, projeleri Türkiye genelindeki markalar için uzaktan yürütüyoruz.",
+      "İzmir'den Tüm Türkiye'ye ve Dünya'ya hizmet vermekteyiz.",
     embedSrc: "",
     shareUrl: "",
   },

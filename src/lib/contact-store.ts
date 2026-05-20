@@ -10,9 +10,14 @@ type Partialish<T> = { [K in keyof T]?: Partial<T[K]> }
 
 function normalize(raw: Partialish<ContactContent>): ContactContent {
   const hero = raw.hero ?? {}
-  const info = raw.info ?? {}
+  const info = (raw.info ?? {}) as Partial<ContactContent["info"]> & {
+    address?: string
+  }
   const form = raw.form ?? {}
   const map = raw.map ?? {}
+  // Legacy support: older docs stored a single `address` field. Promote
+  // it to addressLine1 when no explicit lines are present.
+  const legacyAddress = typeof info.address === "string" ? info.address : ""
   return {
     hero: {
       kicker: String(hero.kicker ?? DEFAULT_CONTACT.hero.kicker),
@@ -24,7 +29,12 @@ function normalize(raw: Partialish<ContactContent>): ContactContent {
     info: {
       email: String(info.email ?? DEFAULT_CONTACT.info.email),
       phone: String(info.phone ?? DEFAULT_CONTACT.info.phone),
-      address: String(info.address ?? DEFAULT_CONTACT.info.address),
+      addressLine1: String(
+        info.addressLine1 ?? legacyAddress ?? DEFAULT_CONTACT.info.addressLine1,
+      ),
+      addressLine2: String(
+        info.addressLine2 ?? DEFAULT_CONTACT.info.addressLine2,
+      ),
       hours: String(info.hours ?? DEFAULT_CONTACT.info.hours),
     },
     form: {

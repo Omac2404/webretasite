@@ -7,11 +7,37 @@ import {
   deleteProject,
   setProjectsOrder,
   updateProject,
+  updateProjectsSidebar,
 } from "@/lib/projects-store"
 import type { ProjectCategory } from "@/lib/projects-types"
 
 export type AddProjectState = { error?: string; ok?: boolean }
 export type EditProjectState = { error?: string; ok?: boolean }
+export type SidebarState = { ok?: boolean; error?: string }
+
+export async function saveProjectsSidebarAction(
+  _prev: SidebarState,
+  formData: FormData,
+): Promise<SidebarState> {
+  const titleLeading = String(formData.get("titleLeading") ?? "").trim()
+  const titleHighlight = String(formData.get("titleHighlight") ?? "").trim()
+  const description = String(formData.get("description") ?? "").trim()
+  const ctaLabel = String(formData.get("ctaLabel") ?? "").trim()
+  const ctaHref = String(formData.get("ctaHref") ?? "").trim()
+  if (!titleLeading && !titleHighlight) {
+    return { error: "Başlık için en az bir parça gerekli." }
+  }
+  await updateProjectsSidebar({
+    titleLeading,
+    titleHighlight,
+    description,
+    ctaLabel,
+    ctaHref,
+  })
+  revalidatePath("/admin/projeler")
+  revalidatePath("/")
+  return { ok: true }
+}
 
 function parseCategory(v: FormDataEntryValue | null): ProjectCategory {
   return String(v ?? "") === "ops" ? "ops" : "dev"

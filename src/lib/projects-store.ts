@@ -6,9 +6,11 @@
 import { promises as fs } from "node:fs"
 import path from "node:path"
 import {
+  DEFAULT_PROJECTS_SIDEBAR,
   type Project,
   type ProjectCategory,
   type ProjectsData,
+  type ProjectsSidebar,
 } from "./projects-types"
 
 const DATA_FILE = path.join(process.cwd(), "data", "projects.json")
@@ -38,6 +40,22 @@ function normalizeProject(p: Partial<Project>): Project {
   }
 }
 
+function normalizeSidebar(input: unknown): ProjectsSidebar {
+  const raw = (input ?? {}) as Partial<ProjectsSidebar>
+  const pick = (v: unknown, fallback: string): string =>
+    typeof v === "string" && v.trim() ? v.trim() : fallback
+  return {
+    titleLeading: pick(raw.titleLeading, DEFAULT_PROJECTS_SIDEBAR.titleLeading),
+    titleHighlight: pick(
+      raw.titleHighlight,
+      DEFAULT_PROJECTS_SIDEBAR.titleHighlight,
+    ),
+    description: pick(raw.description, DEFAULT_PROJECTS_SIDEBAR.description),
+    ctaLabel: pick(raw.ctaLabel, DEFAULT_PROJECTS_SIDEBAR.ctaLabel),
+    ctaHref: pick(raw.ctaHref, DEFAULT_PROJECTS_SIDEBAR.ctaHref),
+  }
+}
+
 export async function readProjects(): Promise<ProjectsData> {
   try {
     const raw = await fs.readFile(DATA_FILE, "utf8")
@@ -47,10 +65,11 @@ export async function readProjects(): Promise<ProjectsData> {
     const projects = Array.isArray(parsed.projects)
       ? parsed.projects.map(normalizeProject)
       : []
-    return { projects }
+    const sidebar = normalizeSidebar(parsed.sidebar)
+    return { projects, sidebar }
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === "ENOENT") {
-      return { projects: [] }
+      return { projects: [], sidebar: { ...DEFAULT_PROJECTS_SIDEBAR } }
     }
     throw err
   }
@@ -127,6 +146,14 @@ export async function updateProject(
 export async function deleteProject(id: string): Promise<void> {
   const data = await readProjects()
   data.projects = data.projects.filter((p) => p.id !== id)
+  await writeProjects(data)
+}
+
+export async function updateProjectsSidebar(
+  patch: Partial<ProjectsSidebar>,
+): Promise<void> {
+  const data = await readProjects()
+  data.sidebar = normalizeSidebar({ ...(data.sidebar ?? {}), ...patch })
   await writeProjects(data)
 }
 

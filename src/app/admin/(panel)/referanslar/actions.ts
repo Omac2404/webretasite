@@ -8,6 +8,7 @@ import {
   deleteLogo,
   moveLogo,
   setDisplayMode,
+  setGooglePartner,
   swapLogoRow,
   type LogoDisplayMode,
   type LogoRow,
@@ -113,5 +114,15 @@ export async function swapRowAction(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "")
   if (!id) return
   await swapLogoRow(id)
+  revalidateBoth()
+}
+
+// Google Partner badge — enabled flag and directory URL. Submit form
+// fields: `enabled` ("on"/missing) and `url` (string). Empty url resets
+// to the default directory URL via the store's normalizer.
+export async function setGooglePartnerAction(formData: FormData): Promise<void> {
+  const enabled = formData.get("enabled") === "on"
+  const url = String(formData.get("url") ?? "").trim()
+  await setGooglePartner({ enabled, url })
   revalidateBoth()
 }

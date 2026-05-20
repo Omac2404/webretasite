@@ -1,8 +1,9 @@
-import { Image as ImageIcon, Type, Plus, Trash2, ChevronUp, ChevronDown, ArrowLeftRight, Zap, Snail } from "lucide-react"
+import { Image as ImageIcon, Type, Plus, Trash2, ChevronUp, ChevronDown, ArrowLeftRight, Zap, Snail, BadgeCheck } from "lucide-react"
 import { readLogos, type Logo, type LogoRow } from "@/lib/logos-store"
 import {
   deleteLogoAction,
   moveLogoAction,
+  setGooglePartnerAction,
   setModeAction,
   swapRowAction,
 } from "./actions"
@@ -11,7 +12,7 @@ import { AddLogoForm } from "./add-logo-form"
 export const dynamic = "force-dynamic"
 
 export default async function LogosAdminPage() {
-  const { mode, logos } = await readLogos()
+  const { mode, logos, googlePartner } = await readLogos()
   const rowA = logos.filter((l) => l.row === "a")
   const rowB = logos.filter((l) => l.row === "b")
 
@@ -27,6 +28,53 @@ export default async function LogosAdminPage() {
           Burada eklediğin firmalar Projeler sekmesinden seçilebilir hale gelir.
         </p>
       </div>
+
+      {/* Google Partner badge toggle + URL */}
+      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
+        <div className="flex items-center gap-2">
+          <BadgeCheck size={15} className="text-[#3c639f]" />
+          <div className="text-[13px] font-semibold text-[#0a0a0a]">
+            Google Partner rozeti
+          </div>
+        </div>
+        <p className="mt-1 text-[12.5px] text-black/50">
+          Anasayfa hero alanındaki rozeti açıp kapatabilir, tıklandığında
+          gidilecek profil URL&apos;ini düzenleyebilirsin. URL boş bırakılırsa
+          varsayılana döner.
+        </p>
+        <form
+          action={setGooglePartnerAction}
+          className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end"
+        >
+          <label className="inline-flex shrink-0 cursor-pointer items-center gap-2 text-[12.5px] font-medium text-[#0a0a0a]">
+            <input
+              type="checkbox"
+              name="enabled"
+              defaultChecked={googlePartner.enabled}
+              className="h-4 w-4 rounded border-black/20 text-[#3c639f] focus:ring-[#3c639f]"
+            />
+            Rozeti göster
+          </label>
+          <div className="flex-1">
+            <label className="block text-[11px] font-medium uppercase tracking-[0.08em] text-black/45">
+              Profil URL&apos;i
+            </label>
+            <input
+              type="url"
+              name="url"
+              defaultValue={googlePartner.url}
+              placeholder="https://www.google.com/partners/agency?id=…"
+              className="mt-1 w-full rounded-lg border border-black/[0.12] bg-white px-3 py-2 text-[13px] text-[#0a0a0a] placeholder:text-black/30 focus:border-[#3c639f] focus:outline-none focus:ring-2 focus:ring-[#3c639f]/20"
+            />
+          </div>
+          <button
+            type="submit"
+            className="inline-flex shrink-0 items-center justify-center rounded-lg bg-[#3c639f] px-4 py-2 text-[12.5px] font-medium text-white transition-colors hover:bg-[#2f5288]"
+          >
+            Kaydet
+          </button>
+        </form>
+      </section>
 
       {/* Display mode toggle */}
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
