@@ -12,7 +12,9 @@
         "Hızlı yayına alma"
       ],
       "iconKey": "layers",
-      "kobiRedirect": true
+      "kobiRedirect": true,
+      "priceMin": null,
+      "priceMax": null
     },
     {
       "id": "mini",
@@ -26,7 +28,9 @@
         "Temel SEO"
       ],
       "iconKey": "globe",
-      "kobiRedirect": true
+      "kobiRedirect": true,
+      "priceMin": null,
+      "priceMax": null
     },
     {
       "id": "pro",
@@ -40,7 +44,9 @@
         "Blog + gelişmiş form yönetimi"
       ],
       "iconKey": "boxes",
-      "kobiRedirect": false
+      "kobiRedirect": false,
+      "priceMin": null,
+      "priceMax": null
     },
     {
       "id": "webapp",
@@ -54,34 +60,36 @@
         "Sektörünüze özel iş akışı tasarımı"
       ],
       "iconKey": "rocket",
-      "kobiRedirect": false
+      "kobiRedirect": false,
+      "priceMin": null,
+      "priceMax": null
     }
   ],
   "kobiBanner": {
-    "imageUrl": "",
-    "eyebrow": "Webreta'dan",
+    "imageUrl": "/brand/kobi-banner-1779383885407.webp",
+    "eyebrow": "Webreta",
     "bigTitle": "KOBİ",
     "bigSubtitle": "Küçük & Orta Ölçek",
     "tags": [
-      "Hızlı kurulum",
-      "Sabit fiyat",
-      "Sade panel"
+      "Hızlı",
+      "Ekonomik",
+      "Çözüme Yönelik"
     ],
-    "rightEyebrow": "Aradığınız bu olabilir",
-    "title": "KOBİ'niz için hızlı ve bütçe dostu web sitesi",
-    "description": "Küçük ve orta ölçekli işletmeler için tasarladığımız Webreta KOBİ, kurumsal kimlik, içerik yönetimi ve mobil uyumlu modern bir tasarımı sabit fiyat ve hızlı teslimat sözüyle birleştiriyor. Karmaşaya girmeden, ihtiyacınız olan her şey: tek pakette.",
+    "rightEyebrow": "WEBRETA KOBİ",
+    "title": "Webreta Kobi - Bütçe dostu web sitesi",
+    "description": "Küçük ve orta ölçekli işletmeler için tasarladığımız Webreta KOBİ, bütçe dostu fiyatlarla modern tasarımlı, mobil uyumlu ve reklam çalışmalarına uygun web siteleri sunmaktadır. Karmaşaya girmeden, ihtiyacınız olan her şey.",
     "bullets": [
-      "2–3 hafta içinde yayında",
-      "Sabit fiyat, sürpriz yok",
-      "Sade içerik yönetim paneli",
-      "Mobil + masaüstü uyumlu"
+      "2 hafta içinde yayında",
+      "Sürpriz ek maaliyetler yok",
+      "Mobil uyumlu modern tasarım",
+      "Sürekli teknik destek"
     ],
     "ctaLabel": "Webreta KOBİ'yi keşfet",
-    "ctaHref": "https://kobi.webreta.com"
+    "ctaHref": "https://izmirwebsiteyaptirma.com/"
   },
   "wizardHeading": {
     "titleLeader": "Size Özel",
     "titleHighlight": "Fiyat Teklifi",
-    "subtitle": "Size en uygun çözümü ve net bir fiyat aralığını sunalım."
+    "subtitle": "Size en uygun çözümü ve net bir fiyat aralığı sunalım."
   }
 }

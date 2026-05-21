@@ -88,6 +88,8 @@ export function WebPackagesForm({ initial }: { initial: WebPackage[] }) {
         bullets: [""],
         iconKey: "layers",
         kobiRedirect: false,
+        priceMin: null,
+        priceMax: null,
       },
     ])
   }
@@ -203,6 +205,49 @@ export function WebPackagesForm({ initial }: { initial: WebPackage[] }) {
                     onChange={(e) => updatePackage(i, { desc: e.target.value })}
                     rows={3}
                     className={`${fieldInput} resize-none`}
+                  />
+                </Field>
+              </div>
+
+              <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+                <Field label="Tahmini teklif — alt sınır (₺)">
+                  <input
+                    name={`priceMin_${i}`}
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    step={1000}
+                    value={pkg.priceMin ?? ""}
+                    onChange={(e) =>
+                      updatePackage(i, {
+                        priceMin:
+                          e.target.value === ""
+                            ? null
+                            : Math.max(0, Math.round(Number(e.target.value))),
+                      })
+                    }
+                    placeholder="örn. 25000"
+                    className={fieldInput}
+                  />
+                </Field>
+                <Field label="Tahmini teklif — üst sınır (₺)">
+                  <input
+                    name={`priceMax_${i}`}
+                    type="number"
+                    inputMode="numeric"
+                    min={0}
+                    step={1000}
+                    value={pkg.priceMax ?? ""}
+                    onChange={(e) =>
+                      updatePackage(i, {
+                        priceMax:
+                          e.target.value === ""
+                            ? null
+                            : Math.max(0, Math.round(Number(e.target.value))),
+                      })
+                    }
+                    placeholder="örn. 45000"
+                    className={fieldInput}
                   />
                 </Field>
               </div>

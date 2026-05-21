@@ -69,6 +69,20 @@ export async function saveWebPackagesAction(
     const bullets = bulletsRaw.slice(0, MAX_WEB_PACKAGE_BULLETS)
     const rawId = String(formData.get(`pkg_id`) ?? "")
     const id = ids[i] && ids[i].trim() ? ids[i] : slugify(label)
+    const priceMinRaw = String(formData.get(`priceMin_${i}`) ?? "").trim()
+    const priceMaxRaw = String(formData.get(`priceMax_${i}`) ?? "").trim()
+    const priceMin = priceMinRaw === "" ? null : Math.max(0, Math.round(Number(priceMinRaw)))
+    const priceMax = priceMaxRaw === "" ? null : Math.max(0, Math.round(Number(priceMaxRaw)))
+    // Reject NaN (the user typed something non-numeric).
+    if (priceMin !== null && !Number.isFinite(priceMin)) {
+      return { error: `Paket ${i + 1}: alt sınır geçerli bir sayı olmalı.` }
+    }
+    if (priceMax !== null && !Number.isFinite(priceMax)) {
+      return { error: `Paket ${i + 1}: üst sınır geçerli bir sayı olmalı.` }
+    }
+    if (priceMin !== null && priceMax !== null && priceMin > priceMax) {
+      return { error: `Paket ${i + 1}: alt sınır üst sınırdan büyük olamaz.` }
+    }
 
     packages.push({
       id,
@@ -79,6 +93,8 @@ export async function saveWebPackagesAction(
       bullets,
       iconKey,
       kobiRedirect,
+      priceMin,
+      priceMax,
     })
     // unused but TypeScript narrowing happy
     void rawId

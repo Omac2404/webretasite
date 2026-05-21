@@ -71,6 +71,8 @@ const SEED: WebPackagesData = {
       bullets: ["1 sayfa", "Form ve CTA optimizasyonu", "Hızlı yayına alma"],
       iconKey: "layers",
       kobiRedirect: true,
+      priceMin: null,
+      priceMax: null,
     },
     {
       id: "mini",
@@ -81,6 +83,8 @@ const SEED: WebPackagesData = {
       bullets: ["5 sayfaya kadar", "Mobil + masaüstü uyumlu", "Temel SEO"],
       iconKey: "globe",
       kobiRedirect: true,
+      priceMin: null,
+      priceMax: null,
     },
     {
       id: "pro",
@@ -95,6 +99,8 @@ const SEED: WebPackagesData = {
       ],
       iconKey: "boxes",
       kobiRedirect: false,
+      priceMin: null,
+      priceMax: null,
     },
     {
       id: "webapp",
@@ -109,6 +115,8 @@ const SEED: WebPackagesData = {
       ],
       iconKey: "rocket",
       kobiRedirect: false,
+      priceMin: null,
+      priceMax: null,
     },
   ],
 }
@@ -119,6 +127,16 @@ function clamp<T>(arr: T[], max: number): T[] {
 
 function isIconKey(v: unknown): v is WebPackageIconKey {
   return typeof v === "string" && (WEB_PACKAGE_ICON_KEYS as string[]).includes(v)
+}
+
+// Coerce admin-supplied min/max into a positive integer or null. Strings
+// arrive from form payloads (digits-only by the time the action runs);
+// floats are accepted but rounded so JSON stays tidy.
+function normalizePrice(v: unknown): number | null {
+  if (v === null || v === undefined || v === "") return null
+  const n = typeof v === "number" ? v : Number(String(v).replace(/[^\d.-]/g, ""))
+  if (!Number.isFinite(n) || n < 0) return null
+  return Math.round(n)
 }
 
 function slugify(s: string): string {
@@ -197,6 +215,8 @@ function normalize(input: unknown): WebPackagesData {
         bullets,
         iconKey: isIconKey(raw.iconKey) ? raw.iconKey : "layers",
         kobiRedirect: Boolean(raw.kobiRedirect),
+        priceMin: normalizePrice(raw.priceMin),
+        priceMax: normalizePrice(raw.priceMax),
       }
     })
     .filter((p): p is WebPackage => p !== null)

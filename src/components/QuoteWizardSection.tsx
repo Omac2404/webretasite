@@ -75,6 +75,26 @@ type QuoteProjectType = {
   bullets: string[]
   iconKey: string
   kobiRedirect: boolean
+  priceMin: number | null
+  priceMax: number | null
+}
+
+// "₺25.000" — TR locale with no decimal places.
+function formatTRY(n: number): string {
+  return `₺${n.toLocaleString("tr-TR", { maximumFractionDigits: 0 })}`
+}
+
+function formatPriceRange(
+  min: number | null,
+  max: number | null,
+): string | null {
+  if (min !== null && max !== null) {
+    if (min === max) return formatTRY(min)
+    return `${formatTRY(min)} – ${formatTRY(max)}`
+  }
+  if (min !== null) return `${formatTRY(min)}+`
+  if (max !== null) return `${formatTRY(max)}'ye kadar`
+  return null
 }
 
 const QUOTE_ICONS: Record<
@@ -99,6 +119,8 @@ const QUOTE_PROJECT_TYPES_SEED: QuoteProjectType[] = [
     bullets: ["1 sayfa", "Form ve CTA optimizasyonu", "Hızlı yayına alma"],
     iconKey: "layers",
     kobiRedirect: true,
+    priceMin: null,
+    priceMax: null,
   },
   {
     id: "mini",
@@ -109,6 +131,8 @@ const QUOTE_PROJECT_TYPES_SEED: QuoteProjectType[] = [
     bullets: ["5 sayfaya kadar", "Mobil + masaüstü uyumlu", "Temel SEO"],
     iconKey: "globe",
     kobiRedirect: true,
+    priceMin: null,
+    priceMax: null,
   },
   {
     id: "pro",
@@ -123,6 +147,8 @@ const QUOTE_PROJECT_TYPES_SEED: QuoteProjectType[] = [
     ],
     iconKey: "boxes",
     kobiRedirect: false,
+    priceMin: null,
+    priceMax: null,
   },
   {
     id: "webapp",
@@ -137,6 +163,8 @@ const QUOTE_PROJECT_TYPES_SEED: QuoteProjectType[] = [
     ],
     iconKey: "rocket",
     kobiRedirect: false,
+    priceMin: null,
+    priceMax: null,
   },
 ]
 
@@ -1082,6 +1110,23 @@ export default function QuoteWizardSection() {
                                   <p className="text-[13px] leading-relaxed text-black/60">
                                     {t.desc}
                                   </p>
+                                  {(() => {
+                                    const range = formatPriceRange(
+                                      t.priceMin,
+                                      t.priceMax,
+                                    )
+                                    if (!range) return null
+                                    return (
+                                      <div className="flex flex-col gap-0.5 rounded-lg bg-[#3c639f]/[0.06] px-3 py-2">
+                                        <span className="text-[10.5px] font-medium uppercase tracking-[0.08em] text-[#3c639f]/85">
+                                          Tahmini teklif aralığı
+                                        </span>
+                                        <span className="text-[14px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
+                                          {range}
+                                        </span>
+                                      </div>
+                                    )
+                                  })()}
                                   <ul className="flex flex-col gap-1.5">
                                     {t.bullets.map(b => (
                                       <li

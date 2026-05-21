@@ -32,6 +32,9 @@ export type WebPackage = {
   // When true, selecting this package opens the "Webreta KOBİ" cross-sell
   // popup. Admin-controlled per package.
   kobiRedirect: boolean
+  // Estimated quote range (in TRY). Both null means "don't display."
+  priceMin: number | null
+  priceMax: number | null
 }
 
 // "Webreta KOBİ" cross-sell banner that sits under the quote wizard.
