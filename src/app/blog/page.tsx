@@ -58,9 +58,6 @@ export default async function BlogIndexPage({
             <span className="font-normal">Webreta </span>
             <span className="font-bold text-[#3c639f]">Blog</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-[560px] text-[15px] leading-relaxed text-black/60">
-            Web tasarımı, dijital reklam ve büyüme üzerine pratik yazılar.
-          </p>
         </div>
 
         {/* Category tabs — same segmented-control language as the

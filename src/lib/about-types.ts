@@ -4,10 +4,17 @@
 export type AboutRow = {
   kicker: string
   title: string
-  // Çift satır (\n\n) yeni paragraf olarak render edilir.
+  // Body, sınırlı whitelist'li HTML olarak saklanır (admin'deki rich
+  // text editor'den çıkar). İzin verilen: p, br, strong, b, em, i, u,
+  // span (color/font-size style). Geriye dönük uyumluluk: HTML tag'i
+  // içermeyen eski içerikler render sırasında \n\n ile paragraflanır.
   body: string
   imageUrl: string
   imageAlt: string
+  // Bloğun sonunda çıkan opsiyonel buton. buttonLabel boşsa buton
+  // render edilmez. buttonHref boşsa "#" fallback.
+  buttonLabel: string
+  buttonHref: string
 }
 
 export type AboutCta = {
@@ -37,7 +44,7 @@ export type AboutData = {
 
 export const DEFAULT_ABOUT: AboutData = {
   hero: {
-    kicker: "Hakkımızda",
+    kicker: "",
     titleLeader: "İzmir'den, ",
     titleHighlight: "dijital dünyaya",
     titleTrailer: " — basit ve net.",
@@ -50,6 +57,8 @@ export const DEFAULT_ABOUT: AboutData = {
     body: "Webreta, küçük bir ekiple büyük markalara hizmet verme fikrinden doğdu. Uzun süredir hem ajans hem freelance tarafında çalışan ekibimiz; her projenin kendine özgü bir ses tonu, hedefi ve müşterisi olduğunu biliyor.\n\nBir kafe için tasarladığımız siteyle bir hukuk bürosuna kurduğumuz portal aynı şablondan çıkmaz; ihtiyaç ne ise yanıt da odur.",
     imageUrl: "",
     imageAlt: "Webreta ekibi",
+    buttonLabel: "",
+    buttonHref: "",
   },
   row2: {
     kicker: "Çalışma prensibimiz",
@@ -57,6 +66,8 @@ export const DEFAULT_ABOUT: AboutData = {
     body: "Tasarımda gereksiz hiçbir şey istemiyoruz; aylar süren projeler yerine net kapsam ve kısa iterasyonlarla ilerliyoruz; iletişimde teknik jargonla saklanmıyor, ne yaptığımızı sade Türkçe ile anlatıyoruz.\n\nÇıkan iş canlıya hızla alınır, ölçülür ve sonra iyileştirilir.",
     imageUrl: "",
     imageAlt: "Webreta çalışma tarzı",
+    buttonLabel: "",
+    buttonHref: "",
   },
   cta: {
     title: "Bir proje konuşalım mı?",

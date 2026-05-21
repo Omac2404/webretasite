@@ -14,152 +14,12 @@ type Testimonial = {
   role: string
   initials: string
   date: string
-  sourceUrl?: string
 }
 
-// 20 testimonials with varied lengths (6 short, 8 medium, 6 long)
-const testimonials: Testimonial[] = [
-  {
-    text: "Şehir merkezindeki kafemiz için sıfırdan yeni bir site yaptırdık. Online sipariş ve rezervasyon sistemi hayatımızı kolaylaştırdı, paket servis siparişlerimiz neredeyse iki katına çıktı. Menüyü tek tıkla güncelleyebilmek de büyük artı, ekibimiz çok memnun.",
-    name: "Ayşe Kaya",
-    role: "Kafe İşletmecisi",
-    initials: "AK",
-    date: "12 Mart 2025",
-  },
-  {
-    text: "Hukuk büromuzun eski sitesi hem yavaştı hem güvensiz görünüyordu. Webreta ekibi kurumsal kimliğimize uygun, son derece şık ve hızlı bir site teslim etti. Online danışmanlık talep formu sayesinde potansiyel müvekkillerimizden gelen başvurular belirgin şekilde arttı.",
-    name: "Av. Zeynep Mert",
-    role: "Avukat",
-    initials: "ZM",
-    date: "28 Şubat 2025",
-  },
-  {
-    text: "Muayenehanemiz için randevu ve hasta takip sistemini birlikte kurguladık. Hastalarımız artık siteden randevu alıyor, SMS ve e-posta hatırlatmaları otomatik gidiyor. Randevu kaçırma oranımız çarpıcı şekilde düştü, günlük operasyon yükümüz çok hafifledi.",
-    name: "Dr. Elif Aydın",
-    role: "Diş Hekimi",
-    initials: "EA",
-    date: "15 Şubat 2025",
-  },
-  {
-    text: "Mimari portföy sitemiz için çalıştık ve sonuç beklediğimden çok daha iyi oldu. Projelerimizi tam istediğimiz şekilde sergiliyoruz; minimalist tasarım, hızlı yükleme süresi ve mobil uyumluluk müşterilerin dikkatini çekiyor. Teklif taleplerimiz ilk aydan itibaren arttı.",
-    name: "Mimar Ahmet Sönmez",
-    role: "Mimari Ofis",
-    initials: "AS",
-    date: "3 Şubat 2025",
-  },
-  {
-    text: "E-ticaret sitemizi sıfırdan kurdular, ödeme entegrasyonları ve kargo takibi sorunsuz işliyor. SEO çalışması da paketin parçasıydı; üç ay içinde organik trafiğimiz üç katına çıktı. Yeni müşteri kazanım maliyetimiz ciddi şekilde düştü, kesinlikle tavsiye ediyorum.",
-    name: "Kerem Bilgin",
-    role: "E-ticaret İşletmecisi",
-    initials: "KB",
-    date: "20 Ocak 2025",
-  },
-  {
-    text: "Lojistik firmamızın eski sitesi gerçekten yavaştı, mobilde neredeyse kullanılamaz haldeydi. Yeni site Lighthouse skoru 95'in üzerinde, tüm formlar hatasız çalışıyor. Müşterilerimizden 'siteniz çok güzel olmuş' yorumlarını almak bizi de motive ediyor.",
-    name: "Mehmet Demir",
-    role: "Lojistik Yöneticisi",
-    initials: "MD",
-    date: "8 Ocak 2025",
-  },
-  {
-    text: "Veteriner kliniğimiz için online randevu sistemi kurduk. Evcil hayvan sahipleri kendi takvimlerinden randevu seçebiliyor, aşı ve check-up hatırlatmaları otomatik gidiyor. Hem bizim hem müşterilerimizin işi kolaylaştı, klinik telefon trafiğimiz yarı yarıya azaldı.",
-    name: "Dr. Canan Bozkurt",
-    role: "Veteriner Hekim",
-    initials: "CB",
-    date: "22 Aralık 2024",
-  },
-  {
-    text: "Butik otelimiz için sıfırdan bir rezervasyon platformu kurduk. Direkt rezervasyonlarımız altı ayda yüzde elli arttı, üçüncü taraf platformlara ödediğimiz komisyondan ciddi tasarruf sağladık. Fotoğraf galerisi ve oda detayları misafirlerimizden çok olumlu geri dönüş alıyor.",
-    name: "Deniz Kılıç",
-    role: "Otel İşletmecisi",
-    initials: "DK",
-    date: "10 Aralık 2024",
-  },
-  {
-    text: "Sigorta acentemiz için müşteri portalı yaptırdık. Müşteriler poliçelerini online görüntüleyebiliyor, yenileme hatırlatmaları ve hasar bildirimi tamamen site üzerinden yapılabiliyor. Operasyon yükümüz büyük ölçüde azaldı, müşteri memnuniyetimiz fark edilebilir şekilde yükseldi.",
-    name: "Serkan Mutlu",
-    role: "Sigorta Acentesi",
-    initials: "SM",
-    date: "28 Kasım 2024",
-  },
-  {
-    text: "Eğitim kurumumuzun online ders ve öğrenci portalı için Webreta ile çalıştık. Video ders entegrasyonu, ödev ve sınav takibi tek panelden yönetiliyor. Veliler de çocuklarının durumunu canlı görebiliyor. Pandemi sonrası hibrit eğitimimizin omurgası bu sistem oldu.",
-    name: "Aylin Polat",
-    role: "Eğitim Kurumu Müdürü",
-    initials: "AP",
-    date: "15 Kasım 2024",
-  },
-  {
-    text: "Hem mağaza içi hem online satış yapabildiğimiz entegre bir sistem kurdular. Stok yönetimi ortak veritabanından geçiyor, kargo süreçleri otomatik akıyor. Müşteri segmentasyonu sayesinde hedefli kampanyalar yapabiliyoruz; satışlarımızda hissedilir bir artış var.",
-    name: "Tolga Vural",
-    role: "Mağaza Sahibi",
-    initials: "TV",
-    date: "2 Kasım 2024",
-  },
-  {
-    text: "Oto servisimiz için araç takip ve fotoğraflı durum raporlama sistemi geliştirdiler. Müşterilerimiz aracının hangi aşamada olduğunu canlı görebiliyor; bu şeffaflık güven yarattı, tavsiye ile gelen yeni müşteri oranımız ciddi şekilde arttı. Personelimiz sistemi hızlı benimsedi.",
-    name: "Okan Rençber",
-    role: "Oto Servis Sahibi",
-    initials: "OR",
-    date: "18 Ekim 2024",
-  },
-  {
-    text: "Güzellik salonumuza online randevu sistemi kuruldu; müşteriler personel ve hizmet seçimini kendileri yapıp uygun saati alabiliyor. SMS ve WhatsApp hatırlatmaları otomatik gidiyor. Telefon trafiğimiz çok azaldı, biz salondaki müşterimize odaklanabiliyoruz. Tasarım da çok şık oldu.",
-    name: "Elif Nazlı",
-    role: "Güzellik Salonu",
-    initials: "EN",
-    date: "5 Ekim 2024",
-  },
-  {
-    text: "Çiçekçimiz için online sipariş ve teslimat takip sistemi yaptılar. İlçe bazlı teslimat alanı seçimi ve özel gün rezervasyonu sayesinde özel günlerde sipariş hacmimiz üç katına çıktı. Ödeme entegrasyonu kusursuz çalışıyor, müşterilerimiz mobilden rahatça sipariş veriyor.",
-    name: "Gamze Yılmaz",
-    role: "Çiçekçi",
-    initials: "GY",
-    date: "22 Eylül 2024",
-  },
-  {
-    text: "Kuru temizleme zincirimiz için sipariş ve teslimat takip sistemi kurdular. Müşteriler siparişlerinin hangi aşamada olduğunu görebiliyor, hazır olunca otomatik SMS gidiyor. İş akışımız belirgin şekilde düzenlendi, kayıp ürün yakınmalarımız neredeyse tamamen ortadan kalktı.",
-    name: "Mustafa Eren",
-    role: "Kuru Temizleme",
-    initials: "ME",
-    date: "8 Eylül 2024",
-  },
-  {
-    text: "Spor salonumuz için üyelik ve ders rezervasyon sistemini birlikte kurguladık. Üyeler ders programını görebiliyor, sınıf kontenjanına göre rezervasyon yapabiliyor. Ödeme takibi otomatik akıyor. Salondaki personel iş yükümüz dramatik şekilde azaldı, üye memnuniyetimiz arttı.",
-    name: "Emre Tan",
-    role: "Spor Salonu",
-    initials: "ET",
-    date: "25 Ağustos 2024",
-  },
-  {
-    text: "Mobilya mağazamız için 3D görselli ürün kataloğu ve sipariş sistemi yaptılar. Müşteriler ürünü canlı ölçülerle inceleyip varyasyonları görebiliyor. Online katalog ziyaretleri mağaza ziyaretlerini de besledi, ortalama sepet tutarımızın yükseldiğini net olarak görüyoruz.",
-    name: "Burcu Aksu",
-    role: "Mobilya Mağazası",
-    initials: "BA",
-    date: "12 Ağustos 2024",
-  },
-  {
-    text: "Emlak ofisimiz için harita entegrasyonlu, gelişmiş filtrelemeli ilan sistemi kuruldu. Sanal tur ve 360 derece fotoğraf desteği müşterilerimizin ilgisini çok çekiyor. Admin paneli o kadar kullanışlı ki personelimiz ilan ekleme süresini yarı yarıya düşürdü. Rakiplerden öndeyiz.",
-    name: "Hakan Sezer",
-    role: "Emlak Danışmanı",
-    initials: "HS",
-    date: "30 Temmuz 2024",
-  },
-  {
-    text: "Danışmanlık firmamızın kurumsal sitesi için çalıştık. Profesyonel, sade ve oldukça hızlı bir site teslim ettiler. Online randevu formu, blog modülü ve SEO çalışması paket halinde geldi; Google'da hedeflediğimiz anahtar kelimelerde ilk sayfaya çıktık, organik trafiğimiz katlandı.",
-    name: "Burak Yıldız",
-    role: "Yönetim Danışmanı",
-    initials: "BY",
-    date: "15 Haziran 2024",
-  },
-  {
-    text: "Huzurevimizin hem ailelere bilgilendirme hem yeni başvurular için bir sitesi yoktu. Webreta ekibi tüm süreci profesyonelce yönetti; sakinlerimizin yakınları artık günlük etkinlikleri siteden takip edebiliyor. Yeni başvurular da formlar üzerinden geliyor, telefon yükümüz azaldı.",
-    name: "Aylin Öz",
-    role: "Huzurevi Yöneticisi",
-    initials: "AÖ",
-    date: "3 Mayıs 2024",
-  },
-]
+// Gerçek yorumlar admin panelden /api/reviews üzerinden geliyor.
+// Seed boş — fetch tamamlanana kadar carousel boş kalır, yorum
+// yoksa hiç görünmez.
+const testimonials: Testimonial[] = []
 
 // "Neler yapıyoruz?" section data. Two categories — `dev` (websites/apps/
 // plugins) and `ops` (server, mail, DNS, security migrations). Each entry
@@ -547,7 +407,7 @@ function TestimonialCard({
   onClick,
   cardRef,
 }: {
-  testimonial: typeof testimonials[0]
+  testimonial: Testimonial
   isFocused: boolean
   opacity: number
   isHovered: boolean
@@ -599,20 +459,7 @@ function TestimonialCard({
             />
           ))}
         </div>
-        {testimonial.sourceUrl ? (
-          <a
-            href={testimonial.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            aria-label="Yorumu Google'da görüntüle"
-            className="inline-flex items-center transition-opacity hover:opacity-80"
-          >
-            <GoogleIcon />
-          </a>
-        ) : (
-          <GoogleIcon />
-        )}
+        <GoogleIcon />
       </div>
 
       {/* Testimonial text. Truncation is rendered differently per device:
@@ -670,7 +517,7 @@ function TestimonialPopup({
   onMouseLeave,
   onClose,
 }: {
-  testimonial: typeof testimonials[0]
+  testimonial: Testimonial
   position: { left: number; top: number } | null
   isMobile: boolean
   onMouseEnter: () => void
@@ -751,11 +598,9 @@ function TestimonialPopup({
         <div className="mt-3 shrink-0 text-[12px] text-black/40">{testimonial.date}</div>
         <div className="my-4 h-px shrink-0 bg-black/[0.08]" />
 
-        {/* Bottom row — left: "Google" verified trust badge (G icon + word +
-            green check); right: outbound link to the review on Google.
-            sourceUrl yoksa link kısmı gösterilmez ama badge her zaman kalır
-            (yorum kaynağı Google. */}
-        <div className="flex shrink-0 items-center justify-between gap-3">
+        {/* Bottom row — "Google" verified trust badge (G icon + word +
+            green check). Yorum kaynağı Google olduğu için her zaman gösterilir. */}
+        <div className="flex shrink-0 items-center gap-3">
           <span
             className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12px] font-medium text-[#0a0a0a]"
             style={{ background: 'rgba(60, 99, 159, 0.07)' }}
@@ -768,17 +613,6 @@ function TestimonialPopup({
               className="text-[#34A853]"
             />
           </span>
-          {testimonial.sourceUrl && (
-            <a
-              href={testimonial.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex shrink-0 items-center gap-1.5 text-[13px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
-            >
-              Google&apos;da görüntüle
-              <ArrowRight size={13} />
-            </a>
-          )}
         </div>
       </div>
     </div>
@@ -843,20 +677,6 @@ function TestimonialPopup({
         </div>
 
         <div className="mt-3 shrink-0 text-[12px] text-black/40">{testimonial.date}</div>
-        <div className="my-4 h-px shrink-0 bg-black/[0.08]" />
-
-        {/* Bottom — outbound Google review link with trailing arrow. */}
-        {testimonial.sourceUrl && (
-          <a
-            href={testimonial.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center gap-1.5 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
-          >
-            Google&apos;da görüntüle
-            <ArrowRight size={14} />
-          </a>
-        )}
       </div>
     </div>
   )
@@ -2106,7 +1926,6 @@ export default function Home() {
       rating: number
       text: string
       date: string
-      sourceUrl?: string
     }
     type ApiSummary = {
       rating: number
@@ -2134,7 +1953,6 @@ export default function Home() {
                 .toUpperCase()
                 .slice(0, 2),
               date: r.date,
-              sourceUrl: r.sourceUrl,
             }))
             setActiveTestimonials(mapped)
           }

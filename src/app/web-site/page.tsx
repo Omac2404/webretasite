@@ -10,7 +10,7 @@ export async function generateMetadata() {
 
 export default function WebSitePage() {
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen overflow-x-clip bg-[#fafafa]">
       <SiteHeader />
       <main>
         <QuoteWizardSection />

@@ -48,17 +48,13 @@ export async function addManualReviewAction(
   const text = String(formData.get("text") ?? "").trim()
   const rating = Number(formData.get("rating") ?? 0)
   const date = String(formData.get("date") ?? "").trim()
-  const sourceUrl = String(formData.get("sourceUrl") ?? "").trim()
 
   if (!author) return { error: "İsim gerekli." }
   if (!text) return { error: "Yorum metni gerekli." }
   if (text.length < 10) return { error: "Yorum çok kısa (en az 10 karakter)." }
   if (rating < 1 || rating > 5) return { error: "Yıldız 1-5 arasında olmalı." }
-  if (sourceUrl && !/^https?:\/\//i.test(sourceUrl)) {
-    return { error: "Yorum linki http:// veya https:// ile başlamalı." }
-  }
 
-  await addManualReview({ author, text, rating, date, sourceUrl })
+  await addManualReview({ author, text, rating, date })
   revalidateBoth()
   return { ok: true }
 }

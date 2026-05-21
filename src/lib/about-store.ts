@@ -38,6 +38,8 @@ function normalizeRow(
     body: s(r.body, fallback.body),
     imageUrl: s(r.imageUrl, fallback.imageUrl),
     imageAlt: s(r.imageAlt, fallback.imageAlt),
+    buttonLabel: s(r.buttonLabel, fallback.buttonLabel ?? ""),
+    buttonHref: s(r.buttonHref, fallback.buttonHref ?? ""),
   }
 }
 

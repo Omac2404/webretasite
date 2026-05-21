@@ -11,14 +11,13 @@ export async function GET() {
   const data = await readReviews()
   const visibleReviews = data.reviews
     .filter((r) => isReviewVisible(r, data.minStars))
-    .map(({ id, author, authorPhotoUrl, rating, text, date, sourceUrl }) => ({
+    .map(({ id, author, authorPhotoUrl, rating, text, date }) => ({
       id,
       author,
       authorPhotoUrl,
       rating,
       text,
       date,
-      sourceUrl,
     }))
 
   return NextResponse.json(

@@ -31,10 +31,16 @@ export default async function IletisimPage() {
       <main>
         {/* Header band */}
         <section className="relative mx-auto max-w-[1280px] px-6 pb-10 pt-16 md:px-12 md:pb-14 md:pt-24">
-          <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
-            {content.hero.kicker}
-          </span>
-          <h1 className="mt-3 text-[36px] leading-[1.05] tracking-[-0.03em] text-[#0a0a0a] md:text-[56px]">
+          {content.hero.kicker && (
+            <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
+              {content.hero.kicker}
+            </span>
+          )}
+          <h1
+            className={`${
+              content.hero.kicker ? "mt-3 " : ""
+            }text-[36px] leading-[1.05] tracking-[-0.03em] text-[#0a0a0a] md:text-[56px]`}
+          >
             <TitleParts
               leading={content.hero.titleLeading}
               highlight={content.hero.titleHighlight}

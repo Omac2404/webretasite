@@ -1,11 +1,4 @@
-import {
-  Star,
-  Trash2,
-  Eye,
-  EyeOff,
-  Filter,
-  ExternalLink,
-} from "lucide-react"
+import { Star, Trash2, Eye, EyeOff, Filter } from "lucide-react"
 import {
   isReviewVisible,
   readReviews,
@@ -79,8 +72,7 @@ export default async function ReviewsAdminPage() {
           Yeni yorum ekle
         </div>
         <p className="mt-1 text-[12.5px] text-black/50">
-          Yazan, tarih, metin, yıldız. İstersen yorumun orijinal Google linkini
-          de ekleyebilirsin — karttaki Google ikonu o linke gider.
+          Yazan, tarih, metin, yıldız.
         </p>
         <div className="mt-4">
           <AddManualForm />
@@ -148,16 +140,6 @@ function ReviewRow({
             <Stars rating={review.rating} />
             <span className="text-[11px] text-black/40">·</span>
             <span className="text-[11px] text-black/40">{review.date}</span>
-            {review.sourceUrl && (
-              <a
-                href={review.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 rounded bg-[#3c639f]/[0.08] px-1.5 py-0.5 text-[10px] font-medium text-[#3c639f] hover:bg-[#3c639f]/[0.14]"
-              >
-                <ExternalLink size={10} /> Link
-              </a>
-            )}
             <VisibilityBadge visible={visible} override={override} />
           </div>
           <p className="mt-1.5 text-[13px] leading-relaxed text-black/75">

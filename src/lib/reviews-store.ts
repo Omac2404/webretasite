@@ -1,7 +1,6 @@
 // File-based store for testimonials. Tüm yorumlar admin tarafından elle
-// giriliyor; her yoruma orijinal Google linki eklenebiliyor. Üstteki özet
-// kartı (rating / yorum sayısı / firma adı / "tümünü gör" linki) da admin
-// tarafından düzenleniyor.
+// giriliyor. Üstteki özet kartı (rating / yorum sayısı / firma adı /
+// "tümünü gör" linki) da admin tarafından düzenleniyor.
 
 import { promises as fs } from "node:fs"
 import path from "node:path"
@@ -15,9 +14,6 @@ export type Review = {
   // Görüntülenecek tarih — serbest metin. ISO de Google'ın "2 ay önce" de
   // olabilir; ne yapıştırılırsa o gösterilir.
   date: string
-  // Yorumun orijinal kaynağına (Google review URL'i) link. Boşsa karttaki
-  // Google ikonu link olarak değil dekoratif olarak render edilir.
-  sourceUrl?: string
   // Manuel override: null = minStars filtresine uy, true = her zaman göster,
   // false = her zaman gizle.
   publishOverride: boolean | null
@@ -120,7 +116,6 @@ export async function readReviews(): Promise<ReviewsData> {
             rating: clampRating(r.rating),
             text: String(r.text ?? ""),
             date: String(r.date ?? ""),
-            sourceUrl: r.sourceUrl ? String(r.sourceUrl) : undefined,
             publishOverride: normalizeOverride(r.publishOverride),
             createdAt: String(r.createdAt ?? new Date().toISOString()),
           }))
@@ -154,7 +149,6 @@ export async function addManualReview(input: {
   rating: number
   text: string
   date: string
-  sourceUrl?: string
 }): Promise<Review> {
   const data = await readReviews()
   const review: Review = {
@@ -163,7 +157,6 @@ export async function addManualReview(input: {
     rating: clampRating(input.rating),
     text: input.text,
     date: input.date,
-    sourceUrl: input.sourceUrl?.trim() || undefined,
     publishOverride: null,
     createdAt: new Date().toISOString(),
   }

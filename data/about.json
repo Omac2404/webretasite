@@ -1,0 +1,33 @@
+{
+  "hero": {
+    "kicker": "",
+    "titleLeader": "Tanışalım",
+    "titleHighlight": "",
+    "titleTrailer": "",
+    "subtitle": "Kısaca; süslü sözlerden uzak, tasarımı sade, performansı yüksek işler yapmayız severiz."
+  },
+  "row1": {
+    "kicker": "",
+    "title": "Nasıl Başladık?",
+    "body": "Webreta, 2022 yılında müşterilerine fiyat/performans hizmet çözümleri sunarak yoluna başladı. Hızlı, tasarımsal olarak profesyonel ve dijital reklamlarla tam optimize çalışabilen web sitelerini makul fiyatlarla müşterilerine ulaştırdı. Web site yapımına entegre olarak verdiği reklam yönetim hizmetleri de hayli talep gördü. Beklemediğimiz şekilde çok tutulan bu konsept talep patlaması yaşamamıza sebep oldu!&nbsp;<br><br>Yaklaşık son 3 senede 350+ civarı web site yayına geçirerek kendi sektörümüzde bu alanda piyasa rekoru kırmış olabiliriz. Çünkü bu haftasonları da dahil 3 günde 1 adet web site yapıp yayına aldığımız anlamına geliyor!",
+    "imageUrl": "/about/row1-1779371478158.webp",
+    "imageAlt": "Webreta ekibi",
+    "buttonLabel": "",
+    "buttonHref": ""
+  },
+  "row2": {
+    "kicker": "",
+    "title": "Nasıl Gidiyor?",
+    "body": "Webreta hala Webreta KOBİ konsepti altında aynı fiyat/performans ürünlerini sunmaya devam etmektedir. Bütçe dostu ve çözüm odaklı dijital hizmetleri müşterileri ile buluşturmaktadır.",
+    "imageUrl": "",
+    "imageAlt": "Webreta çalışma tarzı",
+    "buttonLabel": "Webreta Kobi",
+    "buttonHref": "https://izmirwebsiteyaptirma.com/"
+  },
+  "cta": {
+    "title": "Bir proje konuşalım mı?",
+    "body": "Kısa bir özet bırakın, 24 saat içinde dönelim.",
+    "buttonLabel": "İletişime geç",
+    "buttonHref": "/iletisim"
+  }
+}

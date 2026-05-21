@@ -4,6 +4,7 @@ import { promises as fs } from "node:fs"
 import path from "node:path"
 import { revalidatePath } from "next/cache"
 import { readAbout, writeAbout } from "@/lib/about-store"
+import { sanitizeAboutBody } from "@/lib/about-sanitize"
 import type { AboutData, AboutRow } from "@/lib/about-types"
 
 export type SaveAboutState = { error?: string; ok?: boolean }
@@ -65,9 +66,12 @@ function buildRow(
   return {
     kicker: s(formData, `${rowKey}__kicker`),
     title: s(formData, `${rowKey}__title`),
-    body: bodyFromForm(formData, `${rowKey}__body`),
+    // Body, RichTextArea'dan HTML olarak gelir — sanitize edip kaydet.
+    body: sanitizeAboutBody(bodyFromForm(formData, `${rowKey}__body`)),
     imageUrl: uploadedUrl ?? current.imageUrl,
     imageAlt: s(formData, `${rowKey}__imageAlt`),
+    buttonLabel: s(formData, `${rowKey}__buttonLabel`),
+    buttonHref: s(formData, `${rowKey}__buttonHref`),
   }
 }
 

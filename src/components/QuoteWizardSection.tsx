@@ -33,6 +33,7 @@ import {
   Boxes,
 } from "lucide-react"
 import { createPortal } from "react-dom"
+import { DotPattern } from "@/components/DotPattern"
 
 // ─── Quote wizard data ───────────────────────────────────────────────────
 // Multi-step pricing/quote tool. Steps in QUOTE_STEPS are rendered as a
@@ -703,7 +704,18 @@ export default function QuoteWizardSection() {
         id="teklif"
         className="relative border-t border-black/[0.06] py-12 md:py-16"
       >
-        <div className="relative mx-auto max-w-[1280px] px-6 md:px-12">
+        {/* Dekoratif nokta deseni — hakkımızda hero ile aynı dil. Sağ üst
+            köşeye yerleşir, container dışına taşar. Mobilde gizli. */}
+        <DotPattern
+          style={{
+            right: "-180px",
+            top: "-120px",
+            width: "620px",
+            height: "620px",
+            zIndex: 0,
+          }}
+        />
+        <div className="relative z-10 mx-auto max-w-[1280px] px-6 md:px-12">
           {(wizardHeading.titleLeader.trim() ||
             wizardHeading.titleHighlight.trim() ||
             wizardHeading.subtitle.trim()) && (

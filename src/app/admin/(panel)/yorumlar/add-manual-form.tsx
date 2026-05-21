@@ -49,13 +49,6 @@ export function AddManualForm() {
         className="resize-y rounded-lg border border-black/[0.1] bg-white px-3 py-2.5 text-[13px] outline-none focus:border-[#3c639f]"
       />
 
-      <input
-        name="sourceUrl"
-        type="url"
-        placeholder="Yorumun orijinal linki (opsiyonel — https://...)"
-        className="rounded-lg border border-black/[0.1] bg-white px-3 py-2.5 text-[13px] outline-none focus:border-[#3c639f]"
-      />
-
       <div className="flex items-center gap-3">
         <div className="text-[11.5px] font-medium uppercase tracking-[0.08em] text-black/45">
           Yıldız

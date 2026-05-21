@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Sparkles, ExternalLink } from "lucide-react"
 import type { KobiBanner } from "@/lib/web-packages-types"
+import { DotPattern } from "@/components/DotPattern"
 
 const SEED_BANNER: KobiBanner = {
   imageUrl: "",
@@ -50,9 +51,21 @@ export default function WebSiteExtras() {
           Cross-sell band promoting the lighter KOBİ product. Left panel is
           either a brand-gradient + animated halftone or an admin-uploaded
           image; right panel carries the copy + outbound CTA. */}
-      <section className="mx-auto w-full max-w-[1180px] px-4 pb-12 pt-4 sm:px-6 md:pb-16 md:pt-6">
+      <section className="relative mx-auto w-full max-w-[1180px] px-4 pb-12 pt-4 sm:px-6 md:pb-16 md:pt-6">
+        {/* Dekoratif nokta deseni — hakkımızda CTA ile aynı dil. Banner
+            kartının sol arkasına taşar, kart z-10 ile üstte kalır. */}
+        <DotPattern
+          style={{
+            left: "-220px",
+            top: "-40px",
+            width: "560px",
+            height: "560px",
+            zIndex: 0,
+          }}
+          opacity={0.75}
+        />
         <div
-          className="relative overflow-hidden rounded-3xl bg-white"
+          className="relative z-10 overflow-hidden rounded-3xl bg-white"
           style={{
             border: '1px solid rgba(60, 99, 159, 0.10)',
             boxShadow:

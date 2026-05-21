@@ -6,6 +6,7 @@ import SiteFooter from "@/components/SiteFooter"
 import { DotPattern } from "@/components/DotPattern"
 import { readAbout } from "@/lib/about-store"
 import type { AboutRow } from "@/lib/about-types"
+import { isHtmlBody, sanitizeAboutBody } from "@/lib/about-sanitize"
 
 import { buildPageMetadata } from "@/lib/seo-metadata"
 
@@ -120,10 +121,17 @@ function AboutRowBlock({
   row: AboutRow
   imageSide: "left" | "right"
 }) {
-  const paragraphs = row.body
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter((p) => p.length > 0)
+  // Body ya HTML (RichTextArea'dan) ya da eski plain text. Plain text'i
+  // \n\n ile paragrafla; HTML'i sanitize edip dangerouslySetInnerHTML
+  // ile bas.
+  const bodyIsHtml = isHtmlBody(row.body)
+  const safeHtml = bodyIsHtml ? sanitizeAboutBody(row.body) : ""
+  const paragraphs = bodyIsHtml
+    ? []
+    : row.body
+        .split(/\n\s*\n/)
+        .map((p) => p.trim())
+        .filter((p) => p.length > 0)
 
   const textBlock = (
     <div className="flex flex-col">
@@ -135,16 +143,37 @@ function AboutRowBlock({
       <h2 className="mt-2 text-[28px] leading-[1.15] tracking-[-0.02em] text-[#0a0a0a] md:text-[36px]">
         {row.title}
       </h2>
-      <div className="mt-5 flex flex-col gap-3">
-        {paragraphs.map((p, i) => (
-          <p
-            key={i}
-            className="text-[15px] leading-relaxed text-black/65 md:text-[16px]"
+      {bodyIsHtml ? (
+        <div
+          className="about-body mt-5 text-[15px] leading-relaxed text-black/65 md:text-[16px] [&_p]:mb-3 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-[#0a0a0a]"
+          dangerouslySetInnerHTML={{ __html: safeHtml }}
+        />
+      ) : (
+        <div className="mt-5 flex flex-col gap-3">
+          {paragraphs.map((p, i) => (
+            <p
+              key={i}
+              className="text-[15px] leading-relaxed text-black/65 md:text-[16px]"
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+      )}
+      {row.buttonLabel && (
+        <div className="mt-6">
+          <Link
+            href={row.buttonHref || "#"}
+            className="group inline-flex items-center gap-2 rounded-md border border-black/[0.10] bg-white px-5 py-2.5 text-[14px] font-medium text-[#0a0a0a] transition-all hover:-translate-y-0.5 hover:border-[#3c639f]/30 hover:bg-[#3c639f]/[0.04] hover:text-[#3c639f] hover:shadow-[0_8px_20px_-8px_rgba(60,99,159,0.25)]"
           >
-            {p}
-          </p>
-        ))}
-      </div>
+            {row.buttonLabel}
+            <ArrowRight
+              size={15}
+              className="transition-transform duration-300 group-hover:translate-x-0.5"
+            />
+          </Link>
+        </div>
+      )}
     </div>
   )
 

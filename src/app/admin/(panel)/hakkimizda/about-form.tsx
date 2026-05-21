@@ -4,6 +4,8 @@ import { useActionState, useEffect, useRef, useState } from "react"
 import { Check, ImageIcon, Loader2, Upload } from "lucide-react"
 import type { AboutData } from "@/lib/about-types"
 import { saveAboutAction, type SaveAboutState } from "./actions"
+import { RichTextArea } from "./rich-text-area"
+import { plainTextToHtml } from "@/lib/about-sanitize"
 
 const INITIAL: SaveAboutState = {}
 
@@ -82,12 +84,16 @@ export function AboutForm({ about }: { about: AboutData }) {
               defaultValue={about.row1.title}
               required
             />
-            <TextArea
+            <RichTextArea
               name="row1__body"
               label="Gövde"
-              defaultValue={about.row1.body}
-              rows={6}
-              hint="İki boş satır yeni paragraf açar."
+              defaultValue={plainTextToHtml(about.row1.body)}
+              hint="Bold, renk, boyut için seç ve toolbar'dan uygula."
+            />
+            <ButtonFields
+              rowKey="row1"
+              label={about.row1.buttonLabel}
+              href={about.row1.buttonHref}
             />
           </div>
         </div>
@@ -111,12 +117,16 @@ export function AboutForm({ about }: { about: AboutData }) {
               defaultValue={about.row2.title}
               required
             />
-            <TextArea
+            <RichTextArea
               name="row2__body"
               label="Gövde"
-              defaultValue={about.row2.body}
-              rows={6}
-              hint="İki boş satır yeni paragraf açar."
+              defaultValue={plainTextToHtml(about.row2.body)}
+              hint="Bold, renk, boyut için seç ve toolbar'dan uygula."
+            />
+            <ButtonFields
+              rowKey="row2"
+              label={about.row2.buttonLabel}
+              href={about.row2.buttonHref}
             />
           </div>
           <ImageUploader
@@ -184,6 +194,43 @@ export function AboutForm({ about }: { about: AboutData }) {
         )}
       </div>
     </form>
+  )
+}
+
+function ButtonFields({
+  rowKey,
+  label,
+  href,
+}: {
+  rowKey: "row1" | "row2"
+  label: string
+  href: string
+}) {
+  return (
+    <div className="mt-1 rounded-lg border border-dashed border-black/[0.10] bg-[#fafbfd] p-3">
+      <div className="text-[11.5px] font-medium text-black/55">
+        Opsiyonel buton
+        <span className="ml-2 text-[10.5px] font-normal text-black/40">
+          Bloğun sonunda çıkar. Metin boş bırakılırsa buton hiç render edilmez.
+        </span>
+      </div>
+      <div className="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
+        <input
+          name={`${rowKey}__buttonLabel`}
+          type="text"
+          defaultValue={label}
+          placeholder="Buton metni (örn. Detaylar)"
+          className={inputCls}
+        />
+        <input
+          name={`${rowKey}__buttonHref`}
+          type="text"
+          defaultValue={href}
+          placeholder="Buton linki (örn. /iletisim)"
+          className={inputCls}
+        />
+      </div>
+    </div>
   )
 }
 
