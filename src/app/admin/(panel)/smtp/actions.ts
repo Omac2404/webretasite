@@ -3,14 +3,14 @@
 import { revalidatePath } from "next/cache"
 import { writeSmtp } from "@/lib/smtp-store"
 import type { SmtpEncryption } from "@/lib/smtp-types"
-import { writeTemplates } from "@/lib/email-templates-store"
+import { writeFormLegal } from "@/lib/form-legal-store"
 import {
-  TEMPLATE_META,
-  type EmailTemplates,
-} from "@/lib/email-templates-types"
+  FORM_LEGAL_KEYS,
+  type FormLegalRequirements,
+} from "@/lib/form-legal-types"
 
 export type SmtpFormState = { error?: string; ok?: boolean }
-export type TemplatesFormState = { error?: string; ok?: boolean }
+export type FormLegalFormState = { error?: string; ok?: boolean }
 
 function s(formData: FormData, key: string): string {
   return String(formData.get(key) ?? "").trim()
@@ -69,19 +69,20 @@ export async function saveSmtpAction(
   return { ok: true }
 }
 
-export async function saveTemplatesAction(
-  _prev: TemplatesFormState,
+export async function saveFormLegalAction(
+  _prev: FormLegalFormState,
   formData: FormData,
-): Promise<TemplatesFormState> {
-  const next = {} as EmailTemplates
-  for (const meta of TEMPLATE_META) {
-    const subject = s(formData, `${meta.key}__subject`)
-    const body = String(formData.get(`${meta.key}__body`) ?? "")
-    if (!subject) return { error: `"${meta.label}" konusu boş bırakılamaz.` }
-    if (!body.trim()) return { error: `"${meta.label}" gövdesi boş bırakılamaz.` }
-    next[meta.key] = { subject, body }
+): Promise<FormLegalFormState> {
+  const next = {} as FormLegalRequirements
+  for (const key of FORM_LEGAL_KEYS) {
+    // formData.getAll() döner: array of FormDataEntryValue. checkboxlar
+    // name=`${key}__pages` ile, value=legalPageId şeklinde gönderiliyor.
+    next[key] = formData
+      .getAll(`${key}__pages`)
+      .map((v) => String(v))
+      .filter((v) => v.length > 0)
   }
-  await writeTemplates(next)
+  await writeFormLegal(next)
   revalidatePath("/admin/smtp")
   return { ok: true }
 }

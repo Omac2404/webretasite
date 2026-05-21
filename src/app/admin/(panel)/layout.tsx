@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import Image from "next/image"
-import Link from "next/link"
-import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, Send, Globe } from "lucide-react"
+import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, MailPlus, Send, Globe, Info } from "lucide-react"
 import { SESSION_COOKIE, verifySession } from "@/lib/admin-session"
 import { logoutAction } from "../(auth)/login/actions"
+import { SideLink } from "./side-link"
 
 // Server-side guard. The middleware already redirects unauthenticated
 // hits, but checking again here means a logged-out direct render (or a
@@ -34,8 +34,11 @@ export default async function PanelLayout({
         </div>
 
         <nav className="flex flex-1 flex-col gap-0.5 px-3 py-4">
-          <SideLink href="/admin" icon={<LayoutDashboard size={16} />} active>
+          <SideLink href="/admin" icon={<LayoutDashboard size={16} />}>
             Anasayfa
+          </SideLink>
+          <SideLink href="/admin/hakkimizda" icon={<Info size={16} />}>
+            Hakkımızda
           </SideLink>
           <SideLink href="/admin/referanslar" icon={<ImageIcon size={16} />}>
             Referanslar
@@ -75,6 +78,9 @@ export default async function PanelLayout({
           </SideLink>
           <SideLink href="/admin/smtp" icon={<Send size={16} />}>
             SMTP & Formlar
+          </SideLink>
+          <SideLink href="/admin/e-posta-sablonlari" icon={<MailPlus size={16} />}>
+            E-posta Şablonları
           </SideLink>
           <SideLink href="#" icon={<Briefcase size={16} />} disabled>
             Teklifler
@@ -121,47 +127,3 @@ export default async function PanelLayout({
   )
 }
 
-function SideLink({
-  href,
-  icon,
-  active = false,
-  disabled = false,
-  children,
-}: {
-  href: string
-  icon: React.ReactNode
-  active?: boolean
-  disabled?: boolean
-  children: React.ReactNode
-}) {
-  const base =
-    "flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium transition-colors"
-  if (disabled) {
-    return (
-      <span
-        aria-disabled
-        className={`${base} cursor-not-allowed text-black/30`}
-        title="Yakında"
-      >
-        {icon}
-        {children}
-        <span className="ml-auto rounded bg-black/[0.04] px-1.5 py-0.5 text-[9.5px] font-medium uppercase tracking-[0.08em] text-black/40">
-          Yakında
-        </span>
-      </span>
-    )
-  }
-  return (
-    <Link
-      href={href}
-      className={
-        active
-          ? `${base} bg-[#3c639f]/[0.08] text-[#3c639f]`
-          : `${base} text-black/65 hover:bg-black/[0.03] hover:text-[#0a0a0a]`
-      }
-    >
-      {icon}
-      {children}
-    </Link>
-  )
-}

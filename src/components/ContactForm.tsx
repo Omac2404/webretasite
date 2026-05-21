@@ -1,34 +1,70 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { ArrowRight, Check, Loader2 } from "lucide-react"
 import { submitInquiry } from "@/app/iletisim/actions"
+import {
+  DEFAULT_FORM_SUCCESS,
+  type FormSuccessScreen,
+} from "@/lib/form-success-types"
+import {
+  fillPlaceholders,
+  splitParagraphs,
+} from "@/lib/form-success-render"
+import type { ResolvedLegalPage } from "@/lib/form-legal-types"
+import { FormConsent } from "@/components/FormConsent"
 
 type Status =
   | { kind: "idle" }
   | { kind: "error"; message: string }
-  | { kind: "success" }
+  | { kind: "success"; name: string }
 
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>({ kind: "idle" })
   const [isPending, startTransition] = useTransition()
   const [consent, setConsent] = useState(false)
+  const [successCopy, setSuccessCopy] = useState<FormSuccessScreen>(
+    DEFAULT_FORM_SUCCESS.inquiry,
+  )
+  const [legalPages, setLegalPages] = useState<ResolvedLegalPage[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    fetch("/api/form-success", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { inquiry?: FormSuccessScreen } | null) => {
+        if (cancelled || !data?.inquiry) return
+        setSuccessCopy(data.inquiry)
+      })
+      .catch(() => {})
+    fetch("/api/form-legal", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { inquiry?: ResolvedLegalPage[] } | null) => {
+        if (cancelled || !Array.isArray(data?.inquiry)) return
+        setLegalPages(data.inquiry)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!consent) {
+    if (legalPages.length > 0 && !consent) {
       setStatus({
         kind: "error",
-        message: "Lütfen K.V.K.K. ve çerez onayını işaretleyin.",
+        message: "Lütfen yasal metinleri onayladığınızı işaretleyin.",
       })
       return
     }
     const form = e.currentTarget
     const data = new FormData(form)
+    const name = String(data.get("name") ?? "").trim()
     startTransition(async () => {
       const res = await submitInquiry(data)
       if (res.ok) {
-        setStatus({ kind: "success" })
+        setStatus({ kind: "success", name })
         form.reset()
         setConsent(false)
       } else {
@@ -38,24 +74,35 @@ export default function ContactForm() {
   }
 
   if (status.kind === "success") {
+    const vars = { name: status.name }
+    const title = fillPlaceholders(successCopy.title, vars)
+    const bodyParagraphs = splitParagraphs(fillPlaceholders(successCopy.body, vars))
     return (
       <div className="rounded-2xl border border-[#3c639f]/15 bg-white p-10 text-center">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#3c639f]/10">
           <Check size={26} className="text-[#3c639f]" strokeWidth={2.25} />
         </div>
         <h3 className="mt-5 text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-          Mesajınız bize ulaştı.
+          {title}
         </h3>
-        <p className="mt-2 text-[14px] leading-relaxed text-black/55">
-          24 saat içinde döneceğiz. Acil bir durumda telefonla
-          ulaşmaktan çekinmeyin.
-        </p>
+        {bodyParagraphs.map((p, i) => (
+          <p
+            key={i}
+            className={
+              i === 0
+                ? "mt-2 whitespace-pre-line text-[14px] leading-relaxed text-black/55"
+                : "mt-1.5 whitespace-pre-line text-[13px] leading-relaxed text-black/45"
+            }
+          >
+            {p}
+          </p>
+        ))}
         <button
           type="button"
           onClick={() => setStatus({ kind: "idle" })}
           className="mt-6 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
         >
-          Yeni mesaj gönder
+          {successCopy.ctaLabel}
           <ArrowRight size={14} />
         </button>
       </div>
@@ -93,16 +140,18 @@ export default function ContactForm() {
         <p className="mt-4 text-[13px] text-red-600">{status.message}</p>
       )}
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <label className="inline-flex cursor-pointer items-start gap-2 text-[12.5px] leading-relaxed text-black/65">
-          <input
-            type="checkbox"
+      {legalPages.length > 0 && (
+        <div className="mt-6">
+          <FormConsent
+            pages={legalPages}
             checked={consent}
-            onChange={(e) => setConsent(e.target.checked)}
-            className="mt-[3px] h-4 w-4 shrink-0 rounded border-black/20 text-[#3c639f] focus:ring-[#3c639f]"
+            onChange={setConsent}
+            variant="compact"
           />
-          <span>K.V.K.K. ve çerezleri onaylıyorum.</span>
-        </label>
+        </div>
+      )}
+
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
         <button
           type="submit"
           disabled={isPending}

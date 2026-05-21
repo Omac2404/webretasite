@@ -1,6 +1,8 @@
 "use server"
 
 import { addInquiry } from "@/lib/inquiries-store"
+import { getRenderedTemplate } from "@/lib/email-templates-store"
+import { sendMail, sendToAdmin } from "@/lib/mailer"
 
 export type SubmitInquiryResult =
   | { ok: true }
@@ -22,5 +24,31 @@ export async function submitInquiry(formData: FormData): Promise<SubmitInquiryRe
   }
 
   await addInquiry({ name, email, phone, subject, message })
+
+  const vars = {
+    name,
+    email,
+    phone: phone || "—",
+    subject: subject || "(konu belirtilmemiş)",
+    message,
+  }
+
+  // Kullanıcıya onay maili
+  const userTpl = await getRenderedTemplate("inquiry_user_confirmation", vars)
+  await sendMail({
+    to: email,
+    subject: userTpl.subject,
+    text: userTpl.body,
+  })
+
+  // Admin'e bildirim — replyTo kullanıcıya işaret eder, "Reply" butonu
+  // doğrudan kullanıcıya yazsın.
+  const adminTpl = await getRenderedTemplate("inquiry_admin_notification", vars)
+  await sendToAdmin({
+    subject: adminTpl.subject,
+    text: adminTpl.body,
+    replyTo: email,
+  })
+
   return { ok: true }
 }

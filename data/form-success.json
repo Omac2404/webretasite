@@ -1,0 +1,17 @@
+{
+  "inquiry": {
+    "title": "Mesajınız bize ulaştı.",
+    "body": "24 saat içinde döneceğiz. İletiniz için teşekkür ederiz.",
+    "ctaLabel": "Yeni mesaj gönder"
+  },
+  "quote": {
+    "title": "Teşekkürler {firstName}!",
+    "body": "Teklifiniz bize ulaştı. {channels} üzerinden {date} {time} için sizinle iletişime geçeceğiz.",
+    "ctaLabel": "Yeni teklif gönder"
+  },
+  "appointment": {
+    "title": "Talebiniz alındı",
+    "body": "{date} günü saat {hour} civarında sizi arayacağız.\r\n\r\nBu sürede WhatsApp'tan da yazabilirsiniz.",
+    "ctaLabel": "Kapat"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "kobiBanner": {
+    "imageUrl": "",
+    "eyebrow": "Webreta'dan",
+    "bigTitle": "KOBİ",
+    "bigSubtitle": "Küçük & Orta Ölçek",
+    "tags": [
+      "Hızlı kurulum",
+      "Sabit fiyat",
+      "Sade panel"
+    ],
+    "rightEyebrow": "Aradığınız bu olabilir",
+    "title": "KOBİ'niz için hızlı ve bütçe dostu web sitesi",
+    "description": "Küçük ve orta ölçekli işletmeler için tasarladığımız Webreta KOBİ, kurumsal kimlik, içerik yönetimi ve mobil uyumlu modern bir tasarımı sabit fiyat ve hızlı teslimat sözüyle birleştiriyor. Karmaşaya girmeden, ihtiyacınız olan her şey: tek pakette.",
+    "bullets": [
+      "2–3 hafta içinde yayında",
+      "Sabit fiyat, sürpriz yok",
+      "Sade içerik yönetim paneli",
+      "Mobil + masaüstü uyumlu"
+    ],
+    "ctaLabel": "Webreta KOBİ'yi keşfet",
+    "ctaHref": "https://kobi.webreta.com"
+  },
+  "wizardHeading": {
+    "titleLeader": "Projenize özel",
+    "titleHighlight": "fiyat teklifi",
+    "subtitle": "Size en uygun çözümü ve net bir fiyat aralığını sunalım."
+  },
+  "packages": [
+    {
+      "id": "landing",
+      "label": "Landing Sayfa",
+      "tagline": "Tek sayfa · dönüşüm odaklı",
+      "descriptor": "Pratik",
+      "desc": "Tek sayfada hikayenizi anlatan, dönüşüm odaklı tasarım. Ürün lansmanları, kampanyalar veya tek bir hizmete odaklanan işletmeler için ideal.",
+      "bullets": [
+        "1 sayfa",
+        "Form ve CTA optimizasyonu",
+        "Hızlı yayına alma"
+      ],
+      "iconKey": "layers",
+      "kobiRedirect": true
+    },
+    {
+      "id": "mini",
+      "label": "Kompakt Kurumsal Site",
+      "tagline": "5 sayfaya kadar · statik",
+      "descriptor": "Bütçe dostu",
+      "desc": "5 sayfaya kadar statik kurumsal site. Hakkımızda, hizmetler, referanslar ve iletişim — hızlı yüklenen, şık bir dijital vitrin.",
+      "bullets": [
+        "5 sayfaya kadar",
+        "Mobil + masaüstü uyumlu",
+        "Temel SEO"
+      ],
+      "iconKey": "globe",
+      "kobiRedirect": true
+    },
+    {
+      "id": "pro",
+      "label": "Profesyonel Kurumsal Site",
+      "tagline": "50 sayfaya kadar · CMS",
+      "descriptor": "İdeal",
+      "desc": "50 sayfaya kadar genişleyebilen, blog modülü, içerik yönetim paneli ve gelişmiş form yönetimi içeren tam donanımlı kurumsal site.",
+      "bullets": [
+        "50 sayfaya kadar",
+        "İçerik yönetim paneli (CMS)",
+        "Blog + gelişmiş form yönetimi"
+      ],
+      "iconKey": "boxes",
+      "kobiRedirect": false
+    },
+    {
+      "id": "webapp",
+      "label": "Web Uygulamalı Kurumsal Site",
+      "tagline": "Sınırsız ölçek · amaca özel uygulama",
+      "descriptor": "Profesyonel",
+      "desc": "Sektörünüze özel iş akışlarını dijitalleştiren güçlü uygulamalar: online randevu, sipariş takip, müşteri/hasta portalı, lojistik ve stok yönetimi gibi sınırsız özelleştirilebilir çözümler.",
+      "bullets": [
+        "Online randevu / rezervasyon",
+        "Sipariş, hasta veya müşteri takip paneli",
+        "Sektörünüze özel iş akışı tasarımı"
+      ],
+      "iconKey": "rocket",
+      "kobiRedirect": false
+    }
+  ]
+}

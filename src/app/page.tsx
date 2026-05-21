@@ -996,16 +996,18 @@ function ProjectCard({
       {/* Bottom row — "Detaylar" affordance on the left signals the card is
           clickable (popup opens with full case study); publish date sits
           on the right as subtle metadata. The whole card already handles
-          the click, so the chip is a styled span (no nested button). */}
+          the click, so the chip is a styled span (no nested button).
+          Desktop'ta (lg+) gizli — masaüstünde tüm kart zaten hover ile
+          tıklanabilir gözüküyor, mobilde affordance gerekiyor. */}
       <div className="mt-auto flex items-center justify-between pt-3">
         <span
-          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-semibold text-[#3c639f] transition-colors group-hover:bg-[#3c639f]/[0.14]"
+          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-semibold text-[#3c639f] transition-colors group-hover:bg-[#3c639f]/[0.14] lg:hidden"
           style={{ background: 'rgba(60, 99, 159, 0.08)' }}
         >
           Detaylar
           <ArrowRight size={11} strokeWidth={2.5} />
         </span>
-        <span className="text-[11px] text-black/35">{project.date}</span>
+        <span className="text-[11px] text-black/35 lg:ml-auto">{project.date}</span>
       </div>
     </div>
   )

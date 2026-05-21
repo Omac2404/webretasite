@@ -1,0 +1,26 @@
+{
+  "inquiry_user_confirmation": {
+    "subject": "Mesajınızı aldık — Webreta",
+    "body": "Merhaba {name},\r\n\r\nİletişim formu üzerinden gönderdiğiniz mesajınız bize ulaştı. En kısa sürede {email} veya telefon numaranız üzerinden size dönüş yapacağız.\r\n\r\n— Mesajınızın özeti —\r\nKonu: {subject}\r\nMesaj: {message}\r\n\r\nİyi çalışmalar dileriz.\r\nWebreta Web Teknolojileri\r\nwebreta.com.tr"
+  },
+  "inquiry_admin_notification": {
+    "subject": "Yeni iletişim mesajı: {subject}",
+    "body": "İletişim formundan yeni bir mesaj geldi.\r\n\r\nİsim: {name}\r\nE-posta: {email}\r\nTelefon: {phone}\r\nKonu: {subject}\r\n\r\nMesaj:\r\n{message}\r\n"
+  },
+  "quote_user_confirmation": {
+    "subject": "Teklif talebiniz alındı — Webreta",
+    "body": "Merhaba {name},\r\n\r\nTeklif sihirbazını doldurduğunuz için teşekkürler. Talebiniz bize ulaştı.\r\n\r\nTercih ettiğiniz iletişim kanalı/kanalları: {channels}\r\nGörüşme için belirttiğiniz zaman: {date} {time}\r\n\r\nYukarıdaki tarih/saatte sizinle iletişime geçeceğiz. Görüşmek üzere...\r\n\r\nİyi çalışmalar dileriz.\r\nWebreta Web Teknolojileri\r\nwebreta.com.tr"
+  },
+  "quote_admin_notification": {
+    "subject": "Yeni teklif talebi: {projectType} · {name}",
+    "body": "Yeni bir teklif talebi geldi.\r\n\r\n— Müşteri —\r\nİsim: {name}\r\nFirma: {company}\r\nE-posta: {email}\r\nTelefon: {phone}\r\nTercih kanal(lar)ı: {channels}\r\nGörüşme zamanı: {date} {time}\r\n\r\n— Sektör & Hizmet —\r\nSektör: {industry}\r\nVerdiği hizmetler: {services}\r\nİhtiyaç: {service}\r\nMevcut site (varsa): {existingSiteUrl}\r\n\r\n— Paket & Detay —\r\nSeçilen paket: {projectType}\r\nProje açıklaması: {description}\r\n\r\n— Beğenilen örnek siteler —\r\n{refs}\r\n\r\nNotlar: {refNotes}\r\n"
+  },
+  "appointment_user_confirmation": {
+    "subject": "Randevunuz oluşturuldu — Webreta",
+    "body": "Merhaba {name},\r\n\r\n{channel} kanalı için talep ettiğiniz \"{package}\" randevunuz oluşturuldu.\r\n\r\nTarih: {date}\r\nSaat: {hour}\r\n\r\nBelirttiğiniz saatte {phone} numaralı telefonu arayacağız. Görüşmek üzere...\r\n\r\nİyi çalışmalar dileriz.\r\nWebreta Web Teknolojileri\r\nwebreta.com.tr"
+  },
+  "appointment_admin_notification": {
+    "subject": "Yeni randevu: {channel} · {package}",
+    "body": "Yeni bir randevu oluştu.\r\n\r\nİsim: {name}\r\nTelefon: {phone}\r\nKanal: {channel}\r\nPaket: {package} ({price}/ay)\r\nTarih: {date}\r\nSaat: {hour}\r\n\r\nYukarıdaki tarih/saatte müşteriyi arayın.\r\n"
+  }
+}

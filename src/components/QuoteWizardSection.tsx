@@ -1,6 +1,17 @@
 "use client"
 
-import { useState, useEffect, useRef, useMemo } from "react"
+import { useState, useEffect, useRef, useMemo, useTransition } from "react"
+import { submitQuoteAction } from "@/app/web-site/actions"
+import {
+  DEFAULT_FORM_SUCCESS,
+  type FormSuccessScreen,
+} from "@/lib/form-success-types"
+import {
+  fillPlaceholders,
+  splitParagraphs,
+} from "@/lib/form-success-render"
+import type { ResolvedLegalPage } from "@/lib/form-legal-types"
+import { FormConsent } from "@/components/FormConsent"
 import {
   ArrowRight,
   ArrowLeft,
@@ -192,7 +203,6 @@ type QuoteForm = {
   channels: string[]
   date: string
   time: string
-  kvkk: boolean
 }
 
 const QUOTE_DEFAULT: QuoteForm = {
@@ -211,7 +221,6 @@ const QUOTE_DEFAULT: QuoteForm = {
   channels: [],
   date: "",
   time: "",
-  kvkk: false,
 }
 
 export default function QuoteWizardSection() {
@@ -220,6 +229,33 @@ export default function QuoteWizardSection() {
   const [quoteDir, setQuoteDir] = useState<1 | -1>(1)
   const [quoteSubmitted, setQuoteSubmitted] = useState(false)
   const [quote, setQuote] = useState<QuoteForm>(QUOTE_DEFAULT)
+  const [quoteError, setQuoteError] = useState<string | null>(null)
+  const [submitPending, startSubmitTransition] = useTransition()
+  const [successCopy, setSuccessCopy] = useState<FormSuccessScreen>(
+    DEFAULT_FORM_SUCCESS.quote,
+  )
+  const [legalPages, setLegalPages] = useState<ResolvedLegalPage[]>([])
+  const [consent, setConsent] = useState(false)
+  useEffect(() => {
+    let cancelled = false
+    fetch("/api/form-success", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { quote?: FormSuccessScreen } | null) => {
+        if (cancelled || !data?.quote) return
+        setSuccessCopy(data.quote)
+      })
+      .catch(() => {})
+    fetch("/api/form-legal", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { quote?: ResolvedLegalPage[] } | null) => {
+        if (cancelled || !Array.isArray(data?.quote)) return
+        setLegalPages(data.quote)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
   const [redesignModalOpen, setRedesignModalOpen] = useState(false)
   const [redesignDraftUrl, setRedesignDraftUrl] = useState("")
   const [redesignAnchor, setRedesignAnchor] = useState<{ top: number; left: number } | null>(null)
@@ -462,7 +498,8 @@ export default function QuoteWizardSection() {
     }
     if (i === 1) return quote.projectType !== ""
     if (i === 2) return true
-    if (i === 3)
+    if (i === 3) {
+      const consentOk = legalPages.length === 0 || consent
       return (
         quote.name.trim() !== "" &&
         quote.email.trim() !== "" &&
@@ -470,18 +507,49 @@ export default function QuoteWizardSection() {
         quote.channels.length > 0 &&
         quote.date !== "" &&
         quote.time !== "" &&
-        quote.kvkk
+        consentOk
       )
+    }
     return false
   }
 
   const quoteNext = () => {
     if (!isQuoteStepValid(quoteStep)) return
     if (quoteStep === QUOTE_STEPS.length - 1) {
-      // TODO: replace with real submission — POST to /api/quote or
-      // email/admin-panel endpoint. For now just simulate success.
-      console.log("Quote submitted:", quote)
-      setQuoteSubmitted(true)
+      if (submitPending) return
+      const projectTypeLabel =
+        projectTypes.find(p => p.id === quote.projectType)?.label ?? ""
+      const serviceLabel =
+        QUOTE_SERVICES.find(s => s.id === quote.service)?.label ?? ""
+      const channelLabels = quote.channels
+        .map(id => QUOTE_CHANNELS.find(c => c.id === id)?.label)
+        .filter((l): l is string => Boolean(l))
+
+      setQuoteError(null)
+      startSubmitTransition(async () => {
+        const res = await submitQuoteAction({
+          industry: quote.industry,
+          services: quote.services,
+          serviceLabel,
+          existingSiteUrl: quote.existingSiteUrl,
+          projectTypeLabel,
+          description: quote.description,
+          refs: quote.refs,
+          refNotes: quote.refNotes,
+          name: quote.name,
+          company: quote.company,
+          email: quote.email,
+          phone: quote.phone,
+          channelLabels,
+          date: quote.date,
+          time: quote.time,
+        })
+        if (res.ok) {
+          setQuoteSubmitted(true)
+        } else {
+          setQuoteError(res.error)
+        }
+      })
       return
     }
     setQuoteDir(1)
@@ -499,6 +567,8 @@ export default function QuoteWizardSection() {
     setQuoteStep(0)
     setQuoteDir(1)
     setQuoteSubmitted(false)
+    setQuoteError(null)
+    setConsent(false)
   }
 
   // If the selected time isn't valid for the selected date (e.g. user
@@ -655,43 +725,60 @@ export default function QuoteWizardSection() {
 
           <div className="quote-card-pulse overflow-hidden rounded-2xl border border-black/[0.06] bg-white">
             {quoteSubmitted ? (
-              /* ─── Success state ───────────────────────────────── */
-              <div className="flex flex-col items-center px-6 py-16 text-center md:px-12 md:py-20">
-                <div
-                  className="flex h-20 w-20 items-center justify-center rounded-full bg-[#3c639f]/[0.08]"
-                  style={{ animation: 'quoteSuccessPop 0.6s ease-out' }}
-                >
-                  <CheckCircle2
-                    size={44}
-                    className="text-[#3c639f]"
-                    strokeWidth={1.8}
-                  />
-                </div>
-                <h3 className="mt-6 text-[26px] font-semibold tracking-[-0.02em] text-[#0a0a0a] md:text-[32px]">
-                  Teşekkürler {quote.name.split(' ')[0]}!
-                </h3>
-                <p className="mt-3 max-w-[480px] text-[15px] leading-relaxed text-black/60">
-                  Teklifiniz bize ulaştı.{' '}
-                  <span className="font-medium text-[#0a0a0a]">
-                    {quote.channels
-                      .map(id => QUOTE_CHANNELS.find(c => c.id === id)?.label)
-                      .filter(Boolean)
-                      .join(' / ')}
-                  </span>{' '}
-                  üzerinden{' '}
-                  <span className="font-medium text-[#0a0a0a]">
-                    {quote.date} {quote.time}
-                  </span>{' '}
-                  için sizinle iletişime geçeceğiz.
-                </p>
-                <button
-                  onClick={quoteReset}
-                  className="mt-8 inline-flex items-center gap-2 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
-                >
-                  Yeni teklif gönder
-                  <ArrowRight size={14} />
-                </button>
-              </div>
+              /* ─── Success state — copy admin-managed via /admin/e-posta-sablonlari */
+              (() => {
+                const channelsStr = quote.channels
+                  .map(id => QUOTE_CHANNELS.find(c => c.id === id)?.label)
+                  .filter(Boolean)
+                  .join(' / ')
+                const vars = {
+                  name: quote.name,
+                  firstName: quote.name.split(' ')[0] ?? quote.name,
+                  channels: channelsStr,
+                  date: quote.date,
+                  time: quote.time,
+                }
+                const title = fillPlaceholders(successCopy.title, vars)
+                const bodyParas = splitParagraphs(
+                  fillPlaceholders(successCopy.body, vars),
+                )
+                return (
+                  <div className="flex flex-col items-center px-6 py-16 text-center md:px-12 md:py-20">
+                    <div
+                      className="flex h-20 w-20 items-center justify-center rounded-full bg-[#3c639f]/[0.08]"
+                      style={{ animation: 'quoteSuccessPop 0.6s ease-out' }}
+                    >
+                      <CheckCircle2
+                        size={44}
+                        className="text-[#3c639f]"
+                        strokeWidth={1.8}
+                      />
+                    </div>
+                    <h3 className="mt-6 text-[26px] font-semibold tracking-[-0.02em] text-[#0a0a0a] md:text-[32px]">
+                      {title}
+                    </h3>
+                    {bodyParas.map((p, i) => (
+                      <p
+                        key={i}
+                        className={
+                          i === 0
+                            ? 'mt-3 max-w-[480px] whitespace-pre-line text-[15px] leading-relaxed text-black/60'
+                            : 'mt-2 max-w-[480px] whitespace-pre-line text-[14px] leading-relaxed text-black/50'
+                        }
+                      >
+                        {p}
+                      </p>
+                    ))}
+                    <button
+                      onClick={quoteReset}
+                      className="mt-8 inline-flex items-center gap-2 text-[14px] font-medium text-[#3c639f] transition-colors hover:text-[#2f5288]"
+                    >
+                      {successCopy.ctaLabel}
+                      <ArrowRight size={14} />
+                    </button>
+                  </div>
+                )
+              })()
             ) : (
               <>
                 {/* ─── Stepper ──────────────────────────────────── */}
@@ -1325,37 +1412,17 @@ export default function QuoteWizardSection() {
                           </div>
                         </div>
 
-                        <label className="flex cursor-pointer items-start gap-3">
-                          <input
-                            type="checkbox"
-                            checked={quote.kvkk}
-                            onChange={e =>
-                              setQuote(p => ({ ...p, kvkk: e.target.checked }))
-                            }
-                            className="peer sr-only"
-                          />
-                          <span
-                            className={`mt-[2px] flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-md border transition-all ${
-                              quote.kvkk
-                                ? 'border-[#3c639f] bg-[#3c639f]'
-                                : 'border-black/[0.2] bg-white'
-                            }`}
-                          >
-                            {quote.kvkk && (
-                              <Check
-                                size={12}
-                                strokeWidth={3}
-                                className="text-white"
-                              />
-                            )}
-                          </span>
-                          <span className="text-[13px] leading-relaxed text-black/65">
-                            <span className="font-medium text-[#0a0a0a]">KVKK</span>{' '}
-                            aydınlatma metnini okudum, kişisel verilerimin işlenmesini
-                            kabul ediyorum.{' '}
-                            <span className="text-[#3c639f]">*</span>
-                          </span>
-                        </label>
+                        <FormConsent
+                          pages={legalPages}
+                          checked={consent}
+                          onChange={setConsent}
+                        />
+
+                        {quoteError && (
+                          <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12.5px] text-red-700">
+                            {quoteError}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1380,12 +1447,16 @@ export default function QuoteWizardSection() {
                   <button
                     type="button"
                     onClick={quoteNext}
-                    disabled={!isQuoteStepValid(quoteStep)}
+                    disabled={!isQuoteStepValid(quoteStep) || submitPending}
                     className="cta-primary relative inline-flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-lg px-5 py-3 text-[14px] font-semibold tracking-[-0.005em] sm:flex-none sm:py-2.5"
                   >
                     <span className="relative z-[1] inline-flex items-center gap-2">
-                      {quoteStep === QUOTE_STEPS.length - 1 ? 'Gönder' : 'Devam'}
-                      <ArrowRight size={16} />
+                      {quoteStep === QUOTE_STEPS.length - 1
+                        ? submitPending
+                          ? 'Gönderiliyor...'
+                          : 'Gönder'
+                        : 'Devam'}
+                      {!submitPending && <ArrowRight size={16} />}
                     </span>
                   </button>
                 </div>

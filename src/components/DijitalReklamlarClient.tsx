@@ -18,6 +18,16 @@ import type {
   WhatsAppSettings,
 } from "@/lib/packages-types"
 import { bookAppointmentAction } from "@/app/dijital-reklamlar/actions"
+import {
+  DEFAULT_FORM_SUCCESS,
+  type FormSuccessScreen,
+} from "@/lib/form-success-types"
+import {
+  fillPlaceholders,
+  splitParagraphs,
+} from "@/lib/form-success-render"
+import type { ResolvedLegalPage } from "@/lib/form-legal-types"
+import { FormConsent } from "@/components/FormConsent"
 
 // Fallback WhatsApp values used only if /admin/paketler hasn't been
 // touched yet. Real value flows in via props (admin-managed).
@@ -451,6 +461,32 @@ function RequestModal({
   const [email, setEmail] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [successCopy, setSuccessCopy] = useState<FormSuccessScreen>(
+    DEFAULT_FORM_SUCCESS.appointment,
+  )
+  const [legalPages, setLegalPages] = useState<ResolvedLegalPage[]>([])
+  const [consent, setConsent] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch("/api/form-success", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { appointment?: FormSuccessScreen } | null) => {
+        if (cancelled || !data?.appointment) return
+        setSuccessCopy(data.appointment)
+      })
+      .catch(() => {})
+    fetch("/api/form-legal", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { appointment?: ResolvedLegalPage[] } | null) => {
+        if (cancelled || !Array.isArray(data?.appointment)) return
+        setLegalPages(data.appointment)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     setMounted(true)
@@ -507,8 +543,12 @@ function RequestModal({
   }, [validHours, selectedDate, selectedHour])
 
   const phoneDigits = phone.replace(/\D/g, "")
+  const consentOk = legalPages.length === 0 || consent
   const canSubmit =
-    selectedDate !== null && selectedHour !== null && phoneDigits.length >= 10
+    selectedDate !== null &&
+    selectedHour !== null &&
+    phoneDigits.length >= 10 &&
+    consentOk
 
   // Use the per-package pre-filled message from admin, falling back to a
   // generic auto-template if the admin hasn't customized it.
@@ -735,34 +775,59 @@ function RequestModal({
           />
         </label>
       </div>
+      {legalPages.length > 0 && (
+        <div className="mt-5">
+          <FormConsent
+            pages={legalPages}
+            checked={consent}
+            onChange={setConsent}
+            variant="compact"
+          />
+        </div>
+      )}
+
       {submitError && (
         <p className="mt-4 text-[13px] text-red-600">{submitError}</p>
       )}
     </div>
   )
 
-  const successView = (
-    <div className="px-7 py-10 text-center md:px-9 md:py-12">
-      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#3c639f]/[0.10]">
-        <Check size={28} className="text-[#3c639f]" strokeWidth={2.5} />
+  const successView = (() => {
+    const vars = {
+      date:
+        selectedDate !== null ? formatDateChip(selectedDate, today).sub : "",
+      hour:
+        selectedHour !== null
+          ? `${String(selectedHour).padStart(2, "0")}:00`
+          : "",
+    }
+    const title = fillPlaceholders(successCopy.title, vars)
+    const bodyParas = splitParagraphs(
+      fillPlaceholders(successCopy.body, vars),
+    )
+    return (
+      <div className="px-7 py-10 text-center md:px-9 md:py-12">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#3c639f]/[0.10]">
+          <Check size={28} className="text-[#3c639f]" strokeWidth={2.5} />
+        </div>
+        <h3 className="mt-5 text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+          {title}
+        </h3>
+        {bodyParas.map((p, i) => (
+          <p
+            key={i}
+            className={
+              i === 0
+                ? "mt-2 whitespace-pre-line text-[14px] leading-relaxed text-black/65"
+                : "mt-1 whitespace-pre-line text-[13px] leading-relaxed text-black/45"
+            }
+          >
+            {p}
+          </p>
+        ))}
       </div>
-      <h3 className="mt-5 text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-        Talebiniz alındı
-      </h3>
-      {selectedDate && selectedHour !== null && (
-        <p className="mt-2 text-[14px] leading-relaxed text-black/65">
-          {formatDateChip(selectedDate, today).sub} günü saat{" "}
-          <strong className="font-semibold text-[#0a0a0a]">
-            {String(selectedHour).padStart(2, "0")}:00
-          </strong>{" "}
-          civarında sizi arayacağız.
-        </p>
-      )}
-      <p className="mt-1 text-[13px] text-black/45">
-        Bu sürede WhatsApp&apos;tan da yazabilirsiniz.
-      </p>
-    </div>
-  )
+    )
+  })()
 
   const content = (
     <div
@@ -860,7 +925,7 @@ function RequestModal({
               onClick={onClose}
               className="cta-primary inline-flex items-center justify-center gap-2 rounded-md px-6 py-2.5 text-[13px] font-medium"
             >
-              Kapat
+              {successCopy.ctaLabel}
             </button>
           </div>
         )}
