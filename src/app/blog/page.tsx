@@ -5,11 +5,10 @@ import { BlogSearchableGrid } from "@/components/BlogSearchableGrid"
 import { listPublished } from "@/lib/blog-store"
 import { readAuthors } from "@/lib/authors-store"
 import { CATEGORIES, type CategoryKey } from "@/lib/blog-types"
+import { buildPageMetadata } from "@/lib/seo-metadata"
 
-export const metadata = {
-  title: "Blog | Webreta",
-  description:
-    "Webreta'nın web tasarımı, dijital reklam ve büyüme üzerine yazıları.",
+export async function generateMetadata() {
+  return buildPageMetadata("/blog")
 }
 
 export const dynamic = "force-dynamic"

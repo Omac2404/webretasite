@@ -13,6 +13,7 @@ import {
   InlineImageUploader,
   inputCls,
 } from "../add-post-form"
+import { BlogSeoPanel } from "../seo-panel"
 
 const INITIAL: PostState = {}
 
@@ -32,7 +33,27 @@ export function EditPostForm({
   const [savedFlash, setSavedFlash] = useState(false)
   const [inlineUploading, setInlineUploading] = useState(false)
   const [inlineError, setInlineError] = useState<string | null>(null)
+  const [title, setTitle] = useState(post.title)
+  const [excerpt, setExcerpt] = useState(post.excerpt)
+  const [content, setContent] = useState(post.content)
   const contentRef = useRef<HTMLTextAreaElement>(null)
+
+  function insertSnippet(snippet: string) {
+    const el = contentRef.current
+    if (!el) {
+      setContent((c) => c + snippet)
+      return
+    }
+    const start = el.selectionStart ?? content.length
+    const end = el.selectionEnd ?? content.length
+    const next = content.slice(0, start) + snippet + content.slice(end)
+    setContent(next)
+    requestAnimationFrame(() => {
+      const cursor = start + snippet.length
+      el.focus()
+      el.setSelectionRange(cursor, cursor)
+    })
+  }
 
   useEffect(() => {
     if (state.ok) {
@@ -54,7 +75,7 @@ export function EditPostForm({
         setInlineError(res.error ?? "Yükleme başarısız.")
         return
       }
-      insertAtCursor(contentRef.current, `\n\n![](${res.url})\n\n`)
+      insertSnippet(`\n\n![](${res.url})\n\n`)
     } catch {
       setInlineError("Beklenmeyen bir hata oluştu.")
     } finally {
@@ -71,7 +92,8 @@ export function EditPostForm({
           name="title"
           type="text"
           required
-          defaultValue={post.title}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           className={inputCls}
         />
       </Field>
@@ -91,7 +113,8 @@ export function EditPostForm({
         <textarea
           name="excerpt"
           rows={2}
-          defaultValue={post.excerpt}
+          value={excerpt}
+          onChange={(e) => setExcerpt(e.target.value)}
           className={`${inputCls} resize-none`}
         />
       </Field>
@@ -105,14 +128,15 @@ export function EditPostForm({
           name="content"
           rows={18}
           required
-          defaultValue={post.content}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
           className={`${inputCls} resize-y font-mono text-[12.5px] leading-relaxed`}
         />
         <InlineImageUploader
           uploading={inlineUploading}
           error={inlineError}
           onUpload={handleInlineUpload}
-          onInsertVideo={(snippet) => insertAtCursor(contentRef.current, snippet)}
+          onInsertVideo={(snippet) => insertSnippet(snippet)}
         />
       </Field>
 
@@ -140,6 +164,15 @@ export function EditPostForm({
           }}
         />
       </Field>
+
+      <BlogSeoPanel
+        initial={post.seo}
+        liveTitle={title}
+        liveExcerpt={excerpt}
+        liveContent={content}
+        liveCoverImage={preview ?? post.coverImage}
+        existingSlug={post.slug}
+      />
 
       <label className="flex items-center gap-2.5 text-[13px] text-black/70">
         <input
@@ -186,14 +219,3 @@ export function EditPostForm({
   )
 }
 
-function insertAtCursor(el: HTMLTextAreaElement | null, snippet: string) {
-  if (!el) return
-  const start = el.selectionStart ?? el.value.length
-  const end = el.selectionEnd ?? el.value.length
-  const before = el.value.slice(0, start)
-  const after = el.value.slice(end)
-  el.value = before + snippet + after
-  const cursor = start + snippet.length
-  el.focus()
-  el.setSelectionRange(cursor, cursor)
-}

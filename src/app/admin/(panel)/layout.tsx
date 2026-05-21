@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import Image from "next/image"
-import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, MailPlus, Send, Globe, Info } from "lucide-react"
+import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, MailPlus, Send, Globe, Info, Search } from "lucide-react"
 import { SESSION_COOKIE, verifySession } from "@/lib/admin-session"
 import { logoutAction } from "../(auth)/login/actions"
 import { SideLink } from "./side-link"
@@ -66,6 +66,9 @@ export default async function PanelLayout({
           </SideLink>
           <SideLink href="/admin/analitik" icon={<Activity size={16} />}>
             Analitik
+          </SideLink>
+          <SideLink href="/admin/seo" icon={<Search size={16} />}>
+            SEO
           </SideLink>
           <SideLink href="/admin/footer" icon={<PanelBottom size={16} />}>
             Footer

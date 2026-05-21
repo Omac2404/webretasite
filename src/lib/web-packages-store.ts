@@ -209,15 +209,12 @@ function normalize(input: unknown): WebPackagesData {
 
 function normalizeWizard(input: unknown): WizardHeading {
   const raw = (input ?? {}) as Partial<WizardHeading>
-  const pickStr = (v: unknown, fallback: string): string =>
-    typeof v === "string" && v.trim() ? v.trim() : fallback
+  const pickStr = (v: unknown): string =>
+    typeof v === "string" ? v.trim() : ""
   return {
-    titleLeader: pickStr(raw.titleLeader, DEFAULT_WIZARD_HEADING.titleLeader),
-    titleHighlight: pickStr(
-      raw.titleHighlight,
-      DEFAULT_WIZARD_HEADING.titleHighlight,
-    ),
-    subtitle: pickStr(raw.subtitle, DEFAULT_WIZARD_HEADING.subtitle),
+    titleLeader: pickStr(raw.titleLeader),
+    titleHighlight: pickStr(raw.titleHighlight),
+    subtitle: pickStr(raw.subtitle),
   }
 }
 

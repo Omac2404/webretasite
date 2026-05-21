@@ -7,10 +7,10 @@ import { DotPattern } from "@/components/DotPattern"
 import { readAbout } from "@/lib/about-store"
 import type { AboutRow } from "@/lib/about-types"
 
-export const metadata = {
-  title: "Hakkımızda | Webreta",
-  description:
-    "Webreta — İzmir merkezli web tasarım ve dijital reklam ajansı. Yalın tasarım, hızlı teslim, açık iletişim.",
+import { buildPageMetadata } from "@/lib/seo-metadata"
+
+export async function generateMetadata() {
+  return buildPageMetadata("/hakkimizda")
 }
 
 export const dynamic = "force-dynamic"

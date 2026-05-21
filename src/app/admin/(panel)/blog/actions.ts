@@ -9,7 +9,32 @@ import {
   togglePublished,
   updatePost,
 } from "@/lib/blog-store"
-import type { CategoryKey } from "@/lib/blog-types"
+import type { BlogPostSeo, CategoryKey } from "@/lib/blog-types"
+
+function parseSeoFromForm(formData: FormData): Partial<BlogPostSeo> {
+  const metaTitle = String(formData.get("seo_metaTitle") ?? "").trim()
+  const metaDescription = String(
+    formData.get("seo_metaDescription") ?? "",
+  ).trim()
+  const keywords = String(formData.get("seo_keywords") ?? "")
+    .split(/[,\n]/)
+    .map((k) => k.trim())
+    .filter((k) => k.length > 0)
+    .slice(0, 20)
+  const focusKeyword = String(formData.get("seo_focusKeyword") ?? "").trim()
+  const ogImage = String(formData.get("seo_ogImage") ?? "").trim()
+  const noindex = formData.get("seo_noindex") === "on"
+  const includeInSitemap = formData.get("seo_includeInSitemap") === "on"
+  return {
+    metaTitle,
+    metaDescription,
+    keywords,
+    focusKeyword,
+    ogImage,
+    noindex,
+    includeInSitemap,
+  }
+}
 
 function parseCategory(v: FormDataEntryValue | null): CategoryKey {
   return v === "haberler" ? "haberler" : "teknik"
@@ -74,6 +99,7 @@ function revalidateAll(): void {
   revalidatePath("/admin/blog")
   revalidatePath("/blog")
   revalidatePath("/")
+  revalidatePath("/sitemap.xml")
 }
 
 export async function addPostAction(
@@ -106,6 +132,7 @@ export async function addPostAction(
     content,
     coverImage: cover.url ?? "",
     published,
+    seo: parseSeoFromForm(formData),
   })
 
   revalidateAll()
@@ -146,6 +173,7 @@ export async function updatePostAction(
     // existing cover (read by the page) is preserved.
     ...(cover.url ? { coverImage: cover.url } : {}),
     published,
+    seo: parseSeoFromForm(formData),
   })
 
   revalidateAll()

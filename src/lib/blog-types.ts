@@ -1,6 +1,25 @@
 // Blog post types. No `node:fs` here so the file is safe to import from
 // client components.
 
+// Turkish-aware slugifier — shared by the server store and client-side
+// previews (e.g. the SEO checklist that needs to know the upcoming URL
+// before save). Server adds a uniqueness suffix on top.
+export function slugify(input: string): string {
+  return (
+    input
+      .toLowerCase()
+      .replace(/ı/g, "i")
+      .replace(/ç/g, "c")
+      .replace(/ş/g, "s")
+      .replace(/ğ/g, "g")
+      .replace(/ü/g, "u")
+      .replace(/ö/g, "o")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 80) || "yazi"
+  )
+}
+
 export type CategoryKey = "teknik" | "haberler"
 
 export const CATEGORIES: { key: CategoryKey; label: string }[] = [
@@ -10,6 +29,16 @@ export const CATEGORIES: { key: CategoryKey; label: string }[] = [
 
 export function categoryLabel(key: string): string {
   return CATEGORIES.find((c) => c.key === key)?.label ?? "Teknik"
+}
+
+export type BlogPostSeo = {
+  metaTitle: string
+  metaDescription: string
+  keywords: string[]
+  focusKeyword: string
+  ogImage: string
+  noindex: boolean
+  includeInSitemap: boolean
 }
 
 export type BlogPost = {
@@ -24,6 +53,7 @@ export type BlogPost = {
   createdAt: string
   updatedAt: string
   published: boolean
+  seo?: BlogPostSeo
 }
 
 export type BlogData = {

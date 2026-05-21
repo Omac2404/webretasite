@@ -1,9 +1,32 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import SiteHeader from "@/components/SiteHeader"
 import SiteFooter from "@/components/SiteFooter"
 import { getLegalPageBySlug } from "@/lib/legal-store"
+import { readSeo } from "@/lib/seo-store"
 
 export const dynamic = "force-dynamic"
+
+// Legal pages: noindex unless admin explicitly opts them into the
+// sitemap from /admin/seo. Robots.txt also blocks /yasal/ by default.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const [page, seo] = await Promise.all([
+    getLegalPageBySlug(slug),
+    readSeo(),
+  ])
+  const allow = seo.sitemap.includeLegalPages
+  return {
+    title: page?.title ?? "Yasal Sayfa",
+    robots: allow
+      ? { index: true, follow: true }
+      : { index: false, follow: false },
+  }
+}
 
 export default async function LegalPage({
   params,

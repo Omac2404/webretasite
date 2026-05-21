@@ -1,0 +1,84 @@
+{
+  "global": {
+    "siteName": "Webreta",
+    "siteUrl": "https://webreta.com",
+    "defaultTitle": "Webreta | İzmir Web Tasarım ve Geliştirme Ajansı",
+    "titleTemplate": "%s | Webreta",
+    "defaultDescription": "Markanıza özel, hızlı ve modern web siteleri. İzmir merkezli web geliştirme ajansı. 2018'den beri 120+ proje.",
+    "defaultKeywords": [
+      "web tasarım",
+      "web geliştirme",
+      "İzmir",
+      "web ajansı",
+      "kurumsal web sitesi"
+    ],
+    "defaultOgImage": "",
+    "twitterHandle": ""
+  },
+  "pages": {
+    "/": {
+      "title": "Webreta | İzmir Web Tasarım ve Geliştirme Ajansı",
+      "description": "Markanıza özel, hızlı ve modern web siteleri. İzmir merkezli web geliştirme ajansı. 2018'den beri 120+ proje.",
+      "keywords": [],
+      "ogImage": "",
+      "noindex": false,
+      "includeInSitemap": true,
+      "priority": 1,
+      "changefreq": "weekly"
+    },
+    "/hakkimizda": {
+      "title": "Hakkımızda | Webreta",
+      "description": "Webreta — İzmir merkezli web tasarım ve dijital reklam ajansı. Yalın tasarım, hızlı teslim, açık iletişim.",
+      "keywords": [],
+      "ogImage": "",
+      "noindex": false,
+      "includeInSitemap": true,
+      "priority": 0.8,
+      "changefreq": "monthly"
+    },
+    "/web-site": {
+      "title": "Web Site | Webreta",
+      "description": "",
+      "keywords": [],
+      "ogImage": "",
+      "noindex": false,
+      "includeInSitemap": true,
+      "priority": 0.9,
+      "changefreq": "monthly"
+    },
+    "/dijital-reklamlar": {
+      "title": "",
+      "description": "",
+      "keywords": [],
+      "ogImage": "",
+      "noindex": false,
+      "includeInSitemap": true,
+      "priority": 0.9,
+      "changefreq": "monthly"
+    },
+    "/blog": {
+      "title": "Blog | Webreta",
+      "description": "",
+      "keywords": [],
+      "ogImage": "",
+      "noindex": false,
+      "includeInSitemap": true,
+      "priority": 0.7,
+      "changefreq": "weekly"
+    },
+    "/iletisim": {
+      "title": "",
+      "description": "",
+      "keywords": [],
+      "ogImage": "",
+      "noindex": false,
+      "includeInSitemap": true,
+      "priority": 0.7,
+      "changefreq": "yearly"
+    }
+  },
+  "sitemap": {
+    "includeLegalPages": false,
+    "extraUrls": []
+  }
+}

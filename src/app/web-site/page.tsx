@@ -2,9 +2,10 @@ import SiteHeader from "@/components/SiteHeader"
 import SiteFooter from "@/components/SiteFooter"
 import QuoteWizardSection from "@/components/QuoteWizardSection"
 import WebSiteExtras from "@/components/WebSiteExtras"
+import { buildPageMetadata } from "@/lib/seo-metadata"
 
-export const metadata = {
-  title: "Web Site | Webreta",
+export async function generateMetadata() {
+  return buildPageMetadata("/web-site")
 }
 
 export default function WebSitePage() {

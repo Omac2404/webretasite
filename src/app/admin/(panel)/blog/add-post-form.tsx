@@ -9,6 +9,7 @@ import {
   uploadInlineImageAction,
   type PostState,
 } from "./actions"
+import { BlogSeoPanel } from "./seo-panel"
 
 const INITIAL: PostState = {}
 
@@ -18,6 +19,9 @@ export function AddPostForm({ authors }: { authors: Author[] }) {
   const [filename, setFilename] = useState<string | null>(null)
   const [inlineUploading, setInlineUploading] = useState(false)
   const [inlineError, setInlineError] = useState<string | null>(null)
+  const [title, setTitle] = useState("")
+  const [excerpt, setExcerpt] = useState("")
+  const [content, setContent] = useState("")
   const formRef = useRef<HTMLFormElement>(null)
   const contentRef = useRef<HTMLTextAreaElement>(null)
 
@@ -26,8 +30,28 @@ export function AddPostForm({ authors }: { authors: Author[] }) {
       formRef.current?.reset()
       setPreview(null)
       setFilename(null)
+      setTitle("")
+      setExcerpt("")
+      setContent("")
     }
   }, [state.ok])
+
+  function insertSnippet(snippet: string) {
+    const el = contentRef.current
+    if (!el) {
+      setContent((c) => c + snippet)
+      return
+    }
+    const start = el.selectionStart ?? content.length
+    const end = el.selectionEnd ?? content.length
+    const next = content.slice(0, start) + snippet + content.slice(end)
+    setContent(next)
+    requestAnimationFrame(() => {
+      const cursor = start + snippet.length
+      el.focus()
+      el.setSelectionRange(cursor, cursor)
+    })
+  }
 
   async function handleInlineUpload(file: File) {
     setInlineError(null)
@@ -41,7 +65,7 @@ export function AddPostForm({ authors }: { authors: Author[] }) {
         setInlineError(res.error ?? "Yükleme başarısız.")
         return
       }
-      insertAtCursor(contentRef.current, `\n\n![](${res.url})\n\n`)
+      insertSnippet(`\n\n![](${res.url})\n\n`)
     } catch {
       setInlineError("Beklenmeyen bir hata oluştu.")
     } finally {
@@ -56,6 +80,8 @@ export function AddPostForm({ authors }: { authors: Author[] }) {
           name="title"
           type="text"
           required
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="Yazının başlığı"
           className={inputCls}
         />
@@ -76,6 +102,8 @@ export function AddPostForm({ authors }: { authors: Author[] }) {
         <textarea
           name="excerpt"
           rows={2}
+          value={excerpt}
+          onChange={(e) => setExcerpt(e.target.value)}
           placeholder="Bir-iki cümle özet"
           className={`${inputCls} resize-none`}
         />
@@ -90,14 +118,16 @@ export function AddPostForm({ authors }: { authors: Author[] }) {
           name="content"
           rows={14}
           required
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
           placeholder="Yazının gövdesi"
           className={`${inputCls} resize-y font-mono text-[12.5px] leading-relaxed`}
         />
         <InlineImageUploader
           uploading={inlineUploading}
           error={inlineError}
-          onUpload={handleInlineUpload}
-          onInsertVideo={(snippet) => insertAtCursor(contentRef.current, snippet)}
+          onUpload={(f) => handleInlineUpload(f)}
+          onInsertVideo={(snippet) => insertSnippet(snippet)}
         />
       </Field>
 
@@ -119,6 +149,13 @@ export function AddPostForm({ authors }: { authors: Author[] }) {
           }}
         />
       </Field>
+
+      <BlogSeoPanel
+        liveTitle={title}
+        liveExcerpt={excerpt}
+        liveContent={content}
+        liveCoverImage={preview ? "uploaded" : ""}
+      />
 
       <label className="flex items-center gap-2.5 text-[13px] text-black/70">
         <input
@@ -342,20 +379,6 @@ export function CategorySelect({
       ))}
     </select>
   )
-}
-
-// Insert text at the textarea's current selection. Falls back to
-// appending if the textarea isn't accessible.
-function insertAtCursor(el: HTMLTextAreaElement | null, snippet: string) {
-  if (!el) return
-  const start = el.selectionStart ?? el.value.length
-  const end = el.selectionEnd ?? el.value.length
-  const before = el.value.slice(0, start)
-  const after = el.value.slice(end)
-  el.value = before + snippet + after
-  const cursor = start + snippet.length
-  el.focus()
-  el.setSelectionRange(cursor, cursor)
 }
 
 const inputCls =

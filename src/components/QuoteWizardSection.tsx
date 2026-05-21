@@ -277,10 +277,9 @@ export default function QuoteWizardSection() {
     titleHighlight: string
     subtitle: string
   }>({
-    titleLeader: "Projenize özel",
-    titleHighlight: "fiyat teklifi",
-    subtitle:
-      "Dört kısa adımda projenizi tanıyalım. Cevaplarınıza göre size en uygun çözümü ve net bir fiyat aralığını sunalım.",
+    titleLeader: "",
+    titleHighlight: "",
+    subtitle: "",
   })
   useEffect(() => {
     let cancelled = false
@@ -705,23 +704,32 @@ export default function QuoteWizardSection() {
         className="relative border-t border-black/[0.06] py-12 md:py-16"
       >
         <div className="relative mx-auto max-w-[1280px] px-6 md:px-12">
-          <div className="mb-8 md:mb-10">
-            <h2 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[48px]">
-              {wizardHeading.titleLeader && (
-                <span className="font-normal">{wizardHeading.titleLeader} </span>
+          {(wizardHeading.titleLeader.trim() ||
+            wizardHeading.titleHighlight.trim() ||
+            wizardHeading.subtitle.trim()) && (
+            <div className="mb-8 md:mb-10">
+              {(wizardHeading.titleLeader.trim() ||
+                wizardHeading.titleHighlight.trim()) && (
+                <h2 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[48px]">
+                  {wizardHeading.titleLeader && (
+                    <span className="font-normal">
+                      {wizardHeading.titleLeader}{" "}
+                    </span>
+                  )}
+                  {wizardHeading.titleHighlight && (
+                    <span className="font-bold text-[#3c639f]">
+                      {wizardHeading.titleHighlight}
+                    </span>
+                  )}
+                </h2>
               )}
-              {wizardHeading.titleHighlight && (
-                <span className="font-bold text-[#3c639f]">
-                  {wizardHeading.titleHighlight}
-                </span>
+              {wizardHeading.subtitle && (
+                <p className="mt-4 max-w-[520px] text-[15px] leading-relaxed text-black/60">
+                  {wizardHeading.subtitle}
+                </p>
               )}
-            </h2>
-            {wizardHeading.subtitle && (
-              <p className="mt-4 max-w-[520px] text-[15px] leading-relaxed text-black/60">
-                {wizardHeading.subtitle}
-              </p>
-            )}
-          </div>
+            </div>
+          )}
 
           <div className="quote-card-pulse overflow-hidden rounded-2xl border border-black/[0.06] bg-white">
             {quoteSubmitted ? (

@@ -84,7 +84,12 @@ export async function saveWebPackagesAction(
     void rawId
   }
 
-  const data: WebPackagesData = { packages }
+  const current = await readWebPackages()
+  const data: WebPackagesData = {
+    packages,
+    kobiBanner: current.kobiBanner,
+    wizardHeading: current.wizardHeading,
+  }
   await writeWebPackages(data)
   revalidatePath("/admin/web-paketleri")
   revalidatePath("/web-site")
@@ -182,9 +187,6 @@ export async function saveWizardHeadingAction(
   const titleLeader = String(formData.get("titleLeader") ?? "").trim()
   const titleHighlight = String(formData.get("titleHighlight") ?? "").trim()
   const subtitle = String(formData.get("subtitle") ?? "").trim()
-  if (!titleLeader && !titleHighlight) {
-    return { error: "Başlık için en az bir parça gerekli." }
-  }
   await updateWizardHeading({ titleLeader, titleHighlight, subtitle })
   revalidatePath("/admin/web-paketleri")
   revalidatePath("/web-site")

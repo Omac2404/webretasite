@@ -4,10 +4,46 @@
 import { promises as fs } from "node:fs"
 import path from "node:path"
 import {
+  slugify as slugifyShared,
   type BlogData,
   type BlogPost,
+  type BlogPostSeo,
   type CategoryKey,
 } from "./blog-types"
+
+function normalizeSeo(input: unknown): BlogPostSeo | undefined {
+  if (input == null) return undefined
+  const raw = input as Partial<BlogPostSeo>
+  const keywords = Array.isArray(raw.keywords)
+    ? raw.keywords
+        .map((k) => String(k).trim())
+        .filter((k) => k.length > 0)
+        .slice(0, 20)
+    : []
+  const seo: BlogPostSeo = {
+    metaTitle: typeof raw.metaTitle === "string" ? raw.metaTitle.trim() : "",
+    metaDescription:
+      typeof raw.metaDescription === "string"
+        ? raw.metaDescription.trim()
+        : "",
+    keywords,
+    focusKeyword:
+      typeof raw.focusKeyword === "string" ? raw.focusKeyword.trim() : "",
+    ogImage: typeof raw.ogImage === "string" ? raw.ogImage.trim() : "",
+    noindex: raw.noindex === true,
+    includeInSitemap: raw.includeInSitemap !== false,
+  }
+  // Don't persist an entirely empty SEO blob — keeps JSON tidy
+  const hasAny =
+    seo.metaTitle ||
+    seo.metaDescription ||
+    seo.keywords.length > 0 ||
+    seo.focusKeyword ||
+    seo.ogImage ||
+    seo.noindex ||
+    seo.includeInSitemap === false
+  return hasAny ? seo : undefined
+}
 
 function normalizeCategory(v: unknown): CategoryKey {
   return v === "haberler" ? "haberler" : "teknik"
@@ -19,26 +55,13 @@ function makeId(): string {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 }
 
-// Turkish-aware slugifier. Strips diacritics, collapses non-alnum to
-// hyphens, limits length.
-export function slugify(input: string): string {
-  return (
-    input
-      .toLowerCase()
-      .replace(/ı/g, "i")
-      .replace(/ç/g, "c")
-      .replace(/ş/g, "s")
-      .replace(/ğ/g, "g")
-      .replace(/ü/g, "u")
-      .replace(/ö/g, "o")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 80) || "yazi"
-  )
-}
+// Re-export the shared slugifier so existing imports from blog-store
+// keep working.
+export const slugify = slugifyShared
 
 function normalizePost(p: Partial<BlogPost>): BlogPost {
   const now = new Date().toISOString()
+  const seo = normalizeSeo(p.seo)
   return {
     id: String(p.id ?? makeId()),
     authorId: String(p.authorId ?? ""),
@@ -51,6 +74,7 @@ function normalizePost(p: Partial<BlogPost>): BlogPost {
     createdAt: String(p.createdAt ?? now),
     updatedAt: String(p.updatedAt ?? now),
     published: p.published !== false,
+    ...(seo ? { seo } : {}),
   }
 }
 
@@ -120,10 +144,12 @@ export async function addPost(input: {
   content: string
   coverImage: string
   published: boolean
+  seo?: Partial<BlogPostSeo>
 }): Promise<BlogPost> {
   const data = await readBlog()
   const slug = await uniqueSlug(slugify(input.title))
   const now = new Date().toISOString()
+  const seo = normalizeSeo(input.seo)
   const post: BlogPost = {
     id: makeId(),
     authorId: input.authorId,
@@ -136,6 +162,7 @@ export async function addPost(input: {
     createdAt: now,
     updatedAt: now,
     published: input.published,
+    ...(seo ? { seo } : {}),
   }
   data.posts.unshift(post)
   await writeBlog(data)
@@ -152,6 +179,7 @@ export async function updatePost(
     content: string
     coverImage?: string
     published: boolean
+    seo?: Partial<BlogPostSeo>
   },
 ): Promise<void> {
   const data = await readBlog()
@@ -169,6 +197,9 @@ export async function updatePost(
   post.content = input.content.replace(/\r\n/g, "\n")
   if (typeof input.coverImage === "string") post.coverImage = input.coverImage
   post.published = input.published
+  const seo = normalizeSeo(input.seo)
+  if (seo) post.seo = seo
+  else delete post.seo
   post.updatedAt = new Date().toISOString()
   await writeBlog(data)
 }

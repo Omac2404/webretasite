@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import type { Metadata } from "next"
 import { ArrowLeft } from "lucide-react"
 import SiteHeader from "@/components/SiteHeader"
 import SiteFooter from "@/components/SiteFooter"
@@ -6,6 +7,7 @@ import { BlogCard } from "@/components/BlogCard"
 import { AuthorAvatar } from "@/components/AuthorChip"
 import { getPostBySlug, listPublished } from "@/lib/blog-store"
 import { getAuthorById, readAuthors } from "@/lib/authors-store"
+import { readSeo } from "@/lib/seo-store"
 import {
   formatDate,
   readingTimeMinutes,
@@ -14,17 +16,63 @@ import {
 
 export const dynamic = "force-dynamic"
 
+function abs(base: string, p: string): string | undefined {
+  if (!p) return undefined
+  if (/^https?:\/\//i.test(p)) return p
+  const trimmed = base.replace(/\/+$/, "")
+  return `${trimmed}${p.startsWith("/") ? p : `/${p}`}`
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>
-}) {
+}): Promise<Metadata> {
   const { slug } = await params
   const post = await getPostBySlug(slug)
-  if (!post) return { title: "Yazı bulunamadı | Webreta" }
+  if (!post) return { title: "Yazı bulunamadı" }
+
+  const seoData = await readSeo()
+  const g = seoData.global
+  const title = post.seo?.metaTitle?.trim() || post.title
+  const description =
+    post.seo?.metaDescription?.trim() ||
+    post.excerpt ||
+    g.defaultDescription
+  const keywords =
+    post.seo?.keywords && post.seo.keywords.length > 0
+      ? post.seo.keywords
+      : g.defaultKeywords
+  const ogImage =
+    post.seo?.ogImage?.trim() || post.coverImage || g.defaultOgImage
+  const ogImageAbs = ogImage ? abs(g.siteUrl, ogImage) : undefined
+  const canonical = g.siteUrl ? abs(g.siteUrl, `/blog/${post.slug}`) : undefined
+
   return {
-    title: `${post.title} | Webreta`,
-    description: post.excerpt,
+    title,
+    description,
+    ...(keywords.length > 0 ? { keywords } : {}),
+    alternates: canonical ? { canonical } : undefined,
+    openGraph: {
+      type: "article",
+      siteName: g.siteName,
+      title,
+      description,
+      url: canonical,
+      publishedTime: post.createdAt,
+      modifiedTime: post.updatedAt,
+      ...(ogImageAbs ? { images: [{ url: ogImageAbs }] } : {}),
+    },
+    twitter: {
+      card: ogImageAbs ? "summary_large_image" : "summary",
+      title,
+      description,
+      ...(g.twitterHandle ? { site: g.twitterHandle } : {}),
+      ...(ogImageAbs ? { images: [ogImageAbs] } : {}),
+    },
+    robots: post.seo?.noindex
+      ? { index: false, follow: false }
+      : { index: true, follow: true },
   }
 }
 

@@ -1,31 +1,4 @@
 {
-  "kobiBanner": {
-    "imageUrl": "",
-    "eyebrow": "Webreta'dan",
-    "bigTitle": "KOBİ",
-    "bigSubtitle": "Küçük & Orta Ölçek",
-    "tags": [
-      "Hızlı kurulum",
-      "Sabit fiyat",
-      "Sade panel"
-    ],
-    "rightEyebrow": "Aradığınız bu olabilir",
-    "title": "KOBİ'niz için hızlı ve bütçe dostu web sitesi",
-    "description": "Küçük ve orta ölçekli işletmeler için tasarladığımız Webreta KOBİ, kurumsal kimlik, içerik yönetimi ve mobil uyumlu modern bir tasarımı sabit fiyat ve hızlı teslimat sözüyle birleştiriyor. Karmaşaya girmeden, ihtiyacınız olan her şey: tek pakette.",
-    "bullets": [
-      "2–3 hafta içinde yayında",
-      "Sabit fiyat, sürpriz yok",
-      "Sade içerik yönetim paneli",
-      "Mobil + masaüstü uyumlu"
-    ],
-    "ctaLabel": "Webreta KOBİ'yi keşfet",
-    "ctaHref": "https://kobi.webreta.com"
-  },
-  "wizardHeading": {
-    "titleLeader": "Projenize özel",
-    "titleHighlight": "fiyat teklifi",
-    "subtitle": "Size en uygun çözümü ve net bir fiyat aralığını sunalım."
-  },
   "packages": [
     {
       "id": "landing",
@@ -83,5 +56,32 @@
       "iconKey": "rocket",
       "kobiRedirect": false
     }
-  ]
+  ],
+  "kobiBanner": {
+    "imageUrl": "",
+    "eyebrow": "Webreta'dan",
+    "bigTitle": "KOBİ",
+    "bigSubtitle": "Küçük & Orta Ölçek",
+    "tags": [
+      "Hızlı kurulum",
+      "Sabit fiyat",
+      "Sade panel"
+    ],
+    "rightEyebrow": "Aradığınız bu olabilir",
+    "title": "KOBİ'niz için hızlı ve bütçe dostu web sitesi",
+    "description": "Küçük ve orta ölçekli işletmeler için tasarladığımız Webreta KOBİ, kurumsal kimlik, içerik yönetimi ve mobil uyumlu modern bir tasarımı sabit fiyat ve hızlı teslimat sözüyle birleştiriyor. Karmaşaya girmeden, ihtiyacınız olan her şey: tek pakette.",
+    "bullets": [
+      "2–3 hafta içinde yayında",
+      "Sabit fiyat, sürpriz yok",
+      "Sade içerik yönetim paneli",
+      "Mobil + masaüstü uyumlu"
+    ],
+    "ctaLabel": "Webreta KOBİ'yi keşfet",
+    "ctaHref": "https://kobi.webreta.com"
+  },
+  "wizardHeading": {
+    "titleLeader": "Size Özel",
+    "titleHighlight": "Fiyat Teklifi",
+    "subtitle": "Size en uygun çözümü ve net bir fiyat aralığını sunalım."
+  }
 }

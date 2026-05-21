@@ -1,24 +1,24 @@
 {
   "hero": {
     "kicker": "İletişim",
-    "titleLeading": "Bir kahve içelim,",
-    "titleHighlight": "projenizi konuşalım.",
+    "titleLeading": "Merak Ettiğiniz",
+    "titleHighlight": "İlgili Her Konu İçin.",
     "titleTrailing": "",
-    "intro": "Yeni bir web projeniz, mevcut sitenizde iyileştirme fikriniz veya dijital reklam stratejiniz için bizimle iletişime geçin. 24 saat içinde geri dönüyoruz."
+    "intro": "Web projeniz, reklamlarınız ya da ilgili herhangi bir konu için bize ulaşabilirsiniz."
   },
   "info": {
-    "email": "hello@webreta.com",
-    "phone": "+90 (XXX) XXX XX XX",
+    "email": "info@webreta.com.tr",
+    "phone": "+90 542 580 94 92",
     "addressLine1": "Türkiye, İzmir, Bornova",
     "addressLine2": "Kazımdirik mah. 220 sok. no:3/A",
-    "hours": "Pazartesi – Cuma · 09:00 – 18:00"
+    "hours": "Pazartesi – Cuma · 10:00 – 18:00"
   },
   "form": {
     "kicker": "Mesaj gönderin",
     "titleLeading": "Formu",
     "titleHighlight": "doldurun",
     "titleTrailing": ", dönelim.",
-    "intro": "Merak ettiğiniz ilgili her konu için bize danışabilirsiniz."
+    "intro": "24 saat içinde geri dönüyoruz."
   },
   "map": {
     "kicker": "Konum",

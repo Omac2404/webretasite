@@ -2,9 +2,10 @@ import SiteHeader from "@/components/SiteHeader"
 import SiteFooter from "@/components/SiteFooter"
 import DijitalReklamlarClient from "@/components/DijitalReklamlarClient"
 import { readPackages } from "@/lib/packages-store"
+import { buildPageMetadata } from "@/lib/seo-metadata"
 
-export const metadata = {
-  title: "Dijital Reklamlar | Webreta",
+export async function generateMetadata() {
+  return buildPageMetadata("/dijital-reklamlar")
 }
 
 // Disable static caching so admin edits to packages.json show up on the

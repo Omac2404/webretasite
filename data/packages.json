@@ -22,7 +22,8 @@
             "Anahtar kelime araştırması",
             "Aylık 1 raporlama toplantısı",
             "Temel dönüşüm takibi kurulumu"
-          ]
+          ],
+          "whatsappMessage": ""
         },
         {
           "key": "growth",
@@ -41,7 +42,8 @@
             "A/B reklam metni testleri",
             "Aylık 2 raporlama toplantısı",
             "Gelişmiş dönüşüm takibi (GTM + GA4)"
-          ]
+          ],
+          "whatsappMessage": ""
         },
         {
           "key": "premium",
@@ -60,7 +62,8 @@
             "Haftalık optimizasyon",
             "Aylık 4 raporlama toplantısı",
             "Özel dashboard ve attribution modelleme"
-          ]
+          ],
+          "whatsappMessage": ""
         }
       ]
     },
@@ -86,7 +89,8 @@
             "Temel kitle hedefleme",
             "Aylık 1 raporlama toplantısı",
             "Reklam metni desteği"
-          ]
+          ],
+          "whatsappMessage": ""
         },
         {
           "key": "growth",
@@ -104,7 +108,8 @@
             "A/B yaratıcı testleri",
             "Aylık 2 raporlama toplantısı",
             "Gelişmiş dönüşüm takibi (Conversions API)"
-          ]
+          ],
+          "whatsappMessage": ""
         },
         {
           "key": "premium",
@@ -123,15 +128,16 @@
             "Haftalık optimizasyon",
             "Aylık 4 raporlama toplantısı",
             "Özel dashboard ve attribution modelleme"
-          ]
+          ],
+          "whatsappMessage": ""
         }
       ]
     },
     {
       "key": "360",
       "label": "Google + Meta",
-      "short": "G + M",
-      "intro": "Google ve Meta'yı tek elden, koordineli bir stratejiyle yöneten paketlerimiz.",
+      "short": "Google + Meta",
+      "intro": "Google Ads reklam yönetimi paketlerimiz ile bütçenize en uygun çözümü bulun.",
       "packages": [
         {
           "key": "basic",
@@ -149,7 +155,8 @@
             "Çapraz kanal raporlaması",
             "Aylık 1 raporlama toplantısı",
             "Birleşik dönüşüm takibi"
-          ]
+          ],
+          "whatsappMessage": ""
         },
         {
           "key": "growth",
@@ -168,7 +175,8 @@
             "Aylık 2 raporlama toplantısı",
             "Gelişmiş dönüşüm takibi (GA4 + CAPI)",
             "Kanallar arası bütçe optimizasyonu"
-          ]
+          ],
+          "whatsappMessage": ""
         },
         {
           "key": "premium",
@@ -187,9 +195,14 @@
             "Haftalık optimizasyon",
             "Aylık 4 raporlama toplantısı",
             "Özel dashboard ve stratejik danışmanlık"
-          ]
+          ],
+          "whatsappMessage": ""
         }
       ]
     }
-  ]
+  ],
+  "whatsapp": {
+    "number": "905321234567",
+    "display": "+90 532 123 45 67"
+  }
 }

@@ -3,11 +3,10 @@ import SiteHeader from "@/components/SiteHeader"
 import SiteFooter from "@/components/SiteFooter"
 import ContactForm from "@/components/ContactForm"
 import { readContact } from "@/lib/contact-store"
+import { buildPageMetadata } from "@/lib/seo-metadata"
 
-export const metadata = {
-  title: "İletişim | Webreta",
-  description:
-    "Webreta ile iletişime geçin. İzmir merkezli web tasarım ve dijital reklam ajansı. Projeniz için 24 saat içinde dönüş.",
+export async function generateMetadata() {
+  return buildPageMetadata("/iletisim")
 }
 
 // Admin haritayı boş bıraktığında kullanılacak fallback — İzmir Konak.
