@@ -5,10 +5,14 @@ import { useEffect, useState } from "react"
 import { Menu, X, BookOpen, ArrowRight } from "lucide-react"
 
 const NAV_ITEMS = [
-  { label: "Hakkımızda", href: "/hakkimizda" },
-  { label: "Web Site", href: "/web-site" },
-  { label: "Dijital Reklamlar", href: "/dijital-reklamlar" },
-  { label: "İletişim", href: "/iletisim" },
+  { label: "Hakkımızda", href: "/hakkimizda", track: "header:nav:hakkimizda" },
+  { label: "Web Site", href: "/web-site", track: "header:nav:web-site" },
+  {
+    label: "Dijital Reklamlar",
+    href: "/dijital-reklamlar",
+    track: "header:nav:dijital-reklamlar",
+  },
+  { label: "İletişim", href: "/iletisim", track: "header:nav:iletisim" },
 ]
 
 export default function SiteHeader() {
@@ -50,6 +54,8 @@ export default function SiteHeader() {
             <a
               key={item.label}
               href={item.href}
+              data-track={item.track}
+              data-track-label={item.label}
               className="text-[14px] text-black/60 transition-colors hover:text-[#0a0a0a]"
             >
               {item.label}
@@ -133,6 +139,8 @@ export default function SiteHeader() {
                 <li key={item.label}>
                   <a
                     href={item.href}
+                    data-track={item.track}
+                    data-track-label={item.label}
                     onClick={() => setMobileMenuOpen(false)}
                     className="group flex items-center justify-between border-b border-black/[0.05] py-4 text-[17px] tracking-[-0.01em] text-[#0a0a0a] transition-colors hover:text-[#3c639f]"
                   >

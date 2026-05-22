@@ -186,6 +186,8 @@ export default function WebSiteExtras() {
                   href={banner.ctaHref}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-track="web-site:kobi-banner"
+                  data-track-label={banner.ctaLabel}
                   className="cta-primary inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[14px] font-medium"
                 >
                   {banner.ctaLabel}

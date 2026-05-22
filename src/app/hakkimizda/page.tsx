@@ -68,8 +68,14 @@ export default async function HakkimizdaPage() {
         {/* Row 1 — image left, text right */}
         <AboutRowBlock row={about.row1} imageSide="left" />
 
-        {/* Row 2 — text left, image right */}
-        <AboutRowBlock row={about.row2} imageSide="right" />
+        {/* Row 2 — text left, image right. This block currently hosts the
+            "Webreta KOBİ" CTA; tracked so admin can see how many of the
+            Hakkımızda visitors click it. */}
+        <AboutRowBlock
+          row={about.row2}
+          imageSide="right"
+          buttonTrack="hakkimizda:row2-cta"
+        />
 
         {/* CTA — Bir proje konuşalım mı? */}
         <section className="relative mx-auto max-w-[1280px] px-6 pb-20 pt-4 md:px-12 md:pb-28 md:pt-8">
@@ -98,6 +104,8 @@ export default async function HakkimizdaPage() {
             </div>
             <Link
               href={about.cta.buttonHref}
+              data-track="hakkimizda:cta"
+              data-track-label={about.cta.buttonLabel}
               className="group inline-flex items-center gap-2 rounded-md bg-[#3c639f] px-6 py-3 text-[14px] font-medium text-white shadow-[0_8px_24px_-8px_rgba(60,99,159,0.4)] transition-colors hover:bg-[#2f5288]"
             >
               {about.cta.buttonLabel}
@@ -117,9 +125,11 @@ export default async function HakkimizdaPage() {
 function AboutRowBlock({
   row,
   imageSide,
+  buttonTrack,
 }: {
   row: AboutRow
   imageSide: "left" | "right"
+  buttonTrack?: string
 }) {
   // Body ya HTML (RichTextArea'dan) ya da eski plain text. Plain text'i
   // \n\n ile paragrafla; HTML'i sanitize edip dangerouslySetInnerHTML
@@ -164,6 +174,8 @@ function AboutRowBlock({
         <div className="mt-6">
           <Link
             href={row.buttonHref || "#"}
+            data-track={buttonTrack}
+            data-track-label={row.buttonLabel}
             className="group inline-flex items-center gap-2 rounded-md border border-black/[0.10] bg-white px-5 py-2.5 text-[14px] font-medium text-[#0a0a0a] transition-all hover:-translate-y-0.5 hover:border-[#3c639f]/30 hover:bg-[#3c639f]/[0.04] hover:text-[#3c639f] hover:shadow-[0_8px_20px_-8px_rgba(60,99,159,0.25)]"
           >
             {row.buttonLabel}

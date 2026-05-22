@@ -2,41 +2,41 @@
   "packages": [
     {
       "id": "landing",
-      "label": "Landing Sayfa",
+      "label": "Landing Page Web Site",
       "tagline": "Tek sayfa · dönüşüm odaklı",
       "descriptor": "Pratik",
-      "desc": "Tek sayfada hikayenizi anlatan, dönüşüm odaklı tasarım. Ürün lansmanları, kampanyalar veya tek bir hizmete odaklanan işletmeler için ideal.",
+      "desc": "Tek sayfada şirketinizi anlatan, dönüşüm odaklı tasarım. Sadece bir hizmet grubuna odaklanan, kampanya veya reklam yapmayı hedefleyen işletmeler için.",
       "bullets": [
-        "1 sayfa",
+        "1 sayfa (sadece anasayfa)",
         "Form ve CTA optimizasyonu",
         "Hızlı yayına alma"
       ],
       "iconKey": "layers",
-      "kobiRedirect": true,
-      "priceMin": null,
-      "priceMax": null
+      "kobiRedirect": false,
+      "priceMin": 10000,
+      "priceMax": 15000
     },
     {
       "id": "mini",
-      "label": "Kompakt Kurumsal Site",
-      "tagline": "5 sayfaya kadar · statik",
-      "descriptor": "Bütçe dostu",
-      "desc": "5 sayfaya kadar statik kurumsal site. Hakkımızda, hizmetler, referanslar ve iletişim — hızlı yüklenen, şık bir dijital vitrin.",
+      "label": "Hizmet Odaklı Kurumsal Web Site",
+      "tagline": "10-25 sayfaya kadar - basit admin panel",
+      "descriptor": "İdeal",
+      "desc": "Genelde 10-25 sayfa aralığında olan kurumsal site. Hakkımızda, hizmetler, referanslar, iletişim vb sayfalar içeren, hızlı yüklenen, şık bir dijital vitrin.",
       "bullets": [
-        "5 sayfaya kadar",
+        "10 - 25 sayfaya kadar",
         "Mobil + masaüstü uyumlu",
         "Temel SEO"
       ],
       "iconKey": "globe",
       "kobiRedirect": true,
-      "priceMin": null,
-      "priceMax": null
+      "priceMin": 15000,
+      "priceMax": 30000
     },
     {
       "id": "pro",
-      "label": "Profesyonel Kurumsal Site",
-      "tagline": "50 sayfaya kadar · CMS",
-      "descriptor": "İdeal",
+      "label": "Ürün Odaklı Kurumsal Web Site",
+      "tagline": "50 + sayfaya kadar · CMS",
+      "descriptor": "Ürün Odaklı",
       "desc": "50 sayfaya kadar genişleyebilen, blog modülü, içerik yönetim paneli ve gelişmiş form yönetimi içeren tam donanımlı kurumsal site.",
       "bullets": [
         "50 sayfaya kadar",
@@ -45,14 +45,14 @@
       ],
       "iconKey": "boxes",
       "kobiRedirect": false,
-      "priceMin": null,
-      "priceMax": null
+      "priceMin": 30000,
+      "priceMax": 50000
     },
     {
       "id": "webapp",
       "label": "Web Uygulamalı Kurumsal Site",
       "tagline": "Sınırsız ölçek · amaca özel uygulama",
-      "descriptor": "Profesyonel",
+      "descriptor": "Tam Donanımlı",
       "desc": "Sektörünüze özel iş akışlarını dijitalleştiren güçlü uygulamalar: online randevu, sipariş takip, müşteri/hasta portalı, lojistik ve stok yönetimi gibi sınırsız özelleştirilebilir çözümler.",
       "bullets": [
         "Online randevu / rezervasyon",
@@ -61,7 +61,7 @@
       ],
       "iconKey": "rocket",
       "kobiRedirect": false,
-      "priceMin": null,
+      "priceMin": 50000,
       "priceMax": null
     }
   ],

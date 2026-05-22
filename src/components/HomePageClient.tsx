@@ -2332,6 +2332,8 @@ export default function Home() {
                     href={googlePartner.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-track="home:partner-badge"
+                    data-track-label="Google Partner badge"
                     aria-label="Webreta'nın Google Partner profilini görüntüle"
                     className="google-partner-badge group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white py-2.5 pl-4 pr-2 transition-all duration-300 hover:-translate-y-0.5"
                     style={{
@@ -2678,6 +2680,8 @@ export default function Home() {
                     href={reviewsSummary.reviewsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-track="home:google-reviews:view"
+                    data-track-label="Yorumları Google'da görüntüle"
                     className="group inline-flex items-center gap-2 rounded-lg border border-[#3c639f]/40 bg-white px-4 py-2.5 text-[13px] font-medium text-[#3c639f] shadow-[0_1px_2px_rgba(60,99,159,0.06)] transition-all hover:border-[#3c639f] hover:bg-[#3c639f]/[0.04] hover:shadow-[0_4px_12px_-2px_rgba(60,99,159,0.18)]"
                   >
                     <GoogleIcon />

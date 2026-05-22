@@ -1,49 +1,37 @@
 import Link from "next/link"
 import { headers } from "next/headers"
 import {
-  Activity,
   BarChart3,
-  Calendar as CalendarIcon,
   CalendarDays,
   Clock,
-  Eye,
   Globe2,
   MonitorSmartphone,
   MousePointerClick,
   PieChart,
   Smartphone,
   Tablet,
-  Trash2,
   Users,
 } from "lucide-react"
 import {
-  dailySeriesForMonth,
-  dayBuckets,
+  clickReach,
   dayKey,
-  hourlySeries,
   listVisitorsFrom,
   monthBuckets,
   monthKey,
   readEvents,
-  topClicksFrom,
-  topPagesFrom,
-  topSectionsFrom,
+  sectionDwellSummary,
+  tabReach,
+  topClicksByPrefix,
+  topClicksOnPath,
+  visitorsOnPath,
+  type Reach,
   type Tally,
   type Visitor,
 } from "@/lib/analytics-store"
 import { readAnalyticsSettings } from "@/lib/analytics-settings"
-import {
-  EVENT_LABEL,
-  sectionLabel,
-  type StoredEvent,
-} from "@/lib/analytics-types"
-import {
-  clearAnalyticsAction,
-  clearDayAction,
-  clearMonthAction,
-  setEnabledAction,
-} from "./actions"
-import { ConfirmForm } from "./confirm-form"
+import { EVENT_LABEL, sectionLabel, type StoredEvent } from "@/lib/analytics-types"
+import { setEnabledAction } from "./actions"
+import { ResetDialog } from "./reset-dialog"
 
 export const dynamic = "force-dynamic"
 
@@ -134,47 +122,31 @@ function formatMonthLabel(month: string): string {
   return TR_MONTH_FULL.format(new Date(month + "-01T12:00:00"))
 }
 
-// ── Activity tags ─────────────────────────────────────────────────────
-// Look at a visitor's click events and extract human-readable badges so
-// the admin can see at a glance "this person submitted an appointment"
-// without expanding the timeline.
+function formatDuration(ms: number): string {
+  if (ms <= 0) return "0sn"
+  const totalSec = Math.round(ms / 1000)
+  if (totalSec < 60) return `${totalSec}sn`
+  const m = Math.floor(totalSec / 60)
+  const s = totalSec - m * 60
+  if (m < 60) return s === 0 ? `${m}dk` : `${m}dk ${s}sn`
+  const h = Math.floor(m / 60)
+  const mm = m - h * 60
+  return mm === 0 ? `${h}sa` : `${h}sa ${mm}dk`
+}
 
-type Tag = { label: string; color: "emerald" | "green" | "blue" | "violet" | "rose" | "amber" | "indigo" }
+// ── Visitor tags ─────────────────────────────────────────────────────
+// Per spec the visitor row only surfaces two activity flavours: a
+// successful form submission, and a WhatsApp-with-package click. Every
+// other interaction is aggregated into the cards above and shouldn't
+// clutter the per-visitor row.
 
-const TAG_RULES: Array<{ match: (target: string) => boolean; tag: Tag }> = [
-  {
-    match: (t) => t === "randevu-olustur",
-    tag: { label: "Randevu oluşturdu", color: "emerald" },
-  },
-  {
-    match: (t) => t.startsWith("whatsapp:"),
-    tag: { label: "WhatsApp'a tıkladı", color: "green" },
-  },
-  {
-    match: (t) => t.startsWith("talep-edin:"),
-    tag: { label: "Talep popup'ı açtı", color: "blue" },
-  },
-  {
-    match: (t) => t.startsWith("detaylari-gor:"),
-    tag: { label: "Paket detayına baktı", color: "violet" },
-  },
-  {
-    match: (t) => t === "header:blog-cta",
-    tag: { label: "Header Blog'a bastı", color: "rose" },
-  },
-  {
-    match: (t) => t.startsWith("blog:card:"),
-    tag: { label: "Blog yazısı açtı", color: "amber" },
-  },
-  {
-    match: (t) => t === "home:service-card:web-site",
-    tag: { label: "Web Site kartı", color: "indigo" },
-  },
-  {
-    match: (t) => t === "home:service-card:dijital-reklamlar",
-    tag: { label: "Dijital Reklamlar kartı", color: "indigo" },
-  },
-]
+type Tag = { label: string; color: "emerald" | "green" | "blue" }
+
+const FORM_LABEL: Record<string, string> = {
+  contact: "İletişim",
+  quote: "Teklif",
+  randevu: "Randevu",
+}
 
 function visitorTags(visitor: Visitor): Tag[] {
   const seen = new Set<string>()
@@ -182,10 +154,25 @@ function visitorTags(visitor: Visitor): Tag[] {
   for (const e of visitor.events) {
     if (e.type !== "click") continue
     const target = String(e.data?.target ?? "")
-    for (const rule of TAG_RULES) {
-      if (rule.match(target) && !seen.has(rule.tag.label)) {
-        seen.add(rule.tag.label)
-        out.push(rule.tag)
+    if (target.startsWith("form-submit:")) {
+      const key = target.slice("form-submit:".length)
+      const label = `${FORM_LABEL[key] ?? key} formu gönderdi`
+      if (!seen.has(label)) {
+        seen.add(label)
+        out.push({ label, color: "emerald" })
+      }
+    } else if (target.startsWith("whatsapp:pkg:")) {
+      // The package name lives in the click event's `label` data field
+      // (we set it as "<channel> – <pkg name>"). Surface the pkg name when
+      // possible; fall back to a generic tag.
+      const lbl = String(e.data?.label ?? "")
+      const pkgName = lbl.includes("–") ? lbl.split("–").pop()?.trim() : lbl
+      const finalLabel = pkgName
+        ? `${pkgName} paketi WhatsApp'ına tıkladı`
+        : "WhatsApp'a tıkladı"
+      if (!seen.has(finalLabel)) {
+        seen.add(finalLabel)
+        out.push({ label: finalLabel, color: "green" })
       }
     }
   }
@@ -196,35 +183,66 @@ const TAG_COLOR: Record<Tag["color"], string> = {
   emerald: "bg-emerald-100 text-emerald-800",
   green: "bg-green-100 text-green-800",
   blue: "bg-blue-100 text-blue-800",
-  violet: "bg-violet-100 text-violet-800",
-  rose: "bg-rose-100 text-rose-800",
-  amber: "bg-amber-100 text-amber-800",
-  indigo: "bg-indigo-100 text-indigo-800",
 }
+
+// ── Page selector ────────────────────────────────────────────────────
+// Per-page stat cards live in a sub-tab; we ship "Anasayfa" first and
+// will add more pages as the admin requests them. Keep the list here so
+// it's trivial to extend.
+
+type PageTab = {
+  id: string
+  label: string
+  path: string
+  comingSoon?: boolean
+}
+
+const PAGE_TABS: PageTab[] = [
+  { id: "home", label: "Anasayfa", path: "/" },
+  { id: "hakkimizda", label: "Hakkımızda", path: "/hakkimizda" },
+  { id: "web-site", label: "Web Site", path: "/web-site" },
+  {
+    id: "dijital-reklamlar",
+    label: "Dijital Reklamlar",
+    path: "/dijital-reklamlar",
+  },
+  { id: "iletisim", label: "İletişim", path: "/iletisim" },
+]
+
+// Targets we hide from "Anasayfada en çok tıklananlar" — those are
+// already surfaced as their own cards or aren't useful as raw clicks.
+const HOME_TOP_CLICK_HIDDEN_PREFIXES = ["form-submit:", "whatsapp:"]
+
+// Home service card targets — used both for the multi-target reach and
+// to filter them out of the raw top-5 list if desired (we keep them in
+// so the list shows the most-clicked items including service cards).
+const HOME_SERVICE_CARD_TARGETS = new Set<string>([
+  "home:service-card:web-site",
+  "home:service-card:dijital-reklamlar",
+])
 
 // ── Page ──────────────────────────────────────────────────────────────
 
 export default async function AnalyticsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ day?: string; month?: string }>
+  searchParams: Promise<{ day?: string; month?: string; page?: string }>
 }) {
   const params = await searchParams
   const rawDay = params.day?.trim() ?? ""
   const rawMonth = params.month?.trim() ?? ""
+  const rawPage = params.page?.trim() ?? ""
 
   const [allEvents, ownIp, settings] = await Promise.all([
     readEvents(),
     getOwnIp(),
     readAnalyticsSettings(),
   ])
-  const buckets = dayBuckets(allEvents)
   const months = monthBuckets(allEvents)
   const todayKey = dayKey(new Date().toISOString())
 
   // Resolve filter: explicit day wins; otherwise explicit month; otherwise all.
-  const validDay =
-    rawDay && /^\d{4}-\d{2}-\d{2}$/.test(rawDay) ? rawDay : null
+  const validDay = rawDay && /^\d{4}-\d{2}-\d{2}$/.test(rawDay) ? rawDay : null
   const validMonth = validDay
     ? validDay.slice(0, 7)
     : rawMonth && /^\d{4}-\d{2}$/.test(rawMonth)
@@ -238,25 +256,12 @@ export default async function AnalyticsPage({
       ? allEvents.filter((e) => monthKey(e.ts) === validMonth)
       : allEvents
 
-  // The chart always shows a month. Fall back to the most recent month
-  // with data when nothing is selected (so admin always sees something).
   const chartMonth =
     validMonth ??
     months[0]?.month ??
     `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`
 
   const visitors = listVisitorsFrom(scopeEvents)
-  const pagesT = topPagesFrom(scopeEvents, 10)
-  const clicksT = topClicksFrom(scopeEvents, 10)
-  const sectionsT = topSectionsFrom(scopeEvents, 10).map((row) => ({
-    ...row,
-    key: sectionLabel(row.key),
-  }))
-
-  const dailySeries = dailySeriesForMonth(allEvents, chartMonth)
-  const hourlyData = hourlySeries(scopeEvents)
-
-  const totalEvents = scopeEvents.length
   const own = visitors.find((v) => v.ip === ownIp)
   const others = visitors.filter((v) => v.ip !== ownIp)
   const scopeLabel = validDay
@@ -270,9 +275,161 @@ export default async function AnalyticsPage({
   for (const v of visitors) deviceCounts[deviceType(v.userAgent)] += 1
   const deviceTotal = visitors.length
 
-  // Days of the current chart month (for the day chip strip).
-  const daysForChartMonth = buckets.filter((b) =>
-    b.day.startsWith(chartMonth),
+  // ── General cards ────────────────────────────────────────────────────
+  const headerNavClicks = topClicksByPrefix(scopeEvents, "header:nav:", 5)
+  const homeTopClicks = topClicksOnPath(
+    scopeEvents,
+    "/",
+    5,
+    (t) => !HOME_TOP_CLICK_HIDDEN_PREFIXES.some((p) => t.startsWith(p)),
+  )
+
+  // Session-length distribution. Per-visitor duration is the gap between
+  // the first and last event we observed for that IP in the scoped
+  // window. Buckets overlap on purpose ("at least X") — the same person
+  // can land in >1dk, >3dk, and >5dk if they stayed long enough; the
+  // user wants engagement tiers, not mutually exclusive slices.
+  const sessionMs = visitors.map(
+    (v) => new Date(v.lastSeen).getTime() - new Date(v.firstSeen).getTime(),
+  )
+  const sessionBuckets = {
+    total: visitors.length,
+    under30s: sessionMs.filter((ms) => ms < 30_000).length,
+    over1m: sessionMs.filter((ms) => ms > 60_000).length,
+    over3m: sessionMs.filter((ms) => ms > 180_000).length,
+    over5m: sessionMs.filter((ms) => ms > 300_000).length,
+  }
+
+  // ── Per-page (home) cards ────────────────────────────────────────────
+  const activePageTab =
+    PAGE_TABS.find((p) => p.id === rawPage && !p.comingSoon) ?? PAGE_TABS[0]
+
+  const homeVisitorCount = visitorsOnPath(scopeEvents, "/").size
+  const partnerReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "home:partner-badge",
+    "/",
+  )
+  const googleReviewsReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "home:google-reviews:view",
+    "/",
+  )
+  const testimonialsDwell = sectionDwellSummary(scopeEvents, "testimonials")
+  const projectsDwell = sectionDwellSummary(scopeEvents, "projects")
+  const opsTabReach: Reach = tabReach(scopeEvents, "projects", "ops", "/")
+  const serviceCardsReach: Reach = clickReach(
+    scopeEvents,
+    (t) => HOME_SERVICE_CARD_TARGETS.has(t),
+    "/",
+  )
+
+  // ── Per-page (hakkımızda) cards ──────────────────────────────────────
+  const hakkimizdaKobiReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "hakkimizda:row2-cta",
+    "/hakkimizda",
+  )
+  const hakkimizdaIletisimReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "hakkimizda:cta",
+    "/hakkimizda",
+  )
+
+  // ── Per-page (web-site) cards ────────────────────────────────────────
+  // Quote wizard funnel: each step's "reached" event fires when the
+  // visitor clicks "İlerle" and ends up on that step. Step 1 is the
+  // landing step (no event); we only count 2/3/4 as funnel progress.
+  const quoteStep2Reach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "quote:step-reached:2",
+    "/web-site",
+  )
+  const quoteStep3Reach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "quote:step-reached:3",
+    "/web-site",
+  )
+  const quoteStep4Reach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "quote:step-reached:4",
+    "/web-site",
+  )
+  const quoteSubmitReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "form-submit:quote",
+    "/web-site",
+  )
+  const quoteKobiPopupReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "web-site:kobi-popup",
+    "/web-site",
+  )
+  const webSiteKobiBannerReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "web-site:kobi-banner",
+    "/web-site",
+  )
+
+  // ── Per-page (dijital-reklamlar) cards ───────────────────────────────
+  // Channel tabs: tab_change events with control="channel", value=key.
+  // Package interactions: clicks prefixed with the action key, suffixed
+  // with "<channel>:<package>". We aggregate across all packages so the
+  // card answers "kaç kişi HERHANGİ bir paketin X'ine bastı".
+  const dijitalGoogleTabReach: Reach = tabReach(
+    scopeEvents,
+    "channel",
+    "google",
+    "/dijital-reklamlar",
+  )
+  const dijitalMetaTabReach: Reach = tabReach(
+    scopeEvents,
+    "channel",
+    "meta",
+    "/dijital-reklamlar",
+  )
+  const dijital360TabReach: Reach = tabReach(
+    scopeEvents,
+    "channel",
+    "360",
+    "/dijital-reklamlar",
+  )
+  const dijitalDetayReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t.startsWith("detaylari-gor:"),
+    "/dijital-reklamlar",
+  )
+  const dijitalTalepReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t.startsWith("talep-edin:"),
+    "/dijital-reklamlar",
+  )
+  const dijitalRandevuReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "form-submit:randevu",
+    "/dijital-reklamlar",
+  )
+  const dijitalWhatsappReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t.startsWith("whatsapp:pkg:"),
+    "/dijital-reklamlar",
+  )
+
+  // ── Per-page (iletisim) cards ────────────────────────────────────────
+  const iletisimEmailReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "iletisim:email",
+    "/iletisim",
+  )
+  const iletisimPhoneReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "iletisim:phone",
+    "/iletisim",
+  )
+  const iletisimFormReach: Reach = clickReach(
+    scopeEvents,
+    (t) => t === "form-submit:contact",
+    "/iletisim",
   )
 
   return (
@@ -283,20 +440,22 @@ export default async function AnalyticsPage({
             Analitik
           </h1>
           <p className="text-[13.5px] text-black/55">
-            Site ziyaretçilerinin sayfa, bölüm, buton ve sekme hareketleri.
-            Ay/gün seçimine göre filtreleyebilir, grafiklerden zaman içindeki
-            dağılımı görebilirsin.
+            Site ziyaretçilerinin sayfa, bölüm, buton hareketleri. Üst kartlar
+            tüm site geneli; alt kısımda her sayfanın kendi istatistikleri.
           </p>
         </div>
 
         <div className="flex flex-col items-end gap-1.5">
-          <div className="flex items-center gap-1 rounded-full border border-black/[0.10] bg-white p-1">
-            <ToggleButton enabled={settings.enabled} value="true">
-              Aktif
-            </ToggleButton>
-            <ToggleButton enabled={!settings.enabled} value="false">
-              Pasif
-            </ToggleButton>
+          <div className="flex items-center gap-2">
+            <ResetDialog />
+            <div className="flex items-center gap-1 rounded-full border border-black/[0.10] bg-white p-1">
+              <ToggleButton enabled={settings.enabled} value="true">
+                Aktif
+              </ToggleButton>
+              <ToggleButton enabled={!settings.enabled} value="false">
+                Pasif
+              </ToggleButton>
+            </div>
           </div>
           <span
             className={`text-[11px] ${
@@ -310,266 +469,359 @@ export default async function AnalyticsPage({
         </div>
       </header>
 
-      {/* Filter controls — three rows: month picker (chips + input),
-          day picker (chips + input). All wired through URL params so
-          they're back-button friendly. */}
-      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
-        <div className="flex items-center gap-2 text-[11.5px] font-medium uppercase tracking-[0.08em] text-black/45">
-          <CalendarDays size={12} />
-          Filtrele
-        </div>
+      {/* Filter toolbar — thin, single-row. Month dropdown + day picker
+          live in one form so submitting applies both together. Day wins
+          when both are set (the page handler enforces this). */}
+      <section className="rounded-xl border border-black/[0.06] bg-white px-3 py-2">
+        <form
+          action="/admin/analitik"
+          method="GET"
+          className="flex flex-wrap items-center gap-2 text-[12px]"
+        >
+          <span className="inline-flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-[0.08em] text-black/45">
+            <CalendarDays size={12} />
+            Filtrele
+          </span>
 
-        {/* Months */}
-        <div className="mt-3 flex flex-col gap-2">
-          <div className="flex items-center justify-between text-[11px] text-black/45">
-            <span>Ay</span>
-            <form
-              action="/admin/analitik"
-              method="GET"
-              className="flex items-center gap-2"
+          <label className="inline-flex items-center gap-1.5">
+            <span className="text-black/50">Ay</span>
+            <select
+              name="month"
+              defaultValue={validMonth ?? ""}
+              className="rounded-md border border-black/[0.10] bg-white px-2 py-1 text-[12px] text-[#0a0a0a] focus:border-[#3c639f]/50 focus:outline-none"
             >
-              <input
-                type="month"
-                name="month"
-                defaultValue={validMonth ?? ""}
-                className="rounded-md border border-black/[0.10] bg-white px-2 py-1 text-[11.5px] text-[#0a0a0a]"
-              />
-              <button
-                type="submit"
-                className="rounded-md border border-black/[0.10] bg-white px-2.5 py-1 text-[11.5px] font-medium text-black/65 hover:bg-black/[0.03]"
-              >
-                Aya git
-              </button>
-            </form>
-          </div>
-          <div className="flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:thin]">
-            <Chip
-              href="/admin/analitik"
-              active={!validMonth && !validDay}
-              label="Tüm zamanlar"
-              sub={`${allEvents.length.toLocaleString("tr-TR")} olay`}
+              <option value="">Tüm aylar</option>
+              {months.map((m) => (
+                <option key={m.month} value={m.month}>
+                  {formatMonthLabel(m.month)} · {m.events}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="inline-flex items-center gap-1.5">
+            <span className="text-black/50">Gün</span>
+            <input
+              type="date"
+              name="day"
+              defaultValue={validDay ?? ""}
+              className="rounded-md border border-black/[0.10] bg-white px-2 py-1 text-[12px] text-[#0a0a0a] focus:border-[#3c639f]/50 focus:outline-none"
             />
-            {months.map((m) => (
-              <Chip
-                key={m.month}
-                href={`/admin/analitik?month=${m.month}`}
-                active={!validDay && m.month === validMonth}
-                label={formatMonthLabel(m.month)}
-                sub={`${m.visitors} kişi · ${m.events} olay`}
-              />
-            ))}
-          </div>
-        </div>
+          </label>
 
-        {/* Days within selected month */}
-        <div className="mt-4 flex flex-col gap-2">
-          <div className="flex items-center justify-between text-[11px] text-black/45">
-            <span>
-              {validMonth
-                ? `Gün — ${formatMonthLabel(chartMonth)}`
-                : "Gün (son etkin günler)"}
-            </span>
-            <form
-              action="/admin/analitik"
-              method="GET"
-              className="flex items-center gap-2"
+          <button
+            type="submit"
+            className="rounded-md bg-[#3c639f] px-3 py-1 text-[12px] font-medium text-white transition-colors hover:bg-[#2f5288]"
+          >
+            Uygula
+          </button>
+
+          <Link
+            href={`/admin/analitik?day=${todayKey}`}
+            aria-current={validDay === todayKey ? "page" : undefined}
+            className={`rounded-md border px-2.5 py-1 text-[11.5px] font-medium transition-colors ${
+              validDay === todayKey
+                ? "border-[#3c639f] bg-[#3c639f]/[0.08] text-[#3c639f]"
+                : "border-black/[0.10] bg-white text-black/65 hover:border-[#3c639f]/30 hover:text-[#0a0a0a]"
+            }`}
+          >
+            Bugün
+          </Link>
+
+          {(validDay || validMonth) && (
+            <Link
+              href="/admin/analitik"
+              className="rounded-md border border-black/[0.10] bg-white px-2.5 py-1 text-[11.5px] font-medium text-black/55 transition-colors hover:bg-black/[0.03]"
             >
-              <input
-                type="date"
-                name="day"
-                defaultValue={validDay ?? ""}
-                className="rounded-md border border-black/[0.10] bg-white px-2 py-1 text-[11.5px] text-[#0a0a0a]"
-              />
-              <button
-                type="submit"
-                className="rounded-md border border-black/[0.10] bg-white px-2.5 py-1 text-[11.5px] font-medium text-black/65 hover:bg-black/[0.03]"
-              >
-                Güne git
-              </button>
-            </form>
-          </div>
-          <div className="flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:thin]">
-            {(validMonth ? daysForChartMonth : buckets).length === 0 ? (
-              <span className="text-[12px] text-black/40">
-                Bu ayda olay yok.
-              </span>
-            ) : (
-              (validMonth ? daysForChartMonth : buckets).map((b) => (
-                <Chip
-                  key={b.day}
-                  href={`/admin/analitik?day=${b.day}`}
-                  active={b.day === validDay}
-                  label={formatDayLabel(b.day, todayKey)}
-                  sub={`${b.visitors} kişi · ${b.events} olay`}
-                />
-              ))
-            )}
-          </div>
-        </div>
+              Tümü
+            </Link>
+          )}
+
+          <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] text-black/50">
+            Aktif:
+            <span className="rounded-full bg-[#3c639f]/[0.08] px-2 py-0.5 text-[11px] font-medium text-[#3c639f]">
+              {scopeLabel}
+            </span>
+          </span>
+        </form>
       </section>
 
-      {/* Top banner stat boxes */}
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-        <StatBox
-          icon={<Eye size={15} />}
-          label={`Senin IP'in · ${scopeLabel}`}
-          value={ownIp}
-          sub={
-            own
-              ? `${own.events.length} olay · son ${relTime(own.lastSeen)}`
-              : "bu aralıkta aktivite yok"
-          }
-          accent
-        />
-        <StatBox
-          icon={<Users size={15} />}
-          label={`Ziyaretçi · ${scopeLabel}`}
-          value={String(visitors.length)}
-          sub={`${others.length} farklı IP (sen hariç)`}
-        />
-        <StatBox
-          icon={<Activity size={15} />}
-          label={`Toplam olay · ${scopeLabel}`}
-          value={totalEvents.toLocaleString("tr-TR")}
-          sub={`tüm zamanlar: ${allEvents.length.toLocaleString("tr-TR")}`}
-        />
-      </div>
+      {/* ── Genel istatistikler ──────────────────────────────────────── */}
+      <SectionHeader
+        title="Genel istatistikler"
+        sub="Tüm sayfaları kapsayan kartlar"
+      />
 
-      {/* Charts row */}
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-        <ChartCard
-          icon={<BarChart3 size={14} className="text-[#3c639f]" />}
-          title={`${formatMonthLabel(chartMonth)} — gün gün`}
-          headerExtra={
-            validMonth ? (
-              <ConfirmForm
-                action={clearMonthAction}
-                message={`${formatMonthLabel(chartMonth)} ayına ait tüm olaylar silinecek. Emin misin?`}
-                className="ml-2"
-              >
-                <input type="hidden" name="month" value={chartMonth} />
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-1 rounded-md border border-black/[0.08] bg-white px-2 py-0.5 text-[10.5px] font-medium text-black/55 hover:border-red-200 hover:bg-red-50 hover:text-red-700"
-                >
-                  <Trash2 size={10} />
-                  Bu ayı sıfırla
-                </button>
-              </ConfirmForm>
-            ) : null
-          }
-          className="lg:col-span-2"
-        >
-          <DailyBarChart series={dailySeries} todayKey={todayKey} />
-        </ChartCard>
-
-        <ChartCard
-          icon={<Clock size={14} className="text-[#3c639f]" />}
-          title="Saatlik dağılım"
-        >
-          <HourlyBarChart series={hourlyData} />
-        </ChartCard>
-      </div>
-
-      {/* Device breakdown */}
-      <ChartCard
-        icon={<PieChart size={14} className="text-[#3c639f]" />}
-        title={`Cihaz dağılımı · ${scopeLabel}`}
-      >
-        {deviceTotal === 0 ? (
-          <p className="text-[12.5px] text-black/45">Bu aralıkta veri yok.</p>
-        ) : (
-          <div className="flex flex-col gap-2.5">
-            <DeviceBar
-              label="Masaüstü"
-              count={deviceCounts["Masaüstü"]}
-              total={deviceTotal}
-              color="emerald"
-              icon={<MonitorSmartphone size={12} />}
-            />
-            <DeviceBar
-              label="Mobil"
-              count={deviceCounts["Mobil"]}
-              total={deviceTotal}
-              color="amber"
-              icon={<Smartphone size={12} />}
-            />
-            <DeviceBar
-              label="Tablet"
-              count={deviceCounts["Tablet"]}
-              total={deviceTotal}
-              color="violet"
-              icon={<Tablet size={12} />}
-            />
-            {deviceCounts["?"] > 0 && (
-              <DeviceBar
-                label="Bilinmeyen"
-                count={deviceCounts["?"]}
-                total={deviceTotal}
-                color="black"
-                icon={<Globe2 size={12} />}
-              />
-            )}
-          </div>
-        )}
-      </ChartCard>
-
-      {/* Stat tables */}
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-        <StatTable
-          icon={<Eye size={14} className="text-[#3c639f]" />}
-          title="En çok ziyaret edilen sayfalar"
-          rows={pagesT}
-        />
-        <StatTable
+        <ListCard
           icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
-          title="En çok tıklanan / değiştirilen"
-          rows={clicksT}
+          title="Header'da en çok tıklanan sekme"
+          empty="Henüz nav tıklaması yok."
+          rows={headerNavClicks.map((r) => ({
+            ...r,
+            // Use the stored label (the visible nav text) when present —
+            // it reads better than the raw `header:nav:slug` key.
+            display: r.meta ?? humanizeHeaderNav(r.key),
+          }))}
         />
-        <StatTable
-          icon={<Clock size={14} className="text-[#3c639f]" />}
-          title="En çok durulan bölümler"
-          rows={sectionsT}
+
+        <DeviceCard
+          counts={deviceCounts}
+          total={deviceTotal}
+          scopeLabel={scopeLabel}
         />
+
+        <VisitorDurationCard buckets={sessionBuckets} />
       </div>
+
+      {/* ── Sayfa bazlı istatistikler ────────────────────────────────── */}
+      <SectionHeader
+        title="Sayfa bazlı istatistikler"
+        sub="Bir sayfa seçin, o sayfaya özel kartlar gelsin"
+      />
+
+      <div className="flex flex-wrap items-center gap-1.5">
+        {PAGE_TABS.map((tab) => {
+          const isActive = tab.id === activePageTab.id
+          const href = buildHref({
+            day: validDay,
+            month: validMonth,
+            page: tab.id === "home" ? null : tab.id,
+          })
+          if (tab.comingSoon) {
+            return (
+              <span
+                key={tab.id}
+                className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-black/[0.12] bg-white px-3 py-1.5 text-[12px] font-medium text-black/35"
+                title="Yakında"
+              >
+                {tab.label}
+                <span className="rounded-full bg-black/[0.05] px-1.5 py-0.5 text-[9px] uppercase tracking-[0.08em] text-black/40">
+                  Yakında
+                </span>
+              </span>
+            )
+          }
+          return (
+            <Link
+              key={tab.id}
+              href={href}
+              className={`rounded-full border px-3.5 py-1.5 text-[12.5px] font-medium transition-colors ${
+                isActive
+                  ? "border-[#3c639f] bg-[#3c639f] text-white"
+                  : "border-black/[0.10] bg-white text-black/65 hover:border-[#3c639f]/30 hover:text-[#0a0a0a]"
+              }`}
+            >
+              {tab.label}
+            </Link>
+          )
+        })}
+      </div>
+
+      {activePageTab.id === "home" && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <ListCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Anasayfa — en çok tıklanan ilk 5"
+            empty="Anasayfada henüz tıklama yok."
+            rows={homeTopClicks.map((r) => ({
+              ...r,
+              display: r.meta ?? r.key,
+            }))}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Partner badge"
+            sub="Google Partner rozeti tıklaması"
+            reach={partnerReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Yorumları Google'da görüntüle"
+            sub="Yorumlar bölümünün altındaki CTA"
+            reach={googleReviewsReach}
+          />
+
+          <DwellCard
+            icon={<Clock size={14} className="text-[#3c639f]" />}
+            title="Yorumlarda durma süresi"
+            visitorsOnPage={homeVisitorCount}
+            dwell={testimonialsDwell}
+          />
+
+          <DwellCard
+            icon={<Clock size={14} className="text-[#3c639f]" />}
+            title="Projelerde durma süresi"
+            visitorsOnPage={homeVisitorCount}
+            dwell={projectsDwell}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Operasyonlar sekmesi"
+            sub="Projeler bölümünde 'Operasyonlar' sekmesine geçen"
+            reach={opsTabReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Hizmet kartları"
+            sub="Web Site veya Dijital Reklamlar kartına tıklayan"
+            reach={serviceCardsReach}
+          />
+        </div>
+      )}
+
+      {activePageTab.id === "hakkimizda" && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Webreta KOBİ butonu"
+            sub="'Nasıl Gidiyor?' bölümündeki KOBİ CTA'sı"
+            reach={hakkimizdaKobiReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="İletişim butonu"
+            sub="Sayfanın altındaki 'İletişime geç' CTA'sı"
+            reach={hakkimizdaIletisimReach}
+          />
+        </div>
+      )}
+
+      {activePageTab.id === "web-site" && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Teklif aracı — 2. adım"
+            sub="Sektör & Hizmet'i tamamlayıp Paket Seçimi'ne geçen"
+            reach={quoteStep2Reach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Teklif aracı — 3. adım"
+            sub="Paket Seçimi'ni tamamlayıp Örnek Siteler'e geçen"
+            reach={quoteStep3Reach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Teklif aracı — 4. adım"
+            sub="Örnek Siteler'i tamamlayıp İletişim adımına geçen"
+            reach={quoteStep4Reach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Teklif gönderenler"
+            sub="Tüm adımları tamamlayıp formu gönderen"
+            reach={quoteSubmitReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Paket seçimi → KOBİ popup"
+            sub="2. adımda açılan popup'tan KOBİ'ye geçen"
+            reach={quoteKobiPopupReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Teklif aracı altı — KOBİ banner"
+            sub="Sayfa altındaki 'Webreta KOBİ'yi keşfet' butonu"
+            reach={webSiteKobiBannerReach}
+          />
+        </div>
+      )}
+
+      {activePageTab.id === "dijital-reklamlar" && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Google Ads tabı"
+            sub="Google Ads sekmesini görüntüleyen"
+            reach={dijitalGoogleTabReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Meta Ads tabı"
+            sub="Meta Ads sekmesini görüntüleyen"
+            reach={dijitalMetaTabReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Google + Meta tabı"
+            sub="360° sekmesini görüntüleyen"
+            reach={dijital360TabReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Paket — Detaylar butonu"
+            sub="Herhangi bir pakette 'Detayları Gör' tıklayan"
+            reach={dijitalDetayReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Paket — Talep Edin butonu"
+            sub="Herhangi bir pakette 'Talep Edin' tıklayan"
+            reach={dijitalTalepReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Paket — Talep formu gönderenler"
+            sub="Herhangi bir pakette randevu formunu tamamlayan"
+            reach={dijitalRandevuReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Paket — WhatsApp butonu"
+            sub="Herhangi bir pakette WhatsApp seçen"
+            reach={dijitalWhatsappReach}
+          />
+        </div>
+      )}
+
+      {activePageTab.id === "iletisim" && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="E-posta kartı"
+            sub="E-posta adresine tıklayan (mailto)"
+            reach={iletisimEmailReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Telefon kartı"
+            sub="Telefon numarasına tıklayan (tel)"
+            reach={iletisimPhoneReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="İletişim formu"
+            sub="Formu başarıyla gönderen"
+            reach={iletisimFormReach}
+          />
+        </div>
+      )}
 
       {/* Visitors */}
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <BarChart3 size={15} className="text-[#3c639f]" />
-            <div className="text-[13px] font-semibold text-[#0a0a0a]">
-              Ziyaretçiler ({scopeLabel})
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {validDay && (
-              <ConfirmForm
-                action={clearDayAction}
-                message={`${formatDayLabel(validDay, todayKey)} (${validDay}) günündeki tüm olaylar silinecek. Emin misin?`}
-              >
-                <input type="hidden" name="day" value={validDay} />
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-black/[0.10] bg-white px-3 py-1.5 text-[12px] font-medium text-black/60 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
-                >
-                  <Trash2 size={12} />
-                  Bu günü sıfırla
-                </button>
-              </ConfirmForm>
-            )}
-            <ConfirmForm
-              action={clearAnalyticsAction}
-              message="Tüm zamanlardaki analitik olayları geri dönüşsüz silinecek. Emin misin?"
-            >
-              <button
-                type="submit"
-                className="inline-flex items-center gap-1.5 rounded-md border border-black/[0.10] bg-white px-3 py-1.5 text-[12px] font-medium text-black/60 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700"
-              >
-                <Trash2 size={12} />
-                Tümünü sıfırla
-              </button>
-            </ConfirmForm>
+        <div className="flex flex-wrap items-center gap-2">
+          <BarChart3 size={15} className="text-[#3c639f]" />
+          <div className="text-[13px] font-semibold text-[#0a0a0a]">
+            Ziyaretçiler ({scopeLabel})
           </div>
         </div>
 
@@ -592,12 +844,7 @@ export default async function AnalyticsPage({
           <ul className="mt-4 flex flex-col gap-3">
             {own && <VisitorRow visitor={own} isSelf ownIp={ownIp} />}
             {others.map((v) => (
-              <VisitorRow
-                key={v.ip}
-                visitor={v}
-                isSelf={false}
-                ownIp={ownIp}
-              />
+              <VisitorRow key={v.ip} visitor={v} isSelf={false} ownIp={ownIp} />
             ))}
           </ul>
         )}
@@ -606,7 +853,45 @@ export default async function AnalyticsPage({
   )
 }
 
+// ── URL helpers ───────────────────────────────────────────────────────
+
+function buildHref(opts: {
+  day: string | null
+  month: string | null
+  page: string | null
+}): string {
+  const params = new URLSearchParams()
+  if (opts.day) params.set("day", opts.day)
+  else if (opts.month) params.set("month", opts.month)
+  if (opts.page) params.set("page", opts.page)
+  const qs = params.toString()
+  return qs ? `/admin/analitik?${qs}` : "/admin/analitik"
+}
+
+const HEADER_NAV_LABEL: Record<string, string> = {
+  "header:nav:hakkimizda": "Hakkımızda",
+  "header:nav:web-site": "Web Site",
+  "header:nav:dijital-reklamlar": "Dijital Reklamlar",
+  "header:nav:iletisim": "İletişim",
+  "header:blog-cta": "Blog (CTA)",
+}
+
+function humanizeHeaderNav(key: string): string {
+  return HEADER_NAV_LABEL[key] ?? key
+}
+
 // ── UI bits ──────────────────────────────────────────────────────────
+
+function SectionHeader({ title, sub }: { title: string; sub: string }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-[#0a0a0a]">
+        {title}
+      </h2>
+      <p className="text-[12.5px] text-black/50">{sub}</p>
+    </div>
+  )
+}
 
 function ToggleButton({
   enabled,
@@ -636,269 +921,293 @@ function ToggleButton({
   )
 }
 
-function Chip({
-  href,
-  active,
-  label,
-  sub,
-}: {
-  href: string
-  active: boolean
-  label: string
-  sub: string
-}) {
-  return (
-    <Link
-      href={href}
-      className={`shrink-0 rounded-lg border px-3.5 py-2 text-left transition-colors ${
-        active
-          ? "border-[#3c639f] bg-[#3c639f] text-white shadow-[0_4px_12px_-4px_rgba(60,99,159,0.40)]"
-          : "border-black/[0.10] bg-white text-black/70 hover:border-[#3c639f]/30 hover:text-[#0a0a0a]"
-      }`}
-    >
-      <div className="text-[12px] font-semibold leading-tight">{label}</div>
-      <div
-        className={`mt-0.5 text-[10.5px] leading-tight ${
-          active ? "text-white/75" : "text-black/45"
-        }`}
-      >
-        {sub}
-      </div>
-    </Link>
-  )
-}
-
-function StatBox({
-  icon,
-  label,
-  value,
-  sub,
-  accent = false,
-}: {
-  icon: React.ReactNode
-  label: string
-  value: string
-  sub: string
-  accent?: boolean
-}) {
-  return (
-    <div
-      className={`rounded-2xl border p-4 ${
-        accent
-          ? "border-[#3c639f]/30 bg-[#3c639f]/[0.04]"
-          : "border-black/[0.06] bg-white"
-      }`}
-    >
-      <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.08em] text-black/45">
-        {icon}
-        {label}
-      </div>
-      <div className="mt-1.5 text-[18px] font-semibold tabular-nums tracking-[-0.01em] text-[#0a0a0a]">
-        {value}
-      </div>
-      <div className="mt-0.5 text-[11.5px] text-black/55">{sub}</div>
-    </div>
-  )
-}
-
-function ChartCard({
+function CardShell({
   icon,
   title,
-  headerExtra,
-  className,
+  sub,
   children,
 }: {
   icon: React.ReactNode
   title: string
-  headerExtra?: React.ReactNode
-  className?: string
+  sub?: string
   children: React.ReactNode
 }) {
   return (
-    <div
-      className={`rounded-2xl border border-black/[0.06] bg-white p-5 ${
-        className ?? ""
-      }`}
-    >
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          {icon}
-          <div className="text-[12.5px] font-semibold text-[#0a0a0a]">
-            {title}
-          </div>
+    <div className="flex h-full flex-col rounded-2xl border border-black/[0.06] bg-white p-5">
+      <div className="flex items-center gap-2">
+        {icon}
+        <div className="text-[12.5px] font-semibold text-[#0a0a0a]">
+          {title}
         </div>
-        {headerExtra}
       </div>
-      <div className="mt-4">{children}</div>
+      {sub && <p className="mt-1 text-[11.5px] text-black/45">{sub}</p>}
+      <div className="mt-3 flex-1">{children}</div>
     </div>
   )
 }
 
-// ── Charts ────────────────────────────────────────────────────────────
-
-function DailyBarChart({
-  series,
-  todayKey,
+function ListCard({
+  icon,
+  title,
+  empty,
+  rows,
 }: {
-  series: { day: string; events: number; visitors: number }[]
-  todayKey: string
+  icon: React.ReactNode
+  title: string
+  empty: string
+  rows: (Tally & { display?: string })[]
 }) {
-  const max = Math.max(...series.map((d) => d.events), 1)
-  const totalEvents = series.reduce((n, d) => n + d.events, 0)
-  if (series.length === 0)
-    return <p className="text-[12.5px] text-black/45">Veri yok.</p>
-
-  const barWidth = 18
-  const gap = 4
-  const chartHeight = 130
-  const labelHeight = 22
-  const chartWidth = series.length * (barWidth + gap) - gap
-  const svgHeight = chartHeight + labelHeight
-
   return (
-    <div>
-      <div className="text-[11.5px] text-black/50">
-        {totalEvents.toLocaleString("tr-TR")} toplam olay · maks{" "}
-        {max.toLocaleString("tr-TR")} / gün
-      </div>
-      <svg
-        viewBox={`0 0 ${chartWidth} ${svgHeight}`}
-        preserveAspectRatio="none"
-        className="mt-3 h-[170px] w-full"
-        role="img"
-      >
-        {/* Baseline */}
-        <line
-          x1={0}
-          y1={chartHeight}
-          x2={chartWidth}
-          y2={chartHeight}
-          stroke="rgba(0,0,0,0.08)"
-          strokeWidth={0.5}
-        />
-        {series.map((d, i) => {
-          const x = i * (barWidth + gap)
-          const h = d.events === 0 ? 1 : (d.events / max) * chartHeight
-          const y = chartHeight - h
-          const dayNum = parseInt(d.day.slice(-2), 10)
-          const isToday = d.day === todayKey
-          return (
-            <g key={d.day}>
-              <rect
-                x={x}
-                y={y}
-                width={barWidth}
-                height={h}
-                rx={2}
-                fill={
-                  d.events === 0
-                    ? "rgba(0,0,0,0.08)"
-                    : isToday
-                      ? "#5b8de6"
-                      : "#3c639f"
-                }
-                opacity={d.events === 0 ? 0.6 : 1}
-              >
-                <title>
-                  {d.day} — {d.events} olay, {d.visitors} kişi
-                </title>
-              </rect>
-              {(dayNum === 1 ||
-                dayNum % 5 === 0 ||
-                i === series.length - 1) && (
-                <text
-                  x={x + barWidth / 2}
-                  y={chartHeight + 14}
-                  textAnchor="middle"
-                  fontSize={9}
-                  fill="rgba(0,0,0,0.45)"
-                  fontFamily="ui-sans-serif, system-ui, sans-serif"
-                >
-                  {dayNum}
-                </text>
-              )}
-            </g>
-          )
-        })}
-      </svg>
-      <div className="mt-2 text-[10.5px] text-black/40">
-        Bar üzerine fareyle gel → o günün detayı (olay/kişi). Bugün varsa daha
-        açık tonda.
-      </div>
+    <CardShell icon={icon} title={title}>
+      {rows.length === 0 ? (
+        <p className="text-[12.5px] text-black/40">{empty}</p>
+      ) : (
+        <ul className="flex flex-col gap-1.5">
+          {rows.map((r) => (
+            <li
+              key={r.key}
+              className="flex items-baseline justify-between gap-2 text-[12.5px]"
+            >
+              <span className="min-w-0 truncate text-black/75" title={r.key}>
+                {r.display ?? r.key}
+              </span>
+              <span className="shrink-0 tabular-nums font-medium text-[#3c639f]">
+                {r.count}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </CardShell>
+  )
+}
+
+// X / Y reach card (e.g. "Anasayfaya gelen 100 kişiden 25'i partner badge'e
+// tıkladı"). Big numerator/denominator with a small percentage line.
+function ReachCard({
+  icon,
+  title,
+  sub,
+  reach,
+}: {
+  icon: React.ReactNode
+  title: string
+  sub: string
+  reach: Reach
+}) {
+  const pct =
+    reach.reached === 0 ? 0 : Math.round((reach.acted / reach.reached) * 100)
+  return (
+    <CardShell icon={icon} title={title} sub={sub}>
+      {reach.reached === 0 ? (
+        <p className="text-[12.5px] text-black/40">
+          Bu aralıkta sayfaya gelen yok.
+        </p>
+      ) : (
+        <>
+          <div className="flex items-baseline gap-2">
+            <span className="text-[26px] font-semibold tabular-nums tracking-[-0.02em] text-[#0a0a0a]">
+              {reach.acted}
+            </span>
+            <span className="text-[13px] text-black/45">
+              / {reach.reached} kişi
+            </span>
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-black/[0.05]">
+              <div
+                className="h-full rounded-full bg-[#3c639f] transition-all"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+            <span className="shrink-0 text-[11px] tabular-nums text-black/55">
+              %{pct}
+            </span>
+          </div>
+        </>
+      )}
+    </CardShell>
+  )
+}
+
+// "kaç kişi geldi / toplam ne kadar durdu / ortalama" — section dwell.
+function DwellCard({
+  icon,
+  title,
+  visitorsOnPage,
+  dwell,
+}: {
+  icon: React.ReactNode
+  title: string
+  visitorsOnPage: number
+  dwell: { visitors: number; totalMs: number; avgMs: number }
+}) {
+  return (
+    <CardShell
+      icon={icon}
+      title={title}
+      sub={
+        visitorsOnPage > 0
+          ? `Anasayfaya gelen ${visitorsOnPage} kişiden ${dwell.visitors}'i bu bölüme ulaştı`
+          : "Bu aralıkta sayfaya gelen yok."
+      }
+    >
+      {dwell.visitors === 0 ? (
+        <p className="text-[12.5px] text-black/40">
+          Bu bölümde durma kaydı yok.
+        </p>
+      ) : (
+        <dl className="flex flex-col gap-2">
+          <DwellRow label="Bölüme ulaşan" value={`${dwell.visitors} kişi`} />
+          <DwellRow label="Toplam durma" value={formatDuration(dwell.totalMs)} />
+          <DwellRow
+            label="Ortalama durma"
+            value={formatDuration(dwell.avgMs)}
+          />
+        </dl>
+      )}
+    </CardShell>
+  )
+}
+
+function DwellRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-baseline justify-between gap-2 text-[12.5px]">
+      <dt className="text-black/55">{label}</dt>
+      <dd className="shrink-0 tabular-nums font-medium text-[#0a0a0a]">
+        {value}
+      </dd>
     </div>
   )
 }
 
-function HourlyBarChart({
-  series,
+function VisitorDurationCard({
+  buckets,
 }: {
-  series: { hour: number; events: number }[]
+  buckets: {
+    total: number
+    under30s: number
+    over1m: number
+    over3m: number
+    over5m: number
+  }
 }) {
-  const max = Math.max(...series.map((d) => d.events), 1)
-  const total = series.reduce((n, d) => n + d.events, 0)
-  if (total === 0)
-    return <p className="text-[12.5px] text-black/45">Veri yok.</p>
-
-  const barWidth = 12
-  const gap = 3
-  const chartHeight = 110
-  const labelHeight = 22
-  const chartWidth = series.length * (barWidth + gap) - gap
-
   return (
-    <div>
-      <div className="text-[11.5px] text-black/50">
-        {total.toLocaleString("tr-TR")} olay · maks {max} / saat
-      </div>
-      <svg
-        viewBox={`0 0 ${chartWidth} ${chartHeight + labelHeight}`}
-        preserveAspectRatio="none"
-        className="mt-3 h-[150px] w-full"
-        role="img"
-      >
-        <line
-          x1={0}
-          y1={chartHeight}
-          x2={chartWidth}
-          y2={chartHeight}
-          stroke="rgba(0,0,0,0.08)"
-          strokeWidth={0.5}
-        />
-        {series.map((d, i) => {
-          const x = i * (barWidth + gap)
-          const h = d.events === 0 ? 1 : (d.events / max) * chartHeight
-          const y = chartHeight - h
-          return (
-            <g key={d.hour}>
-              <rect
-                x={x}
-                y={y}
-                width={barWidth}
-                height={h}
-                rx={2}
-                fill={d.events === 0 ? "rgba(0,0,0,0.08)" : "#3c639f"}
-              >
-                <title>
-                  {String(d.hour).padStart(2, "0")}:00 — {d.events} olay
-                </title>
-              </rect>
-              {d.hour % 3 === 0 && (
-                <text
-                  x={x + barWidth / 2}
-                  y={chartHeight + 14}
-                  textAnchor="middle"
-                  fontSize={9}
-                  fill="rgba(0,0,0,0.45)"
-                  fontFamily="ui-sans-serif, system-ui, sans-serif"
-                >
-                  {String(d.hour).padStart(2, "0")}
-                </text>
-              )}
-            </g>
-          )
-        })}
-      </svg>
+    <CardShell
+      icon={<Users size={14} className="text-[#3c639f]" />}
+      title="Toplam ziyaretçi sayısı"
+    >
+      {buckets.total === 0 ? (
+        <p className="text-[12.5px] text-black/40">Bu aralıkta ziyaretçi yok.</p>
+      ) : (
+        <>
+          <div className="flex items-baseline gap-2">
+            <span className="text-[26px] font-semibold tabular-nums tracking-[-0.02em] text-[#0a0a0a]">
+              {buckets.total}
+            </span>
+            <span className="text-[13px] text-black/45">kişi</span>
+          </div>
+          <dl className="mt-3 flex flex-col gap-1.5">
+            <DurationRow
+              label="30sn'den az kalanlar"
+              value={buckets.under30s}
+              total={buckets.total}
+            />
+            <DurationRow
+              label="1dk'dan fazla kalanlar"
+              value={buckets.over1m}
+              total={buckets.total}
+            />
+            <DurationRow
+              label="3dk'dan fazla kalanlar"
+              value={buckets.over3m}
+              total={buckets.total}
+            />
+            <DurationRow
+              label="5dk'dan fazla kalanlar"
+              value={buckets.over5m}
+              total={buckets.total}
+            />
+          </dl>
+        </>
+      )}
+    </CardShell>
+  )
+}
+
+function DurationRow({
+  label,
+  value,
+  total,
+}: {
+  label: string
+  value: number
+  total: number
+}) {
+  const pct = total === 0 ? 0 : Math.round((value / total) * 100)
+  return (
+    <div className="flex items-baseline justify-between gap-2 text-[12.5px]">
+      <dt className="text-black/65">{label}</dt>
+      <dd className="shrink-0 tabular-nums text-[#3c639f]">
+        <span className="font-semibold">{value}</span>
+        <span className="ml-1 text-black/40">· %{pct}</span>
+      </dd>
     </div>
+  )
+}
+
+function DeviceCard({
+  counts,
+  total,
+  scopeLabel,
+}: {
+  counts: Record<Device, number>
+  total: number
+  scopeLabel: string
+}) {
+  return (
+    <CardShell
+      icon={<PieChart size={14} className="text-[#3c639f]" />}
+      title="En çok giriş yapılan cihazlar"
+      sub={scopeLabel}
+    >
+      {total === 0 ? (
+        <p className="text-[12.5px] text-black/40">Bu aralıkta veri yok.</p>
+      ) : (
+        <div className="flex flex-col gap-2.5">
+          <DeviceBar
+            label="Masaüstü"
+            count={counts["Masaüstü"]}
+            total={total}
+            color="emerald"
+            icon={<MonitorSmartphone size={12} />}
+          />
+          <DeviceBar
+            label="Mobil"
+            count={counts["Mobil"]}
+            total={total}
+            color="amber"
+            icon={<Smartphone size={12} />}
+          />
+          <DeviceBar
+            label="Tablet"
+            count={counts["Tablet"]}
+            total={total}
+            color="violet"
+            icon={<Tablet size={12} />}
+          />
+          {counts["?"] > 0 && (
+            <DeviceBar
+              label="Bilinmeyen"
+              count={counts["?"]}
+              total={total}
+              color="black"
+              icon={<Globe2 size={12} />}
+            />
+          )}
+        </div>
+      )}
+    </CardShell>
   )
 }
 
@@ -943,69 +1252,18 @@ function DeviceBar({
   )
 }
 
-function StatTable({
-  icon,
-  title,
-  rows,
-}: {
-  icon: React.ReactNode
-  title: string
-  rows: Tally[]
-}) {
-  return (
-    <div className="rounded-2xl border border-black/[0.06] bg-white p-4">
-      <div className="flex items-center gap-2">
-        {icon}
-        <div className="text-[12.5px] font-semibold text-[#0a0a0a]">
-          {title}
-        </div>
-      </div>
-      {rows.length === 0 ? (
-        <p className="mt-3 text-[12px] text-black/40">Henüz veri yok.</p>
-      ) : (
-        <ul className="mt-3 flex flex-col gap-1.5">
-          {rows.map((r) => (
-            <li
-              key={r.key}
-              className="flex items-baseline justify-between gap-2 text-[12.5px]"
-            >
-              <span className="min-w-0 truncate text-black/75" title={r.key}>
-                {r.key}
-              </span>
-              <span className="shrink-0 tabular-nums font-medium text-[#3c639f]">
-                {r.count}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {rows.some((r) => r.meta) && (
-        <ul className="mt-2 flex flex-col gap-1 border-t border-black/[0.06] pt-2">
-          {rows
-            .filter((r) => r.meta)
-            .map((r) => (
-              <li key={r.key + "-meta"} className="text-[10.5px] text-black/45">
-                <span className="font-medium text-black/60">{r.key}</span>:{" "}
-                {r.meta}
-              </li>
-            ))}
-        </ul>
-      )}
-    </div>
-  )
-}
-
 // ── Visitor row ──────────────────────────────────────────────────────
 
 function VisitorRow({
   visitor,
   isSelf,
-  ownIp,
+  ownIp: _ownIp,
 }: {
   visitor: Visitor
   isSelf: boolean
   ownIp: string
 }) {
+  void _ownIp
   const events = visitor.events.slice(0, 80)
   const browser = browserName(visitor.userAgent)
   const os = osName(visitor.userAgent)

@@ -13,6 +13,7 @@ import {
 } from "@/lib/form-success-render"
 import type { ResolvedLegalPage } from "@/lib/form-legal-types"
 import { FormConsent } from "@/components/FormConsent"
+import { trackFormSubmit } from "@/lib/track-client"
 
 type Status =
   | { kind: "idle" }
@@ -64,6 +65,7 @@ export default function ContactForm() {
     startTransition(async () => {
       const res = await submitInquiry(data)
       if (res.ok) {
+        trackFormSubmit("contact", "İletişim formu")
         setStatus({ kind: "success", name })
         form.reset()
         setConsent(false)

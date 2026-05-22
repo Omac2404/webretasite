@@ -28,6 +28,7 @@ import {
 } from "@/lib/form-success-render"
 import type { ResolvedLegalPage } from "@/lib/form-legal-types"
 import { FormConsent } from "@/components/FormConsent"
+import { trackFormSubmit } from "@/lib/track-client"
 
 // Fallback WhatsApp values used only if /admin/paketler hasn't been
 // touched yet. Real value flows in via props (admin-managed).
@@ -578,6 +579,7 @@ function RequestModal({
         hour: selectedHour,
       })
       if (res.ok) {
+        trackFormSubmit("randevu", `Randevu — ${pkg.name}`)
         setView("success")
       } else {
         setSubmitError(res.error)
@@ -629,8 +631,8 @@ function RequestModal({
           href={waHref}
           target="_blank"
           rel="noopener noreferrer"
-          data-track="whatsapp:choice"
-          data-track-label={`WhatsApp seçti (${channel.label} – ${pkg.name})`}
+          data-track={`whatsapp:pkg:${channel.key}:${pkg.key}`}
+          data-track-label={`${channel.label} – ${pkg.name}`}
           className="group relative flex flex-col items-start gap-3 rounded-xl border border-black/[0.08] bg-white p-5 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-[#25D366]/40 hover:shadow-[0_12px_28px_-12px_rgba(37,211,102,0.30)]"
         >
           <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#25D366]/[0.10] text-[#25D366] transition-colors group-hover:bg-[#25D366] group-hover:text-white">

@@ -12,6 +12,7 @@ import {
 } from "@/lib/form-success-render"
 import type { ResolvedLegalPage } from "@/lib/form-legal-types"
 import { FormConsent } from "@/components/FormConsent"
+import { trackEvent, trackFormSubmit } from "@/lib/track-client"
 import {
   ArrowRight,
   ArrowLeft,
@@ -573,6 +574,7 @@ export default function QuoteWizardSection() {
           time: quote.time,
         })
         if (res.ok) {
+          trackFormSubmit("quote", "Teklif formu")
           setQuoteSubmitted(true)
         } else {
           setQuoteError(res.error)
@@ -580,8 +582,19 @@ export default function QuoteWizardSection() {
       })
       return
     }
+    // Advancing to the next step. Emit a tracking event keyed by the
+    // step number we're moving INTO (1-indexed so it matches the user's
+    // mental model — "ikinci adıma geçen", "üçüncü adıma geçen"…). Reach
+    // is deduped per visitor by the aggregator, so multiple advances
+    // from the same IP only count once.
+    const nextIdx = quoteStep + 1
+    trackEvent({
+      type: "click",
+      target: `quote:step-reached:${nextIdx + 1}`,
+      label: `Adım ${nextIdx + 1} — ${QUOTE_STEPS[nextIdx].title}`,
+    })
     setQuoteDir(1)
-    setQuoteStep(s => s + 1)
+    setQuoteStep(nextIdx)
   }
 
   const quoteBack = () => {
@@ -1711,6 +1724,8 @@ export default function QuoteWizardSection() {
                   href={WEBRETA_KOBI_URL}
                   target="_blank"
                   rel="noopener noreferrer"
+                  data-track="web-site:kobi-popup"
+                  data-track-label="Teklif aracı KOBİ popup'ı"
                   className="inline-flex items-center gap-1.5 rounded-lg bg-[#3c639f] px-4 py-2 text-[13px] font-medium text-white shadow-[0_4px_12px_-2px_rgba(60,99,159,0.35)] transition-all hover:bg-[#2f5288]"
                 >
                   Webreta KOBİ

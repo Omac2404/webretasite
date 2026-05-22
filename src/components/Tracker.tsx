@@ -6,6 +6,7 @@ import {
   type ClientEvent,
   type EventType,
 } from "@/lib/analytics-types"
+import { TRACK_EVENT_NAME, type TrackEventDetail } from "@/lib/track-client"
 
 const ALLOWED_SECTIONS = new Set<string>(TRACKED_SECTIONS)
 
@@ -153,6 +154,21 @@ export default function Tracker() {
     }
     document.addEventListener("click", onDocClick, true)
 
+    // ── Programmatic events ─────────────────────────────────────────
+    // Feature code (form success handlers etc.) dispatches a custom
+    // CustomEvent<TrackEventDetail> on window; we forward it onto the
+    // queue. Keeps Tracker decoupled from feature internals.
+    function onCustomEvent(e: Event) {
+      const detail = (e as CustomEvent<TrackEventDetail>).detail
+      if (!detail || typeof detail.target !== "string") return
+      const data: Record<string, string | number> = { target: detail.target }
+      if (typeof detail.label === "string" && detail.label) {
+        data.label = detail.label.slice(0, 80)
+      }
+      push(detail.type ?? "click", data)
+    }
+    window.addEventListener(TRACK_EVENT_NAME, onCustomEvent)
+
     // ── Section visibility ──────────────────────────────────────────
     // IntersectionObserver tracks [data-section] elements. We emit a
     // section_view on first entry (>=40% visible) and a section_dwell
@@ -234,6 +250,7 @@ export default function Tracker() {
       window.clearInterval(flushTimer)
       window.removeEventListener("popstate", handlePathChange)
       document.removeEventListener("click", onDocClick, true)
+      window.removeEventListener(TRACK_EVENT_NAME, onCustomEvent)
       window.removeEventListener("pagehide", onHide)
       window.removeEventListener("beforeunload", onHide)
       observer?.disconnect()

@@ -73,28 +73,6 @@ export async function clearEvents(): Promise<void> {
   return task
 }
 
-// Clear events for a single ISO day (YYYY-MM-DD in Europe/Istanbul).
-export async function clearEventsForDay(day: string): Promise<void> {
-  const task = writeQueue.then(async () => {
-    const data = await readData()
-    data.events = data.events.filter((e) => dayKey(e.ts) !== day)
-    await writeData(data)
-  })
-  writeQueue = task.catch(() => undefined)
-  return task
-}
-
-// Clear events for a single ISO month (YYYY-MM in Europe/Istanbul).
-export async function clearEventsForMonth(month: string): Promise<void> {
-  const task = writeQueue.then(async () => {
-    const data = await readData()
-    data.events = data.events.filter((e) => !dayKey(e.ts).startsWith(month))
-    await writeData(data)
-  })
-  writeQueue = task.catch(() => undefined)
-  return task
-}
-
 export async function readEvents(): Promise<StoredEvent[]> {
   const data = await readData()
   return data.events
@@ -298,6 +276,181 @@ export function topClicksFrom(events: StoredEvent[], limit = 10): Tally[] {
     .map(([key, count]) => ({ key, count }))
     .sort((a, b) => b.count - a.count)
     .slice(0, limit)
+}
+
+// ── Reach helpers (X kişiden Y kişi) ────────────────────────────────
+// Used by the per-page admin cards: each ratio compares the visitors
+// who landed on a page (unique IPs that produced a page_view for it)
+// against the subset that took some action — clicked a target, fired
+// a tab change, etc.
+
+// Distinct IPs that hit a page_view for `path` in the given event set.
+export function visitorsOnPath(events: StoredEvent[], path: string): Set<string> {
+  const ips = new Set<string>()
+  for (const e of events) {
+    if (e.type !== "page_view") continue
+    if (e.path !== path && !e.path.startsWith(`${path}?`)) continue
+    ips.add(e.ip)
+  }
+  return ips
+}
+
+// Distinct IPs that clicked a click-target matching the predicate, scoped
+// to a path (target was clicked while the IP's path matched). Predicate
+// receives the stored `target` string.
+export function visitorsClickedOnPath(
+  events: StoredEvent[],
+  predicate: (target: string) => boolean,
+  path: string,
+): Set<string> {
+  const ips = new Set<string>()
+  for (const e of events) {
+    if (e.type !== "click") continue
+    if (e.path !== path && !e.path.startsWith(`${path}?`)) continue
+    const target = String(e.data?.target ?? "")
+    if (!predicate(target)) continue
+    ips.add(e.ip)
+  }
+  return ips
+}
+
+// Distinct IPs that fired a tab_change on a path with the given
+// control + value.
+export function visitorsTabChangedOnPath(
+  events: StoredEvent[],
+  control: string,
+  value: string,
+  path: string,
+): Set<string> {
+  const ips = new Set<string>()
+  for (const e of events) {
+    if (e.type !== "tab_change") continue
+    if (e.path !== path && !e.path.startsWith(`${path}?`)) continue
+    if (String(e.data?.control ?? "") !== control) continue
+    if (String(e.data?.value ?? "") !== value) continue
+    ips.add(e.ip)
+  }
+  return ips
+}
+
+export type Reach = {
+  reached: number // visitors on the page
+  acted: number // subset that clicked / changed tab
+}
+
+export function clickReach(
+  events: StoredEvent[],
+  predicate: (target: string) => boolean,
+  path: string,
+): Reach {
+  const reached = visitorsOnPath(events, path)
+  const acted = visitorsClickedOnPath(events, predicate, path)
+  return { reached: reached.size, acted: acted.size }
+}
+
+export function tabReach(
+  events: StoredEvent[],
+  control: string,
+  value: string,
+  path: string,
+): Reach {
+  const reached = visitorsOnPath(events, path)
+  const acted = visitorsTabChangedOnPath(events, control, value, path)
+  return { reached: reached.size, acted: acted.size }
+}
+
+// Top N click targets on a specific page, with optional target filtering
+// (e.g. skip form-submit:* or whatsapp:* if you only want raw UI clicks).
+// Ties broken alphabetically so the order is stable across reloads.
+export function topClicksOnPath(
+  events: StoredEvent[],
+  path: string,
+  limit = 5,
+  filter?: (target: string) => boolean,
+): Tally[] {
+  const counts = new Map<string, { count: number; labels: Set<string> }>()
+  for (const e of events) {
+    if (e.type !== "click") continue
+    if (e.path !== path && !e.path.startsWith(`${path}?`)) continue
+    const target = String(e.data?.target ?? "")
+    if (!target) continue
+    if (filter && !filter(target)) continue
+    const cur = counts.get(target) ?? { count: 0, labels: new Set<string>() }
+    cur.count += 1
+    const lbl = String(e.data?.label ?? "")
+    if (lbl) cur.labels.add(lbl)
+    counts.set(target, cur)
+  }
+  return [...counts.entries()]
+    .map(([key, { count, labels }]) => ({
+      key,
+      count,
+      meta: labels.size > 0 ? [...labels][0] : undefined,
+    }))
+    .sort((a, b) => b.count - a.count || a.key.localeCompare(b.key))
+    .slice(0, limit)
+}
+
+// Top N click targets matching a prefix, scoped to all events (no path
+// filter — used for "header'da en çok tıklanan sekme" which spans every
+// page).
+export function topClicksByPrefix(
+  events: StoredEvent[],
+  prefix: string,
+  limit = 5,
+): Tally[] {
+  const counts = new Map<string, { count: number; labels: Set<string> }>()
+  for (const e of events) {
+    if (e.type !== "click") continue
+    const target = String(e.data?.target ?? "")
+    if (!target.startsWith(prefix)) continue
+    const cur = counts.get(target) ?? { count: 0, labels: new Set<string>() }
+    cur.count += 1
+    const lbl = String(e.data?.label ?? "")
+    if (lbl) cur.labels.add(lbl)
+    counts.set(target, cur)
+  }
+  return [...counts.entries()]
+    .map(([key, { count, labels }]) => ({
+      key,
+      count,
+      meta: labels.size > 0 ? [...labels][0] : undefined,
+    }))
+    .sort((a, b) => b.count - a.count || a.key.localeCompare(b.key))
+    .slice(0, limit)
+}
+
+export type DwellSummary = {
+  visitors: number // distinct IPs that entered the section
+  totalMs: number
+  avgMs: number
+}
+
+// Aggregate dwell stats for a single section across the given event set.
+// `visitors` counts unique IPs that entered the section at least once
+// (section_view), not just produced a section_dwell — that way the
+// "kaç kişi geldi" stat matches the section_view trigger.
+export function sectionDwellSummary(
+  events: StoredEvent[],
+  sectionId: string,
+): DwellSummary {
+  const visitors = new Set<string>()
+  let totalMs = 0
+  let dwellCount = 0
+  for (const e of events) {
+    if (String(e.data?.section ?? "") !== sectionId) continue
+    if (e.type === "section_view") {
+      visitors.add(e.ip)
+    } else if (e.type === "section_dwell") {
+      totalMs += Number(e.data?.durationMs ?? 0)
+      dwellCount += 1
+    }
+  }
+  return {
+    visitors: visitors.size,
+    totalMs,
+    avgMs: dwellCount === 0 ? 0 : Math.round(totalMs / dwellCount),
+  }
 }
 
 // Top N sections by total dwell time across the given events. Only

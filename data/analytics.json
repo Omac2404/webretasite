@@ -1,61 +1,60 @@
 {
   "events": [
     {
-      "id": "ff28e3bf-782c-463f-8084-6212060a6755",
-      "ts": "2026-05-19T09:28:57.097Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
+      "id": "579ad43c-b2f3-4d65-b364-7a9c1bb9b01e",
+      "ts": "2026-05-22T15:52:13.440Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/hakkimizda",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "81e9ba57-f57d-4030-a8d9-9ec1d5fe7565",
+      "ts": "2026-05-22T15:52:13.459Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
       "path": "/",
       "type": "section_view",
       "data": {
-        "section": "projects"
+        "section": "testimonials"
       },
       "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
     },
     {
-      "id": "6598be1d-f224-444e-9ad8-4bbf8a18972f",
-      "ts": "2026-05-19T09:28:59.548Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
-      "path": "/",
-      "type": "tab_change",
-      "data": {
-        "control": "projects",
-        "value": "ops",
-        "label": "Operasyonlar"
-      },
-      "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
-    },
-    {
-      "id": "b5876631-86e2-4149-8851-d3c6710263ff",
-      "ts": "2026-05-19T09:29:01.908Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
-      "path": "/",
-      "type": "section_dwell",
-      "data": {
-        "section": "projects",
-        "durationMs": 4811
-      },
-      "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
-    },
-    {
-      "id": "ff32db92-6348-49f6-9212-cb3e6ce083d8",
-      "ts": "2026-05-19T09:29:02.921Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
+      "id": "bb1a8dea-00b7-4306-b8cb-9bd29a83443f",
+      "ts": "2026-05-22T15:52:15.867Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
       "path": "/",
       "type": "click",
       "data": {
-        "target": "home:service-card:web-site",
-        "label": "Web Site kartı"
+        "target": "header:nav:web-site",
+        "label": "Web Site"
       },
       "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
     },
     {
-      "id": "08d86695-2cf0-4a33-b758-8df0dda18712",
-      "ts": "2026-05-19T09:29:03.161Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
+      "id": "960de866-df55-4566-ab79-92bdc520787e",
+      "ts": "2026-05-22T15:52:15.867Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/",
+      "type": "section_dwell",
+      "data": {
+        "section": "testimonials",
+        "durationMs": 2408
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "ccbd7b03-fbf8-4c27-a81d-89ef21582383",
+      "ts": "2026-05-22T15:52:16.196Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
       "path": "/web-site",
       "type": "page_view",
       "data": {
@@ -63,12 +62,25 @@
         "viewport": "1920x947"
       },
       "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
     },
     {
-      "id": "1ae1ed47-dbdc-4f48-a476-34f32078960d",
-      "ts": "2026-05-19T09:29:06.092Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
+      "id": "7aa69584-1e49-4bce-8544-ebb156084fe9",
+      "ts": "2026-05-22T15:52:16.536Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:dijital-reklamlar",
+        "label": "Dijital Reklamlar"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "e440aac3-7b2e-4bc9-a743-517a651a0748",
+      "ts": "2026-05-22T15:52:16.918Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
       "path": "/dijital-reklamlar",
       "type": "page_view",
       "data": {
@@ -76,12 +88,194 @@
         "viewport": "1920x947"
       },
       "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
     },
     {
-      "id": "5a5aaf3a-1e6d-40c6-9c7c-cc9c28747a7a",
-      "ts": "2026-05-19T09:29:07.961Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
+      "id": "d4ea35e9-4a8d-4465-8015-34289dcdd250",
+      "ts": "2026-05-22T15:52:27.965Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "1851c5a6-d18f-4668-ad56-840b1d7b4763",
+      "ts": "2026-05-22T15:52:33.763Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "header:nav:iletisim",
+        "label": "İletişim"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "e2bd6877-8afa-4404-b160-844e0fb6c139",
+      "ts": "2026-05-22T15:52:34.237Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "77912f57-7561-41ff-aa51-649d797d1bc3",
+      "ts": "2026-05-22T15:52:34.842Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "click",
+      "data": {
+        "target": "header:nav:dijital-reklamlar",
+        "label": "Dijital Reklamlar"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "9bda2a13-cd4b-4384-aaaa-ad0066ddc025",
+      "ts": "2026-05-22T15:52:35.106Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "bf4a3990-cec5-4b76-bde6-d14f1eb95c33",
+      "ts": "2026-05-22T15:52:36.259Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "header:nav:web-site",
+        "label": "Web Site"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "095ef651-4ab0-4905-87c5-dc738e4afda1",
+      "ts": "2026-05-22T15:52:36.483Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "c27ae9a9-4423-433c-bace-58324e039b36",
+      "ts": "2026-05-22T15:52:37.650Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:hakkimizda",
+        "label": "Hakkımızda"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "578310ba-efc8-4975-a9c1-6f2813b24bf1",
+      "ts": "2026-05-22T15:52:37.886Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "cba82ff9-2848-4d63-90ee-eb7117a11263",
+      "ts": "2026-05-22T15:52:40.174Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "d0930251-2d1e-48d3-b5aa-793b34506410",
+      "ts": "2026-05-22T15:52:49.434Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "click",
+      "data": {
+        "target": "header:nav:web-site",
+        "label": "Web Site"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "0b6fc451-5c41-4b90-ba25-58e28533bc45",
+      "ts": "2026-05-22T15:52:49.826Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/hakkimizda",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "c1c6dec2-7cb6-4e01-81ee-ec4f8b72d0c2",
+      "ts": "2026-05-22T15:52:51.442Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:dijital-reklamlar",
+        "label": "Dijital Reklamlar"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "990c3dfd-f4fd-4a9e-9608-24ca0f4839ae",
+      "ts": "2026-05-22T15:52:51.721Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "15bc3eef-94fe-4c42-84dd-72c0687b49ff",
+      "ts": "2026-05-22T15:53:00.018Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
       "path": "/dijital-reklamlar",
       "type": "tab_change",
       "data": {
@@ -90,12 +284,12 @@
         "label": "Meta Ads"
       },
       "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
     },
     {
-      "id": "9049f8ab-ee15-439f-89bc-dd31e1e0b489",
-      "ts": "2026-05-19T09:29:08.377Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
+      "id": "e8c5a37b-ffa4-4380-9840-4d20c0e46942",
+      "ts": "2026-05-22T15:53:00.446Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
       "path": "/dijital-reklamlar",
       "type": "tab_change",
       "data": {
@@ -104,12 +298,26 @@
         "label": "Google + Meta"
       },
       "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
     },
     {
-      "id": "d3d35da5-d330-4c00-b8bb-c0ca7a11e82b",
-      "ts": "2026-05-19T09:29:08.769Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
+      "id": "3302fb92-a24c-4a72-a88d-d50651143750",
+      "ts": "2026-05-22T15:53:00.971Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "google",
+        "label": "Google Ads"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "46e5c041-0543-4be8-affc-3992caf9bf74",
+      "ts": "2026-05-22T15:53:05.807Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
       "path": "/dijital-reklamlar",
       "type": "tab_change",
       "data": {
@@ -118,20 +326,1133 @@
         "label": "Meta Ads"
       },
       "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
     },
     {
-      "id": "cddb71db-b4e2-443c-ac33-f9ff88a07493",
-      "ts": "2026-05-19T09:29:09.737Z",
-      "sessionId": "fd3fb42f-f948-45a0-9e65-1ea820529bc8",
+      "id": "919bce86-dc89-4a90-8431-a7a953ee4d59",
+      "ts": "2026-05-22T15:53:06.155Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "360",
+        "label": "Google + Meta"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "0073ee7b-35e1-489c-9c8f-b57d2d0c25a9",
+      "ts": "2026-05-22T15:53:06.839Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "meta",
+        "label": "Meta Ads"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "0fba1d50-c56a-478c-9ebc-90b4053168e9",
+      "ts": "2026-05-22T15:53:07.699Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "google",
+        "label": "Google Ads"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "c30568d6-1d5a-42b4-a70d-3d822681814d",
+      "ts": "2026-05-22T15:53:14.615Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "meta",
+        "label": "Meta Ads"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "16344b14-9598-466b-94a2-3048ffacf9cf",
+      "ts": "2026-05-22T15:53:15.178Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "360",
+        "label": "Google + Meta"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "8742126c-a189-4d01-ba60-2d295bb730f5",
+      "ts": "2026-05-22T15:53:15.994Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "google",
+        "label": "Google Ads"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "9f764539-b079-47a2-b4ad-0cc4a5fb3ed5",
+      "ts": "2026-05-22T15:53:16.964Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
       "path": "/dijital-reklamlar",
       "type": "click",
       "data": {
-        "target": "talep-edin:meta:growth",
-        "label": "Talep Edin (Meta Ads – Büyüme Paketi)"
+        "target": "header:nav:web-site",
+        "label": "Web Site"
       },
       "ip": "::ffff:127.0.0.1",
-      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0"
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "f0b2dcbb-03ca-45c0-a0a5-fb2f6ac1b74d",
+      "ts": "2026-05-22T15:53:17.198Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "f8e48819-2b98-4b68-9be4-cdb8343ce40b",
+      "ts": "2026-05-22T15:53:29.738Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:web-site",
+        "label": "Web Site"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "c80acfdd-0cb8-4ed1-b45c-ca49096fc9d9",
+      "ts": "2026-05-22T15:53:29.980Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "d8044f43-7ec0-429a-8776-a5b071b5c599",
+      "ts": "2026-05-22T15:53:34.218Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:dijital-reklamlar",
+        "label": "Dijital Reklamlar"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "db44be35-e372-4fb6-98e2-d892254923c8",
+      "ts": "2026-05-22T15:53:34.506Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "3100e94d-f154-4d16-9723-250454867121",
+      "ts": "2026-05-22T15:53:35.539Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "meta",
+        "label": "Meta Ads"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "78ad28b7-6561-4e31-9c42-7e60581d421c",
+      "ts": "2026-05-22T15:53:35.978Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "360",
+        "label": "Google + Meta"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "5b6faaf3-fbf6-4af3-8537-970064baaad5",
+      "ts": "2026-05-22T15:53:36.658Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "meta",
+        "label": "Meta Ads"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "03a4dceb-4b62-4d12-a716-460b3aa97256",
+      "ts": "2026-05-22T15:53:37.979Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "tab_change",
+      "data": {
+        "control": "channel",
+        "value": "google",
+        "label": "Google Ads"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "7147d7d2-bfd6-47d4-a247-af58f24b086a",
+      "ts": "2026-05-22T15:53:39.794Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "header:nav:iletisim",
+        "label": "İletişim"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "5c58f94f-0ccc-4ea3-b099-3ced74d606ac",
+      "ts": "2026-05-22T15:53:40.040Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "ddf571ba-cef7-4d5e-81bc-869c1032da4b",
+      "ts": "2026-05-22T15:53:42.700Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "click",
+      "data": {
+        "target": "header:nav:hakkimizda",
+        "label": "Hakkımızda"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "e1f0f155-ec69-4d62-8a36-8cd0c2e8eaac",
+      "ts": "2026-05-22T15:53:42.946Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "b1460f45-93ae-4a06-8b61-eabcd9412f84",
+      "ts": "2026-05-22T15:53:43.242Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "click",
+      "data": {
+        "target": "header:nav:web-site",
+        "label": "Web Site"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "0140155e-11a2-4967-9027-345902db0c53",
+      "ts": "2026-05-22T15:53:43.482Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/hakkimizda",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "9fed5056-5651-43ea-ac40-5946128addf5",
+      "ts": "2026-05-22T15:54:14.030Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:hakkimizda",
+        "label": "Hakkımızda"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "9252488b-41d8-49c9-870a-3980cde65806",
+      "ts": "2026-05-22T15:54:14.290Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "1b4f0f97-5010-4798-a1e8-f662b807d0b4",
+      "ts": "2026-05-22T15:54:15.002Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "click",
+      "data": {
+        "target": "header:nav:web-site",
+        "label": "Web Site"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "77d9302e-d492-47ba-ad41-ec1db786fe24",
+      "ts": "2026-05-22T15:54:15.247Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/hakkimizda",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "2e8f68e7-df0d-443c-a9cb-3aad341d148c",
+      "ts": "2026-05-22T15:54:21.962Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:dijital-reklamlar",
+        "label": "Dijital Reklamlar"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "c28e43fe-d67e-4172-b74e-a4ba3178632b",
+      "ts": "2026-05-22T15:54:22.232Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "81cedc50-7d75-4b64-8326-ee8ceb5586a6",
+      "ts": "2026-05-22T15:54:24.746Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "header:nav:web-site",
+        "label": "Web Site"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "0e61fc9d-2663-4530-9951-0e60e5d6f6bd",
+      "ts": "2026-05-22T15:54:25.015Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "d6bd471d-6185-4778-930c-bab70de7332b",
+      "ts": "2026-05-22T15:54:33.254Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:dijital-reklamlar",
+        "label": "Dijital Reklamlar"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "0a345bd1-69bb-4f3f-9b4f-0e33575489f1",
+      "ts": "2026-05-22T15:54:33.539Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "efb0e44b-031c-4f0c-8965-dbca50503c21",
+      "ts": "2026-05-22T15:54:33.774Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "header:nav:iletisim",
+        "label": "İletişim"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "174f9d25-e23b-4d06-89a3-eb68cd48890e",
+      "ts": "2026-05-22T15:54:34.011Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "94aaacf8-64c1-46ad-95cf-c514b8117e50",
+      "ts": "2026-05-22T15:54:34.919Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "click",
+      "data": {
+        "target": "header:blog-cta",
+        "label": "Header Blog butonu"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "d133cbe7-54ef-49d0-a3fd-6350cfd88a55",
+      "ts": "2026-05-22T15:54:35.263Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "9f96dcaf-ca64-4876-ad45-6c8d26073fe4",
+      "ts": "2026-05-22T15:54:39.028Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog",
+      "type": "click",
+      "data": {
+        "target": "header:nav:web-site",
+        "label": "Web Site"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "472f819a-4f15-44d9-9cad-5c0aeec1d938",
+      "ts": "2026-05-22T15:54:39.275Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/blog",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "1795a803-c928-4dcf-81f1-3629220ff5d1",
+      "ts": "2026-05-22T15:54:39.818Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:hakkimizda",
+        "label": "Hakkımızda"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "e534fa28-5227-4af3-b0c9-af55090a3175",
+      "ts": "2026-05-22T15:54:40.071Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "6b8c76ae-c404-48a9-8a91-a708b5dc99ce",
+      "ts": "2026-05-22T15:54:44.427Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "click",
+      "data": {
+        "target": "header:nav:dijital-reklamlar",
+        "label": "Dijital Reklamlar"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "5378e681-cc88-4856-b3d1-dfc037e7102d",
+      "ts": "2026-05-22T15:54:44.839Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/hakkimizda",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "306ff125-5165-4d49-a26a-a94fa3e96684",
+      "ts": "2026-05-22T15:54:45.611Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "header:nav:iletisim",
+        "label": "İletişim"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "2b2ffa37-210d-44bf-8c11-e7848f9c426d",
+      "ts": "2026-05-22T15:54:45.857Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "e3a5d04c-fb6c-4c27-ba28-6af83e2890d6",
+      "ts": "2026-05-22T15:54:47.018Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "click",
+      "data": {
+        "target": "header:nav:dijital-reklamlar",
+        "label": "Dijital Reklamlar"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "5fdcdac3-13a8-4659-a399-8c0e82673515",
+      "ts": "2026-05-22T15:54:47.281Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "bbbccd59-b8fc-4fda-b860-3557c8ae7c5b",
+      "ts": "2026-05-22T15:54:47.554Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "header:nav:web-site",
+        "label": "Web Site"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "f702eb7c-d880-4880-83a8-3d46c4e09de2",
+      "ts": "2026-05-22T15:54:47.782Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "eac5c9e6-cf00-4901-b5db-12a07b0e585a",
+      "ts": "2026-05-22T15:54:48.923Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:hakkimizda",
+        "label": "Hakkımızda"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "7d4d83e6-4056-402b-b155-6cbfeb5bdd55",
+      "ts": "2026-05-22T15:54:49.181Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "66a53e3d-2cb5-4400-ad2b-af496a74a8d5",
+      "ts": "2026-05-22T15:54:56.163Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "click",
+      "data": {
+        "target": "header:nav:web-site",
+        "label": "Web Site"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "a1d3a538-0134-4b66-9104-7c85f1278347",
+      "ts": "2026-05-22T15:54:56.401Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/hakkimizda",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "67251b21-717a-448d-86b7-97d113dc1a92",
+      "ts": "2026-05-22T15:54:57.626Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/web-site",
+      "type": "click",
+      "data": {
+        "target": "header:nav:dijital-reklamlar",
+        "label": "Dijital Reklamlar"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "804b57be-e730-4edf-84be-ba927ef4a836",
+      "ts": "2026-05-22T15:54:57.901Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/web-site",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "1ec7c391-53e8-473e-92f5-4ce8ecdd93e3",
+      "ts": "2026-05-22T15:54:58.734Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/dijital-reklamlar",
+      "type": "click",
+      "data": {
+        "target": "header:nav:iletisim",
+        "label": "İletişim"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "e1f3780d-4448-40a4-bc15-431369cabb56",
+      "ts": "2026-05-22T15:54:58.976Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/dijital-reklamlar",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "d546b81a-4555-4219-b4a8-7603b9f45094",
+      "ts": "2026-05-22T15:54:59.579Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "click",
+      "data": {
+        "target": "header:nav:hakkimizda",
+        "label": "Hakkımızda"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "793f127f-c2bb-4c66-8385-0f02179cfa57",
+      "ts": "2026-05-22T15:54:59.837Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "b8f3ba9f-78fc-405e-9a35-ccbf78d4f5af",
+      "ts": "2026-05-22T15:55:19.058Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/hakkimizda",
+      "type": "click",
+      "data": {
+        "target": "header:nav:iletisim",
+        "label": "İletişim"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "6645e632-e983-4733-af84-1152caf8eea7",
+      "ts": "2026-05-22T15:55:19.324Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/hakkimizda",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "8f0de78d-14e0-412c-9001-0797d80a8ebd",
+      "ts": "2026-05-22T15:55:21.699Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/iletisim",
+      "type": "click",
+      "data": {
+        "target": "header:blog-cta",
+        "label": "Header Blog butonu"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "f2f1e1d0-3bf1-4a36-bdca-0542fd33bf98",
+      "ts": "2026-05-22T15:55:21.977Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "f6a769d4-560a-4565-861c-65c489a2677e",
+      "ts": "2026-05-22T15:55:23.366Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "teknik",
+        "label": "Teknik"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "2a8f2ca2-b297-4232-9a07-a3c429405f86",
+      "ts": "2026-05-22T15:55:23.441Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "e93c8d7b-3fa9-4fbd-8aab-d3488cbad4d7",
+      "ts": "2026-05-22T15:55:24.739Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "haberler",
+        "label": "Bizden Haberler"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "067ba448-3e37-43d9-a3c3-6ae8a57b7933",
+      "ts": "2026-05-22T15:55:24.811Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=haberler",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "190cf459-faee-43d9-a136-54b93f5a5b6a",
+      "ts": "2026-05-22T15:55:25.219Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=haberler",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "haberler",
+        "label": "Bizden Haberler"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "7e62bdf1-cfc0-4bb8-a39d-dcba9daed69f",
+      "ts": "2026-05-22T15:55:25.762Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=haberler",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "teknik",
+        "label": "Teknik"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "ac68f435-c007-49c6-b0de-5668e8ad4c8f",
+      "ts": "2026-05-22T15:55:25.837Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "1ca44820-838d-446e-8c5b-d193d1601cc7",
+      "ts": "2026-05-22T15:55:26.619Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "all",
+        "label": "Tümü"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "2698444c-ba74-4c6e-a3bf-1709170fe11b",
+      "ts": "2026-05-22T15:55:26.708Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "1742b50c-0a2d-479d-b66e-f442a81aec37",
+      "ts": "2026-05-22T15:55:27.667Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "teknik",
+        "label": "Teknik"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "be5f41f0-1be2-4f18-85e2-cbd80853a430",
+      "ts": "2026-05-22T15:55:27.753Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "92dcc8a7-6460-491d-b8a6-29bb17be15e8",
+      "ts": "2026-05-22T15:55:28.319Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "haberler",
+        "label": "Bizden Haberler"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "2e122115-af31-4a10-b6c6-d40ec746df49",
+      "ts": "2026-05-22T15:55:28.386Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=haberler",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "bc886c74-ac86-4b47-9136-3ed3a07922e1",
+      "ts": "2026-05-22T15:55:29.139Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=haberler",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "teknik",
+        "label": "Teknik"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "2a8a7172-cdd5-4b24-8a11-489d57c9653c",
+      "ts": "2026-05-22T15:55:29.217Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "8e4dcce6-e446-44ca-b137-c5e42c28c9ab",
+      "ts": "2026-05-22T15:55:30.634Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "haberler",
+        "label": "Bizden Haberler"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "433fae59-2289-4ca9-8fb3-f4dcd251a4bb",
+      "ts": "2026-05-22T15:55:30.701Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=haberler",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "586f884f-106a-4027-b450-19759b2e82b4",
+      "ts": "2026-05-22T15:55:32.004Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=haberler",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "teknik",
+        "label": "Teknik"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "24235771-b168-4d01-a098-276a9effbc83",
+      "ts": "2026-05-22T15:55:32.095Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "9fd0da55-1012-4da6-a48f-89e572ad93d6",
+      "ts": "2026-05-22T15:55:33.155Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=teknik",
+      "type": "tab_change",
+      "data": {
+        "control": "blog-category",
+        "value": "haberler",
+        "label": "Bizden Haberler"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "1df9e7ea-6171-4910-839a-482cd155dedb",
+      "ts": "2026-05-22T15:55:33.224Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=haberler",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/iletisim",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "3485b8b8-af3d-463b-830c-45d6e42dea0a",
+      "ts": "2026-05-22T15:55:34.642Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog?cat=haberler",
+      "type": "click",
+      "data": {
+        "target": "header:blog-cta",
+        "label": "Header Blog butonu"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
+    },
+    {
+      "id": "e427248a-3e15-4048-ba44-32d00a4a380f",
+      "ts": "2026-05-22T15:55:34.914Z",
+      "sessionId": "73330ee8-a016-4771-b300-ea2e8904377a",
+      "path": "/blog",
+      "type": "page_view",
+      "data": {
+        "referrer": "http://localhost:3000/blog?cat=haberler",
+        "viewport": "1920x947"
+      },
+      "ip": "::ffff:127.0.0.1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0"
     }
   ]
 }

@@ -60,12 +60,14 @@ export default async function IletisimPage() {
               label="E-posta"
               value={content.info.email}
               href={content.info.email ? `mailto:${content.info.email}` : undefined}
+              track="iletisim:email"
             />
             <InfoCard
               icon={<Phone size={18} strokeWidth={1.75} />}
               label="Telefon"
               value={content.info.phone}
               href={content.info.phone ? phoneHref : undefined}
+              track="iletisim:phone"
             />
             <InfoCard
               icon={<MapPin size={18} strokeWidth={1.75} />}
@@ -175,6 +177,7 @@ function InfoCard({
   value,
   topRight,
   href,
+  track,
 }: {
   icon: React.ReactNode
   label: string
@@ -184,6 +187,7 @@ function InfoCard({
   // ikon yalnız durur, kart eski tek-satırlı düzene döner.
   topRight?: string
   href?: string
+  track?: string
 }) {
   const inner = (
     <>
@@ -213,7 +217,12 @@ function InfoCard({
 
   if (href) {
     return (
-      <a href={href} className={className}>
+      <a
+        href={href}
+        data-track={track}
+        data-track-label={label}
+        className={className}
+      >
         {inner}
       </a>
     )
