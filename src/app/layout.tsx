@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Tracker from "@/components/Tracker";
+import FloatMenu from "@/components/FloatMenu";
+import BfcacheReset from "@/components/BfcacheReset";
 import { readSeo } from "@/lib/seo-store";
+import { readFloatMenu } from "@/lib/float-menu-store";
 import { getMetadataBase } from "@/lib/seo-metadata";
 
 const inter = Inter({
@@ -28,16 +31,19 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const floatMenu = await readFloatMenu()
   return (
     <html lang="tr" className="bg-[#fafafa]">
       <body className={`${inter.variable} font-sans antialiased`}>
         {children}
         <Tracker />
+        <FloatMenu config={floatMenu} />
+        <BfcacheReset />
       </body>
     </html>
   );

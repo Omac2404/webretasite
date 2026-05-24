@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Layers, Star, MessageCircle } from "lucide-react"
+import { Layers, Star, MessageCircle, Globe } from "lucide-react"
 import {
   CHANNEL_ORDER,
   MAX_AUDIENCE,
@@ -7,9 +7,11 @@ import {
   readPackages,
   type ChannelKey,
 } from "@/lib/packages-store"
+import { DEFAULT_GLOBAL_CTA } from "@/lib/packages-types"
 import { ChannelForm } from "./channel-form"
 import { PackageForm } from "./package-form"
 import { WhatsAppForm } from "./whatsapp-form"
+import { GlobalCtaForm } from "./global-cta-form"
 
 export const dynamic = "force-dynamic"
 
@@ -30,6 +32,7 @@ export default async function PackagesAdminPage({
   const data = await readPackages()
   const channel = data.channels.find((c) => c.key === activeKey)!
   const whatsapp = data.whatsapp ?? { number: "", display: "" }
+  const globalCta = data.globalCta ?? DEFAULT_GLOBAL_CTA
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
@@ -60,6 +63,25 @@ export default async function PackagesAdminPage({
         </p>
         <div className="mt-4">
           <WhatsAppForm whatsapp={whatsapp} />
+        </div>
+      </section>
+
+      {/* Global CTA — paket grid'i ile footer arasındaki "Yurtdışı reklamları"
+          tarzı yönlendirme kartı. Kanaldan bağımsız, tek dokümanlık. */}
+      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
+        <div className="flex items-center gap-2">
+          <Globe size={15} className="text-[#3c639f]" />
+          <div className="text-[13px] font-semibold text-[#0a0a0a]">
+            Yurtdışı / Global CTA kartı
+          </div>
+        </div>
+        <p className="mt-1 text-[12.5px] text-black/50">
+          /dijital-reklamlar sayfasının altında paketlerden sonra çıkan,
+          iletişime yönlendiren büyük kart. Her kanal için aynı içerik
+          gösterilir.
+        </p>
+        <div className="mt-4">
+          <GlobalCtaForm cta={globalCta} />
         </div>
       </section>
 
@@ -99,6 +121,7 @@ export default async function PackagesAdminPage({
           <ChannelForm
             channelKey={channel.key}
             label={channel.label}
+            pageTitle={channel.pageTitle ?? ""}
             short={channel.short}
             intro={channel.intro}
           />

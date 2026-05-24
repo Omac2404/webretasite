@@ -34,6 +34,9 @@ export function RichTextArea({
   hint?: string
 }) {
   const editorRef = useRef<HTMLDivElement>(null)
+  // Toolbar/popup butonlarına tıklandığında editör selection'ı kaybolabiliyor.
+  // Editör içindeki son geçerli range'i burada saklıyoruz, exec sırasında geri yüklenir.
+  const savedRangeRef = useRef<Range | null>(null)
   const [html, setHtml] = useState(defaultValue || "")
   const [showColors, setShowColors] = useState(false)
 
@@ -51,32 +54,77 @@ export function RichTextArea({
     setHtml(el.innerHTML)
   }
 
+  function saveSelection() {
+    const sel = window.getSelection()
+    if (!sel || sel.rangeCount === 0) return
+    const range = sel.getRangeAt(0)
+    const editor = editorRef.current
+    if (!editor) return
+    // Yalnızca editör içindeki selection'ı sakla — dışarıdaki seçimler
+    // (örn. URL bar) restore sırasında yanlış yere yazardı.
+    if (editor.contains(range.commonAncestorContainer)) {
+      savedRangeRef.current = range.cloneRange()
+    }
+  }
+
+  function restoreSelection() {
+    const range = savedRangeRef.current
+    if (!range) return
+    const sel = window.getSelection()
+    if (!sel) return
+    sel.removeAllRanges()
+    sel.addRange(range)
+  }
+
   function exec(command: string, value?: string) {
     editorRef.current?.focus()
+    restoreSelection()
     // execCommand deprecated ama browser desteği bizim use-case için
     // hala stabil. TipTap/Lexical eklemeden bu kadarını yapmak için ok.
     document.execCommand(command, false, value)
+    saveSelection()
     syncFromEditor()
   }
 
-  function applyFontSize(px: number) {
+  function wrapSelection(makeSpan: () => HTMLSpanElement) {
     editorRef.current?.focus()
+    restoreSelection()
     const selection = window.getSelection()
     if (!selection || selection.rangeCount === 0) return
     const range = selection.getRangeAt(0)
     if (range.collapsed) return // bir şey seç
-    const span = document.createElement("span")
-    span.style.fontSize = `${px}px`
+    const span = makeSpan()
     try {
       range.surroundContents(span)
     } catch {
       // surroundContents tek bir node'u sarabilir; karmaşık seçimlerde
-      // execCommand'a düş.
+      // extractContents+insertNode kombinasyonuna düş.
       span.appendChild(range.extractContents())
       range.insertNode(span)
     }
     selection.removeAllRanges()
+    saveSelection()
     syncFromEditor()
+  }
+
+  function applyFontSize(px: number) {
+    wrapSelection(() => {
+      const s = document.createElement("span")
+      s.style.fontSize = `${px}px`
+      return s
+    })
+  }
+
+  function applyForeColor(color: string) {
+    // execCommand("foreColor") çoğu tarayıcıda <font color="..."> üretiyor;
+    // bizim sanitizer whitelist'i sadece <span style="color: ..."> kabul ediyor.
+    // Bu yüzden execCommand yerine manuel span wrap ediyoruz — kaydedince
+    // sanitizer'dan sağ kurtuluyor.
+    wrapSelection(() => {
+      const s = document.createElement("span")
+      s.style.color = color
+      return s
+    })
   }
 
   function adjustFontSize(delta: number) {
@@ -155,8 +203,9 @@ export function RichTextArea({
                 <button
                   key={c}
                   type="button"
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
-                    exec("foreColor", c)
+                    applyForeColor(c)
                     setShowColors(false)
                   }}
                   className="h-5 w-5 rounded-full border border-black/15 transition-transform hover:scale-110"
@@ -166,8 +215,9 @@ export function RichTextArea({
               ))}
               <button
                 type="button"
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
-                  exec("foreColor", "#0a0a0a")
+                  applyForeColor("#0a0a0a")
                   setShowColors(false)
                 }}
                 title="Varsayılan"
@@ -194,8 +244,13 @@ export function RichTextArea({
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
-        onInput={syncFromEditor}
+        onInput={() => {
+          syncFromEditor()
+          saveSelection()
+        }}
         onBlur={syncFromEditor}
+        onMouseUp={saveSelection}
+        onKeyUp={saveSelection}
         // Plain text paste — kopyala/yapıştırla dışarıdan stil
         // gelmesini engelle.
         onPaste={(e) => {

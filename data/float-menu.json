@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "webSite": {
+    "enabled": true,
+    "label": "Web Site",
+    "href": "/web-site"
+  },
+  "ads": {
+    "enabled": true,
+    "label": "Reklamlar",
+    "href": "/dijital-reklamlar"
+  },
+  "contact": {
+    "enabled": true,
+    "label": "İletişim",
+    "phone": "+90 542 580 94 92",
+    "whatsapp": "+90 542 580 94 92",
+    "whatsappMessage": "Merhaba, web siteniz üzerinden ulaşıyorum."
+  }
+}

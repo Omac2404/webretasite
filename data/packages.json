@@ -2,19 +2,20 @@
   "channels": [
     {
       "key": "google",
-      "label": "Google Ads",
+      "label": "Google",
+      "pageTitle": "Google Reklamları",
       "short": "Google",
       "intro": "Google Ads reklam yönetimi paketlerimiz ile bütçenize en uygun çözümü bulun.",
       "packages": [
         {
           "key": "basic",
           "name": "Başlangıç Paketi",
-          "tagline": "Temel Google Ads reklam kurulumu ve yönetimi hizmeti.",
-          "price": "₺8.000",
+          "tagline": "Temel Google Ads reklam kurulumu ve yönetimi",
+          "price": "₺5.000",
           "audience": [
-            "Yeni reklam veren işletmeler",
-            "Yerel hizmet firmaları",
-            "Bütçesi sınırlı ama görünmek isteyenler"
+            "Reklamlara yeni başlayacak işletmeler",
+            "Yerel müşteriye hızlı ulaşmak isteyenler",
+            "Aylık en az 10.000₺ bütçe ayırabilenler"
           ],
           "items": [
             "Google Ads hesap kurulumu",
@@ -28,12 +29,12 @@
         {
           "key": "growth",
           "name": "Büyüme Paketi",
-          "tagline": "Segmentasyonlu Google Ads reklam yönetimi çözümü.",
-          "price": "₺12.500",
+          "tagline": "Daha profesyonel ve sistematik yönetim",
+          "price": "₺10.000",
           "audience": [
-            "Düzenli müşteri akışı isteyen işletmeler",
-            "Lead ve satış dengesini kurmak isteyen firmalar",
-            "Reklamı profesyonel ve sistemli yönetmek isteyenler"
+            "Düzenli müşteri akışı hedefleyenler",
+            "Google görünürlüğünü artırmak isteyenler",
+            "Aylık en az 25.000₺ bütçe ayırabilenler"
           ],
           "items": [
             "Search + Display kampanya yönetimi",
@@ -69,7 +70,8 @@
     },
     {
       "key": "meta",
-      "label": "Meta Ads",
+      "label": "Meta",
+      "pageTitle": "Instagram Reklamları",
       "short": "Meta",
       "intro": "Meta Ads reklam yönetimi paketlerimiz ile Instagram ve Facebook'ta doğru kitleye ulaşın.",
       "packages": [
@@ -77,7 +79,7 @@
           "key": "basic",
           "name": "Başlangıç Paketi",
           "tagline": "Meta Ads'e yeni başlayanlar için temel reklam kurulumu ve yönetimi.",
-          "price": "₺5.000",
+          "price": "₺6.000",
           "audience": [
             "Reklama yeni başlayacak markalar",
             "Butik işletmeler",
@@ -136,7 +138,8 @@
     {
       "key": "360",
       "label": "Google + Meta",
-      "short": "Google + Meta",
+      "pageTitle": "360° Reklam Yönetimi",
+      "short": "Google",
       "intro": "Google Ads reklam yönetimi paketlerimiz ile bütçenize en uygun çözümü bulun.",
       "packages": [
         {
@@ -204,5 +207,12 @@
   "whatsapp": {
     "number": "905321234567",
     "display": "+90 532 123 45 67"
+  },
+  "globalCta": {
+    "kicker": "Yurtdışı reklamları",
+    "title": "Globale satış mı yapmak istiyorsun?",
+    "body": "Avrupa, ABD ve MENA bölgelerine yönelik Google Ads ve Meta kampanyalarını lokalleştirilmiş yaratıcılar, ülkeye özel optimizasyon ve şeffaf raporlamayla biz yönetelim. Strateji ihtiyacınıza göre kurgulanır.",
+    "buttonLabel": "İletişime geçin",
+    "buttonHref": "/iletisim"
   }
 }

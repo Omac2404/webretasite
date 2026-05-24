@@ -760,7 +760,7 @@ export default function QuoteWizardSection() {
           {(wizardHeading.titleLeader.trim() ||
             wizardHeading.titleHighlight.trim() ||
             wizardHeading.subtitle.trim()) && (
-            <div className="mb-8 md:mb-10">
+            <div className="mb-10 text-center md:mb-14">
               {(wizardHeading.titleLeader.trim() ||
                 wizardHeading.titleHighlight.trim()) && (
                 <h2 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[48px]">
@@ -777,14 +777,45 @@ export default function QuoteWizardSection() {
                 </h2>
               )}
               {wizardHeading.subtitle && (
-                <p className="mt-4 max-w-[520px] text-[15px] leading-relaxed text-black/60">
+                <p className="mx-auto mt-4 max-w-[560px] text-[15px] leading-relaxed text-black/60">
                   {wizardHeading.subtitle}
                 </p>
               )}
             </div>
           )}
 
-          <div className="quote-card-pulse overflow-hidden rounded-2xl border border-black/[0.06] bg-white">
+          {/* Wizard kart konteyneri — arkasında nefes alan marka-mavisi aura
+              (radial blur), üstünde gradient accent stripe, çevresinde
+              gradient border. Kartı dekoratif çerçeveden ayırıp daha
+              "premium / dikkat çekici" hissi veriyor. */}
+          <div className="relative">
+            <div
+              aria-hidden
+              className="quote-card-aura pointer-events-none absolute -inset-3 rounded-[26px] md:-inset-5"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-2xl"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(91,141,230,0.35), rgba(60,99,159,0.15) 45%, rgba(255,255,255,0) 75%)",
+                padding: "1px",
+                WebkitMask:
+                  "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                WebkitMaskComposite: "xor",
+                maskComposite: "exclude",
+              }}
+            />
+            <div className="quote-card-pulse relative overflow-hidden rounded-2xl border border-[#3c639f]/15 bg-white">
+              {/* Üst aksan şeridi — marka mavisinden navy'ye gradient */}
+              <div
+                aria-hidden
+                className="h-[3px] w-full"
+                style={{
+                  background:
+                    "linear-gradient(90deg, #5b8de6 0%, #3c639f 50%, #2f5288 100%)",
+                }}
+              />
             {quoteSubmitted ? (
               /* ─── Success state — copy admin-managed via /admin/e-posta-sablonlari */
               (() => {
@@ -1540,6 +1571,7 @@ export default function QuoteWizardSection() {
                 </div>
               </>
             )}
+            </div>
           </div>
         </div>
       </section>
@@ -1802,6 +1834,24 @@ export default function QuoteWizardSection() {
         }
         @media (prefers-reduced-motion: reduce) {
           .quote-card-pulse { animation: none; }
+        }
+
+        /* Wizard kartının arkasındaki yumuşak halo — radial brand-blue
+           parıltı, nefes alır gibi opacity ve ölçek değiştirir. Kartı
+           sayfanın geri kalanından kendiliğinden öne çıkarır. */
+        .quote-card-aura {
+          background:
+            radial-gradient(ellipse 65% 75% at 50% 40%, rgba(91,141,230,0.30) 0%, rgba(60,99,159,0.18) 30%, rgba(60,99,159,0.05) 55%, transparent 75%);
+          filter: blur(28px);
+          animation: quoteCardAura 5.2s ease-in-out infinite;
+          will-change: opacity, transform;
+        }
+        @keyframes quoteCardAura {
+          0%, 100% { opacity: 0.70; transform: scale(1); }
+          50%      { opacity: 1.00; transform: scale(1.02); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .quote-card-aura { animation: none; opacity: 0.55; }
         }
 
         /* Stepper active circle — soft pulsing ring radiating outward.

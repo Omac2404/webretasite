@@ -69,15 +69,15 @@
     "imageUrl": "/brand/kobi-banner-1779383885407.webp",
     "eyebrow": "Webreta",
     "bigTitle": "KOBİ",
-    "bigSubtitle": "Küçük & Orta Ölçek",
+    "bigSubtitle": "Küçük İşletmeler İçin",
     "tags": [
       "Hızlı",
       "Ekonomik",
       "Çözüme Yönelik"
     ],
     "rightEyebrow": "WEBRETA KOBİ",
-    "title": "Webreta Kobi - Bütçe dostu web sitesi",
-    "description": "Küçük ve orta ölçekli işletmeler için tasarladığımız Webreta KOBİ, bütçe dostu fiyatlarla modern tasarımlı, mobil uyumlu ve reklam çalışmalarına uygun web siteleri sunmaktadır. Karmaşaya girmeden, ihtiyacınız olan her şey.",
+    "title": "Webreta Kobi",
+    "description": "Küçük işletmeler ve esnaflar için tasarladığımız Webreta KOBİ, bütçe dostu fiyatlarla modern tasarımlı, mobil uyumlu ve reklam çalışmalarına uygun web siteleri sunmaktadır. Karmaşaya girmeden, ihtiyacınız olan her şey.",
     "bullets": [
       "2 hafta içinde yayında",
       "Sürpriz ek maaliyetler yok",
@@ -90,6 +90,6 @@
   "wizardHeading": {
     "titleLeader": "Size Özel",
     "titleHighlight": "Fiyat Teklifi",
-    "subtitle": "Size en uygun çözümü ve net bir fiyat aralığı sunalım."
+    "subtitle": "Size en uygun çözüm ile birlikte net bir fiyat aralığı sunalım."
   }
 }

@@ -13,11 +13,13 @@ import { promises as fs } from "node:fs"
 import path from "node:path"
 import {
   CHANNEL_ORDER,
+  DEFAULT_GLOBAL_CTA,
   MAX_AUDIENCE,
   MAX_ITEMS,
   PACKAGE_ORDER,
   type Channel,
   type ChannelKey,
+  type GlobalCta,
   type PackageKey,
   type PackagesData,
   type Pkg,
@@ -27,6 +29,7 @@ import {
 export type {
   Channel,
   ChannelKey,
+  GlobalCta,
   PackageKey,
   PackagesData,
   Pkg,
@@ -43,6 +46,7 @@ const DATA_FILE = path.join(process.cwd(), "data", "packages.json")
 
 const SEED: PackagesData = {
   whatsapp: DEFAULT_WHATSAPP,
+  globalCta: DEFAULT_GLOBAL_CTA,
   channels: [
     {
       key: "google",
@@ -304,6 +308,7 @@ function normalizeData(input: unknown): PackagesData {
     return {
       key: ck,
       label: found?.label?.toString().trim() || seed.label,
+      pageTitle: found?.pageTitle?.toString().trim() || "",
       short: found?.short?.toString().trim() || seed.short,
       intro: found?.intro?.toString().trim() || seed.intro,
       packages,
@@ -323,7 +328,20 @@ function normalizeData(input: unknown): PackagesData {
         : DEFAULT_WHATSAPP.display,
   }
 
-  return { channels, whatsapp }
+  const incomingCta = (obj.globalCta ?? {}) as Partial<GlobalCta>
+  const globalCta: GlobalCta = {
+    kicker: (incomingCta.kicker?.toString().trim() || DEFAULT_GLOBAL_CTA.kicker),
+    title: (incomingCta.title?.toString().trim() || DEFAULT_GLOBAL_CTA.title),
+    body: (incomingCta.body?.toString().trim() || DEFAULT_GLOBAL_CTA.body),
+    buttonLabel:
+      incomingCta.buttonLabel?.toString().trim() ||
+      DEFAULT_GLOBAL_CTA.buttonLabel,
+    buttonHref:
+      incomingCta.buttonHref?.toString().trim() ||
+      DEFAULT_GLOBAL_CTA.buttonHref,
+  }
+
+  return { channels, whatsapp, globalCta }
 }
 
 export async function readPackages(): Promise<PackagesData> {
@@ -343,12 +361,15 @@ async function writePackages(data: PackagesData): Promise<void> {
 
 export async function updateChannel(
   channelKey: ChannelKey,
-  fields: { label: string; short: string; intro: string },
+  fields: { label: string; pageTitle: string; short: string; intro: string },
 ): Promise<void> {
   const data = await readPackages()
   const channel = data.channels.find((c) => c.key === channelKey)
   if (!channel) return
   if (fields.label.trim()) channel.label = fields.label.trim()
+  // pageTitle bilinçli olarak boşa düşürülebilir — bu durumda label'a
+  // fallback eder. trim() varsa kullan, yoksa temizle.
+  channel.pageTitle = fields.pageTitle.trim()
   if (fields.short.trim()) channel.short = fields.short.trim()
   if (fields.intro.trim()) channel.intro = fields.intro.trim()
   await writePackages(data)
@@ -395,6 +416,18 @@ export async function updateWhatsApp(fields: {
   data.whatsapp = {
     number: cleanedNumber || DEFAULT_WHATSAPP.number,
     display: fields.display.trim() || DEFAULT_WHATSAPP.display,
+  }
+  await writePackages(data)
+}
+
+export async function updateGlobalCta(fields: GlobalCta): Promise<void> {
+  const data = await readPackages()
+  data.globalCta = {
+    kicker: fields.kicker.trim() || DEFAULT_GLOBAL_CTA.kicker,
+    title: fields.title.trim() || DEFAULT_GLOBAL_CTA.title,
+    body: fields.body.trim() || DEFAULT_GLOBAL_CTA.body,
+    buttonLabel: fields.buttonLabel.trim() || DEFAULT_GLOBAL_CTA.buttonLabel,
+    buttonHref: fields.buttonHref.trim() || DEFAULT_GLOBAL_CTA.buttonHref,
   }
   await writePackages(data)
 }

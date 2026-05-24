@@ -52,11 +52,11 @@ export function AboutForm({ about }: { about: AboutData }) {
             hint="Vurgudan sonraki kısım."
           />
         </div>
-        <TextArea
+        <RichTextArea
           name="hero__subtitle"
           label="Alt başlık"
-          defaultValue={about.hero.subtitle}
-          rows={3}
+          defaultValue={plainTextToHtml(about.hero.subtitle)}
+          hint="Vurgu için seç ve toolbar'dan kalın/renk/boyut uygula."
         />
       </Card>
 

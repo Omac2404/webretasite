@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { useEffect, useMemo, useState } from "react"
-import { Mail, Phone, MapPin, ArrowUpRight, ArrowRight } from "lucide-react"
+import { Mail, Phone, MapPin, ArrowUpRight, ArrowRight, Check } from "lucide-react"
 import {
   DEFAULT_FOOTER,
   SOCIAL_PLATFORMS,
@@ -87,6 +87,12 @@ export default function SiteFooter() {
   const [config, setConfig] = useState<FooterConfig>(DEFAULT_FOOTER)
   const [nav, setNav] = useState<NavItem[]>([])
   const [legalLinks, setLegalLinks] = useState<LegalLink[]>([])
+  // Google Partner badge — admin /admin/referanslar > Google Partner. /api/logos
+  // bunu config'in yanında dönüyor; ana sayfadakiyle aynı kaynak.
+  const [googlePartner, setGooglePartner] = useState<{
+    enabled: boolean
+    url: string
+  }>({ enabled: false, url: "" })
 
   useEffect(() => {
     let cancelled = false
@@ -102,6 +108,25 @@ export default function SiteFooter() {
           if (data.config) setConfig(data.config)
           if (Array.isArray(data.nav)) setNav(data.nav)
           if (Array.isArray(data.legalLinks)) setLegalLinks(data.legalLinks)
+        },
+      )
+      .catch(() => {})
+    fetch("/api/logos")
+      .then((r) => (r.ok ? r.json() : null))
+      .then(
+        (
+          data:
+            | { googlePartner?: { enabled?: boolean; url?: string } }
+            | null,
+        ) => {
+          if (cancelled || !data?.googlePartner) return
+          setGooglePartner({
+            enabled: data.googlePartner.enabled !== false,
+            url:
+              typeof data.googlePartner.url === "string"
+                ? data.googlePartner.url
+                : "",
+          })
         },
       )
       .catch(() => {})
@@ -254,21 +279,75 @@ export default function SiteFooter() {
                   </div>
                 )}
               </div>
+
             </div>
           </div>
         </div>
 
         {/* Middle band — brand mark + horizontal nav + socials. */}
         <div className="mt-20 flex flex-col gap-8 border-t border-white/[0.06] py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-          <a href="/" aria-label="Webreta" className="inline-flex items-center">
-            <Image
-              src="/brand/webreta-logo.webp"
-              alt="Webreta"
-              width={364}
-              height={64}
-              className="h-7 w-auto brightness-0 invert"
-            />
-          </a>
+          <div className="flex items-center gap-4">
+            <a href="/" aria-label="Webreta" className="inline-flex items-center">
+              <Image
+                src="/brand/webreta-logo.webp"
+                alt="Webreta"
+                width={364}
+                height={64}
+                className="h-7 w-auto brightness-0 invert"
+              />
+            </a>
+
+            {/* Google Partner — minimal, transparan badge. Footer zeminini
+                miras alır, sadece tipografi + check + ince separator var.
+                Admin /admin/referanslar > Google Partner ile yönetilir. */}
+            {googlePartner.enabled && googlePartner.url && (
+              <>
+                <span
+                  aria-hidden
+                  className="h-7 w-px bg-white/15"
+                />
+                <a
+                  href={googlePartner.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-track="footer:partner-badge"
+                  data-track-label="Footer Google Partner badge"
+                  aria-label="Webreta Google Partner profili"
+                  className="group inline-flex items-center gap-2 transition-opacity hover:opacity-90"
+                >
+                  <span
+                    className="flex flex-col items-start leading-[1.0]"
+                    style={{
+                      fontFamily:
+                        '"Google Sans", "Product Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
+                    }}
+                  >
+                    <span className="text-[13px] font-medium tracking-[-0.01em]">
+                      <span style={{ color: "#4285F4" }}>G</span>
+                      <span style={{ color: "#EA4335" }}>o</span>
+                      <span style={{ color: "#FBBC05" }}>o</span>
+                      <span style={{ color: "#4285F4" }}>g</span>
+                      <span style={{ color: "#34A853" }}>l</span>
+                      <span style={{ color: "#EA4335" }}>e</span>
+                    </span>
+                    <span className="mt-0.5 text-[13px] font-medium tracking-[-0.01em] text-white/55">
+                      Partner
+                    </span>
+                  </span>
+                  <span
+                    aria-hidden
+                    className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #5b8de6 0%, #3c639f 100%)",
+                    }}
+                  >
+                    <Check size={8} strokeWidth={3.5} className="text-white" />
+                  </span>
+                </a>
+              </>
+            )}
+          </div>
 
           {nav.length > 0 && (
             <nav className="flex flex-wrap items-center gap-x-6 gap-y-2">

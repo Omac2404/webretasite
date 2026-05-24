@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Menu, X, BookOpen, ArrowRight } from "lucide-react"
 
 const NAV_ITEMS = [
+  { label: "Anasayfa", href: "/", track: "header:nav:anasayfa" },
   { label: "Hakkımızda", href: "/hakkimizda", track: "header:nav:hakkimizda" },
   { label: "Web Site", href: "/web-site", track: "header:nav:web-site" },
   {

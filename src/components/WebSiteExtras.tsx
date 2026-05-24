@@ -65,27 +65,51 @@ export default function WebSiteExtras() {
           opacity={0.75}
         />
         <div
-          className="relative z-10 overflow-hidden rounded-3xl bg-white"
+          className="relative z-10 overflow-hidden rounded-3xl"
           style={{
-            border: '1px solid rgba(60, 99, 159, 0.10)',
+            background:
+              'linear-gradient(135deg, #0f1e3a 0%, #1a3464 50%, #2f5288 100%)',
+            border: '1px solid rgba(60, 99, 159, 0.25)',
             boxShadow:
-              '0 2px 8px -2px rgba(60, 99, 159, 0.06), 0 24px 64px -16px rgba(60, 99, 159, 0.12)',
+              '0 2px 8px -2px rgba(15, 30, 58, 0.18), 0 24px 64px -16px rgba(15, 30, 58, 0.30)',
           }}
         >
-          <div className="grid grid-cols-1 md:grid-cols-[42%_58%]">
-            {/* Visual side */}
+          {/* Atmosfer halosu — kartın sağ-üstünde yumuşak mavi parıltı,
+              dijital-reklamlar global CTA ile aynı dil. */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-32 -top-24 h-[420px] w-[420px] rounded-full opacity-55"
+            style={{
+              background:
+                'radial-gradient(circle at center, rgba(91, 141, 230, 0.45) 0%, rgba(60, 99, 159, 0.20) 35%, transparent 70%)',
+              filter: 'blur(10px)',
+            }}
+          />
+          {/* Yıldız tozu — derinlik için ince statik beyaz noktalar */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-35"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle at 12% 18%, rgba(255,255,255,0.55) 0.5px, transparent 1px), radial-gradient(circle at 32% 72%, rgba(255,255,255,0.4) 0.5px, transparent 1px), radial-gradient(circle at 68% 22%, rgba(255,255,255,0.5) 0.5px, transparent 1px), radial-gradient(circle at 82% 64%, rgba(255,255,255,0.4) 0.5px, transparent 1px), radial-gradient(circle at 48% 88%, rgba(255,255,255,0.4) 0.5px, transparent 1px)',
+            }}
+          />
+
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-[42%_58%]">
+            {/* Visual side — banner. Hafif daha açık navy ile sağ tarafa
+                karşı görsel bir ayrım; sağda dikey ince mavi separator var. */}
             <div
-              className="relative isolate flex min-h-[260px] items-center justify-center overflow-hidden p-8 md:min-h-[340px] md:p-10"
+              className="relative isolate flex min-h-[260px] items-center justify-center overflow-hidden p-8 md:min-h-[340px] md:border-r md:border-white/[0.08] md:p-10"
               style={
                 hasImage
                   ? {
-                      backgroundImage: `linear-gradient(135deg, rgba(60,99,159,0.55) 0%, rgba(47,82,136,0.60) 65%, rgba(36,63,107,0.65) 100%), url(${banner.imageUrl})`,
+                      backgroundImage: `linear-gradient(135deg, rgba(26,52,100,0.78) 0%, rgba(47,82,136,0.78) 65%, rgba(60,99,159,0.78) 100%), url(${banner.imageUrl})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                     }
                   : {
                       background:
-                        'linear-gradient(135deg, #3c639f 0%, #2f5288 65%, #243f6b 100%)',
+                        'linear-gradient(135deg, #1a3464 0%, #2f5288 65%, #3c639f 100%)',
                     }
               }
             >
@@ -121,7 +145,7 @@ export default function WebSiteExtras() {
 
               <div className="relative z-10 flex flex-col items-start gap-5 text-white">
                 {banner.eyebrow && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/12 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#5b8de6]/40 bg-[#5b8de6]/15 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-[#cfe0ff] backdrop-blur-sm">
                     <Sparkles size={12} strokeWidth={2} />
                     {banner.eyebrow}
                   </span>
@@ -141,7 +165,7 @@ export default function WebSiteExtras() {
                     {banner.tags.map((t) => (
                       <span
                         key={t}
-                        className="rounded-full border border-white/20 bg-white/8 px-2.5 py-1 text-[11px] font-medium text-white/90"
+                        className="rounded-full border border-[#5b8de6]/40 bg-[#5b8de6]/15 px-2.5 py-1 text-[11px] font-medium text-[#cfe0ff] backdrop-blur-sm"
                       >
                         {t}
                       </span>
@@ -151,30 +175,31 @@ export default function WebSiteExtras() {
               </div>
             </div>
 
-            {/* Copy side */}
-            <div className="flex flex-col justify-center gap-5 p-8 md:p-10">
+            {/* Copy side — koyu navy zemin, beyaz metin, brand-blue accent.
+                Global CTA + hakkımızda CTA ile aynı DNA. */}
+            <div className="relative flex flex-col justify-center gap-5 p-8 md:p-10">
               <div>
                 {banner.rightEyebrow && (
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#3c639f]">
+                  <div className="inline-flex items-center gap-1.5 rounded-full border border-[#5b8de6]/40 bg-[#5b8de6]/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#cfe0ff] backdrop-blur-sm">
                     {banner.rightEyebrow}
                   </div>
                 )}
-                <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.02em] text-[#0a0a0a] md:text-[30px]">
+                <h2 className="mt-3 text-[26px] font-semibold leading-[1.18] tracking-[-0.02em] text-white md:text-[30px]">
                   {banner.title}
                 </h2>
               </div>
               {banner.description && (
-                <p className="text-[15px] leading-relaxed text-black/65">
+                <p className="text-[15px] leading-relaxed text-white/70">
                   {banner.description}
                 </p>
               )}
               {banner.bullets.length > 0 && (
-                <ul className="grid grid-cols-1 gap-2 text-[14px] text-black/70 sm:grid-cols-2">
+                <ul className="grid grid-cols-1 gap-2 text-[14px] text-white/80 sm:grid-cols-2">
                   {banner.bullets.map((t) => (
                     <li key={t} className="flex items-start gap-2">
                       <span
                         aria-hidden
-                        className="mt-[7px] inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#3c639f]"
+                        className="mt-[7px] inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#5b8de6]"
                       />
                       {t}
                     </li>
@@ -188,10 +213,13 @@ export default function WebSiteExtras() {
                   rel="noopener noreferrer"
                   data-track="web-site:kobi-banner"
                   data-track-label={banner.ctaLabel}
-                  className="cta-primary inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[14px] font-medium"
+                  className="group inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-[14px] font-semibold text-[#1a3464] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.45)] transition-all hover:-translate-y-0.5 hover:bg-[#f8fafc] hover:shadow-[0_18px_40px_-8px_rgba(0,0,0,0.55)]"
                 >
                   {banner.ctaLabel}
-                  <ExternalLink size={15} />
+                  <ExternalLink
+                    size={15}
+                    className="transition-transform duration-300 group-hover:translate-x-0.5"
+                  />
                 </a>
               </div>
             </div>

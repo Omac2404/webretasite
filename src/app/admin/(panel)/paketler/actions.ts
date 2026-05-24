@@ -5,6 +5,7 @@ import {
   CHANNEL_ORDER,
   PACKAGE_ORDER,
   updateChannel,
+  updateGlobalCta,
   updatePackage,
   updateWhatsApp,
   type ChannelKey,
@@ -43,12 +44,13 @@ export async function updateChannelAction(
   const channel = parseChannel(formData.get("channel"))
   if (!channel) return { error: "Geçersiz kanal." }
   const label = String(formData.get("label") ?? "").trim()
+  const pageTitle = String(formData.get("pageTitle") ?? "").trim()
   const short = String(formData.get("short") ?? "").trim()
   const intro = String(formData.get("intro") ?? "").trim()
   if (!label || !intro) {
     return { error: "Kanal adı ve açıklama zorunlu." }
   }
-  await updateChannel(channel, { label, short, intro })
+  await updateChannel(channel, { label, pageTitle, short, intro })
   revalidateBoth()
   return { ok: true }
 }
@@ -92,6 +94,23 @@ export async function updateWhatsAppAction(
     return { error: "Numara ve görünür format zorunlu." }
   }
   await updateWhatsApp({ number, display })
+  revalidateBoth()
+  return { ok: true }
+}
+
+export async function updateGlobalCtaAction(
+  _prev: UpdateState,
+  formData: FormData,
+): Promise<UpdateState> {
+  const kicker = String(formData.get("kicker") ?? "").trim()
+  const title = String(formData.get("title") ?? "").trim()
+  const body = String(formData.get("body") ?? "").trim()
+  const buttonLabel = String(formData.get("buttonLabel") ?? "").trim()
+  const buttonHref = String(formData.get("buttonHref") ?? "").trim()
+  if (!title || !body || !buttonLabel) {
+    return { error: "Başlık, açıklama ve buton metni boş bırakılamaz." }
+  }
+  await updateGlobalCta({ kicker, title, body, buttonLabel, buttonHref })
   revalidateBoth()
   return { ok: true }
 }

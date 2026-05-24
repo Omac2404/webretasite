@@ -4,6 +4,7 @@ import { ArrowRight, ImageIcon } from "lucide-react"
 import SiteHeader from "@/components/SiteHeader"
 import SiteFooter from "@/components/SiteFooter"
 import { DotPattern } from "@/components/DotPattern"
+import { ConstellationBackdrop } from "@/components/ConstellationBackdrop"
 import { readAbout } from "@/lib/about-store"
 import type { AboutRow } from "@/lib/about-types"
 import { isHtmlBody, sanitizeAboutBody } from "@/lib/about-sanitize"
@@ -57,11 +58,19 @@ export default async function HakkimizdaPage() {
                 <span className="font-normal">{about.hero.titleTrailer}</span>
               )}
             </h1>
-            {about.hero.subtitle && (
-              <p className="mt-5 text-[16px] leading-relaxed text-black/60">
-                {about.hero.subtitle}
-              </p>
-            )}
+            {about.hero.subtitle &&
+              (isHtmlBody(about.hero.subtitle) ? (
+                <div
+                  className="about-hero-subtitle mt-5 text-[17px] leading-relaxed text-black/60 md:text-[18px] [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-[#0a0a0a]"
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeAboutBody(about.hero.subtitle),
+                  }}
+                />
+              ) : (
+                <p className="mt-5 text-[17px] leading-relaxed text-black/60 md:text-[18px]">
+                  {about.hero.subtitle}
+                </p>
+              ))}
           </div>
         </section>
 
@@ -77,43 +86,62 @@ export default async function HakkimizdaPage() {
           buttonTrack="hakkimizda:row2-cta"
         />
 
-        {/* CTA — Bir proje konuşalım mı? */}
+        {/* CTA — Bir proje konuşalım mı? Dijital reklamlar sayfasındaki
+            global CTA ile aynı renk DNA'sı: koyu navy gradient zemin,
+            atmosferik halo, takımyıldız stili amber twinkle noktalar +
+            ince bağlantı çizgileri ("connect" metaforu). */}
         <section className="relative mx-auto max-w-[1280px] px-6 pb-20 pt-4 md:px-12 md:pb-28 md:pt-8">
-          {/* Dekoratif nokta deseni — CTA'nın sol arka tarafına taşar */}
-          <DotPattern
-            style={{
-              left: "-220px",
-              top: "-40px",
-              width: "560px",
-              height: "560px",
-              zIndex: 0,
-            }}
-            opacity={0.75}
-          />
+          <div className="relative z-10 overflow-hidden rounded-2xl border border-[#3c639f]/20 bg-gradient-to-br from-[#0f1e3a] via-[#1a3464] to-[#2f5288] p-7 md:rounded-3xl md:p-12">
+            {/* Atmosfer halosu — sol-üstte yumuşak mavi parıltı */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -left-32 -top-32 h-[480px] w-[480px] rounded-full opacity-55 md:-left-20 md:-top-20"
+              style={{
+                background:
+                  "radial-gradient(circle at center, rgba(91, 141, 230, 0.50) 0%, rgba(60, 99, 159, 0.22) 35%, transparent 70%)",
+                filter: "blur(10px)",
+              }}
+            />
 
-          <div className="relative z-10 flex flex-col items-start gap-5 rounded-2xl border border-[#3c639f]/15 bg-gradient-to-br from-[#3c639f]/[0.06] via-[#3c639f]/[0.02] to-transparent p-6 md:flex-row md:items-center md:justify-between md:p-10">
-            <div className="max-w-[640px]">
-              <h3 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a] md:text-[28px]">
-                {about.cta.title}
-              </h3>
-              {about.cta.body && (
-                <p className="mt-2 text-[14px] leading-relaxed text-black/60 md:text-[15px]">
-                  {about.cta.body}
-                </p>
-              )}
+            {/* Yıldız tozu — küçük statik noktalar arka planda derinlik */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-40"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 12% 18%, rgba(255,255,255,0.6) 0.5px, transparent 1px), radial-gradient(circle at 32% 72%, rgba(255,255,255,0.4) 0.5px, transparent 1px), radial-gradient(circle at 68% 22%, rgba(255,255,255,0.5) 0.5px, transparent 1px), radial-gradient(circle at 82% 64%, rgba(255,255,255,0.4) 0.5px, transparent 1px), radial-gradient(circle at 48% 88%, rgba(255,255,255,0.4) 0.5px, transparent 1px)",
+              }}
+            />
+
+            {/* Takımyıldız — SVG'de twinkle yapan amber noktalar +
+                bağlantı çizgileri. Sağ tarafa yerleşik, container'dan biraz
+                taşar; mobilde gizli (sm+ görünür). */}
+            <ConstellationBackdrop />
+
+            <div className="relative z-10 flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between md:gap-10">
+              <div className="max-w-[620px]">
+                <h3 className="text-[24px] font-semibold leading-[1.18] tracking-[-0.02em] text-white md:text-[32px]">
+                  {about.cta.title}
+                </h3>
+                {about.cta.body && (
+                  <p className="mt-3 text-[14px] leading-relaxed text-white/70 md:text-[15px]">
+                    {about.cta.body}
+                  </p>
+                )}
+              </div>
+              <Link
+                href={about.cta.buttonHref}
+                data-track="hakkimizda:cta"
+                data-track-label={about.cta.buttonLabel}
+                className="group inline-flex shrink-0 items-center gap-2 rounded-md bg-white px-6 py-3 text-[14px] font-semibold text-[#1a3464] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.45)] transition-all hover:-translate-y-0.5 hover:bg-[#f8fafc] hover:shadow-[0_18px_40px_-8px_rgba(0,0,0,0.55)]"
+              >
+                {about.cta.buttonLabel}
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5"
+                />
+              </Link>
             </div>
-            <Link
-              href={about.cta.buttonHref}
-              data-track="hakkimizda:cta"
-              data-track-label={about.cta.buttonLabel}
-              className="group inline-flex items-center gap-2 rounded-md bg-[#3c639f] px-6 py-3 text-[14px] font-medium text-white shadow-[0_8px_24px_-8px_rgba(60,99,159,0.4)] transition-colors hover:bg-[#2f5288]"
-            >
-              {about.cta.buttonLabel}
-              <ArrowRight
-                size={16}
-                className="transition-transform duration-300 group-hover:translate-x-0.5"
-              />
-            </Link>
           </div>
         </section>
       </main>
@@ -176,7 +204,7 @@ function AboutRowBlock({
             href={row.buttonHref || "#"}
             data-track={buttonTrack}
             data-track-label={row.buttonLabel}
-            className="group inline-flex items-center gap-2 rounded-md border border-black/[0.10] bg-white px-5 py-2.5 text-[14px] font-medium text-[#0a0a0a] transition-all hover:-translate-y-0.5 hover:border-[#3c639f]/30 hover:bg-[#3c639f]/[0.04] hover:text-[#3c639f] hover:shadow-[0_8px_20px_-8px_rgba(60,99,159,0.25)]"
+            className="group inline-flex items-center gap-2 rounded-md bg-[#3c639f] px-5 py-2.5 text-[14px] font-medium text-white shadow-[0_8px_24px_-8px_rgba(60,99,159,0.4)] transition-all hover:-translate-y-0.5 hover:bg-[#2f5288] hover:shadow-[0_12px_28px_-8px_rgba(60,99,159,0.5)]"
           >
             {row.buttonLabel}
             <ArrowRight

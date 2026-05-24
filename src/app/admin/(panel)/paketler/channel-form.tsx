@@ -10,11 +10,13 @@ const INITIAL: UpdateState = {}
 export function ChannelForm({
   channelKey,
   label,
+  pageTitle,
   short,
   intro,
 }: {
   channelKey: ChannelKey
   label: string
+  pageTitle: string
   short: string
   intro: string
 }) {
@@ -38,7 +40,7 @@ export function ChannelForm({
       <input type="hidden" name="channel" value={channelKey} />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Field label="Sekme adı (uzun)">
+        <Field label="Sekme adı (uzun)" hint="Üstteki sekme butonunda görünür.">
           <input
             name="label"
             type="text"
@@ -56,6 +58,19 @@ export function ChannelForm({
           />
         </Field>
       </div>
+
+      <Field
+        label="Sayfa başlığı (h1)"
+        hint="Sekme seçildiğinde sayfanın üstünde büyük başlık olarak görünür. Boş bırakılırsa sekme adı kullanılır."
+      >
+        <input
+          name="pageTitle"
+          type="text"
+          defaultValue={pageTitle}
+          placeholder="Boş bırakılırsa sekme adı kullanılır"
+          className={fieldInput}
+        />
+      </Field>
 
       <Field label="Sayfa açıklaması">
         <textarea
@@ -81,14 +96,21 @@ const fieldInput =
 
 function Field({
   label,
+  hint,
   children,
 }: {
   label: string
+  hint?: string
   children: React.ReactNode
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-[11.5px] font-medium text-black/55">{label}</span>
+      <span className="text-[11.5px] font-medium text-black/55">
+        {label}
+        {hint && (
+          <span className="ml-2 font-normal text-black/40">{hint}</span>
+        )}
+      </span>
       {children}
     </label>
   )

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { createPortal } from "react-dom"
+import Link from "next/link"
 import {
   Check,
   ChevronDown,
@@ -10,12 +11,15 @@ import {
   ArrowLeft,
   Phone,
   CalendarClock,
+  Globe,
 } from "lucide-react"
-import type {
-  Channel,
-  ChannelKey,
-  Pkg,
-  WhatsAppSettings,
+import {
+  DEFAULT_GLOBAL_CTA,
+  type Channel,
+  type ChannelKey,
+  type GlobalCta,
+  type Pkg,
+  type WhatsAppSettings,
 } from "@/lib/packages-types"
 import { bookAppointmentAction } from "@/app/dijital-reklamlar/actions"
 import {
@@ -280,6 +284,209 @@ function PopupBrand() {
         className="h-5 w-auto"
       />
     </a>
+  )
+}
+
+// Global CTA kartının arka plan globe'u. Wireframe stilde meridyenler +
+// paraleller + dünya üzerinde glowing şehir noktaları. SVG ile çiziliyor —
+// resim asset'i olmadan responsive ve renk uyumlu kalıyor.
+function GlobeBackdrop() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute -right-24 -top-24 hidden h-[520px] w-[520px] opacity-90 sm:block md:-right-12 md:-top-8 md:h-[600px] md:w-[600px]"
+    >
+      <svg
+        viewBox="0 0 600 600"
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-full w-full"
+      >
+        <defs>
+          <radialGradient id="globeSphere" cx="40%" cy="35%" r="65%">
+            <stop offset="0%" stopColor="#5b8de6" stopOpacity="0.30" />
+            <stop offset="55%" stopColor="#3c639f" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#0f1e3a" stopOpacity="0" />
+          </radialGradient>
+          <linearGradient id="globeLine" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#a8c7ff" stopOpacity="0.75" />
+            <stop offset="100%" stopColor="#5b8de6" stopOpacity="0.20" />
+          </linearGradient>
+          <radialGradient id="cityGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#fef3c7" stopOpacity="1" />
+            <stop offset="40%" stopColor="#fbbf24" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+
+        {/* Sphere base */}
+        <circle cx="300" cy="300" r="240" fill="url(#globeSphere)" />
+        <circle
+          cx="300"
+          cy="300"
+          r="240"
+          fill="none"
+          stroke="url(#globeLine)"
+          strokeWidth="1.25"
+          opacity="0.85"
+        />
+
+        {/* Paraleller — yataydan giderek sıkışan elipsler. Y eksenini yarım
+            yarım ölçeklendirerek 5 latitude line elde ediyoruz. */}
+        <g
+          fill="none"
+          stroke="url(#globeLine)"
+          strokeWidth="1"
+          opacity="0.55"
+        >
+          <ellipse cx="300" cy="300" rx="240" ry="65" />
+          <ellipse cx="300" cy="300" rx="240" ry="130" />
+          <ellipse cx="300" cy="300" rx="240" ry="195" />
+          <ellipse cx="300" cy="240" rx="225" ry="20" />
+          <ellipse cx="300" cy="360" rx="225" ry="20" />
+        </g>
+
+        {/* Meridyenler — X eksenini sıkıştırarak küre üzerinde dönen
+            boylamlar. Sabit boylamlar + animasyonlu (yavaş dönen) bir
+            grup; küreye gerçekten dönüyor hissi veriyor. */}
+        <g
+          fill="none"
+          stroke="url(#globeLine)"
+          strokeWidth="1"
+          opacity="0.50"
+        >
+          <ellipse cx="300" cy="300" rx="65" ry="240" />
+          <ellipse cx="300" cy="300" rx="130" ry="240" />
+          <ellipse cx="300" cy="300" rx="195" ry="240" />
+        </g>
+        {/* Yavaş dönen iki meridyen — SMIL animateTransform ile küreye
+            "dönüyor" hissi katar. Ellipse'in 180° simetrisi olduğu için
+            36s tam tur, iki ayrı faz halinde sweep. Reduced-motion altında
+            tarayıcı SMIL'i durdurur. */}
+        <ellipse
+          cx="300"
+          cy="300"
+          rx="90"
+          ry="240"
+          fill="none"
+          stroke="url(#globeLine)"
+          strokeWidth="1.25"
+          opacity="0.60"
+        >
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="0 300 300"
+            to="360 300 300"
+            dur="36s"
+            repeatCount="indefinite"
+          />
+        </ellipse>
+        <ellipse
+          cx="300"
+          cy="300"
+          rx="60"
+          ry="240"
+          fill="none"
+          stroke="url(#globeLine)"
+          strokeWidth="1"
+          opacity="0.40"
+        >
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="180 300 300"
+            to="540 300 300"
+            dur="48s"
+            repeatCount="indefinite"
+          />
+        </ellipse>
+
+        {/* Şehir ışıkları — küre yüzeyine 14 farklı pozisyona dağılmış.
+            Her birinin SMIL animasyonu çoğu zaman 0 opacity'de (dark),
+            kısa bir "alive" penceresi sırasında parlıyor. Farklı dur ve
+            begin değerleriyle hangi noktanın yandığı sürekli değişiyor —
+            "bir yerde söner, başka yerde yanar" hissi. */}
+        <g>
+          <City cx={220} cy={210} dur="7s"  begin="0s" />
+          <City cx={360} cy={245} dur="9s"  begin="2.2s" />
+          <City cx={310} cy={320} dur="6s"  begin="4.5s" />
+          <City cx={420} cy={325} dur="8s"  begin="1.1s" />
+          <City cx={250} cy={385} dur="7.5s" begin="5.6s" />
+          <City cx={185} cy={295} dur="9.5s" begin="3.0s" />
+          <City cx={355} cy={420} dur="6.5s" begin="0.8s" />
+          <City cx={300} cy={180} dur="8.5s" begin="3.8s" />
+          <City cx={175} cy={380} dur="7.2s" begin="6.2s" />
+          <City cx={400} cy={215} dur="9.2s" begin="1.7s" />
+          <City cx={270} cy={350} dur="6.8s" begin="4.8s" />
+          <City cx={440} cy={375} dur="8.8s" begin="2.6s" />
+          <City cx={160} cy={250} dur="7.6s" begin="5.2s" />
+          <City cx={335} cy={460} dur="9.8s" begin="0.4s" />
+        </g>
+
+        {/* Üst-sol highlight — küreye 3D hissi verir */}
+        <ellipse
+          cx="240"
+          cy="220"
+          rx="80"
+          ry="50"
+          fill="#ffffff"
+          opacity="0.06"
+        />
+      </svg>
+    </div>
+  )
+}
+
+function City({
+  cx,
+  cy,
+  dur = "8s",
+  begin = "0s",
+}: {
+  cx: number
+  cy: number
+  dur?: string
+  begin?: string
+}) {
+  // SMIL ile her şehir SHORT "alive window" gösterir: cycle'ın %15-40
+  // aralığında tam parlıyor, sonra söner ve uzun bir süre invisible
+  // kalır. Farklı dur/begin değerleriyle hangi noktanın yandığı sürekli
+  // farklılaşır — kullanıcı her bakışta küre üzerinde başka yerde ışık
+  // görüyor.
+  //
+  // keyTimes: 0 ile 1 arası, opacity values'e karşılık gelir.
+  //   0    → 0      (invisible başlangıç)
+  //   0.15 → 1      (fade in)
+  //   0.40 → 1      (peak hold)
+  //   0.55 → 0      (fade out)
+  //   1    → 0      (rest of cycle dark)
+  const glowKeys = "0;0.15;0.40;0.55;1"
+  const glowVals = "0;0.95;0.95;0;0"
+  const dotKeys = glowKeys
+  const dotVals = "0;1;1;0;0"
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r="14" fill="url(#cityGlow)" opacity="0">
+        <animate
+          attributeName="opacity"
+          values={glowVals}
+          keyTimes={glowKeys}
+          dur={dur}
+          begin={begin}
+          repeatCount="indefinite"
+        />
+      </circle>
+      <circle cx={cx} cy={cy} r="2.5" fill="#fef3c7" opacity="0">
+        <animate
+          attributeName="opacity"
+          values={dotVals}
+          keyTimes={dotKeys}
+          dur={dur}
+          begin={begin}
+          repeatCount="indefinite"
+        />
+      </circle>
+    </g>
   )
 }
 
@@ -597,7 +804,7 @@ function RequestModal({
   const headerName = pkg.name
 
   const choiceView = (
-    <div className="px-7 py-7 md:px-9 md:py-8">
+    <div className="px-5 py-5 sm:px-7 sm:py-7 md:px-9 md:py-8">
       <p className="text-[15px] leading-relaxed text-black/65">
         Bu paket için bizimle nasıl iletişim kurmak istersiniz?
       </p>
@@ -657,7 +864,7 @@ function RequestModal({
 
   const today = now ?? new Date()
   const scheduleView = (
-    <div className="px-7 py-7 md:px-9 md:py-8">
+    <div className="px-5 py-5 sm:px-7 sm:py-7 md:px-9 md:py-8">
       {/* Date strip — scrolls horizontally on overflow */}
       <div>
         <div className="flex items-center justify-between">
@@ -808,7 +1015,7 @@ function RequestModal({
       fillPlaceholders(successCopy.body, vars),
     )
     return (
-      <div className="px-7 py-10 text-center md:px-9 md:py-12">
+      <div className="px-5 py-8 text-center sm:px-7 sm:py-10 md:px-9 md:py-12">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#3c639f]/[0.10]">
           <Check size={28} className="text-[#3c639f]" strokeWidth={2.5} />
         </div>
@@ -833,7 +1040,7 @@ function RequestModal({
 
   const content = (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8"
+      className="fixed inset-0 z-[100] flex items-center justify-center px-3 py-3 sm:px-4 sm:py-6 md:py-8"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
       }}
@@ -844,16 +1051,16 @@ function RequestModal({
       />
 
       <div
-        className="relative w-full max-w-[640px] overflow-hidden rounded-2xl bg-white shadow-[0_24px_64px_-12px_rgba(15,23,42,0.30)] transition-all duration-200"
+        className="relative flex max-h-[calc(100dvh-1.5rem)] w-full max-w-[640px] flex-col overflow-hidden rounded-2xl bg-white shadow-[0_24px_64px_-12px_rgba(15,23,42,0.30)] transition-all duration-200 sm:max-h-[calc(100dvh-3rem)] md:max-h-[calc(100dvh-4rem)]"
         style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "scale(1) translateY(0)" : "scale(0.96) translateY(8px)",
         }}
       >
-        <div className="h-[3px] w-full" style={{ background: theme.badgeGradient }} />
+        <div className="h-[3px] w-full shrink-0" style={{ background: theme.badgeGradient }} />
 
         {/* Header — back arrow appears on schedule/success views */}
-        <div className="flex items-start justify-between gap-4 px-7 pt-6 md:px-9 md:pt-7">
+        <div className="flex shrink-0 items-start justify-between gap-4 px-5 pt-5 sm:px-7 sm:pt-6 md:px-9 md:pt-7">
           <div className="flex items-center gap-3">
             {view === "schedule" && (
               <button
@@ -888,14 +1095,16 @@ function RequestModal({
           </button>
         </div>
 
-        {view === "choice" && choiceView}
-        {view === "schedule" && scheduleView}
-        {view === "success" && successView}
+        <div className="flex-1 overflow-y-auto overscroll-contain">
+          {view === "choice" && choiceView}
+          {view === "schedule" && scheduleView}
+          {view === "success" && successView}
+        </div>
 
         {/* Footer — varies by view. Brand mark sits on the left in every
             footer so the popup feels owned by Webreta regardless of step. */}
         {view === "choice" && (
-          <div className="flex items-center justify-between gap-3 border-t border-black/[0.06] bg-[#fafafa] px-7 py-4 md:px-9">
+          <div className="flex shrink-0 items-center justify-between gap-3 border-t border-black/[0.06] bg-[#fafafa] px-5 py-3.5 sm:px-7 sm:py-4 md:px-9">
             <PopupBrand />
             <span className="text-[11.5px] text-black/40">
               Hızlı yanıt için WhatsApp&apos;ı tercih edin.
@@ -904,7 +1113,7 @@ function RequestModal({
         )}
 
         {view === "schedule" && (
-          <div className="flex flex-col gap-3 border-t border-black/[0.06] bg-[#fafafa] px-7 py-5 md:flex-row md:items-center md:justify-between md:px-9">
+          <div className="flex shrink-0 items-center justify-between gap-3 border-t border-black/[0.06] bg-[#fafafa] px-5 py-3.5 sm:px-7 sm:py-4 md:px-9 md:py-5">
             <PopupBrand />
             <button
               type="button"
@@ -912,20 +1121,20 @@ function RequestModal({
               onClick={handleSubmit}
               data-track="randevu-olustur"
               data-track-label={`Randevu oluşturdu (${channel.label} – ${pkg.name})`}
-              className="cta-primary inline-flex items-center justify-center gap-2 rounded-md px-6 py-2.5 text-[13px] font-medium"
+              className="cta-primary inline-flex items-center justify-center gap-2 rounded-md px-5 py-2.5 text-[13px] font-medium sm:px-6"
             >
-              {submitting ? "Gönderiliyor…" : "Randevu Oluştur"}
+              {submitting ? "Gönderiliyor…" : "Onayla"}
               {!submitting && <ArrowRight size={15} />}
             </button>
           </div>
         )}
 
         {view === "success" && (
-          <div className="flex items-center justify-between gap-3 border-t border-black/[0.06] bg-[#fafafa] px-7 py-5 md:px-9">
+          <div className="flex shrink-0 items-center justify-between gap-3 border-t border-black/[0.06] bg-[#fafafa] px-5 py-3.5 sm:px-7 sm:py-4 md:px-9 md:py-5">
             <PopupBrand />
             <button
               onClick={onClose}
-              className="cta-primary inline-flex items-center justify-center gap-2 rounded-md px-6 py-2.5 text-[13px] font-medium"
+              className="cta-primary inline-flex items-center justify-center gap-2 rounded-md px-5 py-2.5 text-[13px] font-medium sm:px-6"
             >
               {successCopy.ctaLabel}
             </button>
@@ -1131,11 +1340,14 @@ function PackageCard({
 export default function DijitalReklamlarClient({
   channels,
   whatsapp,
+  globalCta,
 }: {
   channels: Channel[]
   whatsapp?: WhatsAppSettings
+  globalCta?: GlobalCta
 }) {
   const whatsappCfg = whatsapp ?? FALLBACK_WHATSAPP
+  const cta = globalCta ?? DEFAULT_GLOBAL_CTA
   // Fall through to "google" if the admin somehow ships an empty channels
   // array — keeps the page from crashing while we debug.
   const initialChannel: ChannelKey = channels[0]?.key ?? "google"
@@ -1162,7 +1374,9 @@ export default function DijitalReklamlarClient({
       <main className="mx-auto max-w-[1280px] px-6 py-12 md:px-12 md:py-16">
         <div className="text-center">
           <h1 className="text-[36px] leading-[1.1] tracking-[-0.02em] text-[#0a0a0a] md:text-[48px]">
-            <span className="font-bold text-[#3c639f]">{channel.label}</span>
+            <span className="font-bold text-[#3c639f]">
+              {channel.pageTitle?.trim() || channel.label}
+            </span>
           </h1>
           <p className="mx-auto mt-4 text-[15px] leading-relaxed text-black/60 md:whitespace-nowrap">
             {channel.intro}
@@ -1171,15 +1385,21 @@ export default function DijitalReklamlarClient({
 
         {/* Channel tabs — same segmented-control language as the homepage
             projects section. Active chip carries a thin channel-tinted dot
-            so the user feels which palette they're on. */}
+            so the user feels which palette they're on. Soft brand-blue halo
+            breathes behind the pill (aynı efekt anasayfa Partner badge'inde). */}
         <div className="mt-10 flex justify-center">
-          <div
-            className="inline-flex shrink-0 items-center rounded-full p-1"
-            style={{
-              background: "#f1f3f7",
-              border: "1px solid rgba(60, 99, 159, 0.08)",
-            }}
-          >
+          <div className="relative inline-block">
+            <div
+              aria-hidden
+              className="gp-halo pointer-events-none absolute -inset-2 rounded-full"
+            />
+            <div
+              className="relative inline-flex shrink-0 items-center rounded-full p-1"
+              style={{
+                background: "#f1f3f7",
+                border: "1px solid rgba(60, 99, 159, 0.08)",
+              }}
+            >
             {channels.map((c) => {
               const active = activeChannel === c.key
               const t = THEMES[c.key]
@@ -1213,6 +1433,7 @@ export default function DijitalReklamlarClient({
                 </button>
               )
             })}
+            </div>
           </div>
         </div>
 
@@ -1248,6 +1469,71 @@ export default function DijitalReklamlarClient({
             )
           })}
         </div>
+
+        {/* Global CTA — paket grid'i ile footer arasında. İçerik admin'den
+            yönetilir (/admin/paketler > Yurtdışı / Global CTA kartı).
+            Arka planda detaylı globe SVG + atmosferik radial gradient + ışıklı
+            şehir noktaları — "dünyaya yayılma" hissini görsel olarak veriyor. */}
+        <section
+          className="relative mt-20 md:mt-28"
+          data-section="dijital-reklamlar-global-cta"
+        >
+          <div className="relative z-10 overflow-hidden rounded-2xl border border-[#3c639f]/20 bg-gradient-to-br from-[#0f1e3a] via-[#1a3464] to-[#2f5288] p-7 md:rounded-3xl md:p-12">
+            {/* Atmosfer halosu — globenun arkasında yumuşak mavi parıltı */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-32 -top-32 h-[520px] w-[520px] rounded-full opacity-60 md:-right-20 md:-top-20"
+              style={{
+                background:
+                  "radial-gradient(circle at center, rgba(91, 141, 230, 0.50) 0%, rgba(60, 99, 159, 0.25) 35%, transparent 70%)",
+                filter: "blur(8px)",
+              }}
+            />
+
+            {/* Stilize globe + meridyenler + paraleller + ışıklı şehirler */}
+            <GlobeBackdrop />
+
+            {/* Yıldız tozu — küçük noktalar, derinlik için */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-40"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle at 15% 20%, rgba(255,255,255,0.6) 0.5px, transparent 1px), radial-gradient(circle at 30% 70%, rgba(255,255,255,0.4) 0.5px, transparent 1px), radial-gradient(circle at 70% 15%, rgba(255,255,255,0.5) 0.5px, transparent 1px), radial-gradient(circle at 85% 60%, rgba(255,255,255,0.4) 0.5px, transparent 1px), radial-gradient(circle at 50% 90%, rgba(255,255,255,0.4) 0.5px, transparent 1px)",
+                backgroundSize: "100% 100%",
+              }}
+            />
+
+            <div className="relative z-10 flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between md:gap-10">
+              <div className="max-w-[640px]">
+                {cta.kicker && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/[0.08] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.10em] text-white/90 backdrop-blur-sm">
+                    <Globe size={13} strokeWidth={2.25} />
+                    {cta.kicker}
+                  </span>
+                )}
+                <h3 className="mt-4 text-[24px] font-semibold leading-[1.18] tracking-[-0.02em] text-white md:text-[32px]">
+                  {cta.title}
+                </h3>
+                <p className="mt-3 text-[14px] leading-relaxed text-white/70 md:text-[15px]">
+                  {cta.body}
+                </p>
+              </div>
+              <Link
+                href={cta.buttonHref || "/iletisim"}
+                data-track="dijital-reklamlar:global-cta"
+                data-track-label={cta.buttonLabel}
+                className="group inline-flex shrink-0 items-center gap-2 rounded-md bg-white px-6 py-3 text-[14px] font-semibold text-[#1a3464] shadow-[0_12px_32px_-8px_rgba(0,0,0,0.45)] transition-all hover:-translate-y-0.5 hover:bg-[#f8fafc] hover:shadow-[0_18px_40px_-8px_rgba(0,0,0,0.55)]"
+              >
+                {cta.buttonLabel}
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5"
+                />
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
 
       {modalPkg && (

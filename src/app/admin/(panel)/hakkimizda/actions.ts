@@ -93,7 +93,8 @@ export async function saveAboutAction(
       titleLeader: s(formData, "hero__titleLeader"),
       titleHighlight: s(formData, "hero__titleHighlight"),
       titleTrailer: s(formData, "hero__titleTrailer"),
-      subtitle: s(formData, "hero__subtitle"),
+      // Subtitle artık RichTextArea — sanitize edip kaydet, body ile aynı whitelist.
+      subtitle: sanitizeAboutBody(bodyFromForm(formData, "hero__subtitle")),
     },
     row1: buildRow(formData, "row1", current.row1, r1Upload.url),
     row2: buildRow(formData, "row2", current.row2, r2Upload.url),

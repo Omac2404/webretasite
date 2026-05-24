@@ -13,11 +13,15 @@ export async function generateMetadata() {
 export const dynamic = "force-dynamic"
 
 export default async function DijitalReklamlarPage() {
-  const { channels, whatsapp } = await readPackages()
+  const { channels, whatsapp, globalCta } = await readPackages()
   return (
     <div className="min-h-screen bg-[#fafafa]">
       <SiteHeader />
-      <DijitalReklamlarClient channels={channels} whatsapp={whatsapp} />
+      <DijitalReklamlarClient
+        channels={channels}
+        whatsapp={whatsapp}
+        globalCta={globalCta}
+      />
       <SiteFooter />
     </div>
   )
