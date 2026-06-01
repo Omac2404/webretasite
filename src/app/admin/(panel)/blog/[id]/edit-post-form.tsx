@@ -20,9 +20,15 @@ const INITIAL: PostState = {}
 export function EditPostForm({
   post,
   authors,
+  siteUrl,
+  siteName,
+  titleTemplate,
 }: {
   post: BlogPost
   authors: Author[]
+  siteUrl?: string
+  siteName?: string
+  titleTemplate?: string
 }) {
   const [state, formAction, pending] = useActionState(
     updatePostAction,
@@ -172,6 +178,9 @@ export function EditPostForm({
         liveContent={content}
         liveCoverImage={preview ?? post.coverImage}
         existingSlug={post.slug}
+        siteUrl={siteUrl}
+        siteName={siteName}
+        titleTemplate={titleTemplate}
       />
 
       <label className="flex items-center gap-2.5 text-[13px] text-black/70">
@@ -182,6 +191,21 @@ export function EditPostForm({
           className="h-4 w-4 rounded border-black/20 text-[#3c639f] focus:ring-[#3c639f]/30"
         />
         <span>Yayında</span>
+      </label>
+
+      <label className="flex flex-col gap-1.5 text-[13px] text-black/70">
+        <span>
+          Zamanlanmış yayın{" "}
+          <span className="text-black/40">
+            (boş = mevcut yayın durumu kullanılır)
+          </span>
+        </span>
+        <input
+          type="datetime-local"
+          name="publishAt"
+          defaultValue={post.publishAt ? post.publishAt.slice(0, 16) : ""}
+          className="w-fit rounded-lg border border-black/[0.12] bg-white px-3 py-2 text-[13px] text-[#0a0a0a] focus:border-[#3c639f] focus:outline-none focus:ring-2 focus:ring-[#3c639f]/20"
+        />
       </label>
 
       <div className="flex items-center justify-between gap-3">

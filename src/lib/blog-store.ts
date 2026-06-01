@@ -4,6 +4,7 @@
 import { promises as fs } from "node:fs"
 import path from "node:path"
 import {
+  isPostLive,
   slugify as slugifyShared,
   type BlogData,
   type BlogPost,
@@ -74,6 +75,7 @@ function normalizePost(p: Partial<BlogPost>): BlogPost {
     createdAt: String(p.createdAt ?? now),
     updatedAt: String(p.updatedAt ?? now),
     published: p.published !== false,
+    publishAt: typeof p.publishAt === "string" ? p.publishAt : "",
     ...(seo ? { seo } : {}),
   }
 }
@@ -100,11 +102,13 @@ async function writeBlog(data: BlogData): Promise<void> {
 }
 
 // Published posts, newest first. Used by the public blog index, the home
-// page section, and the single-post sibling links.
+// page section, and the single-post sibling links. `publishAt` set in
+// the future hides the post until that moment passes.
 export async function listPublished(): Promise<BlogPost[]> {
   const data = await readBlog()
+  const now = new Date()
   return data.posts
-    .filter((p) => p.published)
+    .filter((p) => isPostLive(p, now))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 }
 
@@ -112,7 +116,10 @@ export async function getPostBySlug(
   slug: string,
 ): Promise<BlogPost | null> {
   const data = await readBlog()
-  return data.posts.find((p) => p.slug === slug && p.published) ?? null
+  const now = new Date()
+  return (
+    data.posts.find((p) => p.slug === slug && isPostLive(p, now)) ?? null
+  )
 }
 
 export async function getPostById(id: string): Promise<BlogPost | null> {
@@ -144,6 +151,7 @@ export async function addPost(input: {
   content: string
   coverImage: string
   published: boolean
+  publishAt?: string
   seo?: Partial<BlogPostSeo>
 }): Promise<BlogPost> {
   const data = await readBlog()
@@ -162,6 +170,7 @@ export async function addPost(input: {
     createdAt: now,
     updatedAt: now,
     published: input.published,
+    publishAt: input.publishAt ?? "",
     ...(seo ? { seo } : {}),
   }
   data.posts.unshift(post)
@@ -179,6 +188,7 @@ export async function updatePost(
     content: string
     coverImage?: string
     published: boolean
+    publishAt?: string
     seo?: Partial<BlogPostSeo>
   },
 ): Promise<void> {
@@ -197,6 +207,7 @@ export async function updatePost(
   post.content = input.content.replace(/\r\n/g, "\n")
   if (typeof input.coverImage === "string") post.coverImage = input.coverImage
   post.published = input.published
+  if (input.publishAt !== undefined) post.publishAt = input.publishAt
   const seo = normalizeSeo(input.seo)
   if (seo) post.seo = seo
   else delete post.seo

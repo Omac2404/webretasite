@@ -5,14 +5,18 @@ import { Check, AlertCircle, Loader2, ChevronDown } from "lucide-react"
 import {
   CHANGE_FREQS,
   SEO_MANAGED_PAGES,
+  type GlobalSeo,
   type PageSeo,
 } from "@/lib/seo-types"
+import { GooglePreview } from "@/components/admin/GooglePreview"
 import { savePageSeoAction, type SaveState } from "./actions"
 
 export function PageSeoList({
   pages,
+  global,
 }: {
   pages: Record<string, PageSeo>
+  global: GlobalSeo
 }) {
   return (
     <div className="flex flex-col gap-2.5">
@@ -22,6 +26,7 @@ export function PageSeoList({
           href={p.href}
           label={p.label}
           initial={pages[p.href]}
+          global={global}
         />
       ))}
     </div>
@@ -32,16 +37,30 @@ function PageSeoRow({
   href,
   label,
   initial,
+  global,
 }: {
   href: string
   label: string
   initial: PageSeo
+  global: GlobalSeo
 }) {
   const [open, setOpen] = useState(false)
+  const [title, setTitle] = useState(initial.title)
+  const [description, setDescription] = useState(initial.description)
   const [state, formAction, pending] = useActionState<SaveState, FormData>(
     savePageSeoAction,
     {},
   )
+
+  // Mirror the live site logic in seo-metadata.ts: page fields fall back
+  // to global defaults; the global titleTemplate then wraps the result.
+  const effectiveTitle = title.trim() || global.defaultTitle
+  const previewTitle = global.titleTemplate
+    ? global.titleTemplate.replace("%s", effectiveTitle)
+    : effectiveTitle
+  const previewDescription =
+    description.trim() || global.defaultDescription
+  const previewUrl = joinUrl(global.siteUrl, href)
 
   return (
     <div className="rounded-xl border border-black/[0.08] bg-white">
@@ -76,11 +95,19 @@ function PageSeoRow({
         <form action={formAction} className="flex flex-col gap-4 border-t border-black/[0.06] p-4">
           <input type="hidden" name="href" value={href} />
 
+          <GooglePreview
+            title={previewTitle}
+            description={previewDescription}
+            url={previewUrl}
+            siteName={global.siteName}
+          />
+
           <Field label="Başlık (title)">
             <input
               name="title"
               type="text"
-              defaultValue={initial.title}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="Boş bırakırsan varsayılan başlık kullanılır."
               className={inputCls}
             />
@@ -90,7 +117,8 @@ function PageSeoRow({
             <textarea
               name="description"
               rows={2}
-              defaultValue={initial.description}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Boş bırakırsan varsayılan açıklama kullanılır."
               className={`${inputCls} resize-none`}
             />
@@ -241,3 +269,9 @@ function SubmitRow({
 
 const inputCls =
   "w-full rounded-lg border border-black/[0.12] bg-white px-3 py-2 text-[13px] text-[#0a0a0a] placeholder:text-black/30 focus:border-[#3c639f] focus:outline-none focus:ring-2 focus:ring-[#3c639f]/20"
+
+function joinUrl(base: string, href: string): string {
+  const root = (base || "https://webreta.com").replace(/\/+$/, "")
+  if (!href || href === "/") return root + "/"
+  return root + (href.startsWith("/") ? href : `/${href}`)
+}

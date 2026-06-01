@@ -3,6 +3,11 @@
 import { addInquiry } from "@/lib/inquiries-store"
 import { getRenderedTemplate } from "@/lib/email-templates-store"
 import { sendMail, sendToAdmin } from "@/lib/mailer"
+import {
+  HONEYPOT_FIELD,
+  checkRateLimit,
+  isHoneypotTripped,
+} from "@/lib/spam-guard"
 
 export type SubmitInquiryResult =
   | { ok: true }
@@ -11,6 +16,17 @@ export type SubmitInquiryResult =
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export async function submitInquiry(formData: FormData): Promise<SubmitInquiryResult> {
+  // Honeypot — silent success-shaped reject so bots don't probe further.
+  if (isHoneypotTripped(formData.get(HONEYPOT_FIELD))) {
+    return { ok: true }
+  }
+  if (!(await checkRateLimit("inquiry"))) {
+    return {
+      ok: false,
+      error: "Çok fazla deneme yapıldı, lütfen biraz sonra tekrar deneyin.",
+    }
+  }
+
   const name = String(formData.get("name") ?? "").trim()
   const email = String(formData.get("email") ?? "").trim()
   const phone = String(formData.get("phone") ?? "").trim()

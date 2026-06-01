@@ -48,26 +48,36 @@ export async function writeTemplates(next: EmailTemplates): Promise<void> {
 }
 
 // `{name}` → input.name. Tanımsız anahtarlar boş string'e dönüşür ki maile
-// "{undefined}" sızmasın.
+// "{undefined}" sızmasın; ek olarak dev modunda console.warn ile uyarıp
+// admin'in eksik değişkeni fark etmesini sağlıyoruz.
 export function renderTemplate(
   template: EmailTemplate,
   vars: Record<string, string | number | undefined>,
-): { subject: string; body: string } {
+): { subject: string; body: string; missing: string[] } {
+  const missing = new Set<string>()
   const replace = (str: string): string =>
     str.replace(/\{(\w+)\}/g, (_, key: string) => {
       const v = vars[key]
-      return v == null ? "" : String(v)
+      if (v == null) {
+        missing.add(key)
+        return ""
+      }
+      return String(v)
     })
-  return {
-    subject: replace(template.subject),
-    body: replace(template.body),
+  const subject = replace(template.subject)
+  const body = replace(template.body)
+  if (missing.size > 0 && process.env.NODE_ENV !== "production") {
+    console.warn(
+      `[email-templates] Eksik değişkenler: ${[...missing].join(", ")}`,
+    )
   }
+  return { subject, body, missing: [...missing] }
 }
 
 export async function getRenderedTemplate(
   key: TemplateKey,
   vars: Record<string, string | number | undefined>,
-): Promise<{ subject: string; body: string }> {
+): Promise<{ subject: string; body: string; missing: string[] }> {
   const all = await readTemplates()
   return renderTemplate(all[key], vars)
 }

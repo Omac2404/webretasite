@@ -27,19 +27,39 @@ async function writeInquiries(data: InquiriesData): Promise<void> {
   await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2) + "\n", "utf8")
 }
 
+// Serialize writes through a single in-memory chain so concurrent form
+// submissions don't read-modify-write the JSON file and clobber each
+// other. Mirrors the pattern in analytics-store.
+let writeQueue: Promise<unknown> = Promise.resolve()
+function enqueue<T>(task: () => Promise<T>): Promise<T> {
+  const p = writeQueue.then(task)
+  writeQueue = p.catch(() => undefined)
+  return p
+}
+
 export async function addInquiry(input: Omit<Inquiry, "id" | "createdAt" | "notes">): Promise<Inquiry> {
-  const data = await readInquiries()
-  const inquiry: Inquiry = {
-    id: makeId(),
-    createdAt: new Date().toISOString(),
-    notes: "",
-    name: input.name.trim(),
-    email: input.email.trim(),
-    phone: input.phone.trim(),
-    subject: input.subject.trim(),
-    message: input.message.trim(),
-  }
-  data.inquiries.unshift(inquiry)
-  await writeInquiries(data)
-  return inquiry
+  return enqueue(async () => {
+    const data = await readInquiries()
+    const inquiry: Inquiry = {
+      id: makeId(),
+      createdAt: new Date().toISOString(),
+      notes: "",
+      name: input.name.trim(),
+      email: input.email.trim(),
+      phone: input.phone.trim(),
+      subject: input.subject.trim(),
+      message: input.message.trim(),
+    }
+    data.inquiries.unshift(inquiry)
+    await writeInquiries(data)
+    return inquiry
+  })
+}
+
+export async function deleteInquiry(id: string): Promise<void> {
+  await enqueue(async () => {
+    const data = await readInquiries()
+    data.inquiries = data.inquiries.filter((i) => i.id !== id)
+    await writeInquiries(data)
+  })
 }

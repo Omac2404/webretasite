@@ -116,6 +116,20 @@ export default function ContactForm() {
       onSubmit={handleSubmit}
       className="rounded-2xl border border-black/[0.06] bg-white p-6 md:p-8"
     >
+      {/* Honeypot — invisible to humans, bots fill it; rejected server-side. */}
+      <div aria-hidden className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0">
+        <label>
+          Website URL (boş bırakın)
+          <input
+            type="text"
+            name="website_url"
+            tabIndex={-1}
+            autoComplete="off"
+            defaultValue=""
+          />
+        </label>
+      </div>
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Field name="name" label="Ad Soyad" placeholder="Adınız" required autoComplete="name" />
         <Field name="email" type="email" label="E-posta" placeholder="ornek@firma.com" required autoComplete="email" />

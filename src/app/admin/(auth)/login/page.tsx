@@ -3,7 +3,8 @@
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 import Image from "next/image"
-import { ArrowRight, Lock, User } from "lucide-react"
+import Link from "next/link"
+import { ArrowRight, Lock, Mail } from "lucide-react"
 import { loginAction, type LoginState } from "./actions"
 
 const initialState: LoginState = {}
@@ -43,25 +44,25 @@ export default function AdminLoginPage() {
           <form action={formAction} className="flex flex-col gap-4 px-8 pb-7 pt-6">
             <div>
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="text-[12.5px] font-semibold tracking-[-0.01em] text-[#0a0a0a]"
               >
-                Kullanıcı adı
+                E-posta
               </label>
               <div className="relative mt-2">
-                <User
+                <Mail
                   size={15}
                   className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-black/35"
                 />
                 <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  autoComplete="username"
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="username email"
                   autoFocus
                   required
                   className="w-full rounded-xl border border-black/[0.1] bg-white py-3 pl-10 pr-4 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                  placeholder="admin"
+                  placeholder="webreta.digital@gmail.com"
                 />
               </div>
             </div>
@@ -101,16 +102,13 @@ export default function AdminLoginPage() {
 
             <SubmitButton />
 
-            <div className="mt-1 rounded-xl bg-[#fafafa] px-3.5 py-2.5 text-center text-[11.5px] leading-relaxed text-black/55">
-              <span className="font-medium text-black/70">Demo:</span>{" "}
-              kullanıcı adı{" "}
-              <code className="rounded bg-white px-1.5 py-0.5 font-mono text-[11px] text-[#0a0a0a]">
-                admin
-              </code>{" "}
-              · şifre{" "}
-              <code className="rounded bg-white px-1.5 py-0.5 font-mono text-[11px] text-[#0a0a0a]">
-                123456
-              </code>
+            <div className="mt-1 text-center">
+              <Link
+                href="/admin/forgot"
+                className="text-[12px] font-medium text-[#3c639f] underline-offset-2 hover:underline"
+              >
+                Şifremi unuttum
+              </Link>
             </div>
           </form>
         </div>

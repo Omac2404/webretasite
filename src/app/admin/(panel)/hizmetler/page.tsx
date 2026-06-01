@@ -1,4 +1,5 @@
 import { readServices } from "@/lib/services-store"
+import { PreviewLink } from "@/components/admin/PreviewLink"
 import { ServicesForm } from "./services-form"
 
 export const dynamic = "force-dynamic"
@@ -8,15 +9,18 @@ export default async function HizmetlerAdminPage() {
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-6">
-      <div>
-        <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-          Hizmetler
-        </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          Anasayfadaki <em>Neler yaparız?</em> bölümünde yan yana duran iki
-          kartın başlığını ve alt maddelerini buradan düzenle. Kart başına
-          en fazla 5 alt madde girebilirsin.
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+            Hizmetler
+          </h1>
+          <p className="mt-1.5 text-[13.5px] text-black/55">
+            Anasayfadaki <em>Neler yaparız?</em> bölümünde yan yana duran iki
+            kartın başlığını ve alt maddelerini buradan düzenle. Kart başına
+            en fazla 5 alt madde girebilirsin.
+          </p>
+        </div>
+        <PreviewLink href="/" />
       </div>
 
       <ServicesForm cards={cards} />

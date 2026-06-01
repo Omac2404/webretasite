@@ -10,6 +10,7 @@ import {
 } from "lucide-react"
 import { runChecks, summarize, type SeoCheckSeverity } from "@/lib/seo-checklist"
 import { slugify as slugifyTitle, type BlogPostSeo } from "@/lib/blog-types"
+import { GooglePreview } from "@/components/admin/GooglePreview"
 
 export type SeoPanelProps = {
   initial?: BlogPostSeo
@@ -19,6 +20,10 @@ export type SeoPanelProps = {
   liveContent: string
   liveCoverImage: string
   existingSlug?: string
+  // Site-level SEO defaults so the preview can mirror what Google sees.
+  siteUrl?: string
+  siteName?: string
+  titleTemplate?: string
 }
 
 export function BlogSeoPanel({
@@ -28,6 +33,9 @@ export function BlogSeoPanel({
   liveContent,
   liveCoverImage,
   existingSlug,
+  siteUrl,
+  siteName,
+  titleTemplate,
 }: SeoPanelProps) {
   const [open, setOpen] = useState(false)
   const [metaTitle, setMetaTitle] = useState(initial?.metaTitle ?? "")
@@ -120,7 +128,22 @@ export function BlogSeoPanel({
       </button>
 
       {open && (
-        <div className="grid grid-cols-1 gap-5 border-t border-black/[0.06] p-4 md:grid-cols-[1.2fr_1fr]">
+        <div className="flex flex-col gap-5 border-t border-black/[0.06] p-4">
+          <GooglePreview
+            title={
+              titleTemplate
+                ? titleTemplate.replace(
+                    "%s",
+                    (metaTitle.trim() || liveTitle).trim() || "Yazı başlığı",
+                  )
+                : (metaTitle.trim() || liveTitle).trim() || "Yazı başlığı"
+            }
+            description={metaDescription.trim() || liveExcerpt}
+            url={buildBlogUrl(siteUrl, slug)}
+            siteName={siteName}
+          />
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-[1.2fr_1fr]">
           {/* Form fields */}
           <div className="flex flex-col gap-3">
             <Field
@@ -228,10 +251,16 @@ export function BlogSeoPanel({
               ))}
             </ul>
           </div>
+          </div>
         </div>
       )}
     </div>
   )
+}
+
+function buildBlogUrl(siteUrl: string | undefined, slug: string): string {
+  const base = (siteUrl || "https://webreta.com").replace(/\/+$/, "")
+  return `${base}/blog/${slug || "yazi-slugi"}`
 }
 
 function StatusIcon({ status }: { status: SeoCheckSeverity }) {

@@ -13,7 +13,9 @@ import { SESSION_COOKIE, verifySession } from "@/lib/admin-session"
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
 
-  if (pathname === "/admin/login") {
+  // Public auth flows — login and the forgot-password wizard need to be
+  // reachable without a session cookie.
+  if (pathname === "/admin/login" || pathname.startsWith("/admin/forgot")) {
     return NextResponse.next()
   }
 

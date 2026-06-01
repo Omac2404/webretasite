@@ -1,4 +1,4 @@
-import SiteHeader from "@/components/SiteHeader"
+import SiteHeader from "@/components/SiteHeaderServer"
 import SiteFooter from "@/components/SiteFooter"
 import QuoteWizardSection from "@/components/QuoteWizardSection"
 import WebSiteExtras from "@/components/WebSiteExtras"

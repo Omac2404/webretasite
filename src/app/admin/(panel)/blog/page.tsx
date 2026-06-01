@@ -1,15 +1,18 @@
 import { Plus } from "lucide-react"
 import { readBlog } from "@/lib/blog-store"
 import { listAuthors } from "@/lib/authors-store"
+import { readSeo } from "@/lib/seo-store"
+import { PreviewLink } from "@/components/admin/PreviewLink"
 import { AddPostForm } from "./add-post-form"
 import { AdminPostsList } from "./posts-list"
 
 export const dynamic = "force-dynamic"
 
 export default async function BlogAdminPage() {
-  const [{ posts }, authors] = await Promise.all([
+  const [{ posts }, authors, seo] = await Promise.all([
     readBlog(),
     listAuthors(),
+    readSeo(),
   ])
   const sorted = [...posts].sort((a, b) =>
     b.createdAt.localeCompare(a.createdAt),
@@ -17,14 +20,17 @@ export default async function BlogAdminPage() {
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-8">
-      <div>
-        <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-          Blog
-        </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          /blog ve anasayfada görünen yazıları buradan yönet. Yeni yazı ekle,
-          mevcutları düzenle, taslağa indir veya sil.
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+            Blog
+          </h1>
+          <p className="mt-1.5 text-[13.5px] text-black/55">
+            /blog ve anasayfada görünen yazıları buradan yönet. Yeni yazı ekle,
+            mevcutları düzenle, taslağa indir veya sil.
+          </p>
+        </div>
+        <PreviewLink href="/blog" />
       </div>
 
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
@@ -35,7 +41,12 @@ export default async function BlogAdminPage() {
           </div>
         </div>
         <div className="mt-4">
-          <AddPostForm authors={authors} />
+          <AddPostForm
+            authors={authors}
+            siteUrl={seo.global.siteUrl}
+            siteName={seo.global.siteName}
+            titleTemplate={seo.global.titleTemplate}
+          />
         </div>
       </section>
 

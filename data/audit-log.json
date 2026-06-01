@@ -1,0 +1,23 @@
+{
+  "entries": [
+    {
+      "id": "1780326584595-fjq9f0",
+      "ts": "2026-06-01T15:09:44.595Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "auth.login.ok",
+      "target": "webreta.digital@gmail.com"
+    },
+    {
+      "id": "1780323126139-i23a0j",
+      "ts": "2026-06-01T14:12:06.139Z",
+      "user": "admin",
+      "action": "settings.maintenance.off"
+    },
+    {
+      "id": "1780323114587-580751",
+      "ts": "2026-06-01T14:11:54.587Z",
+      "user": "admin",
+      "action": "settings.maintenance.on"
+    }
+  ]
+}

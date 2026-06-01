@@ -7,6 +7,7 @@ import {
   setModeAction,
   swapRowAction,
 } from "./actions"
+import { PreviewLink } from "@/components/admin/PreviewLink"
 import { AddLogoForm } from "./add-logo-form"
 
 export const dynamic = "force-dynamic"
@@ -18,15 +19,18 @@ export default async function LogosAdminPage() {
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-8">
-      <div>
-        <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-          Referanslar
-        </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          Anasayfadaki kayan logo şeridini ve proje firmalarını buradan yönet.
-          Üst sıra hızlı (38s, sola), alt sıra yavaş (58s, sağa) akıyor.
-          Burada eklediğin firmalar Projeler sekmesinden seçilebilir hale gelir.
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+            Referanslar
+          </h1>
+          <p className="mt-1.5 text-[13.5px] text-black/55">
+            Anasayfadaki kayan logo şeridini ve proje firmalarını buradan yönet.
+            Üst sıra hızlı (38s, sola), alt sıra yavaş (58s, sağa) akıyor.
+            Burada eklediğin firmalar Projeler sekmesinden seçilebilir hale gelir.
+          </p>
+        </div>
+        <PreviewLink href="/" />
       </div>
 
       {/* Google Partner badge toggle + URL */}

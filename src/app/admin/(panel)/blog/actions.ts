@@ -102,6 +102,16 @@ function revalidateAll(): void {
   revalidatePath("/sitemap.xml")
 }
 
+// Convert the HTML datetime-local string into an ISO timestamp, or "" if
+// blank/invalid. The input is the local browser time; we let the
+// browser stash it as "YYYY-MM-DDTHH:mm" and convert via Date.
+function normalizePublishAt(value: string): string {
+  const trimmed = value.trim()
+  if (!trimmed) return ""
+  const d = new Date(trimmed)
+  return Number.isNaN(d.getTime()) ? "" : d.toISOString()
+}
+
 export async function addPostAction(
   _prev: PostState,
   formData: FormData,
@@ -111,6 +121,7 @@ export async function addPostAction(
   const excerpt = String(formData.get("excerpt") ?? "").trim()
   const content = String(formData.get("content") ?? "").trim()
   const published = formData.get("published") === "on"
+  const publishAt = normalizePublishAt(String(formData.get("publishAt") ?? ""))
 
   if (!title) return { error: "Başlık zorunlu." }
   if (!content) return { error: "İçerik boş olamaz." }
@@ -132,6 +143,7 @@ export async function addPostAction(
     content,
     coverImage: cover.url ?? "",
     published,
+    publishAt,
     seo: parseSeoFromForm(formData),
   })
 
@@ -149,6 +161,7 @@ export async function updatePostAction(
   const excerpt = String(formData.get("excerpt") ?? "").trim()
   const content = String(formData.get("content") ?? "").trim()
   const published = formData.get("published") === "on"
+  const publishAt = normalizePublishAt(String(formData.get("publishAt") ?? ""))
 
   if (!id) return { error: "Geçersiz yazı." }
   if (!title) return { error: "Başlık zorunlu." }
@@ -173,6 +186,7 @@ export async function updatePostAction(
     // existing cover (read by the page) is preserved.
     ...(cover.url ? { coverImage: cover.url } : {}),
     published,
+    publishAt,
     seo: parseSeoFromForm(formData),
   })
 

@@ -1,5 +1,6 @@
 import { Globe, Sparkles, Type } from "lucide-react"
 import { readWebPackages } from "@/lib/web-packages-store"
+import { PreviewLink } from "@/components/admin/PreviewLink"
 import { WebPackagesForm } from "./web-packages-form"
 import { KobiBannerForm } from "./kobi-banner-form"
 import { WizardHeadingForm } from "./wizard-heading-form"
@@ -11,15 +12,18 @@ export default async function WebPackagesAdminPage() {
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-6">
-      <div>
-        <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-          Web Site Paketleri
-        </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          /web-site sayfasındaki teklif sihirbazının &quot;Paket Seçimi&quot;
-          adımındaki paketleri ve teklif aracının altındaki Webreta KOBİ
-          banner&apos;ını buradan düzenle.
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+            Web Site Paketleri
+          </h1>
+          <p className="mt-1.5 text-[13.5px] text-black/55">
+            /web-site sayfasındaki teklif sihirbazının &quot;Paket Seçimi&quot;
+            adımındaki paketleri ve teklif aracının altındaki Webreta KOBİ
+            banner&apos;ını buradan düzenle.
+          </p>
+        </div>
+        <PreviewLink href="/web-site" />
       </div>
 
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">

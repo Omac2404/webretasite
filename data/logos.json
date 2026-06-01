@@ -2,150 +2,6 @@
   "mode": "logos",
   "logos": [
     {
-      "id": "seed-1",
-      "name": "Aksel & Partners",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-2",
-      "name": "Mira Kafe",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-3",
-      "name": "Sönmez Mimarlık",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-4",
-      "name": "Polat Akademi",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-5",
-      "name": "Vural Concept",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-6",
-      "name": "NovaTech",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-7",
-      "name": "Kılıç Hotels",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-8",
-      "name": "Mutlu Sigorta",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-9",
-      "name": "Yıldız Danışmanlık",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-10",
-      "name": "Sezer Emlak",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-11",
-      "name": "Bozkurt Vet",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-12",
-      "name": "Aydın Klinik",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-13",
-      "name": "Rençber Otomotiv",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-14",
-      "name": "Nazlı Beauty",
-      "imageUrl": "",
-      "row": "a"
-    },
-    {
-      "id": "seed-15",
-      "name": "Yılmaz Florist",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
-      "id": "seed-16",
-      "name": "Tan Sport",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
-      "id": "seed-17",
-      "name": "Aksu Living",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
-      "id": "seed-18",
-      "name": "Demir Lojistik",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
-      "id": "seed-19",
-      "name": "Eren Tekstil",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
-      "id": "seed-20",
-      "name": "Bilgin Trade",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
-      "id": "seed-21",
-      "name": "Karya Eğitim",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
-      "id": "seed-22",
-      "name": "Mavi Sağlık",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
-      "id": "seed-24",
-      "name": "Anka Yapı",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
-      "id": "seed-23",
-      "name": "Erdem Hukuk",
-      "imageUrl": "",
-      "row": "b"
-    },
-    {
       "id": "1778874278222-19e45s",
       "name": "Odemor",
       "imageUrl": "/logos/odemor-1778874278217.png",
@@ -168,6 +24,124 @@
       "name": "Astrolog Lale Leyla Okay",
       "imageUrl": "/logos/astrolog-lale-leyla-okay-1778874515968.png",
       "row": "b"
+    },
+    {
+      "id": "1780315513693-h2hk8h",
+      "name": "Inter Trans MMS",
+      "imageUrl": "/logos/inter-trans-mms-1780315513689.png",
+      "row": "a"
+    },
+    {
+      "id": "1780315782772-i10hnc",
+      "name": "La Mer",
+      "imageUrl": "/logos/la-mer-1780315782769.png",
+      "row": "a"
+    },
+    {
+      "id": "1780315810678-rickwg",
+      "name": "Buckin",
+      "imageUrl": "/logos/buckin-1780315810675.png",
+      "row": "a"
+    },
+    {
+      "id": "1780315827558-hn7tkb",
+      "name": "Abeliano Quartz",
+      "imageUrl": "/logos/abeliano-quartz-1780315827555.png",
+      "row": "a"
+    },
+    {
+      "id": "1780316096092-6pct8g",
+      "name": "Sanitrox",
+      "imageUrl": "/logos/sanitrox-1780316096089.png",
+      "row": "a"
+    },
+    {
+      "id": "1780315862050-xvvqz0",
+      "name": "Tuco Kafe Market",
+      "imageUrl": "/logos/tuco-kafe-market-1780315862047.png",
+      "row": "a"
+    },
+    {
+      "id": "1780315871891-djziy0",
+      "name": "Offera",
+      "imageUrl": "/logos/offera-1780315871888.png",
+      "row": "a"
+    },
+    {
+      "id": "1780315918760-6cob0b",
+      "name": "Ozi Transportation",
+      "imageUrl": "/logos/ozi-transportation-1780315918757.png",
+      "row": "a"
+    },
+    {
+      "id": "1780315929956-35ou96",
+      "name": "Family Dent",
+      "imageUrl": "/logos/family-dent-1780315929953.png",
+      "row": "a"
+    },
+    {
+      "id": "1780315848477-my7wj5",
+      "name": "Çağlayan Otomasyon",
+      "imageUrl": "/logos/caglayan-otomasyon-1780315848474.png",
+      "row": "a"
+    },
+    {
+      "id": "1780315995520-y5ccbm",
+      "name": "Deniz Erten Akademi",
+      "imageUrl": "/logos/deniz-erten-akademi-1780315995516.png",
+      "row": "a"
+    },
+    {
+      "id": "1780316003833-leq7ox",
+      "name": "MS Vize Merkezi",
+      "imageUrl": "/logos/ms-vize-merkezi-1780316003829.png",
+      "row": "a"
+    },
+    {
+      "id": "1780316013145-sazc02",
+      "name": "T-Y-T Taxi",
+      "imageUrl": "/logos/t-y-t-taxi-1780316013142.png",
+      "row": "a"
+    },
+    {
+      "id": "1780316021509-n1hzw5",
+      "name": "Ceres Tarım Okulu",
+      "imageUrl": "/logos/ceres-tarim-okulu-1780316021505.png",
+      "row": "a"
+    },
+    {
+      "id": "1780316082535-r1621h",
+      "name": "Akkonsis",
+      "imageUrl": "/logos/akkonsis-1780316082532.png",
+      "row": "a"
+    },
+    {
+      "id": "1780316090245-ve6o66",
+      "name": "KAIRU",
+      "imageUrl": "/logos/kairu-1780316090241.png",
+      "row": "a"
+    },
+    {
+      "id": "1780316172778-7wtphs",
+      "name": "Sirius Bilgelik",
+      "imageUrl": "/logos/sirius-bilgelik-1780316172775.png",
+      "row": "b"
+    },
+    {
+      "id": "1780316185296-kmu14j",
+      "name": "Drone Pilots",
+      "imageUrl": "/logos/drone-pilots-1780316185292.png",
+      "row": "b"
+    },
+    {
+      "id": "1780316193205-s0rz8s",
+      "name": "Tavşan Uykusu",
+      "imageUrl": "/logos/tavsan-uykusu-1780316193202.png",
+      "row": "b"
     }
-  ]
+  ],
+  "googlePartner": {
+    "enabled": true,
+    "url": "https://www.google.com/partners/agency?id=7356236542"
+  }
 }

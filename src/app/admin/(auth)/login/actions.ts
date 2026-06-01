@@ -6,10 +6,10 @@ import {
   SESSION_COOKIE,
   SESSION_MAX_AGE,
   createSession,
+  verifySession,
 } from "@/lib/admin-session"
-
-const ADMIN_USER = process.env.ADMIN_USER ?? "admin"
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "123456"
+import { findAdminByEmail, verifyPassword } from "@/lib/admin-users-store"
+import { recordAudit } from "@/lib/audit-log-store"
 
 export type LoginState = { error?: string }
 
@@ -17,17 +17,21 @@ export async function loginAction(
   _prev: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
-  const username = String(formData.get("username") ?? "").trim()
+  const email = String(formData.get("email") ?? formData.get("username") ?? "")
+    .trim()
+    .toLowerCase()
   const password = String(formData.get("password") ?? "")
 
-  if (!username || !password) {
-    return { error: "Kullanıcı adı ve şifre gerekli." }
+  if (!email || !password) {
+    return { error: "E-posta ve şifre gerekli." }
   }
-  if (username !== ADMIN_USER || password !== ADMIN_PASSWORD) {
-    return { error: "Kullanıcı adı veya şifre hatalı." }
+  const admin = await findAdminByEmail(email)
+  if (!admin || !(await verifyPassword(password, admin.passwordHash))) {
+    await recordAudit("auth.login.fail", { target: email })
+    return { error: "E-posta veya şifre hatalı." }
   }
 
-  const token = await createSession(username)
+  const token = await createSession(admin.email)
   const store = await cookies()
   store.set(SESSION_COOKIE, token, {
     httpOnly: true,
@@ -36,11 +40,14 @@ export async function loginAction(
     path: "/",
     maxAge: SESSION_MAX_AGE,
   })
+  await recordAudit("auth.login.ok", { target: admin.email })
   redirect("/admin")
 }
 
 export async function logoutAction(): Promise<void> {
   const store = await cookies()
+  const session = await verifySession(store.get(SESSION_COOKIE)?.value)
+  await recordAudit("auth.logout", { target: session?.username ?? "unknown" })
   store.delete(SESSION_COOKIE)
   redirect("/admin/login")
 }

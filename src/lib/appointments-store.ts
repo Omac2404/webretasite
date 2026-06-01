@@ -54,16 +54,35 @@ async function writeAppointments(data: AppointmentsData): Promise<void> {
   await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2) + "\n", "utf8")
 }
 
+// Serialize concurrent writes so two near-simultaneous submissions don't
+// race the read-modify-write cycle on the JSON file.
+let writeQueue: Promise<unknown> = Promise.resolve()
+function enqueue<T>(task: () => Promise<T>): Promise<T> {
+  const p = writeQueue.then(task)
+  writeQueue = p.catch(() => undefined)
+  return p
+}
+
 export async function appendAppointment(
   input: Omit<Appointment, "id" | "createdAt">,
 ): Promise<Appointment> {
-  const data = await readAppointments()
-  const appointment: Appointment = normalize({
-    ...input,
-    id: makeId(),
-    createdAt: new Date().toISOString(),
+  return enqueue(async () => {
+    const data = await readAppointments()
+    const appointment: Appointment = normalize({
+      ...input,
+      id: makeId(),
+      createdAt: new Date().toISOString(),
+    })
+    data.appointments.unshift(appointment)
+    await writeAppointments(data)
+    return appointment
   })
-  data.appointments.unshift(appointment)
-  await writeAppointments(data)
-  return appointment
+}
+
+export async function deleteAppointment(id: string): Promise<void> {
+  await enqueue(async () => {
+    const data = await readAppointments()
+    data.appointments = data.appointments.filter((a) => a.id !== id)
+    await writeAppointments(data)
+  })
 }

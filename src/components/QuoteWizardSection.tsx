@@ -260,6 +260,8 @@ export default function QuoteWizardSection() {
   const [quoteSubmitted, setQuoteSubmitted] = useState(false)
   const [quote, setQuote] = useState<QuoteForm>(QUOTE_DEFAULT)
   const [quoteError, setQuoteError] = useState<string | null>(null)
+  // Honeypot — invisible field bound below; if a bot fills it, action rejects.
+  const honeypotRef = useRef<HTMLInputElement>(null)
   const [submitPending, startSubmitTransition] = useTransition()
   const [successCopy, setSuccessCopy] = useState<FormSuccessScreen>(
     DEFAULT_FORM_SUCCESS.quote,
@@ -572,6 +574,7 @@ export default function QuoteWizardSection() {
           channelLabels,
           date: quote.date,
           time: quote.time,
+          honeypot: honeypotRef.current?.value ?? "",
         })
         if (res.ok) {
           trackFormSubmit("quote", "Teklif formu")
@@ -736,6 +739,21 @@ export default function QuoteWizardSection() {
 
   return (
     <>
+      {/* Honeypot input — invisible to humans, ref-read at submit. */}
+      <div aria-hidden className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0">
+        <label>
+          Website URL (boş bırakın)
+          <input
+            ref={honeypotRef}
+            type="text"
+            name="website_url"
+            tabIndex={-1}
+            autoComplete="off"
+            defaultValue=""
+          />
+        </label>
+      </div>
+
       {/* Quote Wizard — 4-step pricing tool. Stepper at top, animated
           step content in the middle, Back/Next buttons at the bottom.
           On submit, swaps to a success state. Submission is currently a

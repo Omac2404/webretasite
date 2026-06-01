@@ -50,7 +50,7 @@ export default async function SeoAdminPage() {
           ve sitemap kontrolleri. Blog yazıları için yazı editörünü kullan.
         </p>
         <div className="mt-4">
-          <PageSeoList pages={seo.pages} />
+          <PageSeoList pages={seo.pages} global={seo.global} />
         </div>
       </section>
 

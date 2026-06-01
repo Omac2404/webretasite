@@ -1,5 +1,5 @@
 import Link from "next/link"
-import SiteHeader from "@/components/SiteHeader"
+import SiteHeader from "@/components/SiteHeaderServer"
 import SiteFooter from "@/components/SiteFooter"
 import { BlogSearchableGrid } from "@/components/BlogSearchableGrid"
 import { listPublished } from "@/lib/blog-store"

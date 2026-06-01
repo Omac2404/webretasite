@@ -224,6 +224,14 @@ function PostRow({ post }: { post: BlogPost }) {
               Taslak
             </span>
           )}
+          {post.published && post.publishAt && new Date(post.publishAt).getTime() > Date.now() && (
+            <span
+              className="inline-flex items-center rounded-full bg-violet-100 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.06em] text-violet-800"
+              title={new Date(post.publishAt).toLocaleString("tr-TR")}
+            >
+              Zamanlandı
+            </span>
+          )}
           <span className="inline-flex items-center rounded-full bg-[#3c639f]/8 px-1.5 py-0.5 text-[10px] font-medium text-[#3c639f]">
             {post.category === "haberler" ? "Bizden Haberler" : "Teknik"}
           </span>

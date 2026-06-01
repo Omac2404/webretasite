@@ -52,8 +52,23 @@ export type BlogPost = {
   coverImage: string
   createdAt: string
   updatedAt: string
+  // True = visible (subject to publishAt check). False = hard draft.
   published: boolean
+  // Optional ISO datetime — when set in the future the post stays hidden
+  // from public listings until that moment passes. Empty string = no
+  // schedule (uses `published` directly).
+  publishAt?: string
   seo?: BlogPostSeo
+}
+
+// True when the post is publishable right now: explicitly published and
+// either no scheduled time or the schedule is already in the past.
+export function isPostLive(post: BlogPost, now: Date = new Date()): boolean {
+  if (!post.published) return false
+  if (!post.publishAt) return true
+  const t = new Date(post.publishAt).getTime()
+  if (Number.isNaN(t)) return true
+  return t <= now.getTime()
 }
 
 export type BlogData = {

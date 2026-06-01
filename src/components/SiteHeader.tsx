@@ -16,7 +16,13 @@ const NAV_ITEMS = [
   { label: "İletişim", href: "/iletisim", track: "header:nav:iletisim" },
 ]
 
-export default function SiteHeader() {
+// Optional logoUrl override — defaults to the bundled logo. Pass an
+// admin-uploaded path via SiteHeaderServer to swap site-wide.
+export default function SiteHeader({
+  logoUrl = "/brand/webreta-logo.webp",
+}: {
+  logoUrl?: string
+} = {}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Lock body scroll while the drawer is open, restore on close. Also
@@ -40,14 +46,21 @@ export default function SiteHeader() {
       <header className="sticky top-0 z-50 w-full border-b border-black/[0.06] bg-[#fafafa]/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-6 md:px-12">
         <a href="/" aria-label="Webreta" className="flex items-center">
-          <Image
-            src="/brand/webreta-logo.webp"
-            alt="Webreta"
-            width={364}
-            height={64}
-            priority
-            className="h-7 w-auto"
-          />
+          {logoUrl === "/brand/webreta-logo.webp" ? (
+            <Image
+              src={logoUrl}
+              alt="Webreta"
+              width={364}
+              height={64}
+              priority
+              className="h-7 w-auto"
+            />
+          ) : (
+            // Admin-uploaded logos can be any aspect ratio — use a plain
+            // <img> so we don't have to commit to fixed width/height.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={logoUrl} alt="Webreta" className="h-7 w-auto" />
+          )}
         </a>
 
         <div className="hidden items-center gap-8 md:flex">

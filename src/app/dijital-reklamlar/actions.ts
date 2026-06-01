@@ -3,6 +3,7 @@
 import { appendAppointment } from "@/lib/appointments-store"
 import { getRenderedTemplate } from "@/lib/email-templates-store"
 import { sendMail, sendToAdmin } from "@/lib/mailer"
+import { checkRateLimit, isHoneypotTripped } from "@/lib/spam-guard"
 
 export type BookResult =
   | { ok: true }
@@ -44,11 +45,24 @@ export type BookAppointmentInput = {
   email: string
   dateIso: string
   hour: number
+  // Honeypot — clients pass an empty string; bots fill it.
+  honeypot?: string
 }
 
 export async function bookAppointmentAction(
   input: BookAppointmentInput,
 ): Promise<BookResult> {
+  // Honeypot — silent success-shaped reject.
+  if (isHoneypotTripped(input.honeypot)) {
+    return { ok: true }
+  }
+  if (!(await checkRateLimit("appointment"))) {
+    return {
+      ok: false,
+      error: "Çok fazla deneme yapıldı, lütfen biraz sonra tekrar deneyin.",
+    }
+  }
+
   const phone = input.phone.replace(/\D/g, "")
   if (phone.length < 10) return { ok: false, error: "Geçerli bir telefon girin." }
 

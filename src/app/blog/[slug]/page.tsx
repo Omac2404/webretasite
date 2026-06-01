@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { ArrowLeft } from "lucide-react"
-import SiteHeader from "@/components/SiteHeader"
+import SiteHeader from "@/components/SiteHeaderServer"
 import SiteFooter from "@/components/SiteFooter"
 import { BlogCard } from "@/components/BlogCard"
 import { AuthorAvatar } from "@/components/AuthorChip"

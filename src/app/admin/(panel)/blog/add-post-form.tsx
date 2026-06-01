@@ -13,7 +13,17 @@ import { BlogSeoPanel } from "./seo-panel"
 
 const INITIAL: PostState = {}
 
-export function AddPostForm({ authors }: { authors: Author[] }) {
+export function AddPostForm({
+  authors,
+  siteUrl,
+  siteName,
+  titleTemplate,
+}: {
+  authors: Author[]
+  siteUrl?: string
+  siteName?: string
+  titleTemplate?: string
+}) {
   const [state, formAction, pending] = useActionState(addPostAction, INITIAL)
   const [preview, setPreview] = useState<string | null>(null)
   const [filename, setFilename] = useState<string | null>(null)
@@ -155,6 +165,9 @@ export function AddPostForm({ authors }: { authors: Author[] }) {
         liveExcerpt={excerpt}
         liveContent={content}
         liveCoverImage={preview ? "uploaded" : ""}
+        siteUrl={siteUrl}
+        siteName={siteName}
+        titleTemplate={titleTemplate}
       />
 
       <label className="flex items-center gap-2.5 text-[13px] text-black/70">
@@ -170,6 +183,20 @@ export function AddPostForm({ authors }: { authors: Author[] }) {
             (kapatırsan taslak olarak kalır)
           </span>
         </span>
+      </label>
+
+      <label className="flex flex-col gap-1.5 text-[13px] text-black/70">
+        <span>
+          Zamanlanmış yayın{" "}
+          <span className="text-black/40">
+            (opsiyonel — tarihi geçince otomatik yayına geçer)
+          </span>
+        </span>
+        <input
+          type="datetime-local"
+          name="publishAt"
+          className="w-fit rounded-lg border border-black/[0.12] bg-white px-3 py-2 text-[13px] text-[#0a0a0a] focus:border-[#3c639f] focus:outline-none focus:ring-2 focus:ring-[#3c639f]/20"
+        />
       </label>
 
       {state.error && (

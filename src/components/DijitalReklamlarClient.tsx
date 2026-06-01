@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
 import {
@@ -669,6 +669,8 @@ function RequestModal({
   const [email, setEmail] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  // Honeypot — invisible field bound below; ref-read at submit time.
+  const honeypotRef = useRef<HTMLInputElement>(null)
   const [successCopy, setSuccessCopy] = useState<FormSuccessScreen>(
     DEFAULT_FORM_SUCCESS.appointment,
   )
@@ -784,6 +786,7 @@ function RequestModal({
         email: email.trim(),
         dateIso: selectedDate.toISOString(),
         hour: selectedHour,
+        honeypot: honeypotRef.current?.value ?? "",
       })
       if (res.ok) {
         trackFormSubmit("randevu", `Randevu — ${pkg.name}`)
@@ -942,6 +945,21 @@ function RequestModal({
           Çalışma saatleri 10:00 – 18:00. Randevu için en az 3 saat önceden
           seçim yapılır.
         </p>
+      </div>
+
+      {/* Honeypot — bots fill, humans don't see; rejected server-side. */}
+      <div aria-hidden className="pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0">
+        <label>
+          Website URL (boş bırakın)
+          <input
+            ref={honeypotRef}
+            type="text"
+            name="website_url"
+            tabIndex={-1}
+            autoComplete="off"
+            defaultValue=""
+          />
+        </label>
       </div>
 
       {/* Contact fields */}

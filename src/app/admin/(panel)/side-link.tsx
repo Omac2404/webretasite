@@ -7,11 +7,15 @@ export function SideLink({
   href,
   icon,
   disabled = false,
+  badge,
   children,
 }: {
   href: string
   icon: React.ReactNode
   disabled?: boolean
+  // Numeric unread indicator shown on the right (e.g. new talepler count).
+  // Hidden when undefined or 0.
+  badge?: number
   children: React.ReactNode
 }) {
   const pathname = usePathname()
@@ -50,6 +54,11 @@ export function SideLink({
     >
       {icon}
       {children}
+      {badge != null && badge > 0 && (
+        <span className="ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10.5px] font-semibold text-white">
+          {badge > 99 ? "99+" : badge}
+        </span>
+      )}
     </Link>
   )
 }

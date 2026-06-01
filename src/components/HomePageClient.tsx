@@ -1575,7 +1575,7 @@ function ProjectsSection({
   )
 }
 
-export default function Home() {
+export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -2276,7 +2276,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#fafafa]">
 
-      <SiteHeader />
+      <SiteHeader logoUrl={logoUrl} />
 
       {/* Hero Section */}
       <main>

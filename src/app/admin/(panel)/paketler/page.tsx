@@ -8,6 +8,7 @@ import {
   type ChannelKey,
 } from "@/lib/packages-store"
 import { DEFAULT_GLOBAL_CTA } from "@/lib/packages-types"
+import { PreviewLink } from "@/components/admin/PreviewLink"
 import { ChannelForm } from "./channel-form"
 import { PackageForm } from "./package-form"
 import { WhatsAppForm } from "./whatsapp-form"
@@ -36,16 +37,19 @@ export default async function PackagesAdminPage({
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
-      <div>
-        <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-          Paketler
-        </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          /dijital-reklamlar sayfasındaki paket kartlarını ve detay
-          popup&apos;ını buradan düzenle. Her paket için ad, kısa açıklama,
-          fiyat, &quot;Kimler için uygun&quot; listesi (max {MAX_AUDIENCE}) ve
-          detay maddeleri (max {MAX_ITEMS}).
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+            Paketler
+          </h1>
+          <p className="mt-1.5 text-[13.5px] text-black/55">
+            /dijital-reklamlar sayfasındaki paket kartlarını ve detay
+            popup&apos;ını buradan düzenle. Her paket için ad, kısa açıklama,
+            fiyat, &quot;Kimler için uygun&quot; listesi (max {MAX_AUDIENCE}) ve
+            detay maddeleri (max {MAX_ITEMS}).
+          </p>
+        </div>
+        <PreviewLink href="/dijital-reklamlar" />
       </div>
 
       {/* WhatsApp settings — global for all packages */}

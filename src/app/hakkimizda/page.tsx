@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, ImageIcon } from "lucide-react"
-import SiteHeader from "@/components/SiteHeader"
+import SiteHeader from "@/components/SiteHeaderServer"
 import SiteFooter from "@/components/SiteFooter"
 import { DotPattern } from "@/components/DotPattern"
 import { ConstellationBackdrop } from "@/components/ConstellationBackdrop"

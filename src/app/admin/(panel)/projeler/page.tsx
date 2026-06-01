@@ -2,6 +2,7 @@ import { Plus, MessageSquare } from "lucide-react"
 import { readProjects } from "@/lib/projects-store"
 import { readLogos } from "@/lib/logos-store"
 import { DEFAULT_PROJECTS_SIDEBAR } from "@/lib/projects-types"
+import { PreviewLink } from "@/components/admin/PreviewLink"
 import { AddProjectForm } from "./add-project-form"
 import { ProjectsList } from "./projects-list"
 import { SidebarForm } from "./sidebar-form"
@@ -30,15 +31,18 @@ export default async function ProjectsAdminPage() {
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-8">
-      <div>
-        <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
-          Projeler
-        </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          Anasayfadaki <em>Neler Yaptık?</em> şeridine düşen projeleri buradan
-          yönet. Firma seçimi Referanslar listesinden gelir; logo ve isim
-          oradan otomatik bağlanır.
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
+            Projeler
+          </h1>
+          <p className="mt-1.5 text-[13.5px] text-black/55">
+            Anasayfadaki <em>Neler Yaptık?</em> şeridine düşen projeleri buradan
+            yönet. Firma seçimi Referanslar listesinden gelir; logo ve isim
+            oradan otomatik bağlanır.
+          </p>
+        </div>
+        <PreviewLink href="/" />
       </div>
 
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">

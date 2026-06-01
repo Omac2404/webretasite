@@ -2,6 +2,8 @@
 
 import { getRenderedTemplate } from "@/lib/email-templates-store"
 import { sendMail, sendToAdmin } from "@/lib/mailer"
+import { appendQuote } from "@/lib/quotes-store"
+import { checkRateLimit, isHoneypotTripped } from "@/lib/spam-guard"
 
 export type SubmitQuoteResult =
   | { ok: true }
@@ -23,6 +25,8 @@ export type SubmitQuoteInput = {
   channelLabels: string[]
   date: string
   time: string
+  // Honeypot — clients pass an empty string; bots fill it.
+  honeypot?: string
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -58,6 +62,17 @@ function formatRefs(refs: string[]): string {
 export async function submitQuoteAction(
   input: SubmitQuoteInput,
 ): Promise<SubmitQuoteResult> {
+  // Honeypot — silent success-shaped reject.
+  if (isHoneypotTripped(input.honeypot)) {
+    return { ok: true }
+  }
+  if (!(await checkRateLimit("quote"))) {
+    return {
+      ok: false,
+      error: "Çok fazla deneme yapıldı, lütfen biraz sonra tekrar deneyin.",
+    }
+  }
+
   const name = input.name.trim()
   const email = input.email.trim()
   const phone = input.phone.trim()
@@ -92,23 +107,61 @@ export async function submitQuoteAction(
     refNotes: input.refNotes.trim() || "(belirtilmemiş)",
   }
 
-  // Kullanıcıya onay maili
-  const userTpl = await getRenderedTemplate("quote_user_confirmation", userVars)
-  await sendMail({
-    to: email,
-    subject: userTpl.subject,
-    text: userTpl.body,
-  })
+  // Mail teslim sonuçları admin panelde "mail gönderildi mi?" kolonunu
+  // dolduruyor; her iki gönderim de bağımsız değerlendirilir.
+  let mailUserSent = false
+  let mailAdminSent = false
+  let mailError: string | undefined
 
-  // Admin bildirimi
-  const adminTpl = await getRenderedTemplate(
-    "quote_admin_notification",
-    adminVars,
-  )
-  await sendToAdmin({
-    subject: adminTpl.subject,
-    text: adminTpl.body,
-    replyTo: email,
+  try {
+    const userTpl = await getRenderedTemplate(
+      "quote_user_confirmation",
+      userVars,
+    )
+    await sendMail({
+      to: email,
+      subject: userTpl.subject,
+      text: userTpl.body,
+    })
+    mailUserSent = true
+  } catch (err) {
+    mailError = err instanceof Error ? err.message : String(err)
+  }
+
+  try {
+    const adminTpl = await getRenderedTemplate(
+      "quote_admin_notification",
+      adminVars,
+    )
+    await sendToAdmin({
+      subject: adminTpl.subject,
+      text: adminTpl.body,
+      replyTo: email,
+    })
+    mailAdminSent = true
+  } catch (err) {
+    mailError = err instanceof Error ? err.message : String(err)
+  }
+
+  await appendQuote({
+    name,
+    company: input.company.trim(),
+    email,
+    phone,
+    industry: input.industry.trim(),
+    service: input.services.trim(),
+    serviceLabel: input.serviceLabel,
+    projectType: input.projectTypeLabel,
+    description: input.description.trim(),
+    existingSiteUrl: input.existingSiteUrl.trim(),
+    refs: input.refs,
+    refNotes: input.refNotes.trim(),
+    channelLabels: input.channelLabels,
+    date: input.date,
+    time: input.time,
+    mailUserSent,
+    mailAdminSent,
+    mailError,
   })
 
   return { ok: true }

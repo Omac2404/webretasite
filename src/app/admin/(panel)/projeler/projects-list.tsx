@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { GripVertical, Loader2, Pencil, Trash2 } from "lucide-react"
 import {
   categoryLabel,
@@ -37,6 +37,14 @@ export function ProjectsList({
   const [draggingId, setDraggingId] = useState<string | null>(null)
   const [overId, setOverId] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+
+  // Sync local state with server-rendered initialRows whenever they
+  // change (e.g. after a delete/add server action revalidates the page).
+  // Without this, useState keeps its first value and the row the user
+  // just deleted stays visible — making it look like delete is broken.
+  useEffect(() => {
+    setRows(initialRows)
+  }, [initialRows])
 
   function handleDragStart(id: string, e: React.DragEvent<HTMLLIElement>) {
     setDraggingId(id)

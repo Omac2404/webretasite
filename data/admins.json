@@ -1,0 +1,12 @@
+{
+  "admins": [
+    {
+      "id": "1780322630140-fh9nhs",
+      "email": "webreta.digital@gmail.com",
+      "name": "Webreta Admin",
+      "passwordHash": "8512f0eaee08209d31d7cfad7a437945.ec5e741ef5c2edc26a009d2e7fe089ad3366c02ada9327e1700ea931d8dceea1c1401c5ba6e6774ee9cc30d5ceaf392cd2681ee70a57da5074874316de8f26ef",
+      "isMaster": true,
+      "createdAt": "2026-06-01T14:03:50.140Z"
+    }
+  ]
+}

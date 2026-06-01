@@ -1,4 +1,4 @@
-import SiteHeader from "@/components/SiteHeader"
+import SiteHeader from "@/components/SiteHeaderServer"
 import SiteFooter from "@/components/SiteFooter"
 import DijitalReklamlarClient from "@/components/DijitalReklamlarClient"
 import { readPackages } from "@/lib/packages-store"

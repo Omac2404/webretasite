@@ -4,8 +4,10 @@ import "./globals.css";
 import Tracker from "@/components/Tracker";
 import FloatMenu from "@/components/FloatMenu";
 import BfcacheReset from "@/components/BfcacheReset";
+import MaintenanceBanner from "@/components/MaintenanceBanner";
 import { readSeo } from "@/lib/seo-store";
 import { readFloatMenu } from "@/lib/float-menu-store";
+import { readSiteSettings } from "@/lib/site-settings-store";
 import { getMetadataBase } from "@/lib/seo-metadata";
 
 const inter = Inter({
@@ -16,8 +18,11 @@ const inter = Inter({
 // Root metadata pulls defaults from the admin-managed SEO store. Per-page
 // metadata (in each page's generateMetadata) overrides title/description.
 export async function generateMetadata(): Promise<Metadata> {
-  const seo = await readSeo()
-  const base = await getMetadataBase()
+  const [seo, base, settings] = await Promise.all([
+    readSeo(),
+    getMetadataBase(),
+    readSiteSettings(),
+  ])
   return {
     metadataBase: base,
     title: {
@@ -28,6 +33,9 @@ export async function generateMetadata(): Promise<Metadata> {
     ...(seo.global.defaultKeywords.length > 0
       ? { keywords: seo.global.defaultKeywords }
       : {}),
+    // Admin-uploaded favicon wins over the static src/app/favicon.ico;
+    // when unset the static file keeps serving.
+    ...(settings.faviconUrl ? { icons: { icon: settings.faviconUrl } } : {}),
   }
 }
 
@@ -36,10 +44,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const floatMenu = await readFloatMenu()
+  const [floatMenu, siteSettings] = await Promise.all([
+    readFloatMenu(),
+    readSiteSettings(),
+  ])
   return (
     <html lang="tr" className="bg-[#fafafa]">
       <body className={`${inter.variable} font-sans antialiased`}>
+        <MaintenanceBanner
+          enabled={siteSettings.maintenance.enabled}
+          message={siteSettings.maintenance.message}
+        />
         {children}
         <Tracker />
         <FloatMenu config={floatMenu} />

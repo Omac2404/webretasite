@@ -2,8 +2,10 @@ import Link from "next/link"
 import { headers } from "next/headers"
 import {
   BarChart3,
+  BookOpen,
   CalendarDays,
   Clock,
+  Eye,
   Globe2,
   MonitorSmartphone,
   MousePointerClick,
@@ -30,6 +32,7 @@ import {
 } from "@/lib/analytics-store"
 import { readAnalyticsSettings } from "@/lib/analytics-settings"
 import { EVENT_LABEL, sectionLabel, type StoredEvent } from "@/lib/analytics-types"
+import { listPublished } from "@/lib/blog-store"
 import { setEnabledAction } from "./actions"
 import { ResetDialog } from "./reset-dialog"
 
@@ -207,6 +210,7 @@ const PAGE_TABS: PageTab[] = [
     path: "/dijital-reklamlar",
   },
   { id: "iletisim", label: "İletişim", path: "/iletisim" },
+  { id: "bloglar", label: "Bloglar", path: "/blog" },
 ]
 
 // Targets we hide from "Anasayfada en çok tıklananlar" — those are
@@ -233,10 +237,11 @@ export default async function AnalyticsPage({
   const rawMonth = params.month?.trim() ?? ""
   const rawPage = params.page?.trim() ?? ""
 
-  const [allEvents, ownIp, settings] = await Promise.all([
+  const [allEvents, ownIp, settings, blogPosts] = await Promise.all([
     readEvents(),
     getOwnIp(),
     readAnalyticsSettings(),
+    listPublished(),
   ])
   const months = monthBuckets(allEvents)
   const todayKey = dayKey(new Date().toISOString())
@@ -286,17 +291,16 @@ export default async function AnalyticsPage({
 
   // Session-length distribution. Per-visitor duration is the gap between
   // the first and last event we observed for that IP in the scoped
-  // window. Buckets overlap on purpose ("at least X") — the same person
-  // can land in >1dk, >3dk, and >5dk if they stayed long enough; the
-  // user wants engagement tiers, not mutually exclusive slices.
+  // window. Buckets are mutually exclusive: each visitor counts in
+  // exactly one tier (highest one they qualify for).
   const sessionMs = visitors.map(
     (v) => new Date(v.lastSeen).getTime() - new Date(v.firstSeen).getTime(),
   )
   const sessionBuckets = {
     total: visitors.length,
     under30s: sessionMs.filter((ms) => ms < 30_000).length,
-    over1m: sessionMs.filter((ms) => ms > 60_000).length,
-    over3m: sessionMs.filter((ms) => ms > 180_000).length,
+    over1m: sessionMs.filter((ms) => ms > 60_000 && ms <= 180_000).length,
+    over3m: sessionMs.filter((ms) => ms > 180_000 && ms <= 300_000).length,
     over5m: sessionMs.filter((ms) => ms > 300_000).length,
   }
 
@@ -432,6 +436,26 @@ export default async function AnalyticsPage({
     "/iletisim",
   )
 
+  // ── Per-page (bloglar) cards ─────────────────────────────────────────
+  // Count page_view events on /blog/<slug> paths, then merge with the
+  // published-blog list so newly-published posts with 0 views still
+  // appear. Sorted by view count desc.
+  const blogViewCounts = new Map<string, number>()
+  for (const e of scopeEvents) {
+    if (e.type !== "page_view") continue
+    const m = /^\/blog\/([^/?#]+)/.exec(e.path)
+    if (!m) continue
+    const slug = decodeURIComponent(m[1])
+    blogViewCounts.set(slug, (blogViewCounts.get(slug) ?? 0) + 1)
+  }
+  const blogStats = blogPosts
+    .map((p) => ({
+      slug: p.slug,
+      title: p.title,
+      views: blogViewCounts.get(p.slug) ?? 0,
+    }))
+    .sort((a, b) => b.views - a.views || a.title.localeCompare(b.title, "tr"))
+
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-7">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -447,6 +471,13 @@ export default async function AnalyticsPage({
 
         <div className="flex flex-col items-end gap-1.5">
           <div className="flex items-center gap-2">
+            <a
+              href="/admin/analitik/export"
+              className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.10] bg-white px-3 py-1.5 text-[11.5px] font-medium text-black/65 transition-colors hover:border-[#3c639f]/30 hover:text-[#3c639f]"
+              title="Tüm olayları CSV olarak indir"
+            >
+              CSV indir
+            </a>
             <ResetDialog />
             <div className="flex items-center gap-1 rounded-full border border-black/[0.10] bg-white p-1">
               <ToggleButton enabled={settings.enabled} value="true">
@@ -816,6 +847,10 @@ export default async function AnalyticsPage({
         </div>
       )}
 
+      {activePageTab.id === "bloglar" && (
+        <BlogStats stats={blogStats} scopeLabel={scopeLabel} />
+      )}
+
       {/* Visitors */}
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
         <div className="flex flex-wrap items-center gap-2">
@@ -1114,12 +1149,12 @@ function VisitorDurationCard({
               total={buckets.total}
             />
             <DurationRow
-              label="1dk'dan fazla kalanlar"
+              label="1-3 dk arası kalanlar"
               value={buckets.over1m}
               total={buckets.total}
             />
             <DurationRow
-              label="3dk'dan fazla kalanlar"
+              label="3-5 dk arası kalanlar"
               value={buckets.over3m}
               total={buckets.total}
             />
@@ -1208,6 +1243,93 @@ function DeviceCard({
         </div>
       )}
     </CardShell>
+  )
+}
+
+function BlogStats({
+  stats,
+  scopeLabel,
+}: {
+  stats: { slug: string; title: string; views: number }[]
+  scopeLabel: string
+}) {
+  if (stats.length === 0) {
+    return (
+      <div className="rounded-2xl border border-black/[0.06] bg-white p-5 text-[13px] text-black/45">
+        Henüz yayınlanmış blog yazısı yok.
+      </div>
+    )
+  }
+  const top5 = stats.slice(0, 5).filter((s) => s.views > 0)
+  const totalViews = stats.reduce((sum, s) => sum + s.views, 0)
+  return (
+    <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+      <CardShell
+        icon={<BookOpen size={14} className="text-[#3c639f]" />}
+        title="En çok görüntülenen ilk 5 blog"
+        sub={scopeLabel}
+      >
+        {top5.length === 0 ? (
+          <p className="text-[12.5px] text-black/40">
+            Bu aralıkta blog görüntülenmesi yok.
+          </p>
+        ) : (
+          <ol className="flex flex-col gap-2.5">
+            {top5.map((s, idx) => (
+              <li
+                key={s.slug}
+                className="flex items-baseline gap-3 text-[12.5px]"
+              >
+                <span className="shrink-0 tabular-nums font-semibold text-[#3c639f]/70">
+                  {idx + 1}.
+                </span>
+                <Link
+                  href={`/blog/${s.slug}`}
+                  target="_blank"
+                  className="min-w-0 flex-1 truncate text-black/80 hover:text-[#3c639f] hover:underline"
+                  title={s.title}
+                >
+                  {s.title}
+                </Link>
+                <span className="shrink-0 inline-flex items-baseline gap-1 tabular-nums font-medium text-[#0a0a0a]">
+                  {s.views}
+                  <span className="text-[10.5px] font-normal text-black/40">
+                    görüntülenme
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        )}
+      </CardShell>
+
+      <CardShell
+        icon={<Eye size={14} className="text-[#3c639f]" />}
+        title="Tüm blogların görüntülenme listesi"
+        sub={`${stats.length} yazı · toplam ${totalViews} görüntülenme`}
+      >
+        <ul className="flex flex-col gap-1.5">
+          {stats.map((s) => (
+            <li
+              key={s.slug}
+              className="flex items-baseline justify-between gap-3 border-b border-black/[0.04] pb-1.5 text-[12.5px] last:border-b-0"
+            >
+              <Link
+                href={`/blog/${s.slug}`}
+                target="_blank"
+                className="min-w-0 flex-1 truncate text-black/75 hover:text-[#3c639f] hover:underline"
+                title={s.title}
+              >
+                {s.title}
+              </Link>
+              <span className="shrink-0 tabular-nums font-medium text-[#3c639f]">
+                {s.views}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </CardShell>
+    </div>
   )
 }
 
