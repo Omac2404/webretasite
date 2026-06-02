@@ -19,11 +19,6 @@ export default async function LegalPagesAdmin() {
         <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
           Yasal Sayfalar
         </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          KVKK, Gizlilik, Çerez Politikası gibi yasal sayfaları buradan
-          yönet. Footer sağ altta hangileri çıkacaksa <em>Footer</em> sekmesinden
-          seçim yaparsın.
-        </p>
       </div>
 
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">

@@ -15,11 +15,6 @@ export default async function SeoAdminPage() {
         <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
           SEO
         </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          Site geneli ve sayfa bazlı SEO ayarları, sitemap & robots.txt
-          yönetimi. Blog yazılarının kendi SEO alanları yazı editörünün
-          içindedir.
-        </p>
       </div>
 
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">

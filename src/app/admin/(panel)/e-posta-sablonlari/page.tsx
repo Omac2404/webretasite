@@ -18,15 +18,6 @@ export default async function EmailTemplatesAdminPage() {
           <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
             E-posta Şablonları
           </h1>
-          <p className="mt-1.5 text-[13.5px] leading-relaxed text-black/55">
-            Sitedeki 3 form için toplam 6 şablon. Her form, gönderildiğinde iki
-            mail tetikler: biri ziyaretçiye (onay), biri size (bildirim). Süslü
-            parantez içindeki{" "}
-            <code className="rounded bg-black/[0.04] px-1 font-mono text-[11px]">
-              {`{name}`}
-            </code>{" "}
-            gibi anahtarlar form verisiyle değiştirilir.
-          </p>
         </div>
 
         <TemplatesForm templates={templates} />

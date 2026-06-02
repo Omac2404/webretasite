@@ -27,6 +27,9 @@ export type Project = {
   // Long copy shown in the hover/tap popup.
   demandDetail: string
   solutionDetail: string
+  // Optional external link to the live project/site. When set, the
+  // card popup shows a "Projeyi gör" link that opens in a new tab.
+  siteUrl: string
   createdAt: string
   updatedAt: string
 }

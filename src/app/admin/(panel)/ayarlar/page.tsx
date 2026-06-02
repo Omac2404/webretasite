@@ -38,11 +38,6 @@ export default async function AyarlarPage() {
         <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
           Ayarlar
         </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          Site geneli teknik ayarlar — favicon, bakım modu ve veri yedeği.
-          Sayfa bazlı kurumsal bilgiler (logo, başlık, açıklama) için ilgili
-          bölümleri kullan.
-        </p>
       </div>
 
       <section className="rounded-2xl border border-black/[0.06] bg-white p-5">

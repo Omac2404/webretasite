@@ -25,6 +25,7 @@ export type ProjectFormDefaults = Partial<
     | "solution"
     | "demandDetail"
     | "solutionDetail"
+    | "siteUrl"
   >
 >
 
@@ -175,6 +176,20 @@ export function ProjectFormFields({
           defaultValue={defaults?.solutionDetail ?? ""}
           placeholder="Geliştirdiğiniz çözümün detayı ve sonuç"
           className={`${inputCls} resize-y leading-relaxed`}
+        />
+      </Field>
+
+      <Field
+        label="Proje linki"
+        hint="Opsiyonel — pop-up'ta 'Projeyi gör' butonu olarak açılır (yeni sekme)."
+      >
+        <input
+          name="siteUrl"
+          type="text"
+          inputMode="url"
+          defaultValue={defaults?.siteUrl ?? ""}
+          placeholder="https://ornek-proje.com"
+          className={inputCls}
         />
       </Field>
 

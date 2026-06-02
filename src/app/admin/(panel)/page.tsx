@@ -113,7 +113,7 @@ export default async function AdminDashboardPage() {
             Anasayfa
           </h1>
           <p className="mt-1 text-[13.5px] text-black/55">
-            Site genel durumu. Son giriş:{" "}
+            Son giriş:{" "}
             <span className="font-medium text-[#0a0a0a]">
               {lastLogin ? fmt(lastLogin.ts) : "—"}
             </span>

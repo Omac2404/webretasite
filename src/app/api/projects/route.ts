@@ -30,6 +30,7 @@ export async function GET() {
       solution: p.solution,
       demandDetail: p.demandDetail,
       solutionDetail: p.solutionDetail,
+      siteUrl: p.siteUrl,
     }
   })
   return NextResponse.json(

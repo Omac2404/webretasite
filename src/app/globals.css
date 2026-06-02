@@ -207,6 +207,23 @@
 }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 
+/* Project/testimonial popup body. The popup has a max-height (440px on the
+   desktop card, 80vh for the mobile/referanslar modal); once content
+   exceeds it the body scrolls instead of overflowing off-screen. A thin
+   brand-tinted scrollbar keeps long case studies legible on small phones. */
+.popup-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(60, 99, 159, 0.35) transparent;
+}
+.popup-scroll::-webkit-scrollbar { width: 6px; }
+.popup-scroll::-webkit-scrollbar-thumb {
+  background: rgba(60, 99, 159, 0.35);
+  border-radius: 9999px;
+}
+.popup-scroll::-webkit-scrollbar-track { background: transparent; }
+
 /* Soft brand-blue halo hugging the pill, gently throbbing in opacity
    and scale. No rotation, no traveling — just a calm breathing glow. */
 .gp-halo {

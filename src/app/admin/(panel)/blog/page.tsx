@@ -25,10 +25,6 @@ export default async function BlogAdminPage() {
           <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
             Blog
           </h1>
-          <p className="mt-1.5 text-[13.5px] text-black/55">
-            /blog ve anasayfada görünen yazıları buradan yönet. Yeni yazı ekle,
-            mevcutları düzenle, taslağa indir veya sil.
-          </p>
         </div>
         <PreviewLink href="/blog" />
       </div>

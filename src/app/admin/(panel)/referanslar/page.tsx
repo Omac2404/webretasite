@@ -24,11 +24,6 @@ export default async function LogosAdminPage() {
           <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
             Referanslar
           </h1>
-          <p className="mt-1.5 text-[13.5px] text-black/55">
-            Anasayfadaki kayan logo şeridini ve proje firmalarını buradan yönet.
-            Üst sıra hızlı (38s, sola), alt sıra yavaş (58s, sağa) akıyor.
-            Burada eklediğin firmalar Projeler sekmesinden seçilebilir hale gelir.
-          </p>
         </div>
         <PreviewLink href="/" />
       </div>

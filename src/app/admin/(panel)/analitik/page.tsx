@@ -209,6 +209,7 @@ const PAGE_TABS: PageTab[] = [
     label: "Dijital Reklamlar",
     path: "/dijital-reklamlar",
   },
+  { id: "referanslar", label: "Referanslar", path: "/referanslar" },
   { id: "iletisim", label: "İletişim", path: "/iletisim" },
   { id: "bloglar", label: "Bloglar", path: "/blog" },
 ]
@@ -436,6 +437,29 @@ export default async function AnalyticsPage({
     "/iletisim",
   )
 
+  // ── Per-page (referanslar) cards ─────────────────────────────────────
+  // How many landed on the references page, how long they lingered on the
+  // grid, which category they switched to, and which individual references
+  // they clicked through to ("Projeyi gör"). Per-reference clicks carry a
+  // "referanslar:proje:<id>" target with the company name as label.
+  const referanslarVisitorCount = visitorsOnPath(
+    scopeEvents,
+    "/referanslar",
+  ).size
+  const referanslarDwell = sectionDwellSummary(scopeEvents, "referanslar")
+  const referanslarOpsTabReach: Reach = tabReach(
+    scopeEvents,
+    "referanslar",
+    "ops",
+    "/referanslar",
+  )
+  const referanslarTopClicks = topClicksOnPath(
+    scopeEvents,
+    "/referanslar",
+    10,
+    (t) => t.startsWith("referanslar:proje:"),
+  )
+
   // ── Per-page (bloglar) cards ─────────────────────────────────────────
   // Count page_view events on /blog/<slug> paths, then merge with the
   // published-blog list so newly-published posts with 0 views still
@@ -463,10 +487,6 @@ export default async function AnalyticsPage({
           <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
             Analitik
           </h1>
-          <p className="text-[13.5px] text-black/55">
-            Site ziyaretçilerinin sayfa, bölüm, buton hareketleri. Üst kartlar
-            tüm site geneli; alt kısımda her sayfanın kendi istatistikleri.
-          </p>
         </div>
 
         <div className="flex flex-col items-end gap-1.5">
@@ -847,6 +867,34 @@ export default async function AnalyticsPage({
         </div>
       )}
 
+      {activePageTab.id === "referanslar" && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <DwellCard
+            icon={<Clock size={14} className="text-[#3c639f]" />}
+            title="Sayfada durma süresi"
+            visitorsOnPage={referanslarVisitorCount}
+            dwell={referanslarDwell}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Operasyonlar sekmesi"
+            sub="Referanslar sayfasında 'Operasyonlar' sekmesine geçen"
+            reach={referanslarOpsTabReach}
+          />
+
+          <ListCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="En çok tıklanan referanslar"
+            empty="Henüz 'Projeyi gör' tıklaması yok."
+            rows={referanslarTopClicks.map((r) => ({
+              ...r,
+              display: (r.meta ?? r.key).replace(/^Projeyi gör — /, ""),
+            }))}
+          />
+        </div>
+      )}
+
       {activePageTab.id === "bloglar" && (
         <BlogStats stats={blogStats} scopeLabel={scopeLabel} />
       )}
@@ -907,6 +955,7 @@ const HEADER_NAV_LABEL: Record<string, string> = {
   "header:nav:hakkimizda": "Hakkımızda",
   "header:nav:web-site": "Web Site",
   "header:nav:dijital-reklamlar": "Dijital Reklamlar",
+  "header:nav:referanslar": "Referanslar",
   "header:nav:iletisim": "İletişim",
   "header:blog-cta": "Blog (CTA)",
 }

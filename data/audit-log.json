@@ -1,6 +1,13 @@
 {
   "entries": [
     {
+      "id": "1780406075679-v8tuxs",
+      "ts": "2026-06-02T13:14:35.679Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "auth.login.ok",
+      "target": "webreta.digital@gmail.com"
+    },
+    {
       "id": "1780326584595-fjq9f0",
       "ts": "2026-06-01T15:09:44.595Z",
       "user": "webreta.digital@gmail.com",

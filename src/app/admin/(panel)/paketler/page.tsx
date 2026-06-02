@@ -42,12 +42,6 @@ export default async function PackagesAdminPage({
           <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
             Paketler
           </h1>
-          <p className="mt-1.5 text-[13.5px] text-black/55">
-            /dijital-reklamlar sayfasındaki paket kartlarını ve detay
-            popup&apos;ını buradan düzenle. Her paket için ad, kısa açıklama,
-            fiyat, &quot;Kimler için uygun&quot; listesi (max {MAX_AUDIENCE}) ve
-            detay maddeleri (max {MAX_ITEMS}).
-          </p>
         </div>
         <PreviewLink href="/dijital-reklamlar" />
       </div>

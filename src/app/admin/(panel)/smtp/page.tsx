@@ -22,19 +22,6 @@ export default async function SmtpAdminPage() {
         <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
           SMTP & Formlar
         </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          Site formlarının kullanacağı SMTP sunucusunu buradan yapılandır.
-          Aşağıda sitede aktif olan tüm formların listesi var. Mail içerikleri
-          için{" "}
-          <Link
-            href="/admin/e-posta-sablonlari"
-            className="inline-flex items-center gap-1 text-[#3c639f] underline-offset-2 hover:underline"
-          >
-            <MailPlus size={12} />
-            E-posta Şablonları
-          </Link>{" "}
-          sekmesine bakın.
-        </p>
       </div>
 
       <SmtpForm settings={settings} />

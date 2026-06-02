@@ -23,7 +23,9 @@ export default function FloatMenu({ config }: { config: FloatMenuConfig }) {
   // Dış tıklama / Escape ile kapan. Kullanıcı menüden çıkarken kilitli kalmasın.
   useEffect(() => {
     if (!contactOpen) return
-    function onDocClick(e: MouseEvent) {
+    // Bound to both mousedown and touchstart, so type the param as the
+    // common Event base (we only read e.target, present on both).
+    function onDocClick(e: Event) {
       const target = e.target instanceof Node ? e.target : null
       if (!target) return
       if (wrapperRef.current && !wrapperRef.current.contains(target)) {

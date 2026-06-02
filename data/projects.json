@@ -1,6 +1,34 @@
 {
   "projects": [
     {
+      "id": "1780406786457-nojyei",
+      "companyId": "1778874515972-rpcxin",
+      "category": "dev",
+      "type": "LMS Web Sitesi",
+      "publishDate": "2026-03-26",
+      "demand": "Eğitimlerinin kolay takip edilip satın alınabildiği bir kosenpt web site talebi",
+      "solution": "Farklı eğitim türlerini destekleyin özel bir LSM sistemi inşa edildi",
+      "demandDetail": "Astrolog Lale Leyla Okay, farklı seviye ve formatlardaki astroloji eğitimlerini (temel/ileri programlar, seminerler) ve danışmanlık hizmetlerini ziyaretçilerin kolayca takip edip satın alabileceği bir web platformu istedi. Kullanıcıların üye olabildiği, eğitim içeriklerine erişebildiği ve kurumsal kimliğiyle uyumlu, güven veren bir online eğitim yapısı öncelikli beklentiydi.",
+      "solutionDetail": "Markanın kimliğiyle uyumlu, sade ve estetik bir web sitesi geliştirdik. Farklı eğitim türlerini (canlı programlar, kayıtlı içerikler, seminerler) ve birebir/yazılı danışmanlıkları destekleyen özel bir LMS (eğitim yönetim sistemi) inşa ettik. Üyelik, eğitim takibi ve online satın alma akışını entegre ederek, ziyaretçilerin programları keşfedip kesintisiz şekilde satın alabildiği uçtan uca bir öğrenme platformu kurduk.",
+      "siteUrl": "https://astrologlaleleylaokay.com/",
+      "createdAt": "2026-06-02T13:26:26.457Z",
+      "updatedAt": "2026-06-02T15:02:53.476Z"
+    },
+    {
+      "id": "1780406312096-fdhebj",
+      "companyId": "1780315827558-hn7tkb",
+      "category": "dev",
+      "type": "Web Sitesi",
+      "publishDate": "2026-03-15",
+      "demand": "Ürünlerinin kaliteli bir katalog halinde sergilenmesi",
+      "solution": "Mermerlere özel detay inceleme için geliştirilmiş ürün sayfaları",
+      "demandDetail": "Premium kuvars yüzeyler üreten Abeliano Quartz, geniş ürün gamını dünya standartlarında kaliteli bir katalog halinde sergilemek istedi. Her mermer/kuvars deseninin renk, doku ve teknik özellikleriyle birlikte detaylı incelenebileceği; mimari projeler için ilham veren ve güven duygusu uyandıran bir dijital vitrin öncelikli beklentiydi.",
+      "solutionDetail": "Markanın premium kimliğini yansıtan, görsel ağırlıklı ve şık bir web sitesi geliştirdik. Her kuvars ürünü için özel olarak tasarlanan detay inceleme sayfaları kurduk; ziyaretçiler büyük çözünürlüklü görseller, renk/desen varyasyonları ve teknik özellikler üzerinden ürünleri yakından inceleyebiliyor. Koleksiyonu kolayca keşfetmeyi sağlayan ürün listeleme yapısı ve katalog erişimiyle, marka uluslararası pazarda güçlü bir dijital sunum kazandı.",
+      "siteUrl": "",
+      "createdAt": "2026-06-02T13:18:32.096Z",
+      "updatedAt": "2026-06-02T13:18:32.096Z"
+    },
+    {
       "id": "1780317462316-knupp5",
       "companyId": "1780315810678-rickwg",
       "category": "dev",
@@ -10,6 +38,7 @@
       "solution": "Şube arama moturu ve detaylı bilgi/başvuru formları",
       "demandDetail": "İzmir merkezli kahve markası Buckin, mevcut şubelerini ve franchise sistemini tek bir çatı altında tanıtacak; markanın güçlü kurumsal kimliğini birebir yansıtan bir web sitesi istedi. Ziyaretçilerin şubelere kolayca ulaşabilmesi ve franchise adaylarının başvuru sürecini hızlıca tamamlayabilmesi öncelikli beklentilerdi.",
       "solutionDetail": "Markanın kurumsal kimliğine tam uyumlu, premium görsel diline sahip bir web sitesi geliştirdik. Kullanıcıların lokasyona göre şubeleri filtreleyip bulabildiği bir şube arama motoru ile franchise adaylarının başvurularını ilettiği özel olarak geliştirilmiş formları entegre ettik; böylece hem mevcut operasyon hem de büyüme süreci tek bir dijital platformda buluştu.",
+      "siteUrl": "",
       "createdAt": "2026-06-01T12:37:42.316Z",
       "updatedAt": "2026-06-01T12:37:42.316Z"
     }

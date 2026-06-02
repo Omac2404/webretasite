@@ -70,6 +70,7 @@ export const DEFAULT_FOOTER: FooterConfig = {
     "/hakkimizda",
     "/web-site",
     "/dijital-reklamlar",
+    "/referanslar",
     "/blog",
     "/iletisim",
   ],

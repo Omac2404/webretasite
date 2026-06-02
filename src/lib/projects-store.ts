@@ -35,6 +35,7 @@ function normalizeProject(p: Partial<Project>): Project {
     solution: String(p.solution ?? ""),
     demandDetail: String(p.demandDetail ?? ""),
     solutionDetail: String(p.solutionDetail ?? ""),
+    siteUrl: String(p.siteUrl ?? ""),
     createdAt: String(p.createdAt ?? now),
     updatedAt: String(p.updatedAt ?? now),
   }
@@ -94,6 +95,7 @@ export async function addProject(input: {
   solution: string
   demandDetail: string
   solutionDetail: string
+  siteUrl: string
 }): Promise<Project> {
   const data = await readProjects()
   const now = new Date().toISOString()
@@ -107,6 +109,7 @@ export async function addProject(input: {
     solution: input.solution,
     demandDetail: input.demandDetail,
     solutionDetail: input.solutionDetail,
+    siteUrl: input.siteUrl,
     createdAt: now,
     updatedAt: now,
   }
@@ -126,6 +129,7 @@ export async function updateProject(
     solution: string
     demandDetail: string
     solutionDetail: string
+    siteUrl: string
   },
 ): Promise<void> {
   const data = await readProjects()
@@ -139,6 +143,7 @@ export async function updateProject(
   project.solution = input.solution
   project.demandDetail = input.demandDetail
   project.solutionDetail = input.solutionDetail
+  project.siteUrl = input.siteUrl
   project.updatedAt = new Date().toISOString()
   await writeProjects(data)
 }

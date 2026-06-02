@@ -12,6 +12,7 @@ export const SITE_PAGES: SitePage[] = [
   { href: "/hakkimizda", label: "Hakkımızda" },
   { href: "/web-site", label: "Web Site" },
   { href: "/dijital-reklamlar", label: "Dijital Reklamlar" },
+  { href: "/referanslar", label: "Referanslar" },
   { href: "/blog", label: "Blog" },
   { href: "/iletisim", label: "İletişim" },
 ]

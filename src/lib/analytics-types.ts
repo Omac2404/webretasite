@@ -43,12 +43,17 @@ export const EVENT_LABEL: Record<EventType, string> = {
 // Whitelist of sections we actually want to count dwell time for. The
 // tracker only observes these (other [data-section] elements are
 // ignored), and the admin stats table filters to the same set.
-export const TRACKED_SECTIONS = ["projects", "testimonials"] as const
+export const TRACKED_SECTIONS = [
+  "projects",
+  "testimonials",
+  "referanslar",
+] as const
 
 // Turkish display names for the section ids used in [data-section].
 export const SECTION_LABEL: Record<string, string> = {
   projects: "Projeler",
   testimonials: "Yorumlar",
+  referanslar: "Referanslar",
 }
 
 export function sectionLabel(id: string): string {

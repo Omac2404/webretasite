@@ -62,6 +62,17 @@ type ProjectInput = {
   solution: string
   demandDetail: string
   solutionDetail: string
+  siteUrl: string
+}
+
+// Normalize the optional "Projeyi gör" link. Empty stays empty (the link
+// is simply hidden). A bare domain like "acme.com" gets an https:// prefix
+// so the anchor resolves to an absolute URL instead of a same-site path.
+function normalizeSiteUrl(raw: string): string {
+  const v = raw.trim()
+  if (!v) return ""
+  if (/^https?:\/\//i.test(v)) return v
+  return `https://${v}`
 }
 
 function readInput(formData: FormData): ProjectInput | string {
@@ -73,6 +84,7 @@ function readInput(formData: FormData): ProjectInput | string {
   const solution = String(formData.get("solution") ?? "").trim()
   const demandDetail = String(formData.get("demandDetail") ?? "").trim()
   const solutionDetail = String(formData.get("solutionDetail") ?? "").trim()
+  const siteUrl = normalizeSiteUrl(String(formData.get("siteUrl") ?? ""))
 
   if (!companyId) return "Firma seçimi gerekli."
   if (!type) return "Proje tipi gerekli (ör. Web Sitesi, E-Ticaret)."
@@ -92,6 +104,7 @@ function readInput(formData: FormData): ProjectInput | string {
     solution,
     demandDetail,
     solutionDetail,
+    siteUrl,
   }
 }
 

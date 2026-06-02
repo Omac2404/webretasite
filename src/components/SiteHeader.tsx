@@ -13,6 +13,7 @@ const NAV_ITEMS = [
     href: "/dijital-reklamlar",
     track: "header:nav:dijital-reklamlar",
   },
+  { label: "Referanslar", href: "/referanslar", track: "header:nav:referanslar" },
   { label: "İletişim", href: "/iletisim", track: "header:nav:iletisim" },
 ]
 

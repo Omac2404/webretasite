@@ -90,10 +90,6 @@ export default async function TekliflerPage({
         <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
           Talepler
         </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          Site formlarından düşen talepler. Mail bildirimi yine SMTP üzerinden
-          gönderilir; bu sayfa kayıtların yedek dökümü ve takibi için.
-        </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-1.5">

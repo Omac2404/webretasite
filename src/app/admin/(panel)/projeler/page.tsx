@@ -36,11 +36,6 @@ export default async function ProjectsAdminPage() {
           <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
             Projeler
           </h1>
-          <p className="mt-1.5 text-[13.5px] text-black/55">
-            Anasayfadaki <em>Neler Yaptık?</em> şeridine düşen projeleri buradan
-            yönet. Firma seçimi Referanslar listesinden gelir; logo ve isim
-            oradan otomatik bağlanır.
-          </p>
         </div>
         <PreviewLink href="/" />
       </div>

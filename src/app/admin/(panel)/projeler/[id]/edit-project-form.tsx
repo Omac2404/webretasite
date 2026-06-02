@@ -34,6 +34,7 @@ export function EditProjectForm({
           solution: project.solution,
           demandDetail: project.demandDetail,
           solutionDetail: project.solutionDetail,
+          siteUrl: project.siteUrl,
         }}
         submitting={pending}
         submitLabel="Değişiklikleri kaydet"

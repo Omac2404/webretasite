@@ -17,11 +17,6 @@ export default async function WebPackagesAdminPage() {
           <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
             Web Site Paketleri
           </h1>
-          <p className="mt-1.5 text-[13.5px] text-black/55">
-            /web-site sayfasındaki teklif sihirbazının &quot;Paket Seçimi&quot;
-            adımındaki paketleri ve teklif aracının altındaki Webreta KOBİ
-            banner&apos;ını buradan düzenle.
-          </p>
         </div>
         <PreviewLink href="/web-site" />
       </div>

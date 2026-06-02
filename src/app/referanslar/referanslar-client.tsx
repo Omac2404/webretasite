@@ -1,0 +1,223 @@
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
+import { ProjectCard, ProjectPopup, type ProjectCardData } from "@/components/projects-cards"
+
+// Public /referanslar grid. Reuses the homepage project card + popup so the
+// two surfaces stay in sync. Differences from the homepage carousel: every
+// project is shown (not just the first 10), laid out as a two-column grid
+// with a Geliştirmeler/Operasyonlar tab switch and an always-visible "Daha
+// fazla" affordance. Unlike the homepage, hovering only highlights the card
+// — the popup opens on CLICK (a centered modal), and carries a "Projeyi gör"
+// link. The whole grid sits in a [data-section="referanslar"] wrapper so the
+// analytics panel can report time-on-page; per-reference click-throughs are
+// tracked via the popup link's data-track target.
+
+type Category = "dev" | "ops"
+
+type GridProject = ProjectCardData & { category: Category }
+
+type ApiProject = {
+  id: string
+  company: string
+  initials: string
+  imageUrl: string
+  category: Category
+  type: string
+  dateLabel: string
+  demand: string
+  solution: string
+  demandDetail: string
+  solutionDetail: string
+  siteUrl: string
+}
+
+const TABS: { id: Category; label: string }[] = [
+  { id: "dev", label: "Geliştirmeler" },
+  { id: "ops", label: "Operasyonlar" },
+]
+
+export default function ReferanslarClient() {
+  const [projects, setProjects] = useState<GridProject[]>([])
+  const [loaded, setLoaded] = useState(false)
+  const [activeTab, setActiveTab] = useState<Category>("dev")
+  // Hover only drives the card's visual highlight (desktop). The popup is
+  // gated on a separate click-driven `openId` so hovering never opens it.
+  const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [openId, setOpenId] = useState<string | null>(null)
+
+  // Load the full project archive — same endpoint the homepage uses.
+  useEffect(() => {
+    let cancelled = false
+    fetch("/api/projects")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { projects?: ApiProject[] } | null) => {
+        if (cancelled || !data || !Array.isArray(data.projects)) return
+        setProjects(
+          data.projects.map((p) => ({
+            id: p.id,
+            company: p.company,
+            initials: p.initials,
+            imageUrl: p.imageUrl,
+            category: p.category,
+            type: p.type,
+            date: p.dateLabel,
+            demand: p.demand,
+            solution: p.solution,
+            demandDetail: p.demandDetail,
+            solutionDetail: p.solutionDetail,
+            siteUrl: p.siteUrl,
+          })),
+        )
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLoaded(true)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  // Close the popup on Escape so keyboard users aren't trapped in the modal.
+  useEffect(() => {
+    if (openId === null) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenId(null)
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [openId])
+
+  const visible = useMemo(
+    () => projects.filter((p) => p.category === activeTab),
+    [projects, activeTab],
+  )
+
+  const counts = useMemo(
+    () => ({
+      dev: projects.filter((p) => p.category === "dev").length,
+      ops: projects.filter((p) => p.category === "ops").length,
+    }),
+    [projects],
+  )
+
+  const openProject =
+    openId === null ? null : visible.find((p) => p.id === openId) ?? null
+
+  return (
+    <section
+      data-section="referanslar"
+      className="mx-auto max-w-[1280px] px-6 pb-20 pt-10 md:px-12 md:pt-14"
+    >
+      {/* Heading */}
+      <div className="mb-8">
+        <h1 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
+          <span className="font-normal">Neler </span>
+          <span className="font-bold text-[#3c639f]">Yaptık?</span>
+        </h1>
+        <p className="mt-3 max-w-[640px] text-[15px] leading-relaxed text-black/60">
+          Bugüne kadar tamamladığımız projelerin tamamı. Bir karta tıklayın;
+          talebi, çözümü ve dilerseniz canlı projeyi inceleyin.
+        </p>
+      </div>
+
+      {/* Segmented control */}
+      <div
+        className="mb-8 inline-flex items-center rounded-full p-1"
+        style={{
+          background: "#f1f3f7",
+          border: "1px solid rgba(60, 99, 159, 0.08)",
+        }}
+      >
+        {TABS.map((tab) => {
+          const active = activeTab === tab.id
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              data-track-tab-control="referanslar"
+              data-track-tab-value={tab.id}
+              data-track-label={tab.label}
+              onClick={() => {
+                setActiveTab(tab.id)
+                setOpenId(null)
+              }}
+              className="relative rounded-full px-4 py-2 text-[13px] font-medium transition-colors md:px-5"
+              style={{
+                background: active ? "#ffffff" : "transparent",
+                color: active ? "#3c639f" : "rgba(0,0,0,0.5)",
+                boxShadow: active
+                  ? "0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px -4px rgba(60, 99, 159, 0.18)"
+                  : "none",
+              }}
+            >
+              {tab.label}
+              <span
+                className="ml-2 inline-flex items-center justify-center rounded-full px-1.5 text-[10.5px] font-semibold tabular-nums"
+                style={{
+                  background: active
+                    ? "rgba(60, 99, 159, 0.10)"
+                    : "rgba(0,0,0,0.05)",
+                  color: active ? "#3c639f" : "rgba(0,0,0,0.45)",
+                }}
+              >
+                {counts[tab.id]}
+              </span>
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Grid — two columns (çifterli). items-stretch keeps both cards in a
+          row the same height. */}
+      {!loaded ? (
+        // Brief skeleton while /api/projects resolves — avoids flashing the
+        // empty-state copy before the data lands.
+        <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:gap-5">
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="h-[200px] animate-pulse rounded-xl bg-black/[0.04]"
+            />
+          ))}
+        </div>
+      ) : visible.length === 0 ? (
+        <p className="text-[14px] text-black/45">
+          Bu kategoride henüz proje yok.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:gap-5">
+          {visible.map((project) => (
+            <div key={project.id} className="min-h-[200px]">
+              <ProjectCard
+                project={project}
+                isFocused={false}
+                opacity={1}
+                isHovered={hoveredId === project.id}
+                isMobile={false}
+                moreButton
+                onMouseEnter={() => setHoveredId(project.id!)}
+                onMouseLeave={() => setHoveredId(null)}
+                onClick={() => setOpenId(project.id!)}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Popup — opens on click as a centered modal (not on hover). */}
+      {openProject && (
+        <ProjectPopup
+          project={openProject}
+          position={null}
+          isMobile
+          onMouseEnter={() => {}}
+          onMouseLeave={() => {}}
+          onClose={() => setOpenId(null)}
+          trackTarget={`referanslar:proje:${openProject.id ?? ""}`}
+        />
+      )}
+    </section>
+  )
+}

@@ -23,11 +23,6 @@ export default async function ReviewsAdminPage() {
         <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
           Yorumlar
         </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          Anasayfadaki testimonial bloğunu buradan yönet. Üstteki özet kartı
-          (puan, yorum sayısı, firma adı, &quot;tümünü gör&quot; linki) ve tek
-          tek yorumlar — hepsi elle giriliyor.
-        </p>
       </div>
 
       {/* Summary card editor */}

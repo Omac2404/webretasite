@@ -14,10 +14,6 @@ export default async function ContactAdminPage() {
           <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
             İletişim Sayfası
           </h1>
-          <p className="mt-1.5 text-[13.5px] text-black/55">
-            /iletisim sayfasındaki tüm alanları buradan düzenle — başlıklar,
-            bilgi kartları ve harita.
-          </p>
         </div>
         <PreviewLink href="/iletisim" />
       </div>

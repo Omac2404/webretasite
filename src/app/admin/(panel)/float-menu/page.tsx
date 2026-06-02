@@ -12,10 +12,6 @@ export default async function FloatMenuAdminPage() {
         <h1 className="text-[22px] font-semibold tracking-[-0.02em] text-[#0a0a0a]">
           Mobil Yüzen Menü
         </h1>
-        <p className="mt-1.5 text-[13.5px] text-black/55">
-          Mobilde alt kısımda görünen üç butonlu yüzen menüyü buradan yönet —
-          görünürlük, etiketler, bağlantılar ve iletişim numaraları.
-        </p>
       </div>
 
       <FloatMenuAdminForm config={config} />
