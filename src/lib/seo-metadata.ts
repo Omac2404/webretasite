@@ -63,7 +63,7 @@ export async function buildPageMetadata(href: string): Promise<Metadata> {
 export async function getMetadataBase(): Promise<URL | undefined> {
   const seo = await readSeo()
   try {
-    return new URL(seo.global.siteUrl || "https://webreta.com")
+    return new URL(seo.global.siteUrl || "https://webreta.com.tr")
   } catch {
     return undefined
   }

@@ -259,7 +259,7 @@ export function BlogSeoPanel({
 }
 
 function buildBlogUrl(siteUrl: string | undefined, slug: string): string {
-  const base = (siteUrl || "https://webreta.com").replace(/\/+$/, "")
+  const base = (siteUrl || "https://webreta.com.tr").replace(/\/+$/, "")
   return `${base}/blog/${slug || "yazi-slugi"}`
 }
 

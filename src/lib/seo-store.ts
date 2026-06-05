@@ -16,7 +16,7 @@ const DATA_FILE = path.join(process.cwd(), "data", "seo.json")
 
 const DEFAULT_GLOBAL: GlobalSeo = {
   siteName: "Webreta",
-  siteUrl: "https://webreta.com",
+  siteUrl: "https://webreta.com.tr",
   defaultTitle: "Webreta | İzmir Web Tasarım ve Geliştirme Ajansı",
   titleTemplate: "%s | Webreta",
   defaultDescription:

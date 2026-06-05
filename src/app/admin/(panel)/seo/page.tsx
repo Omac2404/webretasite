@@ -1,13 +1,15 @@
-import { Globe, FileText, Map } from "lucide-react"
+import { Globe, FileText, Map, BookOpen } from "lucide-react"
 import { readSeo } from "@/lib/seo-store"
+import { listPublished } from "@/lib/blog-store"
 import { GlobalSeoForm } from "./global-form"
 import { PageSeoList } from "./page-form"
 import { SitemapForm } from "./sitemap-form"
+import { BlogSeoList } from "./blog-seo-list"
 
 export const dynamic = "force-dynamic"
 
 export default async function SeoAdminPage() {
-  const seo = await readSeo()
+  const [seo, posts] = await Promise.all([readSeo(), listPublished()])
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-6">
@@ -46,6 +48,23 @@ export default async function SeoAdminPage() {
         </p>
         <div className="mt-4">
           <PageSeoList pages={seo.pages} global={seo.global} />
+        </div>
+      </section>
+
+      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
+        <div className="flex items-center gap-2">
+          <BookOpen size={15} className="text-[#3c639f]" />
+          <div className="text-[13px] font-semibold text-[#0a0a0a]">
+            Blog yazıları (sitemap)
+          </div>
+        </div>
+        <p className="mt-1 text-[12.5px] text-black/50">
+          Yayındaki yazılar otomatik sitemap&apos;e girer. Buradan tek tıkla
+          çıkarıp ekleyebilirsin. Başlık/açıklama gibi SEO alanları için yazı
+          editörünü kullan.
+        </p>
+        <div className="mt-4">
+          <BlogSeoList posts={posts} siteUrl={seo.global.siteUrl} />
         </div>
       </section>
 

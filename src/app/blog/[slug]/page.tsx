@@ -8,6 +8,8 @@ import { AuthorAvatar } from "@/components/AuthorChip"
 import { getPostBySlug, listPublished } from "@/lib/blog-store"
 import { getAuthorById, readAuthors } from "@/lib/authors-store"
 import { readSeo } from "@/lib/seo-store"
+import { readSiteSettings } from "@/lib/site-settings-store"
+import { DEFAULT_LOGO_URL } from "@/lib/site-settings-types"
 import {
   formatDate,
   readingTimeMinutes,
@@ -21,6 +23,44 @@ function abs(base: string, p: string): string | undefined {
   if (/^https?:\/\//i.test(p)) return p
   const trimmed = base.replace(/\/+$/, "")
   return `${trimmed}${p.startsWith("/") ? p : `/${p}`}`
+}
+
+// Build a schema.org BlogPosting JSON-LD object. Fields left undefined are
+// dropped by JSON.stringify, so partial data (missing image/author) still
+// produces valid markup. Google reads this to populate the headline,
+// author, dates and image for rich results.
+function buildArticleJsonLd(
+  post: BlogPost,
+  authorName: string | undefined,
+  g: { siteName: string; siteUrl: string; defaultOgImage: string },
+  logoUrl: string,
+): Record<string, unknown> {
+  const base = g.siteUrl || "https://webreta.com.tr"
+  const canonical = abs(base, `/blog/${post.slug}`)
+  const rawImage = post.coverImage || post.seo?.ogImage || g.defaultOgImage
+  const imageAbs = rawImage ? abs(base, rawImage) : undefined
+  const logoAbs = logoUrl ? abs(base, logoUrl) : undefined
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.seo?.metaTitle?.trim() || post.title,
+    description:
+      post.seo?.metaDescription?.trim() || post.excerpt || undefined,
+    image: imageAbs ? [imageAbs] : undefined,
+    datePublished: post.createdAt || undefined,
+    dateModified: post.updatedAt || post.createdAt || undefined,
+    author: authorName ? { "@type": "Person", name: authorName } : undefined,
+    publisher: {
+      "@type": "Organization",
+      name: g.siteName,
+      ...(logoAbs ? { logo: { "@type": "ImageObject", url: logoAbs } } : {}),
+    },
+    mainEntityOfPage: canonical
+      ? { "@type": "WebPage", "@id": canonical }
+      : undefined,
+    url: canonical,
+  }
 }
 
 export async function generateMetadata({
@@ -85,16 +125,30 @@ export default async function BlogPostPage({
   const post = await getPostBySlug(slug)
   if (!post) notFound()
 
-  const [author, all, allAuthorsData] = await Promise.all([
+  const [author, all, allAuthorsData, seoData, siteSettings] = await Promise.all([
     post.authorId ? getAuthorById(post.authorId) : Promise.resolve(null),
     listPublished(),
     readAuthors(),
+    readSeo(),
+    readSiteSettings(),
   ])
   const authorsById = new Map(allAuthorsData.authors.map((a) => [a.id, a]))
   const related = all.filter((p) => p.slug !== post.slug).slice(0, 3)
+  const jsonLd = buildArticleJsonLd(
+    post,
+    author?.name,
+    seoData.global,
+    siteSettings.logoUrl || DEFAULT_LOGO_URL,
+  )
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
+      {/* Article structured data — helps Google understand the headline,
+          author, dates and image; eligibility for rich results. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <SiteHeader />
       <main className="mx-auto max-w-[760px] px-6 py-12 md:px-12 md:py-16">
         <a

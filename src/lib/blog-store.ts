@@ -229,3 +229,25 @@ export async function togglePublished(id: string): Promise<void> {
   post.updatedAt = new Date().toISOString()
   await writeBlog(data)
 }
+
+// Lightweight toggle used by the SEO panel's blog overview: flip whether a
+// post is listed in sitemap.xml without touching the rest of its content.
+// A missing seo blob means "default" (included), so excluding a bare post
+// has to materialize a seo object; re-including one whose only non-default
+// field was this flag drops the blob again to keep blog.json tidy.
+export async function setPostSitemapInclusion(
+  id: string,
+  include: boolean,
+): Promise<void> {
+  const data = await readBlog()
+  const post = data.posts.find((p) => p.id === id)
+  if (!post) return
+  const next = normalizeSeo({
+    ...(post.seo ?? {}),
+    includeInSitemap: include,
+  })
+  if (next) post.seo = next
+  else delete post.seo
+  post.updatedAt = new Date().toISOString()
+  await writeBlog(data)
+}

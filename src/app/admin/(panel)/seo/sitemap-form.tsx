@@ -16,7 +16,7 @@ export function SitemapForm({
     saveSitemapSettingsAction,
     {},
   )
-  const base = (siteUrl || "https://webreta.com").replace(/\/+$/, "")
+  const base = (siteUrl || "https://webreta.com.tr").replace(/\/+$/, "")
   const sitemapUrl = `${base}/sitemap.xml`
   const robotsUrl = `${base}/robots.txt`
   const [copied, setCopied] = useState<"sitemap" | "robots" | null>(null)
@@ -83,7 +83,7 @@ export function SitemapForm({
           <textarea
             name="extraUrls"
             rows={4}
-            placeholder={"/ozel-sayfa\nhttps://baska-alan.webreta.com/icerik"}
+            placeholder={"/ozel-sayfa\nhttps://baska-alan.webreta.com.tr/icerik"}
             defaultValue={initial.extraUrls.join("\n")}
             className={`${inputCls} resize-none font-mono text-[12.5px]`}
           />

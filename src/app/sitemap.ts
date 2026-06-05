@@ -19,7 +19,7 @@ function abs(base: string, path: string): string {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const seo = await readSeo()
-  const base = seo.global.siteUrl || "https://webreta.com"
+  const base = seo.global.siteUrl || "https://webreta.com.tr"
   const now = new Date()
 
   const entries: MetadataRoute.Sitemap = []

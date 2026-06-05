@@ -271,7 +271,7 @@ const inputCls =
   "w-full rounded-lg border border-black/[0.12] bg-white px-3 py-2 text-[13px] text-[#0a0a0a] placeholder:text-black/30 focus:border-[#3c639f] focus:outline-none focus:ring-2 focus:ring-[#3c639f]/20"
 
 function joinUrl(base: string, href: string): string {
-  const root = (base || "https://webreta.com").replace(/\/+$/, "")
+  const root = (base || "https://webreta.com.tr").replace(/\/+$/, "")
   if (!href || href === "/") return root + "/"
   return root + (href.startsWith("/") ? href : `/${href}`)
 }

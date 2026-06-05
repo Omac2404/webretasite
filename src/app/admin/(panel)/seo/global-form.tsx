@@ -4,6 +4,7 @@ import { useActionState } from "react"
 import { Check, AlertCircle, Loader2 } from "lucide-react"
 import type { GlobalSeo } from "@/lib/seo-types"
 import { saveGlobalSeoAction, type SaveState } from "./actions"
+import { OgImageField } from "./og-image-field"
 
 export function GlobalSeoForm({ initial }: { initial: GlobalSeo }) {
   const [state, formAction, pending] = useActionState<SaveState, FormData>(
@@ -24,12 +25,12 @@ export function GlobalSeoForm({ initial }: { initial: GlobalSeo }) {
         </Field>
         <Field
           label="Site URL"
-          hint="https://webreta.com — sitemap & robots burayı baz alır."
+          hint="https://webreta.com.tr — sitemap & robots burayı baz alır."
         >
           <input
             name="siteUrl"
             type="url"
-            placeholder="https://webreta.com"
+            placeholder="https://webreta.com.tr"
             defaultValue={initial.siteUrl}
             className={inputCls}
           />
@@ -80,29 +81,16 @@ export function GlobalSeoForm({ initial }: { initial: GlobalSeo }) {
           className={`${inputCls} resize-none`}
         />
       </Field>
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        <Field
-          label="Varsayılan paylaşım görseli"
-          hint="OpenGraph / Twitter card için tam URL veya /public/ yolu."
-        >
-          <input
-            name="defaultOgImage"
-            type="text"
-            placeholder="/brand/og-cover.png"
-            defaultValue={initial.defaultOgImage}
-            className={inputCls}
-          />
-        </Field>
-        <Field label="Twitter handle" hint="@webreta">
-          <input
-            name="twitterHandle"
-            type="text"
-            placeholder="@webreta"
-            defaultValue={initial.twitterHandle}
-            className={inputCls}
-          />
-        </Field>
-      </div>
+      <OgImageField initial={initial.defaultOgImage} />
+      <Field label="Twitter handle" hint="@webreta">
+        <input
+          name="twitterHandle"
+          type="text"
+          placeholder="@webreta"
+          defaultValue={initial.twitterHandle}
+          className={inputCls}
+        />
+      </Field>
       <SubmitRow state={state} pending={pending} />
     </form>
   )

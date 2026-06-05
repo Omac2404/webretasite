@@ -169,9 +169,9 @@ const QUOTE_PROJECT_TYPES_SEED: QuoteProjectType[] = [
   },
 ]
 
-// External URL for the Webreta KOBI recommendation. Replace with the real
-// link when ready.
-const WEBRETA_KOBI_URL = "https://kobi.webreta.com"
+// External URL for the Webreta KOBI recommendation — the separate KOBİ
+// landing site we route SME customers to.
+const WEBRETA_KOBI_URL = "https://izmirwebsiteyaptirma.com"
 
 // Contact channels — multi-select with per-channel color treatment.
 // WhatsApp uses its official brand green and inline SVG glyph.

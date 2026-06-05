@@ -151,7 +151,7 @@ export function KobiBannerForm({ initial }: { initial: KobiBanner }) {
                 name="ctaHref"
                 type="text"
                 defaultValue={initial.ctaHref}
-                placeholder="https://kobi.webreta.com"
+                placeholder="https://izmirwebsiteyaptirma.com"
                 className={fieldInput}
               />
             </Field>

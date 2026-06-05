@@ -55,7 +55,7 @@ export const DEFAULT_FOOTER: FooterConfig = {
   ctaHref: "/iletisim",
   copyright: "© {year} Webreta · İzmir merkezli web ajansı",
   contact: {
-    email: "hello@webreta.com",
+    email: "info@webreta.com.tr",
     phone: "+90 (XXX) XXX XX XX",
     address: "İzmir, Türkiye",
   },

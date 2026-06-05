@@ -1,7 +1,7 @@
 {
   "global": {
     "siteName": "Webreta",
-    "siteUrl": "https://webreta.com",
+    "siteUrl": "https://webreta.com.tr",
     "defaultTitle": "Webreta | İzmir Web Tasarım ve Geliştirme Ajansı",
     "titleTemplate": "%s | Webreta",
     "defaultDescription": "Markanıza özel, hızlı ve modern web siteleri. İzmir merkezli web geliştirme ajansı. 2018'den beri 120+ proje.",
@@ -55,6 +55,16 @@
       "includeInSitemap": true,
       "priority": 0.9,
       "changefreq": "monthly"
+    },
+    "/referanslar": {
+      "title": "",
+      "description": "",
+      "keywords": [],
+      "ogImage": "",
+      "noindex": false,
+      "includeInSitemap": true,
+      "priority": 0.7,
+      "changefreq": "weekly"
     },
     "/blog": {
       "title": "Blog | Webreta",

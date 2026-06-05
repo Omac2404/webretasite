@@ -11,20 +11,22 @@
       "coverImage": "",
       "createdAt": "2026-05-21T12:58:29.567Z",
       "updatedAt": "2026-05-21T12:58:29.567Z",
-      "published": true
+      "published": true,
+      "publishAt": ""
     },
     {
       "id": "seed-1",
-      "authorId": "auth-mert",
+      "authorId": "1780664504390-go7pbd",
       "category": "teknik",
       "slug": "web-sitenizin-yuklenme-hizi-neden-onemli",
       "title": "Web sitenizin yüklenme hızı neden iş kaybı yaratıyor?",
       "excerpt": "Bir saniyelik gecikme bile dönüşümleri yaklaşık %10 düşürebiliyor. Performansın doğrudan ciroya yansıyan etkisini ve hızlı bir sitenin nasıl kurulduğunu inceledik.",
-      "content": "Sayfa açılış süresi artık sadece kullanıcı deneyimi meselesi değil; doğrudan iş sonuçlarını etkileyen bir KPI. Google'ın yıllık raporlarına göre 3 saniyenin üstünde açılan mobil sayfaların ziyaretçilerinin %53'ü daha sayfayı görmeden vazgeçiyor. Bir saniyelik fazladan gecikme, e-ticarette ortalama %7 dönüşüm kaybına denk geliyor.\r\n\r\n## Hız neden bu kadar belirleyici?\r\n\r\nKullanıcı bir reklamla sitenize geldiğinde zaten ödediğiniz bir maliyet var. Hızlı yüklenen bir sayfa o ödenen reklamı satışa çevirir; yavaş yüklenen sayfa ise bütçenizi geri dönüşsüz harcatır. Google Ads ve Meta Ads algoritmaları da kaliteli (yani hızlı, kullanıcıyı tutabilen) sayfalara daha düşük CPC sunar — yani yavaş site, hem dönüşüm kaybı hem de tıklama başı maliyet artışı demek.\r\n\r\n## Modern bir hızlı site nasıl kurulur?\r\n\r\nHız tek bir ayarla gelmiyor; mimari kararlarla başlıyor. Tercih ettiğimiz Next.js + Vercel kombinasyonu, sayfaların büyük kısmını sunucuda statik olarak üretip CDN'e dağıtarak ziyaretçiye milisaniyeler içinde teslim ediyor. Görseller modern formatlara (WebP, AVIF) çevriliyor, font'lar self-host ediliyor, JavaScript ise yalnızca gerekli sayfalarda yükleniyor.\r\n\r\n## Webreta'da neyi hedefliyoruz?\r\n\r\nTeslim ettiğimiz tüm projelerde mobil Lighthouse skorumuz 95'in üzerinde. Bu sayı kulağa teknik gelebilir ama anlamı şu: ortalama bir kullanıcı sitenizin tam olarak çalışır halini ilk 1.5 saniyede görüyor. İlk teklif formu doldurma oranlarımız da bu sayede sektör ortalamasının ciddi şekilde üzerinde seyrediyor.\r\n\r\nKısacası, sitenizin hızı satışınızdır. Yavaş yüklenen bir site, sürekli sızdıran bir kova gibi: ne kadar reklam dökersen dök, sonuç sınırlı kalıyor.",
+      "content": "Sayfa açılış süresi artık sadece kullanıcı deneyimi meselesi değil; doğrudan iş sonuçlarını etkileyen bir KPI. Google'ın yıllık raporlarına göre 3 saniyenin üstünde açılan mobil sayfaların ziyaretçilerinin %53'ü daha sayfayı görmeden vazgeçiyor. Bir saniyelik fazladan gecikme, e-ticarette ortalama %7 dönüşüm kaybına denk geliyor.\n\n## Hız neden bu kadar belirleyici?\n\nKullanıcı bir reklamla sitenize geldiğinde zaten ödediğiniz bir maliyet var. Hızlı yüklenen bir sayfa o ödenen reklamı satışa çevirir; yavaş yüklenen sayfa ise bütçenizi geri dönüşsüz harcatır. Google Ads ve Meta Ads algoritmaları da kaliteli (yani hızlı, kullanıcıyı tutabilen) sayfalara daha düşük CPC sunar — yani yavaş site, hem dönüşüm kaybı hem de tıklama başı maliyet artışı demek.\n\n## Modern bir hızlı site nasıl kurulur?\n\nHız tek bir ayarla gelmiyor; mimari kararlarla başlıyor. Tercih ettiğimiz Next.js + Vercel kombinasyonu, sayfaların büyük kısmını sunucuda statik olarak üretip CDN'e dağıtarak ziyaretçiye milisaniyeler içinde teslim ediyor. Görseller modern formatlara (WebP, AVIF) çevriliyor, font'lar self-host ediliyor, JavaScript ise yalnızca gerekli sayfalarda yükleniyor.\n\n## Webreta'da neyi hedefliyoruz?\n\nTeslim ettiğimiz tüm projelerde mobil Lighthouse skorumuz 95'in üzerinde. Bu sayı kulağa teknik gelebilir ama anlamı şu: ortalama bir kullanıcı sitenizin tam olarak çalışır halini ilk 1.5 saniyede görüyor. İlk teklif formu doldurma oranlarımız da bu sayede sektör ortalamasının ciddi şekilde üzerinde seyrediyor.\n\nKısacası, sitenizin hızı satışınızdır. Yavaş yüklenen bir site, sürekli sızdıran bir kova gibi: ne kadar reklam dökersen dök, sonuç sınırlı kalıyor.",
       "coverImage": "/blog/web-sitenizin-yuklenme-hizi-neden-is-kay-1779111831371.jpg",
       "createdAt": "2026-05-12T09:00:00.000Z",
-      "updatedAt": "2026-05-18T13:44:02.715Z",
-      "published": true
+      "updatedAt": "2026-06-05T13:01:55.773Z",
+      "published": true,
+      "publishAt": ""
     },
     {
       "id": "seed-2",
@@ -37,7 +39,8 @@
       "coverImage": "",
       "createdAt": "2026-05-08T10:30:00.000Z",
       "updatedAt": "2026-05-18T13:45:18.426Z",
-      "published": true
+      "published": true,
+      "publishAt": ""
     },
     {
       "id": "seed-3",
@@ -50,7 +53,8 @@
       "coverImage": "",
       "createdAt": "2026-05-04T14:00:00.000Z",
       "updatedAt": "2026-05-04T14:00:00.000Z",
-      "published": true
+      "published": true,
+      "publishAt": ""
     },
     {
       "id": "seed-4",
@@ -63,7 +67,8 @@
       "coverImage": "",
       "createdAt": "2026-04-28T11:15:00.000Z",
       "updatedAt": "2026-04-28T11:15:00.000Z",
-      "published": true
+      "published": true,
+      "publishAt": ""
     },
     {
       "id": "seed-5",
@@ -76,7 +81,8 @@
       "coverImage": "",
       "createdAt": "2026-04-22T08:45:00.000Z",
       "updatedAt": "2026-04-22T08:45:00.000Z",
-      "published": true
+      "published": true,
+      "publishAt": ""
     },
     {
       "id": "seed-6",
@@ -89,7 +95,8 @@
       "coverImage": "",
       "createdAt": "2026-05-16T12:00:00.000Z",
       "updatedAt": "2026-05-16T12:00:00.000Z",
-      "published": true
+      "published": true,
+      "publishAt": ""
     },
     {
       "id": "seed-7",
@@ -102,7 +109,8 @@
       "coverImage": "",
       "createdAt": "2026-05-14T16:30:00.000Z",
       "updatedAt": "2026-05-14T16:30:00.000Z",
-      "published": true
+      "published": true,
+      "publishAt": ""
     }
   ]
 }

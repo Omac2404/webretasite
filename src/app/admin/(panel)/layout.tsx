@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import Image from "next/image"
-import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, MailPlus, Send, Globe, Info, Search, Smartphone } from "lucide-react"
+import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, MailPlus, Send, Globe, Info, Search, Smartphone, Signpost, Images } from "lucide-react"
 import { SESSION_COOKIE, verifySession } from "@/lib/admin-session"
 import { Toaster } from "@/components/admin/Toaster"
 import { findAdminByEmail } from "@/lib/admin-users-store"
@@ -112,6 +112,9 @@ export default async function PanelLayout({
           <SideLink href="/admin/yazarlar" icon={<Users size={16} />}>
             Yazarlar
           </SideLink>
+          <SideLink href="/admin/gorseller" icon={<Images size={16} />}>
+            Görseller
+          </SideLink>
 
           <SideGroup label="Form & İletişim" />
           <SideLink
@@ -143,6 +146,9 @@ export default async function PanelLayout({
           </SideLink>
           <SideLink href="/admin/seo" icon={<Search size={16} />}>
             SEO
+          </SideLink>
+          <SideLink href="/admin/yonlendirmeler" icon={<Signpost size={16} />}>
+            Yönlendirmeler
           </SideLink>
 
           <SideGroup label="Sistem" />

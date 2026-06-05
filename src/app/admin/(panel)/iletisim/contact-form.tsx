@@ -57,7 +57,7 @@ export function ContactAdminForm({ content }: { content: ContactContent }) {
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field label="E-posta">
-            <input name="info_email" type="text" defaultValue={content.info.email} placeholder="hello@webreta.com" className={inputCls} />
+            <input name="info_email" type="text" defaultValue={content.info.email} placeholder="info@webreta.com.tr" className={inputCls} />
           </Field>
           <Field label="Telefon">
             <input name="info_phone" type="text" defaultValue={content.info.phone} placeholder="+90 (XXX) XXX XX XX" className={inputCls} />

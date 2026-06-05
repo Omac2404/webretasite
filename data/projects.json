@@ -1,6 +1,48 @@
 {
   "projects": [
     {
+      "id": "1780660643269-gdej2p",
+      "companyId": "1778874502190-goprh0",
+      "category": "dev",
+      "type": "Web Sitesi",
+      "publishDate": "2025-06-06",
+      "demand": "Kurumsal çizgide markanın resmi belgeleri ve ürün gruplarının sergilenmesi",
+      "solution": "Marka renklerine göre tasarlanmış kurumsal web site",
+      "demandDetail": "Pet shop sektöründe faaliyet gösteren D&D Petshop, marka kimliğini profesyonel bir çizgide yansıtan; ürün gruplarını (kedi, köpek, bakım-sağlık, aksesuar) düzenli sergileyen ve yetkili satıcı belgeleriyle marka güvenilirliğini öne çıkaran kurumsal bir web sitesi istedi. Resmi belgelerin ve temsil edilen markaların ziyaretçiye net biçimde sunulması öncelikli beklentiydi.",
+      "solutionDetail": "Markanın renk paletine ve kimliğine uygun, sade ve güven veren bir kurumsal web sitesi geliştirdik. Ürünleri kategori bazında düzenleyen bir vitrin yapısı, temsil edilen markaların listelendiği bir bölüm ve yetkili satıcı belgelerinin sergilendiği özel bir alan kurduk. Mağaza görselleri ve online satış sitesine (petimemama.com) yönlendiren entegrasyonla birlikte, markayı hem güçlü hem de güvenilir konumlandıran kurumsal bir dijital vitrin oluşturduk.",
+      "siteUrl": "https://ddpetshop.com/",
+      "createdAt": "2026-06-05T11:57:23.269Z",
+      "updatedAt": "2026-06-05T11:57:23.269Z"
+    },
+    {
+      "id": "1780660092010-6shst1",
+      "companyId": "1780315848477-my7wj5",
+      "category": "dev",
+      "type": "Web Sitesi",
+      "publishDate": "2026-02-15",
+      "demand": "Tüm marka ürünlerinin kolay kategorizasyonu ve stok takibi",
+      "solution": "Ürün filtreleme, sergileme ve stokta aratma modülü aynı ayna yapıldı",
+      "demandDetail": "Endüstriyel otomasyon ürünleri tedarik eden Çağlayan Otomasyon, Siemens, Schneider, ABB, Omron gibi çok sayıda markanın PLC, HMI panel, hız kontrol cihazı, röle ve sensör gibi geniş ürün gamını tek bir platformda düzenli şekilde sunmak istedi. Müşterilerin ürünleri hem markaya hem kategoriye göre kolayca süzebileceği ve aradıkları parçanın stok durumunu hızlıca sorgulayabileceği bir sistem öncelikli beklentiydi.",
+      "solutionDetail": "Markanın kurumsal kimliğine uygun, geniş ürün portföyünü düzenli yönetebilen kapsamlı bir e-ticaret sitesi geliştirdik. Ürünleri hem markaya hem de kategoriye göre süzmeyi sağlayan çift eksenli bir filtreleme ve sergileme yapısı kurduk; buna parça numarasıyla hızlı sonuç veren bir stokta arama modülü ekledik. Böylece binlerce ürün sistemli biçimde kategorize edilerek, müşterinin aradığını saniyeler içinde bulup stok durumunu görebildiği güçlü bir tedarik platformu oluşturduk.",
+      "siteUrl": "https://caglayanotomasyon.com/",
+      "createdAt": "2026-06-05T11:48:12.010Z",
+      "updatedAt": "2026-06-05T11:48:12.010Z"
+    },
+    {
+      "id": "1780656889806-o316c2",
+      "companyId": "1780316082535-r1621h",
+      "category": "dev",
+      "type": "Web Sitesi",
+      "publishDate": "2025-08-15",
+      "demand": "Ürün gruplarının düzenli bir organizasyon halinde sergilenmesi",
+      "solution": "Ürünleri sistemli bir kategori yapısında düzenlendiği kurumsal izlenim",
+      "demandDetail": "Endüstriyel vana ve akışkan kontrol sistemleri alanında faaliyet gösteren Akkonsis, temsil ettiği farklı markaları (WFE, GFE, Lorzen, GOTEB vb.) ve geniş vana ürün gamını ziyaretçilerin kolayca inceleyebileceği düzenli bir yapıda sergilemek istedi. Ürünlerin marka ve vana tipine göre sistemli şekilde gruplandığı, kurumsal ve güven veren bir web sitesi öncelikli beklentiydi.",
+      "solutionDetail": "Markanın kurumsal kimliğine uygun, profesyonel ve güçlü bir endüstriyel görsel dile sahip web sitesi geliştirdik. Ürünleri hem temsil edilen markalara hem de vana tiplerine (bilyalı, kelebek, sürgülü, çek, glob vb.) göre düzenleyen sistemli bir kategori yapısı kurduk. Video destekli ürün tanıtımları ve sektörel uygulama alanlarıyla birlikte, ziyaretçinin geniş ürün portföyünü kolayca keşfedebildiği, markayı sektöründe güçlü konumlandıran kurumsal bir vitrin oluşturduk.",
+      "siteUrl": "https://akkonsis.com.tr/",
+      "createdAt": "2026-06-05T10:54:49.806Z",
+      "updatedAt": "2026-06-05T10:54:49.806Z"
+    },
+    {
       "id": "1780406786457-nojyei",
       "companyId": "1778874515972-rpcxin",
       "category": "dev",

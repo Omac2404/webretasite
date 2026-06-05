@@ -1,11 +1,14 @@
 "use server"
 
+import { promises as fs } from "node:fs"
+import path from "node:path"
 import { revalidatePath } from "next/cache"
 import {
   updateGlobalSeo,
   updatePageSeo,
   updateSitemapSettings,
 } from "@/lib/seo-store"
+import { setPostSitemapInclusion } from "@/lib/blog-store"
 import {
   CHANGE_FREQS,
   SEO_MANAGED_PAGES,
@@ -13,6 +16,37 @@ import {
 } from "@/lib/seo-types"
 
 export type SaveState = { ok?: boolean; error?: string }
+
+// Default OG image upload. Saves into /public/og and returns the public
+// path; the caller (OgImageField) drops it into the global form's
+// defaultOgImage input so the regular "Kaydet" persists it to seo.json.
+const OG_UPLOAD_DIR = path.join(process.cwd(), "public", "og")
+const OG_MAX_BYTES = 4 * 1024 * 1024
+const OG_ALLOWED = new Set(["image/png", "image/jpeg", "image/webp"])
+
+export type UploadState = { ok?: boolean; path?: string; error?: string }
+
+export async function uploadOgImageAction(
+  formData: FormData,
+): Promise<UploadState> {
+  const file = formData.get("image")
+  if (!(file instanceof File) || file.size === 0) {
+    return { error: "Görsel seçilmedi." }
+  }
+  if (file.size > OG_MAX_BYTES) {
+    return { error: "Görsel 4 MB'dan büyük olamaz." }
+  }
+  if (!OG_ALLOWED.has(file.type)) {
+    return { error: "Sadece PNG, JPG veya WebP yükleyebilirsin." }
+  }
+  const ext =
+    file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg"
+  await fs.mkdir(OG_UPLOAD_DIR, { recursive: true })
+  const filename = `og-${Date.now()}.${ext}`
+  const bytes = Buffer.from(await file.arrayBuffer())
+  await fs.writeFile(path.join(OG_UPLOAD_DIR, filename), bytes)
+  return { ok: true, path: `/og/${filename}` }
+}
 
 function parseKeywords(raw: string): string[] {
   return raw
@@ -115,4 +149,16 @@ export async function saveSitemapSettingsAction(
   revalidatePath("/sitemap.xml")
   revalidatePath("/robots.txt")
   return { ok: true }
+}
+
+// Toggle a single blog post's sitemap inclusion from the SEO panel's blog
+// overview. `include` is the desired next state ("on" = in sitemap).
+export async function toggleBlogSitemapAction(formData: FormData): Promise<void> {
+  const id = String(formData.get("id") ?? "")
+  if (!id) return
+  const include = formData.get("include") === "on"
+  await setPostSitemapInclusion(id, include)
+  revalidatePath("/admin/seo")
+  revalidatePath("/sitemap.xml")
+  revalidatePath(`/blog`)
 }

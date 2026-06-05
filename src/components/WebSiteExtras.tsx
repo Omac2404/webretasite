@@ -22,7 +22,7 @@ const SEED_BANNER: KobiBanner = {
     "Mobil + masaüstü uyumlu",
   ],
   ctaLabel: "Webreta KOBİ'yi keşfet",
-  ctaHref: "https://kobi.webreta.com",
+  ctaHref: "https://izmirwebsiteyaptirma.com",
 }
 
 export default function WebSiteExtras() {

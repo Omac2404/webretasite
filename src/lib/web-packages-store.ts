@@ -53,7 +53,7 @@ const DEFAULT_KOBI_BANNER: KobiBanner = {
     "Mobil + masaüstü uyumlu",
   ],
   ctaLabel: "Webreta KOBİ'yi keşfet",
-  ctaHref: "https://kobi.webreta.com",
+  ctaHref: "https://izmirwebsiteyaptirma.com",
 }
 
 const DATA_FILE = path.join(process.cwd(), "data", "web-packages.json")

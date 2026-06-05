@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic"
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const seo = await readSeo()
-  const base = seo.global.siteUrl || "https://webreta.com"
+  const base = seo.global.siteUrl || "https://webreta.com.tr"
   const trimmedBase = base.replace(/\/+$/, "")
 
   const disallow = ["/admin", "/admin/", "/api/"]

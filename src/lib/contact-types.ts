@@ -51,7 +51,7 @@ export const DEFAULT_CONTACT: ContactContent = {
       "Yeni bir web projeniz, mevcut sitenizde iyileştirme fikriniz veya dijital reklam stratejiniz için bizimle iletişime geçin. 24 saat içinde geri dönüyoruz.",
   },
   info: {
-    email: "hello@webreta.com",
+    email: "info@webreta.com.tr",
     phone: "+90 (XXX) XXX XX XX",
     addressLine1: "İzmir, Türkiye",
     addressLine2: "",

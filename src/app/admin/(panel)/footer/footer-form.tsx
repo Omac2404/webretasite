@@ -117,7 +117,7 @@ export function FooterForm({
               name="contact_email"
               type="text"
               defaultValue={config.contact.email}
-              placeholder="hello@webreta.com"
+              placeholder="info@webreta.com.tr"
               className={inputCls}
             />
           </Field>
