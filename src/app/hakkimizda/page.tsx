@@ -25,7 +25,7 @@ export default async function HakkimizdaPage() {
       <SiteHeader />
       <main>
         {/* Hero — kompakt giriş */}
-        <section className="relative mx-auto max-w-[1280px] px-6 pb-10 pt-16 md:px-12 md:pb-14 md:pt-24">
+        <section className="relative mx-auto max-w-[1280px] px-6 pb-10 pt-10 md:px-12 md:pb-14 md:pt-14">
           {/* Dekoratif nokta deseni — sağ üst köşede, container'dan
               dışarıya taşacak şekilde; root'taki overflow-x-clip yatay
               kaymayı engelliyor. */}
@@ -39,13 +39,13 @@ export default async function HakkimizdaPage() {
             }}
           />
 
-          <div className="relative z-10">
+          <div className="relative z-10 text-center">
             {about.hero.kicker && (
               <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
                 {about.hero.kicker}
               </span>
             )}
-            <h1 className="mt-3 text-[36px] leading-[1.05] tracking-[-0.03em] text-[#0a0a0a] md:text-[56px]">
+            <h1 className="mt-3 text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
               {about.hero.titleLeader && (
                 <span className="font-normal">{about.hero.titleLeader}</span>
               )}
@@ -61,13 +61,13 @@ export default async function HakkimizdaPage() {
             {about.hero.subtitle &&
               (isHtmlBody(about.hero.subtitle) ? (
                 <div
-                  className="about-hero-subtitle mt-5 text-[17px] leading-relaxed text-black/60 md:text-[18px] [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-[#0a0a0a]"
+                  className="about-hero-subtitle mx-auto mt-5 max-w-[640px] text-[17px] leading-relaxed text-black/60 md:text-[18px] [&_p]:mb-2 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_strong]:text-[#0a0a0a]"
                   dangerouslySetInnerHTML={{
                     __html: sanitizeAboutBody(about.hero.subtitle),
                   }}
                 />
               ) : (
-                <p className="mt-5 text-[17px] leading-relaxed text-black/60 md:text-[18px]">
+                <p className="mx-auto mt-5 max-w-[640px] text-[17px] leading-relaxed text-black/60 md:text-[18px]">
                   {about.hero.subtitle}
                 </p>
               ))}

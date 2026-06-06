@@ -111,20 +111,19 @@ export default function ReferanslarClient() {
       className="mx-auto max-w-[1280px] px-6 pb-20 pt-10 md:px-12 md:pt-14"
     >
       {/* Heading */}
-      <div className="mb-8">
+      <div className="mb-8 text-center">
         <h1 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
           <span className="font-normal">Neler </span>
           <span className="font-bold text-[#3c639f]">Yaptık?</span>
         </h1>
-        <p className="mt-3 max-w-[640px] text-[15px] leading-relaxed text-black/60">
-          Bugüne kadar tamamladığımız projelerin tamamı. Bir karta tıklayın;
-          talebi, çözümü ve dilerseniz canlı projeyi inceleyin.
+        <p className="mx-auto mt-3 max-w-[640px] text-[15px] leading-relaxed text-black/60">
+          Bir karta tıklayın, talebi ve çözümü inceleyin.
         </p>
       </div>
 
       {/* Segmented control */}
       <div
-        className="mb-8 inline-flex items-center rounded-full p-1"
+        className="mb-8 mx-auto flex w-fit items-center rounded-full p-1"
         style={{
           background: "#f1f3f7",
           border: "1px solid rgba(60, 99, 159, 0.08)",

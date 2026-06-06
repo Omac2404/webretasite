@@ -250,3 +250,47 @@
   .gp-halo { opacity: 0.5; }
 }
 
+/* Header navigasyon hover/aktif hare'si — link arkasında yumuşak, dalgalı
+   marka-mavisi (#3c639f) blob. Anında değil, opacity ile yumuşak belirir;
+   görünürken organik olarak dalgalanır (border-radius morph + hafif
+   scale/rotate). Sınıflar: link'te `.group`, arkadaki span'de `.nav-aura`
+   (+ aktif sayfada `.is-active`). */
+.nav-aura {
+  background: radial-gradient(
+    68% 78% at 50% 50%,
+    rgba(60, 99, 159, 0.22) 0%,
+    rgba(60, 99, 159, 0.13) 45%,
+    rgba(60, 99, 159, 0) 78%
+  );
+  border-radius: 46% 54% 52% 48% / 54% 46% 54% 46%;
+  opacity: 0;
+  filter: blur(3px);
+  transition: opacity 420ms ease;
+}
+.group:hover > .nav-aura,
+.nav-aura.is-active {
+  opacity: 1;
+  animation: navAuraWave 7s ease-in-out infinite;
+}
+@keyframes navAuraWave {
+  0%,
+  100% {
+    border-radius: 46% 54% 52% 48% / 54% 46% 54% 46%;
+    transform: scale(1) rotate(0deg);
+  }
+  33% {
+    border-radius: 58% 42% 47% 53% / 44% 58% 42% 56%;
+    transform: scale(1.06) rotate(2deg);
+  }
+  66% {
+    border-radius: 42% 58% 56% 44% / 57% 43% 58% 42%;
+    transform: scale(1.02) rotate(-2deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover > .nav-aura,
+  .nav-aura.is-active {
+    animation: none;
+  }
+}
+

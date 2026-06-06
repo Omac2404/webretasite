@@ -52,7 +52,6 @@ export default function FloatMenu({ config }: { config: FloatMenuConfig }) {
   const adsEnabled = config.ads.enabled
   const contactEnabled = config.contact.enabled
   const visibleCount = [webEnabled, adsEnabled, contactEnabled].filter(Boolean).length
-  if (visibleCount === 0) return null
 
   const phoneHref = toTelHref(config.contact.phone)
   const whatsappHref = toWhatsappHref(
@@ -60,10 +59,34 @@ export default function FloatMenu({ config }: { config: FloatMenuConfig }) {
     config.contact.whatsappMessage,
   )
 
+  // Mobilde 3'lü bar (en az bir buton açıkken); masaüstü & tablette ise sağ
+  // altta tek WhatsApp butonu (numara/mesaj İletişim alanından gelir).
+  const showMobileBar = visibleCount > 0
+  const showDesktopWa = config.desktopWhatsapp.enabled && Boolean(whatsappHref)
+  if (!showMobileBar && !showDesktopWa) return null
+
   return (
     <>
-      {/* Sayfa altında menüye yer açan boşluk — fixed menünün içeriği örtmemesi için. */}
-      <div aria-hidden className="h-24 md:hidden" />
+      {/* Masaüstü + tablet: sağ altta tek WhatsApp butonu — beyaz daire,
+          yeşil WhatsApp glyph. Mobilde gizli, md+ görünür. */}
+      {showDesktopWa && (
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-track="floatmenu:desktop-whatsapp"
+          data-track-label="Masaüstü WhatsApp"
+          aria-label="WhatsApp ile yazın"
+          className="fixed bottom-5 right-5 z-[60] hidden h-14 w-14 items-center justify-center rounded-full border border-black/[0.06] bg-white shadow-[0_8px_24px_-6px_rgba(0,0,0,0.20),0_0_18px_1px_rgba(37,211,102,0.45)] transition-shadow transition-transform hover:scale-105 hover:shadow-[0_8px_24px_-6px_rgba(0,0,0,0.22),0_0_26px_3px_rgba(37,211,102,0.60)] active:scale-95 md:flex"
+        >
+          <WhatsAppGlyph size={30} className="text-[#25d366]" />
+        </a>
+      )}
+
+      {showMobileBar && (
+        <>
+          {/* Sayfa altında menüye yer açan boşluk — fixed menünün içeriği örtmemesi için. */}
+          <div aria-hidden className="h-24 md:hidden" />
 
       <div
         ref={wrapperRef}
@@ -168,6 +191,8 @@ export default function FloatMenu({ config }: { config: FloatMenuConfig }) {
           )}
         </div>
       </div>
+        </>
+      )}
 
       <style jsx global>{`
         @keyframes fm-pop {

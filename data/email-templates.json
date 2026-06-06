@@ -9,7 +9,7 @@
   },
   "quote_user_confirmation": {
     "subject": "Teklif talebiniz alındı — Webreta",
-    "body": "Merhaba {name},\r\n\r\nTeklif sihirbazını doldurduğunuz için teşekkürler. Talebiniz bize ulaştı.\r\n\r\nTercih ettiğiniz iletişim kanalı/kanalları: {channels}\r\nGörüşme için belirttiğiniz zaman: {date} {time}\r\n\r\nYukarıdaki tarih/saatte sizinle iletişime geçeceğiz. Görüşmek üzere...\r\n\r\nİyi çalışmalar dileriz.\r\nWebreta Web Teknolojileri\r\nwebreta.com.tr"
+    "body": "Merhaba {name},\r\n\r\nTeklif aracını doldurduğunuz için teşekkürler. Talebiniz bize ulaştı.\r\n\r\nTercih ettiğiniz iletişim kanalı/kanalları: {channels}\r\nGörüşme için belirttiğiniz zaman: {date} {time}\r\n\r\nYukarıdaki tarih/saatte sizinle iletişime geçeceğiz. Görüşmek üzere...\r\n\r\nİyi çalışmalar dileriz.\r\nWebreta Web Teknolojileri\r\nwebreta.com.tr"
   },
   "quote_admin_notification": {
     "subject": "Yeni teklif talebi: {projectType} · {name}",

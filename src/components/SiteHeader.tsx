@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 import { Menu, X, BookOpen, ArrowRight } from "lucide-react"
 
 const NAV_ITEMS = [
@@ -25,6 +26,11 @@ export default function SiteHeader({
   logoUrl?: string
 } = {}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname() ?? "/"
+  const isActive = (href: string) =>
+    href === "/"
+      ? pathname === "/"
+      : pathname === href || pathname.startsWith(`${href}/`)
 
   // Lock body scroll while the drawer is open, restore on close. Also
   // closes the drawer on Escape so keyboard users aren't trapped.
@@ -64,18 +70,32 @@ export default function SiteHeader({
           )}
         </a>
 
-        <div className="hidden items-center gap-8 md:flex">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              data-track={item.track}
-              data-track-label={item.label}
-              className="text-[14px] text-black/60 transition-colors hover:text-[#0a0a0a]"
-            >
-              {item.label}
-            </a>
-          ))}
+        <div className="hidden items-center gap-2 md:flex">
+          {NAV_ITEMS.map((item) => {
+            const active = isActive(item.href)
+            return (
+              <a
+                key={item.label}
+                href={item.href}
+                data-track={item.track}
+                data-track-label={item.label}
+                aria-current={active ? "page" : undefined}
+                className={`group relative rounded-full px-3.5 py-2 text-[14px] font-medium transition-colors duration-300 ${
+                  active ? "text-[#3c639f]" : "text-[#0a0a0a] hover:text-[#3c639f]"
+                }`}
+              >
+                {/* Yumuşak dalgalı marka-mavisi hare — hover/aktifte opacity
+                    ile yumuşakça belirir, görünürken organik dalgalanır. */}
+                <span
+                  aria-hidden
+                  className={`nav-aura pointer-events-none absolute inset-0${
+                    active ? " is-active" : ""
+                  }`}
+                />
+                <span className="relative">{item.label}</span>
+              </a>
+            )
+          })}
         </div>
 
         <a

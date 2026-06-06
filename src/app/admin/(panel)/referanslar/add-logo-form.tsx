@@ -1,25 +1,26 @@
 "use client"
 
 import { useActionState, useEffect, useRef, useState } from "react"
-import { Upload, Zap, Snail } from "lucide-react"
+import { Zap, Snail } from "lucide-react"
+import type { MediaItem } from "@/lib/media-store"
+import { MediaPicker } from "@/components/admin/MediaPicker"
 import { addLogoAction, type AddLogoState } from "./actions"
 
 const INITIAL: AddLogoState = {}
 
-export function AddLogoForm() {
+export function AddLogoForm({ media }: { media: MediaItem[] }) {
   const [state, formAction, pending] = useActionState(addLogoAction, INITIAL)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [filename, setFilename] = useState<string | null>(null)
   const [row, setRow] = useState<"a" | "b">("a")
+  // Bumping a key remounts MediaPicker so its selection clears after submit.
+  const [pickerKey, setPickerKey] = useState(0)
   const formRef = useRef<HTMLFormElement>(null)
 
   // Clear inputs + preview after a successful submit.
   useEffect(() => {
     if (state.ok) {
       formRef.current?.reset()
-      setPreview(null)
-      setFilename(null)
       setRow("a")
+      setPickerKey((k) => k + 1)
     }
   }, [state.ok])
 
@@ -27,37 +28,24 @@ export function AddLogoForm() {
     <form ref={formRef} action={formAction} className="flex flex-col gap-3">
       <input type="hidden" name="row" value={row} />
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto]">
-        <input
-          name="name"
-          type="text"
-          required
-          placeholder="Firma ismi"
-          className="rounded-lg border border-black/[0.1] bg-white px-3 py-2.5 text-[13px] text-[#0a0a0a] outline-none transition-colors focus:border-[#3c639f]"
-        />
+      <input
+        name="name"
+        type="text"
+        required
+        placeholder="Firma ismi"
+        className="rounded-lg border border-black/[0.1] bg-white px-3 py-2.5 text-[13px] text-[#0a0a0a] outline-none transition-colors focus:border-[#3c639f]"
+      />
 
-        <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-black/[0.15] bg-white px-3 py-2.5 text-[13px] text-black/60 transition-colors hover:bg-black/[0.02]">
-          <Upload size={14} />
-          <span className="truncate">{filename ?? "Görsel seç"}</span>
-          <input
-            name="image"
-            type="file"
-            accept="image/png,image/jpeg,image/webp,image/svg+xml"
-            required
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0]
-              if (!f) {
-                setPreview(null)
-                setFilename(null)
-                return
-              }
-              setFilename(f.name)
-              const url = URL.createObjectURL(f)
-              setPreview(url)
-            }}
-          />
-        </label>
+      <div className="flex flex-col gap-1.5">
+        <div className="text-[11.5px] font-medium uppercase tracking-[0.08em] text-black/45">
+          Logo görseli
+        </div>
+        <MediaPicker
+          key={pickerKey}
+          name="imageUrl"
+          media={media}
+          variant="logo"
+        />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -81,16 +69,6 @@ export function AddLogoForm() {
           />
         </div>
       </div>
-
-      {preview && (
-        <div className="flex items-center gap-3 rounded-lg border border-black/[0.06] bg-[#fafbfd] p-3">
-          <div className="flex h-14 w-24 items-center justify-center overflow-hidden rounded-md border border-black/[0.06] bg-white">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={preview} alt="Önizleme" className="max-h-full max-w-full object-contain" />
-          </div>
-          <span className="text-[12px] text-black/50">Önizleme</span>
-        </div>
-      )}
 
       {state.error && (
         <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12.5px] text-red-700">

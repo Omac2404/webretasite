@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "title": "Çerez Bildirimi",
+  "message": "Bu siteyi ziyaret ettiğinizde çerez politikamızı kabul etmiş olursunuz. Performansı iyileştirmek ve kullanıcı deneyimini analiz etmek için çerezler kullanıyoruz.",
+  "buttonLabel": "Tamam",
+  "policyUrl": "",
+  "policyLabel": "Çerez Politikası",
+  "reshowHours": 24,
+  "version": 5
+}

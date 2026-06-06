@@ -2,18 +2,18 @@
   "titleLeading": "Sıradaki",
   "titleHighlight": "müşterimiz siz olun",
   "titleTrailing": "",
-  "subtitle": "Bir e-posta, bir mesaj, bir telefon — yeterli. 24 saat içinde dönüş yapıyoruz.",
+  "subtitle": "Form, telefon veya Whatsapp üzerinden bize ulaşabilirsiniz.",
   "ctaLabel": "Bize Ulaşın",
   "ctaHref": "/iletisim",
-  "copyright": "© {year} Webreta · İzmir merkezli web ajansı",
+  "copyright": "© {year} Webreta Web Teknolojileri",
   "contact": {
     "email": "info@webreta.com.tr",
-    "phone": "+90 (XXX) XXX XX XX",
-    "address": "İzmir, Türkiye"
+    "phone": "+90 542 580 94 92",
+    "address": "Kazımdirik mahallesi 220 Sokak No:3A Bornova / İzmir"
   },
   "socials": {
     "instagram": "https://www.instagram.com/webreta/",
-    "linkedin": "#",
+    "linkedin": "https://www.linkedin.com/company/webreta",
     "x": "",
     "facebook": "",
     "youtube": ""
@@ -27,6 +27,7 @@
     "/iletisim"
   ],
   "legalPageIds": [
-    "1779141742597-o5dylc"
+    "1779141742597-o5dylc",
+    "1780754395413-9fyppw"
   ]
 }

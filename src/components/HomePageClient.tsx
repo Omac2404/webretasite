@@ -1251,7 +1251,17 @@ function ProjectsSection({
   )
 }
 
-export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
+export default function Home({
+  logoUrl,
+  hero: heroProp,
+}: {
+  logoUrl?: string
+  hero?: {
+    subheadline: string
+    primaryButton: { label: string; href: string }
+    secondaryButton: { label: string; href: string }
+  }
+} = {}) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -1260,40 +1270,14 @@ export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
   const [isTransitioning, setIsTransitioning] = useState(true)
   const [hintActive, setHintActive] = useState(false)
 
-  // Service-card scroll-in + hover replay. Each card has its own observer,
-  // and a `playKey` counter that increments to trigger a remount of the
-  // decorative SVG so its CSS animations restart from scratch. On desktop
-  // both cards typically enter the viewport together — the reklam card has
-  // a fixed delay so the two animations play in sequence (web first, then
-  // reklam). On mobile the cards stack and each fires independently when
-  // its threshold is crossed.
-  const webCardRef = useRef<HTMLAnchorElement>(null)
-  const reklamCardRef = useRef<HTMLAnchorElement>(null)
+  // Service-card decorative SVGs render in their FINAL (fully built) state
+  // by default — the build-in animation does NOT autoplay on scroll. It
+  // only runs on hover: `playKey` bumps on mouse-enter to remount the SVG
+  // (restarting the CSS animation from scratch); the `play` class (added
+  // once playKey > 0) is what enables the animation rules. Without it the
+  // `:not(.play)` override below pins everything to the completed state.
   const [webPlayKey, setWebPlayKey] = useState(0)
   const [reklamPlayKey, setReklamPlayKey] = useState(0)
-  const webEnteredRef = useRef(false)
-  const reklamEnteredRef = useRef(false)
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return
-          if (entry.target === webCardRef.current && !webEnteredRef.current) {
-            webEnteredRef.current = true
-            setWebPlayKey((k) => k + 1)
-          } else if (entry.target === reklamCardRef.current && !reklamEnteredRef.current) {
-            reklamEnteredRef.current = true
-            // Stagger after the web card so on desktop they play in sequence.
-            setTimeout(() => setReklamPlayKey((k) => k + 1), 700)
-          }
-        })
-      },
-      { threshold: 0.7 },
-    )
-    if (webCardRef.current) observer.observe(webCardRef.current)
-    if (reklamCardRef.current) observer.observe(reklamCardRef.current)
-    return () => observer.disconnect()
-  }, [])
 
   // Partner logos — fetched from the admin store. Seeded with the
   // hardcoded list so the marquee renders something on first paint,
@@ -1327,16 +1311,22 @@ export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
   // Hero subheadline + CTA buttons — admin-managed via /admin (the
   // dashboard page). Seeded with the defaults so first paint renders the
   // original copy; replaced once /api/hero resolves.
+  // Seeded from the server-provided prop so first paint shows the real
+  // subheadline (no default→real swap / layout jump). The fetch below still
+  // refreshes it on the client; since the values match, there's no visible
+  // change.
   const [hero, setHero] = useState<{
     subheadline: string
     primaryButton: { label: string; href: string }
     secondaryButton: { label: string; href: string }
-  }>({
-    subheadline:
-      "Hazır temalar değil. Hızlı, modern ve markanıza sıfırdan kodlanmış web çözümleri.",
-    primaryButton: { label: "Projemi konuşalım", href: "/web-site" },
-    secondaryButton: { label: "Çalışmalarımız", href: "/iletisim" },
-  })
+  }>(
+    heroProp ?? {
+      subheadline:
+        "Hazır temalar değil. Hızlı, modern ve markanıza sıfırdan kodlanmış web çözümleri.",
+      primaryButton: { label: "Projemi konuşalım", href: "/web-site" },
+      secondaryButton: { label: "Çalışmalarımız", href: "/iletisim" },
+    },
+  )
   useEffect(() => {
     let cancelled = false
     fetch("/api/hero")
@@ -1953,7 +1943,12 @@ export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
   const translateY = -(currentIndex * STEP)
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    // overflow-x-clip: dekoratif el/nokta görselleri (hero'daki mobil
+    // peace-hand vb.) bölüm kenarlarından bilerek taşıyor; bunlar
+    // kırpılmazsa sayfa ~16px yatay kayıyor ve mobilde fixed yüzen menü
+    // sağa kaymış görünüyordu. `clip`, hidden'ın aksine scroll-container
+    // oluşturmadığı için sticky header'ı bozmaz. Sadece anasayfaya özel.
+    <div className="min-h-screen overflow-x-clip bg-[#fafafa]">
 
       <SiteHeader logoUrl={logoUrl} />
 
@@ -2427,7 +2422,6 @@ export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
                 blocks stagger-fade in. Plays once when the card scrolls into
                 view, replays on hover. */}
             <a
-              ref={webCardRef}
               href="/web-site"
               data-track="home:service-card:web-site"
               data-track-label="Web Site kartı"
@@ -2439,7 +2433,7 @@ export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
               <svg
                 key={webPlayKey}
                 aria-hidden
-                className="web-mockup pointer-events-none absolute -right-6 -top-6 h-[230px] w-[230px] opacity-65 transition-opacity duration-500 group-hover:opacity-95 md:-right-10 md:-top-10 md:h-[340px] md:w-[340px]"
+                className={`web-mockup ${webPlayKey > 0 ? "play " : ""}pointer-events-none absolute -right-6 -top-6 h-[230px] w-[230px] opacity-65 transition-opacity duration-500 group-hover:opacity-95 md:-right-10 md:-top-10 md:h-[340px] md:w-[340px]`}
                 viewBox="0 0 176 176"
               >
                 <defs>
@@ -2558,7 +2552,6 @@ export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
             {/* Card 2: Dijital Reklamlar — rising line chart motif. Same
                 viewport-entry + hover replay pattern as the web card. */}
             <a
-              ref={reklamCardRef}
               href="/dijital-reklamlar"
               data-track="home:service-card:dijital-reklamlar"
               data-track-label="Dijital Reklamlar kartı"
@@ -2571,7 +2564,7 @@ export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
               <svg
                 key={reklamPlayKey}
                 aria-hidden
-                className="chart-mockup pointer-events-none absolute -right-6 -top-6 h-[230px] w-[230px] opacity-65 transition-opacity duration-500 group-hover:opacity-95 md:-right-10 md:-top-10 md:h-[340px] md:w-[340px]"
+                className={`chart-mockup ${reklamPlayKey > 0 ? "play " : ""}pointer-events-none absolute -right-6 -top-6 h-[230px] w-[230px] opacity-65 transition-opacity duration-500 group-hover:opacity-95 md:-right-10 md:-top-10 md:h-[340px] md:w-[340px]`}
                 viewBox="0 0 176 176"
               >
                 <defs>
@@ -2948,6 +2941,30 @@ export default function Home({ logoUrl }: { logoUrl?: string } = {}) {
         @keyframes chartRingPulse {
           0% { opacity: 0.85; transform: scale(1); }
           100% { opacity: 0; transform: scale(4.5); }
+        }
+        /* Varsayılan (hover edilmemiş) durum: kartlar görünüme girince
+           animasyon OYNAMAZ; mockup/grafik son (tamamlanmış) halinde durur.
+           Çizim animasyonu yalnızca .play sınıfı (hover) eklenince çalışır. */
+        .web-mockup:not(.play) .web-frame,
+        .web-mockup:not(.play) .web-topbar,
+        .web-mockup:not(.play) .web-el,
+        .web-mockup:not(.play) .web-btn,
+        .web-mockup:not(.play) .web-img,
+        .web-mockup:not(.play) .web-feat,
+        .chart-mockup:not(.play) .chart-frame,
+        .chart-mockup:not(.play) .chart-topbar,
+        .chart-mockup:not(.play) .chart-windot,
+        .chart-mockup:not(.play) .chart-baseline,
+        .chart-mockup:not(.play) .chart-bar,
+        .chart-mockup:not(.play) .trend-line,
+        .chart-mockup:not(.play) .trend-peak,
+        .chart-mockup:not(.play) .trend-peak-ring,
+        .chart-mockup:not(.play) .chart-stat,
+        .chart-mockup:not(.play) .chart-stat-arrow {
+          animation: none !important;
+          stroke-dashoffset: 0 !important;
+          opacity: 1 !important;
+          transform: none !important;
         }
         @media (prefers-reduced-motion: reduce) {
           .service-cta-bg { animation: none; }

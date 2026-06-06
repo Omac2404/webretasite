@@ -37,6 +37,9 @@ export async function saveFloatMenuAction(
       whatsapp: s(formData, "contact_whatsapp"),
       whatsappMessage: s(formData, "contact_whatsappMessage"),
     },
+    desktopWhatsapp: {
+      enabled: b(formData, "desktopWhatsapp_enabled"),
+    },
   }
 
   if (config.contact.enabled && !config.contact.phone && !config.contact.whatsapp) {

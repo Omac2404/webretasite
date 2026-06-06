@@ -1389,9 +1389,9 @@ export default function DijitalReklamlarClient({
 
   return (
     <>
-      <main className="mx-auto max-w-[1280px] px-6 py-12 md:px-12 md:py-16">
+      <main className="mx-auto max-w-[1280px] px-6 pb-12 pt-10 md:px-12 md:pb-16 md:pt-14">
         <div className="text-center">
-          <h1 className="text-[36px] leading-[1.1] tracking-[-0.02em] text-[#0a0a0a] md:text-[48px]">
+          <h1 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
             <span className="font-bold text-[#3c639f]">
               {channel.pageTitle?.trim() || channel.label}
             </span>

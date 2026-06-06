@@ -1,7 +1,5 @@
 "use server"
 
-import { promises as fs } from "node:fs"
-import path from "node:path"
 import { revalidatePath } from "next/cache"
 import {
   addLogo,
@@ -14,40 +12,7 @@ import {
   type LogoRow,
 } from "@/lib/logos-store"
 
-const UPLOAD_DIR = path.join(process.cwd(), "public", "logos")
-const MAX_BYTES = 4 * 1024 * 1024
-const ALLOWED_TYPES = new Set([
-  "image/png",
-  "image/jpeg",
-  "image/webp",
-  "image/svg+xml",
-])
-
 export type AddLogoState = { error?: string; ok?: boolean }
-
-function extFromMime(mime: string): string {
-  if (mime === "image/png") return "png"
-  if (mime === "image/jpeg") return "jpg"
-  if (mime === "image/webp") return "webp"
-  if (mime === "image/svg+xml") return "svg"
-  return "bin"
-}
-
-function slugify(name: string): string {
-  return (
-    name
-      .toLowerCase()
-      .replace(/ı/g, "i")
-      .replace(/ç/g, "c")
-      .replace(/ş/g, "s")
-      .replace(/ğ/g, "g")
-      .replace(/ü/g, "u")
-      .replace(/ö/g, "o")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 40) || "logo"
-  )
-}
 
 function parseRow(value: FormDataEntryValue | null): LogoRow {
   return String(value ?? "") === "b" ? "b" : "a"
@@ -63,26 +28,16 @@ export async function addLogoAction(
   formData: FormData,
 ): Promise<AddLogoState> {
   const name = String(formData.get("name") ?? "").trim()
-  const file = formData.get("image")
+  // The image now comes from the media library (picker writes the public
+  // URL into a hidden `imageUrl` field), so logos reuse the central library
+  // instead of a separate /public/logos upload path.
+  const imageUrl = String(formData.get("imageUrl") ?? "").trim()
   const row = parseRow(formData.get("row"))
 
   if (!name) return { error: "Firma ismi gerekli." }
-  if (!(file instanceof File) || file.size === 0) {
-    return { error: "Logo görseli gerekli." }
-  }
-  if (file.size > MAX_BYTES) {
-    return { error: "Görsel 4 MB'dan büyük olamaz." }
-  }
-  if (!ALLOWED_TYPES.has(file.type)) {
-    return { error: "Sadece PNG, JPG, WebP veya SVG yükleyebilirsin." }
-  }
+  if (!imageUrl) return { error: "Logo görseli gerekli." }
 
-  await fs.mkdir(UPLOAD_DIR, { recursive: true })
-  const filename = `${slugify(name)}-${Date.now()}.${extFromMime(file.type)}`
-  const bytes = Buffer.from(await file.arrayBuffer())
-  await fs.writeFile(path.join(UPLOAD_DIR, filename), bytes)
-
-  await addLogo({ name, imageUrl: `/logos/${filename}`, row })
+  await addLogo({ name, imageUrl, row })
 
   revalidateBoth()
   return { ok: true }

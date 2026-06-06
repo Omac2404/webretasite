@@ -12,6 +12,7 @@ function normalize(raw: Partialish<FloatMenuConfig> & { enabled?: unknown }): Fl
   const webSite = raw.webSite ?? {}
   const ads = raw.ads ?? {}
   const contact = raw.contact ?? {}
+  const desktopWhatsapp = raw.desktopWhatsapp ?? {}
   return {
     enabled: raw.enabled !== false,
     webSite: {
@@ -32,6 +33,9 @@ function normalize(raw: Partialish<FloatMenuConfig> & { enabled?: unknown }): Fl
       whatsappMessage: String(
         contact.whatsappMessage ?? DEFAULT_FLOAT_MENU.contact.whatsappMessage,
       ),
+    },
+    desktopWhatsapp: {
+      enabled: desktopWhatsapp.enabled !== false,
     },
   }
 }

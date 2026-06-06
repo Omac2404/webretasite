@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState, useEffect, useState } from "react"
-import { Check, Globe, Loader2, Megaphone, Phone } from "lucide-react"
+import { Check, Globe, Loader2, Megaphone, MessageCircle, Phone } from "lucide-react"
 import type { FloatMenuConfig } from "@/lib/float-menu-types"
 import { saveFloatMenuAction, type FloatMenuFormState } from "./actions"
 
@@ -170,6 +170,23 @@ export function FloatMenuAdminForm({ config }: { config: FloatMenuConfig }) {
               className={`${inputCls} resize-none`}
             />
           </Field>
+        </div>
+      </section>
+
+      {/* Masaüstü / Tablet WhatsApp */}
+      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
+        <SectionHeader
+          icon={<MessageCircle size={15} />}
+          title="Masaüstü & tablet WhatsApp butonu"
+          subtitle="Masaüstü ve tablette sağ alt köşede tek bir WhatsApp butonu (beyaz daire, yeşil ikon) gösterir. Numara ve ön mesaj yukarıdaki İletişim alanından alınır."
+        />
+        <div className="mt-4">
+          <Toggle
+            name="desktopWhatsapp_enabled"
+            defaultChecked={config.desktopWhatsapp.enabled}
+            label="Masaüstü/tablette WhatsApp butonunu göster"
+            hint="Mobilde bunun yerine üstteki 3'lü menü görünür."
+          />
         </div>
       </section>
 

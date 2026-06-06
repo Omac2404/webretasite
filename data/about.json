@@ -1,15 +1,15 @@
 {
   "hero": {
     "kicker": "",
-    "titleLeader": "Tanışalım",
-    "titleHighlight": "",
+    "titleLeader": "",
+    "titleHighlight": "Tanışalım",
     "titleTrailer": "",
     "subtitle": "<p><span style=\"font-size: 18px\"><span style=\"color: rgb(60, 99, 159)\"><span style=\"color: rgb(10, 10, 10)\"><span style=\"font-size: 22px\"><b></b><span style=\"color: rgb(60, 99, 159)\"><b></b><span style=\"color: rgb(10, 10, 10)\"><b>Biz kısaca;</b> süslü sözlerden uzak, tasarımı sade, performansı yüksek işler yapmayı severiz.</span></span></span></span></span></span></p>"
   },
   "row1": {
     "kicker": "",
     "title": "Nasıl Başladık?",
-    "body": "<span style=\"color: rgb(10, 10, 10)\">Webreta, 2022 yılında müşterilerine fiyat/performans çözümleri sunarak yoluna başladı. Hızlı, tasarımsal olarak profesyonel ve dijital reklamlarla tam optimize çalışabilen web sitelerini makul fiyatlarla müşterilerine ulaştırdı. Web site yapımıyla birlikte verdiği reklam yönetim hizmetleri de fazlaca ilgi görünce, kısa süre içinde hizmet modelimiz çok tutuldu ve talep patlaması yaşamamıza sebep oldu!</span><br><br><span style=\"color: rgb(10, 10, 10)\">Bütçe dostu ve yüksek performanslı bu konsepte <span style=\"color: rgb(60, 99, 159)\"><span style=\"color: rgb(10, 10, 10)\"><b><span style=\"color: rgb(60, 99, 159)\">Webreta Kobi</span></b></span> </span><span style=\"color: rgb(10, 10, 10)\"><span style=\"color: rgb(10, 10, 10)\">adını verdik. Bu konseptte son 3 senede 350+ civarı web site yayına geçirerek kendi sektörümüzde bu alanda ciddi bir piyasa performansı sergiledik. Çünkü bu haftasonları da dahil 3 günde 1 adet web site yapıp yayına aldığımız anlamına geliyor!</span></span></span><span style=\"color: rgb(10, 10, 10)\"><span style=\"color: rgb(10, 10, 10)\"></span></span>",
+    "body": "<span style=\"color: rgb(10, 10, 10)\">Webreta, 2022 yılında müşterilerine fiyat/performans çözümleri sunarak yoluna başladı. Hızlı,<b>&nbsp;</b>profesyonel, iyi görünen ve dijital reklamlarla tam optimize çalışabilen web sitelerini makul fiyatlarla müşterilerine ulaştırdı. Web site yapımına takiben verdiği reklam yönetim hizmetleri de<b>&nbsp;</b>hayli ilgi gördü ve kısa süre içinde talep patlaması yaşamamıza sebep oldu!</span><br><br><span style=\"color: rgb(10, 10, 10)\">Bütçe dostu ve yüksek performanslı bu konsepte <span style=\"color: rgb(60, 99, 159)\"><span style=\"color: rgb(10, 10, 10)\"><b><span style=\"color: rgb(60, 99, 159)\">Webreta Kobi</span></b></span> </span><span style=\"color: rgb(10, 10, 10)\"><span style=\"color: rgb(10, 10, 10)\">adını verdik. Bu konseptte son 3 senede 350+ web site yayına geçirerek kendi sektörümüzde bu alanda ciddi bir piyasa performansı sergiledik. Çünkü bu haftasonları da dahil 3 günde 1 adet web site yapıp yayına aldığımız anlamına geliyor!</span></span></span><span style=\"color: rgb(10, 10, 10)\"><span style=\"color: rgb(10, 10, 10)\"></span></span>",
     "imageUrl": "/about/row1-1779371478158.webp",
     "imageAlt": "Webreta ekibi",
     "buttonLabel": "",
@@ -18,7 +18,7 @@
   "row2": {
     "kicker": "",
     "title": "Nasıl Gidiyor?",
-    "body": "<p><span style=\"color: rgb(10, 10, 10)\">Webreta 2022'de 2 kişi başladığı yolculuğuna 2026'da<b>&nbsp;</b>7 kişilik bir ekiple devam etmektedir. Web tarafında güncel olarak web sitelere özel entegre yazılımlar, web uygulamaları, web tabanlı otomasyon sistemleri ve AI destekli web yazılımları üzerine çalışırken reklam tarafında kompleks stratejiler ve yurtdışı odaklı pazarlama çözümlerine yoğunlaşmıştır.<br></span><b><br><span style=\"color: rgb(60, 99, 159)\">Webreta hala yoğun talep üzerine Webreta KOBİ konsepti altında aynı fiyat/performans ürünlerini sunmaya devam etmektedir. Bütçe dostu ve çözüm odaklı dijital hizmetleri müşterileri ile buluşturmaktadır.</span></b></p>",
+    "body": "<p><span style=\"color: rgb(10, 10, 10)\">Webreta 2022'de 2 kişi başladığı yolculuğuna 2026'da<b>&nbsp;</b>7 kişilik bir ekiple devam etmektedir. Web tarafında güncel olarak web sitelere özel entegre yazılımlar, web uygulamaları, web tabanlı otomasyon sistemleri ve AI destekli web hizmetleri üzerine çalışırken, reklam tarafında kompleks stratejiler ve yurtdışı odaklı pazarlama çözümlerine yoğunlaşmıştır.<br></span><b><br><span style=\"color: rgb(60, 99, 159)\">Webreta hala yoğun talep üzerine Webreta KOBİ konsepti altında aynı fiyat/performans ürünlerini sunmaya devam etmektedir. Bütçe dostu ve çözüm odaklı dijital hizmetleri müşterileri ile buluşturmaktadır.</span></b></p>",
     "imageUrl": "/about/row2-1779531052681.jpg",
     "imageAlt": "Webreta çalışma tarzı",
     "buttonLabel": "Webreta Kobi",

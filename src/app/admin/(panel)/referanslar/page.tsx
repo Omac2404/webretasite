@@ -1,5 +1,6 @@
 import { Image as ImageIcon, Type, Plus, Trash2, ChevronUp, ChevronDown, ArrowLeftRight, Zap, Snail, BadgeCheck } from "lucide-react"
 import { readLogos, type Logo, type LogoRow } from "@/lib/logos-store"
+import { readMedia } from "@/lib/media-store"
 import {
   deleteLogoAction,
   moveLogoAction,
@@ -13,7 +14,10 @@ import { AddLogoForm } from "./add-logo-form"
 export const dynamic = "force-dynamic"
 
 export default async function LogosAdminPage() {
-  const { mode, logos, googlePartner } = await readLogos()
+  const [{ mode, logos, googlePartner }, { items: media }] = await Promise.all([
+    readLogos(),
+    readMedia(),
+  ])
   const rowA = logos.filter((l) => l.row === "a")
   const rowB = logos.filter((l) => l.row === "b")
 
@@ -112,10 +116,11 @@ export default async function LogosAdminPage() {
           </div>
         </div>
         <p className="mt-1 text-[12.5px] text-black/50">
-          Firma ismi, görsel ve hangi sırada akacağı. PNG/JPG/WebP/SVG, max 4 MB.
+          Firma ismi, görsel ve hangi sırada akacağı. Görseli kütüphaneden
+          seçebilir ya da bilgisayardan yükleyebilirsin.
         </p>
         <div className="mt-4">
-          <AddLogoForm />
+          <AddLogoForm media={media} />
         </div>
       </section>
 

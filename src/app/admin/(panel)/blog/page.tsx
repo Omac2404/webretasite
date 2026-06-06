@@ -2,6 +2,7 @@ import { Plus } from "lucide-react"
 import { readBlog } from "@/lib/blog-store"
 import { listAuthors } from "@/lib/authors-store"
 import { readSeo } from "@/lib/seo-store"
+import { readMedia } from "@/lib/media-store"
 import { PreviewLink } from "@/components/admin/PreviewLink"
 import { AddPostForm } from "./add-post-form"
 import { AdminPostsList } from "./posts-list"
@@ -9,10 +10,11 @@ import { AdminPostsList } from "./posts-list"
 export const dynamic = "force-dynamic"
 
 export default async function BlogAdminPage() {
-  const [{ posts }, authors, seo] = await Promise.all([
+  const [{ posts }, authors, seo, { items: media }] = await Promise.all([
     readBlog(),
     listAuthors(),
     readSeo(),
+    readMedia(),
   ])
   const sorted = [...posts].sort((a, b) =>
     b.createdAt.localeCompare(a.createdAt),
@@ -39,6 +41,7 @@ export default async function BlogAdminPage() {
         <div className="mt-4">
           <AddPostForm
             authors={authors}
+            media={media}
             siteUrl={seo.global.siteUrl}
             siteName={seo.global.siteName}
             titleTemplate={seo.global.titleTemplate}

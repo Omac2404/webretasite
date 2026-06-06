@@ -253,7 +253,17 @@ const QUOTE_DEFAULT: QuoteForm = {
   time: "",
 }
 
-export default function QuoteWizardSection() {
+export default function QuoteWizardSection({
+  initialWizardHeading,
+  initialPackages,
+}: {
+  initialWizardHeading?: {
+    titleLeader: string
+    titleHighlight: string
+    subtitle: string
+  }
+  initialPackages?: QuoteProjectType[]
+} = {}) {
   // Quote wizard state
   const [quoteStep, setQuoteStep] = useState(0)
   const [quoteDir, setQuoteDir] = useState<1 | -1>(1)
@@ -300,19 +310,25 @@ export default function QuoteWizardSection() {
   const [pkgCanScrollRight, setPkgCanScrollRight] = useState(false)
 
   // Project types + wizard heading — admin-managed via /admin/web-paketleri.
-  // SEED renders on first paint; replaced once /api/web-packages resolves.
+  // Seeded from the server-provided props so the heading + cards render on
+  // first paint (no empty→real swap / layout jump). The fetch below still
+  // refreshes on the client; matching values mean no visible change.
   const [projectTypes, setProjectTypes] = useState<QuoteProjectType[]>(
-    QUOTE_PROJECT_TYPES_SEED,
+    initialPackages && initialPackages.length > 0
+      ? initialPackages
+      : QUOTE_PROJECT_TYPES_SEED,
   )
   const [wizardHeading, setWizardHeading] = useState<{
     titleLeader: string
     titleHighlight: string
     subtitle: string
-  }>({
-    titleLeader: "",
-    titleHighlight: "",
-    subtitle: "",
-  })
+  }>(
+    initialWizardHeading ?? {
+      titleLeader: "",
+      titleHighlight: "",
+      subtitle: "",
+    },
+  )
   useEffect(() => {
     let cancelled = false
     fetch("/api/web-packages")
@@ -761,7 +777,7 @@ export default function QuoteWizardSection() {
           follow-up. */}
       <section
         id="teklif"
-        className="relative border-t border-black/[0.06] py-12 md:py-16"
+        className="relative border-t border-black/[0.06] pb-12 pt-10 md:pb-16 md:pt-14"
       >
         {/* Dekoratif nokta deseni — hakkımızda hero ile aynı dil. Sağ üst
             köşeye yerleşir, container dışına taşar. Mobilde gizli. */}
@@ -781,7 +797,7 @@ export default function QuoteWizardSection() {
             <div className="mb-10 text-center md:mb-14">
               {(wizardHeading.titleLeader.trim() ||
                 wizardHeading.titleHighlight.trim()) && (
-                <h2 className="text-[32px] leading-[1.08] tracking-[-0.03em] text-[#0a0a0a] md:text-[48px]">
+                <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
                   {wizardHeading.titleLeader && (
                     <span className="font-normal">
                       {wizardHeading.titleLeader}{" "}
@@ -803,37 +819,13 @@ export default function QuoteWizardSection() {
           )}
 
           {/* Wizard kart konteyneri — arkasında nefes alan marka-mavisi aura
-              (radial blur), üstünde gradient accent stripe, çevresinde
-              gradient border. Kartı dekoratif çerçeveden ayırıp daha
-              "premium / dikkat çekici" hissi veriyor. */}
+              (radial blur) ve çevresinde düz koyu mavi 3px çerçeve. */}
           <div className="relative">
             <div
               aria-hidden
               className="quote-card-aura pointer-events-none absolute -inset-3 rounded-[26px] md:-inset-5"
             />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-2xl"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(91,141,230,0.35), rgba(60,99,159,0.15) 45%, rgba(255,255,255,0) 75%)",
-                padding: "1px",
-                WebkitMask:
-                  "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                WebkitMaskComposite: "xor",
-                maskComposite: "exclude",
-              }}
-            />
-            <div className="quote-card-pulse relative overflow-hidden rounded-2xl border border-[#3c639f]/15 bg-white">
-              {/* Üst aksan şeridi — marka mavisinden navy'ye gradient */}
-              <div
-                aria-hidden
-                className="h-[3px] w-full"
-                style={{
-                  background:
-                    "linear-gradient(90deg, #5b8de6 0%, #3c639f 50%, #2f5288 100%)",
-                }}
-              />
+            <div className="quote-card-pulse relative overflow-hidden rounded-2xl border-2 border-[#3c639f] bg-white">
             {quoteSubmitted ? (
               /* ─── Success state — copy admin-managed via /admin/e-posta-sablonlari */
               (() => {

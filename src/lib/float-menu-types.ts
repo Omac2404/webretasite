@@ -19,6 +19,11 @@ export type FloatMenuConfig = {
     whatsapp: string
     whatsappMessage: string
   }
+  // Masaüstü + tablette sağ altta görünen tek WhatsApp butonu. Numara ve
+  // ön mesaj contact alanından alınır; bu sadece görünürlük anahtarıdır.
+  desktopWhatsapp: {
+    enabled: boolean
+  }
 }
 
 export const DEFAULT_FLOAT_MENU: FloatMenuConfig = {
@@ -39,6 +44,9 @@ export const DEFAULT_FLOAT_MENU: FloatMenuConfig = {
     phone: "+90 542 580 94 92",
     whatsapp: "+90 542 580 94 92",
     whatsappMessage: "Merhaba, web siteniz üzerinden ulaşıyorum.",
+  },
+  desktopWhatsapp: {
+    enabled: true,
   },
 }
 

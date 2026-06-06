@@ -5,6 +5,7 @@ import {
   addMediaFile,
   deleteMedia,
   updateMediaAlt,
+  type MediaItem,
 } from "@/lib/media-store"
 import { slugifyFilename, toWebpOrPassthrough } from "@/lib/image-webp"
 import { recordAudit } from "@/lib/audit-log-store"
@@ -19,15 +20,16 @@ const ALLOWED = new Set([
 ])
 
 export type UploadMediaState = { ok?: boolean; error?: string }
+export type LibraryUploadResult = { item?: MediaItem; error?: string }
 
-export async function uploadMediaAction(
-  _prev: UploadMediaState,
-  formData: FormData,
-): Promise<UploadMediaState> {
-  const file = formData.get("image")
-  const nameHint = String(formData.get("name") ?? "").trim()
-  const alt = String(formData.get("alt") ?? "").trim()
-
+// Core upload: validate, convert to WebP (SVG passthrough), register in the
+// library and return the new item. Shared by the Görseller tab form and the
+// reusable media picker used across blog/referans forms.
+async function processAndStore(
+  file: FormDataEntryValue | null,
+  nameHint: string,
+  alt: string,
+): Promise<LibraryUploadResult> {
   if (!(file instanceof File) || file.size === 0) {
     return { error: "Görsel seçilmedi." }
   }
@@ -60,7 +62,32 @@ export async function uploadMediaAction(
 
   await recordAudit("media.upload", { target: item.url })
   revalidatePath(PAGE)
+  return { item }
+}
+
+export async function uploadMediaAction(
+  _prev: UploadMediaState,
+  formData: FormData,
+): Promise<UploadMediaState> {
+  const result = await processAndStore(
+    formData.get("image"),
+    String(formData.get("name") ?? "").trim(),
+    String(formData.get("alt") ?? "").trim(),
+  )
+  if (result.error) return { error: result.error }
   return { ok: true }
+}
+
+// Picker upload: same pipeline, but returns the created item so the client
+// can immediately select it. Invoked directly (not as a <form> action).
+export async function uploadToLibraryAction(
+  formData: FormData,
+): Promise<LibraryUploadResult> {
+  return processAndStore(
+    formData.get("file"),
+    String(formData.get("hint") ?? "").trim(),
+    String(formData.get("alt") ?? "").trim(),
+  )
 }
 
 export async function deleteMediaAction(formData: FormData): Promise<void> {

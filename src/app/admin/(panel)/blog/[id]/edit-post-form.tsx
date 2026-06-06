@@ -4,15 +4,16 @@ import { useActionState, useEffect, useRef, useState } from "react"
 import { Check, Loader2 } from "lucide-react"
 import type { BlogPost } from "@/lib/blog-types"
 import type { Author } from "@/lib/authors-types"
-import { updatePostAction, uploadInlineImageAction, type PostState } from "../actions"
+import type { MediaItem } from "@/lib/media-store"
+import { updatePostAction, type PostState } from "../actions"
 import {
   AuthorSelect,
   CategorySelect,
-  CoverUploader,
   Field,
   InlineImageUploader,
   inputCls,
 } from "../add-post-form"
+import { MediaPicker } from "@/components/admin/MediaPicker"
 import { BlogSeoPanel } from "../seo-panel"
 
 const INITIAL: PostState = {}
@@ -20,12 +21,14 @@ const INITIAL: PostState = {}
 export function EditPostForm({
   post,
   authors,
+  media,
   siteUrl,
   siteName,
   titleTemplate,
 }: {
   post: BlogPost
   authors: Author[]
+  media: MediaItem[]
   siteUrl?: string
   siteName?: string
   titleTemplate?: string
@@ -34,11 +37,8 @@ export function EditPostForm({
     updatePostAction,
     INITIAL,
   )
-  const [preview, setPreview] = useState<string | null>(null)
-  const [filename, setFilename] = useState<string | null>(null)
+  const [coverUrl, setCoverUrl] = useState(post.coverImage ?? "")
   const [savedFlash, setSavedFlash] = useState(false)
-  const [inlineUploading, setInlineUploading] = useState(false)
-  const [inlineError, setInlineError] = useState<string | null>(null)
   const [title, setTitle] = useState(post.title)
   const [excerpt, setExcerpt] = useState(post.excerpt)
   const [content, setContent] = useState(post.content)
@@ -68,26 +68,6 @@ export function EditPostForm({
       return () => clearTimeout(t)
     }
   }, [state.ok])
-
-  async function handleInlineUpload(file: File) {
-    setInlineError(null)
-    setInlineUploading(true)
-    try {
-      const fd = new FormData()
-      fd.append("file", file)
-      fd.append("hint", file.name)
-      const res = await uploadInlineImageAction(fd)
-      if (res.error || !res.url) {
-        setInlineError(res.error ?? "Yükleme başarısız.")
-        return
-      }
-      insertSnippet(`\n\n![](${res.url})\n\n`)
-    } catch {
-      setInlineError("Beklenmeyen bir hata oluştu.")
-    } finally {
-      setInlineUploading(false)
-    }
-  }
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
@@ -139,35 +119,22 @@ export function EditPostForm({
           className={`${inputCls} resize-y font-mono text-[12.5px] leading-relaxed`}
         />
         <InlineImageUploader
-          uploading={inlineUploading}
-          error={inlineError}
-          onUpload={handleInlineUpload}
+          media={media}
+          onInsert={(url) => insertSnippet(`\n\n![](${url})\n\n`)}
           onInsertVideo={(snippet) => insertSnippet(snippet)}
         />
       </Field>
 
       <Field
         label="Kapak görseli"
-        hint={
-          post.coverImage
-            ? "Mevcut kapağı korumak için boş bırak; yeni dosya yüklediğin anda değişir."
-            : "PNG / JPG / WebP, max 5 MB."
-        }
+        hint="Kütüphaneden seç ya da bilgisayardan yükle."
       >
-        <CoverUploader
-          preview={preview}
-          filename={filename}
-          existingUrl={post.coverImage || undefined}
-          label="Yeni görsel seç"
-          onChange={(f) => {
-            if (!f) {
-              setPreview(null)
-              setFilename(null)
-              return
-            }
-            setFilename(f.name)
-            setPreview(URL.createObjectURL(f))
-          }}
+        <MediaPicker
+          name="coverUrl"
+          value={post.coverImage || ""}
+          media={media}
+          variant="cover"
+          onChange={setCoverUrl}
         />
       </Field>
 
@@ -176,7 +143,7 @@ export function EditPostForm({
         liveTitle={title}
         liveExcerpt={excerpt}
         liveContent={content}
-        liveCoverImage={preview ?? post.coverImage}
+        liveCoverImage={coverUrl}
         existingSlug={post.slug}
         siteUrl={siteUrl}
         siteName={siteName}

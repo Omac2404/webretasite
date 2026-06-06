@@ -1,48 +1,47 @@
 "use client"
 
 import { useActionState, useEffect, useRef, useState } from "react"
-import { Image as ImageIcon, ImagePlus, Loader2, Film } from "lucide-react"
+import { Images, Film, Loader2 } from "lucide-react"
 import type { Author } from "@/lib/authors-types"
+import type { MediaItem } from "@/lib/media-store"
 import { CATEGORIES, type CategoryKey } from "@/lib/blog-types"
-import {
-  addPostAction,
-  uploadInlineImageAction,
-  type PostState,
-} from "./actions"
+import { MediaPicker } from "@/components/admin/MediaPicker"
+import { MediaLibraryModal } from "@/components/admin/MediaLibraryModal"
+import { addPostAction, type PostState } from "./actions"
 import { BlogSeoPanel } from "./seo-panel"
 
 const INITIAL: PostState = {}
 
 export function AddPostForm({
   authors,
+  media,
   siteUrl,
   siteName,
   titleTemplate,
 }: {
   authors: Author[]
+  media: MediaItem[]
   siteUrl?: string
   siteName?: string
   titleTemplate?: string
 }) {
   const [state, formAction, pending] = useActionState(addPostAction, INITIAL)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [filename, setFilename] = useState<string | null>(null)
-  const [inlineUploading, setInlineUploading] = useState(false)
-  const [inlineError, setInlineError] = useState<string | null>(null)
+  const [coverUrl, setCoverUrl] = useState("")
   const [title, setTitle] = useState("")
   const [excerpt, setExcerpt] = useState("")
   const [content, setContent] = useState("")
+  const [pickerKey, setPickerKey] = useState(0)
   const formRef = useRef<HTMLFormElement>(null)
   const contentRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     if (state.ok) {
       formRef.current?.reset()
-      setPreview(null)
-      setFilename(null)
+      setCoverUrl("")
       setTitle("")
       setExcerpt("")
       setContent("")
+      setPickerKey((k) => k + 1)
     }
   }, [state.ok])
 
@@ -61,26 +60,6 @@ export function AddPostForm({
       el.focus()
       el.setSelectionRange(cursor, cursor)
     })
-  }
-
-  async function handleInlineUpload(file: File) {
-    setInlineError(null)
-    setInlineUploading(true)
-    try {
-      const fd = new FormData()
-      fd.append("file", file)
-      fd.append("hint", file.name)
-      const res = await uploadInlineImageAction(fd)
-      if (res.error || !res.url) {
-        setInlineError(res.error ?? "Yükleme başarısız.")
-        return
-      }
-      insertSnippet(`\n\n![](${res.url})\n\n`)
-    } catch {
-      setInlineError("Beklenmeyen bir hata oluştu.")
-    } finally {
-      setInlineUploading(false)
-    }
   }
 
   return (
@@ -134,29 +113,22 @@ export function AddPostForm({
           className={`${inputCls} resize-y font-mono text-[12.5px] leading-relaxed`}
         />
         <InlineImageUploader
-          uploading={inlineUploading}
-          error={inlineError}
-          onUpload={(f) => handleInlineUpload(f)}
+          media={media}
+          onInsert={(url) => insertSnippet(`\n\n![](${url})\n\n`)}
           onInsertVideo={(snippet) => insertSnippet(snippet)}
         />
       </Field>
 
       <Field
         label="Kapak görseli (opsiyonel)"
-        hint="PNG / JPG / WebP, max 5 MB. Yüklemezsen kartta brand renkli placeholder görünür."
+        hint="Kütüphaneden seç ya da bilgisayardan yükle. Boş bırakırsan kartta brand renkli placeholder görünür."
       >
-        <CoverUploader
-          preview={preview}
-          filename={filename}
-          onChange={(f) => {
-            if (!f) {
-              setPreview(null)
-              setFilename(null)
-              return
-            }
-            setFilename(f.name)
-            setPreview(URL.createObjectURL(f))
-          }}
+        <MediaPicker
+          key={pickerKey}
+          name="coverUrl"
+          media={media}
+          variant="cover"
+          onChange={setCoverUrl}
         />
       </Field>
 
@@ -164,7 +136,7 @@ export function AddPostForm({
         liveTitle={title}
         liveExcerpt={excerpt}
         liveContent={content}
-        liveCoverImage={preview ? "uploaded" : ""}
+        liveCoverImage={coverUrl}
         siteUrl={siteUrl}
         siteName={siteName}
         titleTemplate={titleTemplate}
@@ -259,69 +231,18 @@ export function AuthorSelect({
   )
 }
 
-export function CoverUploader({
-  preview,
-  filename,
-  onChange,
-  existingUrl,
-  label,
-}: {
-  preview: string | null
-  filename: string | null
-  onChange: (file: File | null) => void
-  existingUrl?: string
-  label?: string
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      {existingUrl && !preview && (
-        <div className="h-12 w-20 overflow-hidden rounded-md border border-black/[0.08] bg-white">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={existingUrl}
-            alt="Mevcut kapak"
-            className="h-full w-full object-cover"
-          />
-        </div>
-      )}
-      <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-black/[0.15] bg-white px-3 py-2.5 text-[13px] text-black/60 transition-colors hover:bg-black/[0.02]">
-        <ImageIcon size={14} />
-        <span className="truncate">
-          {filename ?? label ?? "Görsel seç"}
-        </span>
-        <input
-          name="cover"
-          type="file"
-          accept="image/png,image/jpeg,image/webp"
-          className="hidden"
-          onChange={(e) => onChange(e.target.files?.[0] ?? null)}
-        />
-      </label>
-      {preview && (
-        <div className="h-12 w-20 overflow-hidden rounded-md border border-black/[0.08] bg-white">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={preview}
-            alt="Önizleme"
-            className="h-full w-full object-cover"
-          />
-        </div>
-      )}
-    </div>
-  )
-}
-
 export function InlineImageUploader({
-  uploading,
-  error,
-  onUpload,
+  media,
+  onInsert,
   onInsertVideo,
 }: {
-  uploading: boolean
-  error: string | null
-  onUpload: (file: File) => void
+  media: MediaItem[]
+  onInsert: (url: string) => void
   onInsertVideo: (snippet: string) => void
 }) {
+  const [open, setOpen] = useState(false)
+  const [items, setItems] = useState<MediaItem[]>(media)
+
   function promptVideo() {
     const url = window.prompt(
       "YouTube video URL'i veya ID'sini yapıştır:\n(örn. https://www.youtube.com/watch?v=...)",
@@ -333,31 +254,14 @@ export function InlineImageUploader({
   return (
     <div className="mt-2 flex flex-col gap-1">
       <div className="flex flex-wrap items-center gap-2">
-        <label
-          className={`inline-flex items-center gap-2 rounded-md border border-black/[0.10] bg-white px-3 py-1.5 text-[12px] font-medium transition-colors ${
-            uploading
-              ? "cursor-not-allowed text-black/35"
-              : "cursor-pointer text-black/70 hover:border-[#3c639f]/30 hover:text-[#3c639f]"
-          }`}
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-black/[0.10] bg-white px-3 py-1.5 text-[12px] font-medium text-black/70 transition-colors hover:border-[#3c639f]/30 hover:text-[#3c639f]"
         >
-          {uploading ? (
-            <Loader2 size={12} className="animate-spin" />
-          ) : (
-            <ImagePlus size={12} />
-          )}
-          {uploading ? "Yükleniyor..." : "Görsel ekle"}
-          <input
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
-            className="hidden"
-            disabled={uploading}
-            onChange={(e) => {
-              const f = e.target.files?.[0]
-              if (f) onUpload(f)
-              e.target.value = ""
-            }}
-          />
-        </label>
+          <Images size={12} />
+          Görsel ekle
+        </button>
 
         <button
           type="button"
@@ -380,9 +284,14 @@ export function InlineImageUploader({
           eklenir.
         </span>
       </div>
-      {error && (
-        <div className="text-[11.5px] text-red-700">{error}</div>
-      )}
+
+      <MediaLibraryModal
+        open={open}
+        onClose={() => setOpen(false)}
+        items={items}
+        onUploaded={(item) => setItems((prev) => [item, ...prev])}
+        onSelect={(item) => onInsert(item.url)}
+      />
     </div>
   )
 }

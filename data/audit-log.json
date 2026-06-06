@@ -1,6 +1,153 @@
 {
   "entries": [
     {
+      "id": "1780759178773-jgewni",
+      "ts": "2026-06-06T15:19:38.773Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "auth.login.ok",
+      "target": "webreta.digital@gmail.com"
+    },
+    {
+      "id": "1780758231055-fde4rp",
+      "ts": "2026-06-06T15:03:51.055Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "appointment.delete",
+      "target": "1780757997959-bnn2xp"
+    },
+    {
+      "id": "1780758229731-r6ebww",
+      "ts": "2026-06-06T15:03:49.731Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "quote.delete",
+      "target": "1780758085139-xmm4vy"
+    },
+    {
+      "id": "1780758228023-vkyaed",
+      "ts": "2026-06-06T15:03:48.023Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "inquiry.delete",
+      "target": "1780757952928-p4cunz"
+    },
+    {
+      "id": "1780757849236-dngysd",
+      "ts": "2026-06-06T14:57:29.236Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "appointment.delete",
+      "target": "1780756601252-kcyvus"
+    },
+    {
+      "id": "1780757847554-ee3kj0",
+      "ts": "2026-06-06T14:57:27.554Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "quote.delete",
+      "target": "1780756871383-jveqli"
+    },
+    {
+      "id": "1780757845485-y6cr3x",
+      "ts": "2026-06-06T14:57:25.485Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "inquiry.delete",
+      "target": "1780756136183-da926q"
+    },
+    {
+      "id": "1780757845080-mh36ax",
+      "ts": "2026-06-06T14:57:25.080Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "inquiry.delete",
+      "target": "1780756949538-027mra"
+    },
+    {
+      "id": "1780757844479-8012hy",
+      "ts": "2026-06-06T14:57:24.479Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "inquiry.delete",
+      "target": "1780757162946-lyy1s5"
+    },
+    {
+      "id": "1780755282031-e6h2vr",
+      "ts": "2026-06-06T14:14:42.031Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "settings.cookie.reset",
+      "note": "versiyon 5"
+    },
+    {
+      "id": "1780755279316-2vfsin",
+      "ts": "2026-06-06T14:14:39.316Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "settings.cookie.save",
+      "note": "aktif"
+    },
+    {
+      "id": "1780754610128-jqo26w",
+      "ts": "2026-06-06T14:03:30.128Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "settings.cookie.save",
+      "note": "aktif"
+    },
+    {
+      "id": "1780754581683-xxeudx",
+      "ts": "2026-06-06T14:03:01.683Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "settings.cookie.reset",
+      "note": "versiyon 4"
+    },
+    {
+      "id": "1780754537902-er9kvl",
+      "ts": "2026-06-06T14:02:17.902Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "settings.cookie.reset",
+      "note": "versiyon 3"
+    },
+    {
+      "id": "1780754536007-k6jijc",
+      "ts": "2026-06-06T14:02:16.007Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "settings.cookie.reset",
+      "note": "versiyon 2"
+    },
+    {
+      "id": "1780753139348-f9bvgm",
+      "ts": "2026-06-06T13:38:59.348Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "auth.login.ok",
+      "target": "webreta.digital@gmail.com"
+    },
+    {
+      "id": "1780752848319-904627",
+      "ts": "2026-06-06T13:34:08.319Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "media.delete",
+      "target": "1780752778556-qypigd"
+    },
+    {
+      "id": "1780752778567-jchu3q",
+      "ts": "2026-06-06T13:32:58.567Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "media.upload",
+      "target": "/media/whatsapp-image-2026-05-27-at-00-02-55-4yza.webp"
+    },
+    {
+      "id": "1780752723702-2ymq3j",
+      "ts": "2026-06-06T13:32:03.702Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "media.delete",
+      "target": "1780752689557-lyrn0a"
+    },
+    {
+      "id": "1780752689568-rsets3",
+      "ts": "2026-06-06T13:31:29.568Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "media.upload",
+      "target": "/media/whatsapp-image-2026-05-27-at-00-02-55-3n10.webp"
+    },
+    {
+      "id": "1780752587550-hd9v0h",
+      "ts": "2026-06-06T13:29:47.550Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "auth.login.ok",
+      "target": "webreta.digital@gmail.com"
+    },
+    {
       "id": "1780656200823-f3og41",
       "ts": "2026-06-05T10:43:20.823Z",
       "user": "webreta.digital@gmail.com",

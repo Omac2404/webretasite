@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react"
 import { getPostById } from "@/lib/blog-store"
 import { listAuthors } from "@/lib/authors-store"
 import { readSeo } from "@/lib/seo-store"
+import { readMedia } from "@/lib/media-store"
 import { EditPostForm } from "./edit-post-form"
 
 export const dynamic = "force-dynamic"
@@ -14,10 +15,11 @@ export default async function BlogEditPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const [post, authors, seo] = await Promise.all([
+  const [post, authors, seo, { items: media }] = await Promise.all([
     getPostById(id),
     listAuthors(),
     readSeo(),
+    readMedia(),
   ])
   if (!post) notFound()
 
@@ -46,6 +48,7 @@ export default async function BlogEditPage({
         <EditPostForm
           post={post}
           authors={authors}
+          media={media}
           siteUrl={seo.global.siteUrl}
           siteName={seo.global.siteName}
           titleTemplate={seo.global.titleTemplate}

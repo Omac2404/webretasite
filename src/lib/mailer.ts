@@ -7,17 +7,27 @@ import { readSmtp } from "./smtp-store"
 import type { SmtpSettings } from "./smtp-types"
 
 function buildTransporter(s: SmtpSettings): Transporter {
+  // Port 465 daima implicit TLS (SMTPS) ister. Ayarlarda yanlışlıkla
+  // "tls"/"none" seçilse bile 465'i secure kabul ederek "düz bağlan,
+  // STARTTLS bekle" kilitlenmesini önlüyoruz (bu kombinasyon el sıkışmada
+  // donup timeout'a kadar asılı kalıyordu).
+  const secure = s.encryption === "ssl" || s.port === 465
   return nodemailer.createTransport({
     host: s.host,
     port: s.port,
-    secure: s.encryption === "ssl",
-    requireTLS: s.encryption === "tls",
+    secure,
+    requireTLS: !secure && s.encryption === "tls",
     auth: s.auth && s.username
       ? { user: s.username, pass: s.password }
       : undefined,
     tls: s.disableTLSVerification
       ? { rejectUnauthorized: false }
       : undefined,
+    // Yanlış host/port/şifreleme kombinasyonu sonsuza dek asılı kalmasın;
+    // ~10 sn'de hata versin ki form gönderimi hızlıca tamamlansın.
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
   })
 }
 

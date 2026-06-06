@@ -30,7 +30,7 @@ export default async function IletisimPage() {
       <SiteHeader />
       <main>
         {/* Header band */}
-        <section className="relative mx-auto max-w-[1280px] px-6 pb-10 pt-16 md:px-12 md:pb-14 md:pt-24">
+        <section className="relative mx-auto max-w-[1280px] px-6 pb-10 pt-10 md:px-12 md:pb-14 md:pt-14">
           {content.hero.kicker && (
             <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
               {content.hero.kicker}
@@ -39,7 +39,7 @@ export default async function IletisimPage() {
           <h1
             className={`${
               content.hero.kicker ? "mt-3 " : ""
-            }text-[36px] leading-[1.05] tracking-[-0.03em] text-[#0a0a0a] md:text-[56px]`}
+            }text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]`}
           >
             <TitleParts
               leading={content.hero.titleLeading}
@@ -47,7 +47,7 @@ export default async function IletisimPage() {
               trailing={content.hero.titleTrailing}
             />
           </h1>
-          <p className="mt-5 max-w-[600px] text-[16px] leading-relaxed text-black/60">
+          <p className="mt-5 max-w-[600px] text-[15px] leading-relaxed text-black/60">
             {content.hero.intro}
           </p>
         </section>
