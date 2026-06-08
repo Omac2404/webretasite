@@ -46,8 +46,8 @@ next-env.d.ts
 # local feedback assets (annotated mockups, design references)
 /screenshots
 
-# runtime user data + credentials — admin-managed config kalır,
-# kullanıcının gönderdiği form veriler ve SMTP şifresi git'e girmesin
+# runtime user data — kullanıcının gönderdiği form verileri git'e girmesin.
+# NOT: smtp.json bilinçli olarak takip ediliyor ki SMTP ayarları makineler
+# arasında senkron olsun (içinde e-posta şifresi de var — repo özel).
 /data/inquiries.json
 /data/appointments.json
-/data/smtp.json

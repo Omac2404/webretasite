@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "host": "mail.webreta.com.tr",
+  "port": 465,
+  "auth": true,
+  "username": "test@webreta.com.tr",
+  "password": "Webreta.2331",
+  "encryption": "ssl",
+  "fromEmail": "test@webreta.com.tr",
+  "fromName": "webreta.com.tr",
+  "forceFromAddress": true,
+  "disableTLSVerification": true
+}
