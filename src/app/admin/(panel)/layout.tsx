@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import Image from "next/image"
-import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, MailPlus, Send, Globe, Info, Search, Smartphone, Signpost, Images, Cookie } from "lucide-react"
+import { LogOut, LayoutDashboard, MessageSquare, Package, Briefcase, Settings, Image as ImageIcon, BookOpen, Users, Activity, FolderKanban, Sparkles, Scale, PanelBottom, Mail, MailPlus, Send, Globe, Info, Search, Smartphone, Signpost, Images, Cookie, Code2 } from "lucide-react"
 import { SESSION_COOKIE, verifySession } from "@/lib/admin-session"
 import { Toaster } from "@/components/admin/Toaster"
 import { findAdminByEmail } from "@/lib/admin-users-store"
@@ -153,6 +153,9 @@ export default async function PanelLayout({
           <SideLink href="/admin/cerezler" icon={<Cookie size={16} />}>
             Çerez Yönetimi
           </SideLink>
+          <SideLink href="/admin/kod-ekleme" icon={<Code2 size={16} />}>
+            Kod Ekleme
+          </SideLink>
 
           <SideGroup label="Sistem" />
           <SideLink href="/admin/analitik" icon={<Activity size={16} />}>
@@ -162,18 +165,6 @@ export default async function PanelLayout({
             Ayarlar
           </SideLink>
         </nav>
-
-        <div className="border-t border-black/[0.06] p-3">
-          <form action={logoutAction}>
-            <button
-              type="submit"
-              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-[13px] font-medium text-black/60 transition-colors hover:bg-red-50 hover:text-red-600"
-            >
-              <LogOut size={15} />
-              Çıkış yap
-            </button>
-          </form>
-        </div>
       </aside>
 
       <div className="flex flex-1 flex-col">
@@ -191,6 +182,15 @@ export default async function PanelLayout({
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#3c639f] text-[13px] font-semibold text-white">
               {session.username.charAt(0).toUpperCase()}
             </div>
+            <form action={logoutAction} className="ml-1">
+              <button
+                type="submit"
+                className="flex items-center gap-1.5 rounded-lg border border-black/[0.08] px-3 py-2 text-[12.5px] font-medium text-black/60 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+              >
+                <LogOut size={14} />
+                Çıkış yap
+              </button>
+            </form>
           </div>
         </header>
 

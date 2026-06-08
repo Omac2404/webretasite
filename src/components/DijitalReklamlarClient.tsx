@@ -584,7 +584,7 @@ function DetailModal({
           <span className="text-[44px] font-bold tracking-[-0.03em] text-[#0a0a0a] md:text-[52px]">
             {pkg.price}
           </span>
-          <span className="text-[15px] text-black/45">/ay</span>
+          <span className="text-[15px] text-black/45">/ aylık hizmet bedeli</span>
         </div>
 
         {/* Body — package contents split into two balanced columns. Capped
@@ -1092,7 +1092,7 @@ function RequestModal({
             )}
             <div>
               <span className="text-[11px] font-medium uppercase tracking-[0.10em] text-black/40">
-                {headerLabel} · {pkg.price}/ay
+                {headerLabel} · {pkg.price}/aylık hizmet bedeli
               </span>
               <h3 className="mt-0.5 text-[20px] font-semibold tracking-[-0.02em] text-[#0a0a0a] md:text-[22px]">
                 {view === "schedule"
@@ -1245,7 +1245,7 @@ function PackageCard({
             <span className="text-[36px] font-bold tracking-[-0.03em] text-[#0a0a0a]">
               {pkg.price}
             </span>
-            <span className="text-[13px] text-black/45">/ay</span>
+            <span className="text-[13px] text-black/45">/ aylık hizmet bedeli</span>
           </div>
 
           {/* Hairline divider */}
@@ -1359,10 +1359,12 @@ export default function DijitalReklamlarClient({
   channels,
   whatsapp,
   globalCta,
+  adCustomers = [],
 }: {
   channels: Channel[]
   whatsapp?: WhatsAppSettings
   globalCta?: GlobalCta
+  adCustomers?: { name: string; imageUrl: string }[]
 }) {
   const whatsappCfg = whatsapp ?? FALLBACK_WHATSAPP
   const cta = globalCta ?? DEFAULT_GLOBAL_CTA
@@ -1487,6 +1489,49 @@ export default function DijitalReklamlarClient({
             )
           })}
         </div>
+
+        {/* Reklam Müşterilerimiz — paket grid'i ile global CTA banner'ı
+            arasında. Logolar admin'den (/admin/referanslar > Reklam
+            Müşterileri) seçilir; satır başına 6 logo. Hiç seçili logo yoksa
+            bölüm tamamen gizlenir. */}
+        {adCustomers.length > 0 && (
+          <section
+            className="mt-20 md:mt-28"
+            data-section="dijital-reklamlar-ad-customers"
+          >
+            <div className="text-center">
+              <h2 className="text-[24px] font-semibold tracking-[-0.02em] text-[#0a0a0a] md:text-[30px]">
+                Reklam Müşterilerimiz
+              </h2>
+              <p className="mx-auto mt-3 max-w-[560px] text-[14px] leading-relaxed text-black/55 md:text-[15px]">
+                Reklam yönetimini bize emanet eden markalardan bazıları.
+              </p>
+            </div>
+            <div className="mt-10 grid grid-cols-3 gap-3 sm:gap-4 md:grid-cols-6">
+              {adCustomers.map((c, i) => (
+                <div
+                  key={`${c.name}-${i}`}
+                  className="flex aspect-[3/2] items-center justify-center rounded-xl border border-black/[0.06] bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_6px_16px_-8px_rgba(15,23,42,0.10)] transition-shadow hover:shadow-[0_2px_4px_rgba(60,99,159,0.08),0_10px_24px_-6px_rgba(60,99,159,0.16)]"
+                  title={c.name}
+                >
+                  {c.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={c.imageUrl}
+                      alt={c.name}
+                      className="max-h-full max-w-full object-contain"
+                      draggable={false}
+                    />
+                  ) : (
+                    <span className="text-center text-[13px] font-semibold text-[#3c639f]">
+                      {c.name}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Global CTA — paket grid'i ile footer arasında. İçerik admin'den
             yönetilir (/admin/paketler > Yurtdışı / Global CTA kartı).

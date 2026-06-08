@@ -87,11 +87,23 @@ const TR_MONTHS_LONG = [
   "Aralık",
 ]
 
-// Format an ISO date (YYYY-MM-DD) as "5 Mart 2025".
-export function formatPublishDate(iso: string): string {
-  if (!iso) return ""
-  const [y, m, d] = iso.split("-").map(Number)
-  if (!y || !m || !d) return iso
-  const monthName = TR_MONTHS_LONG[m - 1] ?? ""
-  return `${d} ${monthName} ${y}`
+// Format a publish date for display. Accepts three shapes:
+//   "2025-03-05" → "5 Mart 2025"   (full date)
+//   "2025-03"    → "Mart 2025"     (month + year)
+//   "2025"       → "2025"          (year only)
+// Year-only entries let the admin tag a project with just the year when
+// the exact day isn't relevant.
+export function formatPublishDate(value: string): string {
+  if (!value) return ""
+  if (/^\d{4}$/.test(value)) return value
+  const [y, m, d] = value.split("-").map(Number)
+  if (y && m && d) {
+    const monthName = TR_MONTHS_LONG[m - 1] ?? ""
+    return `${d} ${monthName} ${y}`
+  }
+  if (y && m) {
+    const monthName = TR_MONTHS_LONG[m - 1] ?? ""
+    return `${monthName} ${y}`
+  }
+  return value
 }

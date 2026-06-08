@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 import SiteHeader from "@/components/SiteHeaderServer"
 import SiteFooter from "@/components/SiteFooter"
 import { BlogCard } from "@/components/BlogCard"
@@ -133,7 +133,7 @@ export default async function BlogPostPage({
     readSiteSettings(),
   ])
   const authorsById = new Map(allAuthorsData.authors.map((a) => [a.id, a]))
-  const related = all.filter((p) => p.slug !== post.slug).slice(0, 3)
+  const related = all.filter((p) => p.slug !== post.slug).slice(0, 2)
   const jsonLd = buildArticleJsonLd(
     post,
     author?.name,
@@ -233,7 +233,7 @@ export default async function BlogPostPage({
             <h2 className="text-[14px] font-semibold uppercase tracking-[0.10em] text-[#3c639f]">
               Diğer yazılar
             </h2>
-            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
               {related.map((p) => (
                 <BlogCard
                   key={p.id}
@@ -241,6 +241,15 @@ export default async function BlogPostPage({
                   author={authorsById.get(p.authorId)}
                 />
               ))}
+            </div>
+            <div className="mt-8 flex justify-center">
+              <a
+                href="/blog"
+                className="inline-flex items-center gap-2 rounded-lg border border-black/[0.12] bg-white px-5 py-2.5 text-[13px] font-medium text-black/70 transition-colors hover:border-[#3c639f]/40 hover:text-[#3c639f]"
+              >
+                Tüm blog yazıları
+                <ArrowRight size={15} />
+              </a>
             </div>
           </aside>
         )}

@@ -43,14 +43,20 @@ function parseCategory(v: FormDataEntryValue | null): ProjectCategory {
   return String(v ?? "") === "ops" ? "ops" : "dev"
 }
 
-// Validate the YYYY-MM-DD shape the <input type="date"> gives us. We
-// accept the empty string upstream (callers decide if required) and
-// otherwise enforce the format so the renderer's formatPublishDate
-// helper can rely on it.
-function isValidIsoDate(v: string): boolean {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return false
-  const d = new Date(v)
-  return !Number.isNaN(d.getTime())
+// Validate the publish date. We accept either a full ISO date
+// (YYYY-MM-DD, from <input type="date">) or a bare year (YYYY, from the
+// "Sadece yıl" mode) so the admin can tag a project with just the year.
+// formatPublishDate handles both shapes on render.
+function isValidPublishDate(v: string): boolean {
+  if (/^\d{4}$/.test(v)) {
+    const y = Number(v)
+    return y >= 1900 && y <= 2200
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) {
+    const d = new Date(v)
+    return !Number.isNaN(d.getTime())
+  }
+  return false
 }
 
 type ProjectInput = {
@@ -89,7 +95,8 @@ function readInput(formData: FormData): ProjectInput | string {
   if (!companyId) return "Firma seçimi gerekli."
   if (!type) return "Proje tipi gerekli (ör. Web Sitesi, E-Ticaret)."
   if (!publishDate) return "Yayın tarihi gerekli."
-  if (!isValidIsoDate(publishDate)) return "Yayın tarihi geçerli değil."
+  if (!isValidPublishDate(publishDate))
+    return "Yayın tarihi geçerli değil (tam tarih ya da yıl gir)."
   if (!demand) return "Kısa talep metni gerekli."
   if (!solution) return "Kısa çözüm metni gerekli."
   if (!demandDetail) return "Detaylı talep metni gerekli."

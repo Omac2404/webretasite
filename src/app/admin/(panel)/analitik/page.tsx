@@ -25,6 +25,7 @@ import {
   tabReach,
   topClicksByPrefix,
   topClicksOnPath,
+  visitorsClickedSiteWide,
   visitorsOnPath,
   type Reach,
   type Tally,
@@ -211,8 +212,26 @@ const PAGE_TABS: PageTab[] = [
   },
   { id: "referanslar", label: "Referanslar", path: "/referanslar" },
   { id: "iletisim", label: "İletişim", path: "/iletisim" },
+  // Site-wide component (renders on every non-admin page), not a real
+  // page — `path` is unused for this tab; its cards use site-wide reach.
+  { id: "float-menu", label: "Mobil Yüzen Menü", path: "" },
   { id: "bloglar", label: "Bloglar", path: "/blog" },
 ]
+
+// Float menü buton target'larının okunabilir etiketleri. Sıralama, kartta
+// görünmesini istediğimiz öncelik sırasıdır.
+const FLOATMENU_LABEL: Record<string, string> = {
+  "floatmenu:web-site": "Web Site butonu",
+  "floatmenu:ads": "Reklamlar butonu",
+  "floatmenu:contact-toggle": "İletişim (panel açma)",
+  "floatmenu:phone": "Telefon seçildi",
+  "floatmenu:whatsapp": "WhatsApp seçildi (mobil)",
+  "floatmenu:desktop-whatsapp": "WhatsApp (masaüstü buton)",
+}
+
+function humanizeFloatMenu(key: string): string {
+  return FLOATMENU_LABEL[key] ?? key
+}
 
 // Targets we hide from "Anasayfada en çok tıklananlar" — those are
 // already surfaced as their own cards or aren't useful as raw clicks.
@@ -459,6 +478,29 @@ export default async function AnalyticsPage({
     10,
     (t) => t.startsWith("referanslar:proje:"),
   )
+
+  // ── Float menü (site geneli) cards ───────────────────────────────────
+  // Yüzen menü her sayfada (admin hariç) render edilir; reach paydası tek
+  // bir sayfa değil, kapsamdaki tüm ziyaretçilerdir. "Kaç kişi geldi" =
+  // toplam ziyaretçi, "nereye tıkladı" = buton bazında dağılım.
+  const floatTotalVisitors = visitors.length
+  const floatTopClicks = topClicksByPrefix(scopeEvents, "floatmenu:", 10)
+  const floatAnyReach: Reach = {
+    reached: floatTotalVisitors,
+    acted: visitorsClickedSiteWide(scopeEvents, (t) =>
+      t.startsWith("floatmenu:"),
+    ).size,
+  }
+  const floatButtonReach = (target: string): Reach => ({
+    reached: floatTotalVisitors,
+    acted: visitorsClickedSiteWide(scopeEvents, (t) => t === target).size,
+  })
+  const floatWebSiteReach = floatButtonReach("floatmenu:web-site")
+  const floatAdsReach = floatButtonReach("floatmenu:ads")
+  const floatContactReach = floatButtonReach("floatmenu:contact-toggle")
+  const floatPhoneReach = floatButtonReach("floatmenu:phone")
+  const floatWhatsappReach = floatButtonReach("floatmenu:whatsapp")
+  const floatDesktopWaReach = floatButtonReach("floatmenu:desktop-whatsapp")
 
   // ── Per-page (bloglar) cards ─────────────────────────────────────────
   // Count page_view events on /blog/<slug> paths, then merge with the
@@ -891,6 +933,69 @@ export default async function AnalyticsPage({
               ...r,
               display: (r.meta ?? r.key).replace(/^Projeyi gör — /, ""),
             }))}
+          />
+        </div>
+      )}
+
+      {activePageTab.id === "float-menu" && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Yüzen menüyü kullananlar"
+            sub="Tüm ziyaretçilerden menüde herhangi bir butona tıklayan"
+            reach={floatAnyReach}
+          />
+
+          <ListCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Buton bazında tıklama"
+            empty="Yüzen menüde henüz tıklama yok."
+            rows={floatTopClicks.map((r) => ({
+              ...r,
+              display: humanizeFloatMenu(r.key),
+            }))}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Web Site butonu"
+            sub="Mobil bar'daki 'Web Site' butonuna tıklayan"
+            reach={floatWebSiteReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Reklamlar butonu"
+            sub="Mobil bar'daki 'Reklamlar' butonuna tıklayan"
+            reach={floatAdsReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="İletişim paneli açıldı"
+            sub="Mobil bar'da 'İletişim'e basıp paneli açan"
+            reach={floatContactReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Telefon seçildi"
+            sub="İletişim panelinden telefonu arayan"
+            reach={floatPhoneReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="WhatsApp seçildi (mobil)"
+            sub="İletişim panelinden WhatsApp'a geçen"
+            reach={floatWhatsappReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="WhatsApp (masaüstü buton)"
+            sub="Masaüstü/tablette sağ alttaki WhatsApp butonuna tıklayan"
+            reach={floatDesktopWaReach}
           />
         </div>
       )}

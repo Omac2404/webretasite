@@ -314,6 +314,23 @@ export function visitorsClickedOnPath(
   return ips
 }
 
+// Distinct IPs that clicked a target matching the predicate anywhere on
+// the site — used for site-wide components (e.g. the floating menu) that
+// render on every page and so can't be scoped to a single path.
+export function visitorsClickedSiteWide(
+  events: StoredEvent[],
+  predicate: (target: string) => boolean,
+): Set<string> {
+  const ips = new Set<string>()
+  for (const e of events) {
+    if (e.type !== "click") continue
+    const target = String(e.data?.target ?? "")
+    if (!predicate(target)) continue
+    ips.add(e.ip)
+  }
+  return ips
+}
+
 // Distinct IPs that fired a tab_change on a path with the given
 // control + value.
 export function visitorsTabChangedOnPath(

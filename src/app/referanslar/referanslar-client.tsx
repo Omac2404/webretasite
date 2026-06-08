@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 import { ProjectCard, ProjectPopup, type ProjectCardData } from "@/components/projects-cards"
 
 // Public /referanslar grid. Reuses the homepage project card + popup so the
@@ -94,14 +96,6 @@ export default function ReferanslarClient() {
     [projects, activeTab],
   )
 
-  const counts = useMemo(
-    () => ({
-      dev: projects.filter((p) => p.category === "dev").length,
-      ops: projects.filter((p) => p.category === "ops").length,
-    }),
-    [projects],
-  )
-
   const openProject =
     openId === null ? null : visible.find((p) => p.id === openId) ?? null
 
@@ -152,17 +146,6 @@ export default function ReferanslarClient() {
               }}
             >
               {tab.label}
-              <span
-                className="ml-2 inline-flex items-center justify-center rounded-full px-1.5 text-[10.5px] font-semibold tabular-nums"
-                style={{
-                  background: active
-                    ? "rgba(60, 99, 159, 0.10)"
-                    : "rgba(0,0,0,0.05)",
-                  color: active ? "#3c639f" : "rgba(0,0,0,0.45)",
-                }}
-              >
-                {counts[tab.id]}
-              </span>
             </button>
           )
         })}
@@ -204,6 +187,20 @@ export default function ReferanslarClient() {
           ))}
         </div>
       )}
+
+      {/* Alt CTA — daha fazla proje için iletişim. Footer'dan hemen önce. */}
+      <div className="mt-16 flex flex-col items-center gap-4 border-t border-black/[0.06] pt-12 text-center">
+        <p className="text-[16px] font-medium tracking-[-0.01em] text-[#0a0a0a] md:text-[18px]">
+          Daha fazla proje ve referans için bizimle iletişime geçebilirsiniz.
+        </p>
+        <Link
+          href="/iletisim"
+          className="inline-flex items-center gap-2 rounded-lg bg-[#3c639f] px-6 py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]"
+        >
+          İletişime geç
+          <ArrowRight size={16} />
+        </Link>
+      </div>
 
       {/* Popup — opens on click as a centered modal (not on hover). */}
       {openProject && (

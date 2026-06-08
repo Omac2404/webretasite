@@ -1,4 +1,4 @@
-import { Image as ImageIcon, Type, Plus, Trash2, ChevronUp, ChevronDown, ArrowLeftRight, Zap, Snail, BadgeCheck } from "lucide-react"
+import { Image as ImageIcon, Type, Plus, Trash2, ChevronUp, ChevronDown, ArrowLeftRight, Zap, Snail, BadgeCheck, Megaphone } from "lucide-react"
 import { readLogos, type Logo, type LogoRow } from "@/lib/logos-store"
 import { readMedia } from "@/lib/media-store"
 import {
@@ -7,6 +7,7 @@ import {
   setGooglePartnerAction,
   setModeAction,
   swapRowAction,
+  toggleAdCustomerAction,
 } from "./actions"
 import { PreviewLink } from "@/components/admin/PreviewLink"
 import { AddLogoForm } from "./add-logo-form"
@@ -20,6 +21,7 @@ export default async function LogosAdminPage() {
   ])
   const rowA = logos.filter((l) => l.row === "a")
   const rowB = logos.filter((l) => l.row === "b")
+  const adCount = logos.filter((l) => l.adCustomer).length
 
   return (
     <div className="mx-auto flex max-w-[1080px] flex-col gap-8">
@@ -124,6 +126,27 @@ export default async function LogosAdminPage() {
         </div>
       </section>
 
+      {/* Reklam müşterileri bilgilendirme */}
+      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
+        <div className="flex items-center gap-2">
+          <Megaphone size={15} className="text-[#3c639f]" />
+          <div className="text-[13px] font-semibold text-[#0a0a0a]">
+            Reklam Müşterileri
+          </div>
+          <span className="ml-auto rounded-full bg-[#3c639f]/[0.08] px-2.5 py-0.5 text-[11.5px] font-medium text-[#3c639f]">
+            {adCount} seçili
+          </span>
+        </div>
+        <p className="mt-1 text-[12.5px] text-black/50">
+          Aşağıdaki logolardan istediklerini{" "}
+          <Megaphone size={12} className="inline align-[-1px] text-[#3c639f]" />{" "}
+          megafon butonuyla &quot;reklam müşterisi&quot; olarak işaretle. İşaretli
+          logolar <strong className="font-medium text-black/70">Dijital
+          Reklamlar</strong> sayfasında &quot;Reklam Müşterilerimiz&quot;
+          bölümünde (satır başına 6 logo) gösterilir.
+        </p>
+      </section>
+
       {/* Existing logos — split into two rows */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <RowColumn
@@ -223,6 +246,24 @@ function LogoRowItem({
       </div>
 
       <div className="flex items-center gap-1">
+        <form action={toggleAdCustomerAction}>
+          <input type="hidden" name="id" value={logo.id} />
+          <input
+            type="hidden"
+            name="value"
+            value={logo.adCustomer ? "off" : "on"}
+          />
+          <IconBtn
+            label={
+              logo.adCustomer
+                ? "Reklam müşterisi (kaldır)"
+                : "Reklam müşterisi yap"
+            }
+            variant={logo.adCustomer ? "active" : "default"}
+          >
+            <Megaphone size={14} />
+          </IconBtn>
+        </form>
         <form action={moveLogoAction}>
           <input type="hidden" name="id" value={logo.id} />
           <input type="hidden" name="direction" value="up" />
@@ -263,14 +304,16 @@ function IconBtn({
   children: React.ReactNode
   label: string
   disabled?: boolean
-  variant?: "default" | "danger"
+  variant?: "default" | "danger" | "active"
 }) {
   const base =
     "flex h-8 w-8 items-center justify-center rounded-md transition-colors"
   const enabled =
     variant === "danger"
       ? "text-black/40 hover:bg-red-50 hover:text-red-600"
-      : "text-black/55 hover:bg-black/[0.05] hover:text-[#0a0a0a]"
+      : variant === "active"
+        ? "bg-[#3c639f] text-white hover:bg-[#2f5288]"
+        : "text-black/55 hover:bg-black/[0.05] hover:text-[#0a0a0a]"
   const dim = "cursor-not-allowed text-black/20"
   return (
     <button

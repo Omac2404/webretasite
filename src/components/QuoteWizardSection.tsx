@@ -195,6 +195,10 @@ const QUOTE_CHANNELS = [
   { id: "email", label: "E-posta", color: "#3c639f", Icon: Mail },
 ]
 
+// Tech badge shown on every step-2 package card except the last one, which
+// is special-cased to "Projeye göre" since its stack is bespoke.
+const QUOTE_PKG_TECH = "Next.js · Node.js"
+
 const QUOTE_STEPS = [
   { num: "01", title: "Sektör & Hizmet" },
   { num: "02", title: "Paket Seçimi" },
@@ -815,6 +819,12 @@ export default function QuoteWizardSection({
                   {wizardHeading.subtitle}
                 </p>
               )}
+              <div className="mt-6 flex justify-center">
+                <span className="inline-block max-w-[600px] rounded-full border border-[#3c639f]/25 bg-[#3c639f]/[0.07] px-5 py-2.5 text-center text-[16px] font-semibold leading-snug tracking-[-0.01em] text-[#3c639f] md:max-w-none md:whitespace-nowrap md:text-[18px]">
+                  <span className="text-[#ea580c]">Paket fiyatlarını</span> ve
+                  detaylarını 1. adımı tamamladıktan sonra görebilirsiniz.
+                </span>
+              </div>
             </div>
           )}
 
@@ -972,7 +982,6 @@ export default function QuoteWizardSection({
                               onChange={e =>
                                 setQuote(p => ({ ...p, industry: e.target.value }))
                               }
-                              placeholder="Örn. butik kafe, mimari ofis, online butik..."
                               className="mt-2.5 w-full rounded-xl border border-black/[0.1] bg-white px-4 py-3.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
                             />
                           </div>
@@ -988,7 +997,6 @@ export default function QuoteWizardSection({
                               onChange={e =>
                                 setQuote(p => ({ ...p, services: e.target.value }))
                               }
-                              placeholder="Örn. kahvaltı servisi, tatlı/pasta üretimi, paket servis..."
                               rows={3}
                               className="mt-2.5 w-full resize-none rounded-xl border border-black/[0.1] bg-white px-4 py-3.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08] md:flex-1"
                             />
@@ -1120,9 +1128,12 @@ export default function QuoteWizardSection({
                             ref={pkgScrollerRef}
                             className="quote-pkg-scroll flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto px-6 md:snap-none md:px-12"
                           >
-                            {projectTypes.map(t => {
+                            {projectTypes.map((t, idx) => {
                               const isSel = quote.projectType === t.id
                               const Icon = QUOTE_ICONS[t.iconKey] ?? Layers
+                              // Last package gets a bespoke "Projeye göre"
+                              // label; the rest show the tech-stack badge.
+                              const isLastPkg = idx === projectTypes.length - 1
                               return (
                                 <button
                                   key={t.id}
@@ -1196,13 +1207,27 @@ export default function QuoteWizardSection({
                                       </li>
                                     ))}
                                   </ul>
-                                  <div className="mt-1 flex items-center gap-2 border-t border-black/[0.06] pt-4">
+                                  <div className="mt-1 flex flex-wrap items-center gap-2 border-t border-black/[0.06] pt-4">
                                     <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-black/40">
                                       Karakter
                                     </span>
                                     <span className="text-[15px] font-bold tracking-[-0.01em] text-[#3c639f]">
                                       {t.descriptor}
                                     </span>
+                                    {/* Tech badge — desktop: pushed to the far
+                                        right of this row; mobile: wraps onto
+                                        its own line below. */}
+                                    <div className="w-full md:ml-auto md:w-auto">
+                                      <span
+                                        className={`inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.05em] ${
+                                          isLastPkg
+                                            ? 'border-amber-300/50 bg-amber-50 text-amber-700'
+                                            : 'border-[#3c639f]/25 bg-[#3c639f]/[0.06] text-[#3c639f]'
+                                        }`}
+                                      >
+                                        {isLastPkg ? 'Projeye göre' : QUOTE_PKG_TECH}
+                                      </span>
+                                    </div>
                                   </div>
                                 </button>
                               )

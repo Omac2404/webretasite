@@ -1,3 +1,334 @@
 {
-  "items": []
+  "items": [
+    {
+      "id": "1780930207840-2ycr34",
+      "url": "/media/image-720-e7kx.webp",
+      "alt": "",
+      "width": 720,
+      "height": 720,
+      "size": 28608,
+      "originalName": "image_720.webp",
+      "createdAt": "2026-06-08T14:50:07.840Z"
+    },
+    {
+      "id": "1780929569845-5h3umq",
+      "url": "/media/balatacilar-logo-renkli-unvan-1024x212-qcib.webp",
+      "alt": "",
+      "width": 1024,
+      "height": 212,
+      "size": 21336,
+      "originalName": "balatacilar-logo-renkli-unvan-1024x212.png",
+      "createdAt": "2026-06-08T14:39:29.845Z"
+    },
+    {
+      "id": "1780928426416-h1olrc",
+      "url": "/media/packaging22-pwqa.webp",
+      "alt": "",
+      "width": 645,
+      "height": 235,
+      "size": 19846,
+      "originalName": "Packaging22.png",
+      "createdAt": "2026-06-08T14:20:26.416Z"
+    },
+    {
+      "id": "1780928019099-i065yq",
+      "url": "/media/abc-kocluk-dark1-png-v6vf.webp",
+      "alt": "",
+      "width": 1000,
+      "height": 1000,
+      "size": 51442,
+      "originalName": "abc-kocluk-dark1.png.webp",
+      "createdAt": "2026-06-08T14:13:39.099Z"
+    },
+    {
+      "id": "1780926995260-ag4uea",
+      "url": "/media/adsiz-tasarim74-1024x347-png-gsag.webp",
+      "alt": "",
+      "width": 1024,
+      "height": 347,
+      "size": 29170,
+      "originalName": "Adsiz-tasarim74-1024x347.png.webp",
+      "createdAt": "2026-06-08T13:56:35.260Z"
+    },
+    {
+      "id": "1780926721548-asa3rn",
+      "url": "/media/iron-select-black-transparent-xhoz.webp",
+      "alt": "Iron Select Automotive logosu",
+      "width": 1024,
+      "height": 210,
+      "size": 9824,
+      "originalName": "iron_select_black_transparent.png",
+      "createdAt": "2026-06-08T13:52:01.548Z"
+    },
+    {
+      "id": "1780926614086-ksnb0b",
+      "url": "/media/iron-select-black-kfl2.webp",
+      "alt": "",
+      "width": 1024,
+      "height": 210,
+      "size": 8040,
+      "originalName": "iron_select_black.png",
+      "createdAt": "2026-06-08T13:50:14.086Z"
+    },
+    {
+      "id": "1780926174109-cu1j5o",
+      "url": "/media/logo-00d3.webp",
+      "alt": "Lodos İnşaat logosu",
+      "width": 300,
+      "height": 150,
+      "size": 11892,
+      "originalName": "logo.png",
+      "createdAt": "2026-06-08T13:42:54.109Z"
+    },
+    {
+      "id": "1780910352008-an2plv",
+      "url": "/media/tavsan-uykusu-1pfh.webp",
+      "alt": "Tavşan Uykusu logosu",
+      "width": 514,
+      "height": 203,
+      "size": 8898,
+      "originalName": "tavsan-uykusu-1780316193202.png",
+      "createdAt": "2026-06-08T09:19:12.008Z"
+    },
+    {
+      "id": "1780910351994-07hgt4",
+      "url": "/media/drone-pilots-ge56.webp",
+      "alt": "Drone Pilots logosu",
+      "width": 337,
+      "height": 73,
+      "size": 4994,
+      "originalName": "drone-pilots-1780316185292.png",
+      "createdAt": "2026-06-08T09:19:11.994Z"
+    },
+    {
+      "id": "1780910351986-4y712m",
+      "url": "/media/sirius-bilgelik-6gyf.webp",
+      "alt": "Sirius Bilgelik logosu",
+      "width": 758,
+      "height": 372,
+      "size": 39060,
+      "originalName": "sirius-bilgelik-1780316172775.png",
+      "createdAt": "2026-06-08T09:19:11.986Z"
+    },
+    {
+      "id": "1780910351957-y2fvr4",
+      "url": "/media/kairu-h2bl.webp",
+      "alt": "KAIRU logosu",
+      "width": 300,
+      "height": 71,
+      "size": 6696,
+      "originalName": "kairu-1780316090241.png",
+      "createdAt": "2026-06-08T09:19:11.957Z"
+    },
+    {
+      "id": "1780910351948-olbabe",
+      "url": "/media/akkonsis-8hga.webp",
+      "alt": "Akkonsis logosu",
+      "width": 1024,
+      "height": 162,
+      "size": 9934,
+      "originalName": "akkonsis-1780316082532.png",
+      "createdAt": "2026-06-08T09:19:11.948Z"
+    },
+    {
+      "id": "1780910351923-pv7q7m",
+      "url": "/media/ceres-tarim-okulu-2w46.webp",
+      "alt": "Ceres Tarım Okulu logosu",
+      "width": 665,
+      "height": 283,
+      "size": 36956,
+      "originalName": "ceres-tarim-okulu-1780316021505.png",
+      "createdAt": "2026-06-08T09:19:11.923Z"
+    },
+    {
+      "id": "1780910351884-j3yaz3",
+      "url": "/media/t-y-t-taxi-tkyn.webp",
+      "alt": "T-Y-T Taxi logosu",
+      "width": 1024,
+      "height": 342,
+      "size": 5108,
+      "originalName": "t-y-t-taxi-1780316013142.png",
+      "createdAt": "2026-06-08T09:19:11.884Z"
+    },
+    {
+      "id": "1780910351858-jje7zi",
+      "url": "/media/ms-vize-merkezi-1f8w.webp",
+      "alt": "MS Vize Merkezi logosu",
+      "width": 314,
+      "height": 198,
+      "size": 4032,
+      "originalName": "ms-vize-merkezi-1780316003829.png",
+      "createdAt": "2026-06-08T09:19:11.858Z"
+    },
+    {
+      "id": "1780910351845-kgkrks",
+      "url": "/media/deniz-erten-akademi-hvtr.webp",
+      "alt": "Deniz Erten Akademi logosu",
+      "width": 392,
+      "height": 245,
+      "size": 19218,
+      "originalName": "deniz-erten-akademi-1780315995516.png",
+      "createdAt": "2026-06-08T09:19:11.845Z"
+    },
+    {
+      "id": "1780910351823-faqhxf",
+      "url": "/media/caglayan-otomasyon-g4sb.webp",
+      "alt": "Çağlayan Otomasyon logosu",
+      "width": 983,
+      "height": 323,
+      "size": 26464,
+      "originalName": "caglayan-otomasyon-1780315848474.png",
+      "createdAt": "2026-06-08T09:19:11.823Z"
+    },
+    {
+      "id": "1780910351785-lz3tcd",
+      "url": "/media/family-dent-lozw.webp",
+      "alt": "Family Dent logosu",
+      "width": 967,
+      "height": 252,
+      "size": 18698,
+      "originalName": "family-dent-1780315929953.png",
+      "createdAt": "2026-06-08T09:19:11.785Z"
+    },
+    {
+      "id": "1780910351749-sad914",
+      "url": "/media/ozi-transportation-63sm.webp",
+      "alt": "Ozi Transportation logosu",
+      "width": 1024,
+      "height": 500,
+      "size": 65360,
+      "originalName": "ozi-transportation-1780315918757.png",
+      "createdAt": "2026-06-08T09:19:11.749Z"
+    },
+    {
+      "id": "1780910351667-nfr5qt",
+      "url": "/media/offera-hksn.webp",
+      "alt": "Offera logosu",
+      "width": 693,
+      "height": 313,
+      "size": 42970,
+      "originalName": "offera-1780315871888.png",
+      "createdAt": "2026-06-08T09:19:11.667Z"
+    },
+    {
+      "id": "1780910351629-uzvuez",
+      "url": "/media/tuco-kafe-market-iqy9.webp",
+      "alt": "Tuco Kafe Market logosu",
+      "width": 1000,
+      "height": 459,
+      "size": 24688,
+      "originalName": "tuco-kafe-market-1780315862047.png",
+      "createdAt": "2026-06-08T09:19:11.629Z"
+    },
+    {
+      "id": "1780910351591-525d2f",
+      "url": "/media/sanitrox-d49b.webp",
+      "alt": "Sanitrox logosu",
+      "width": 965,
+      "height": 208,
+      "size": 33882,
+      "originalName": "sanitrox-1780316096089.png",
+      "createdAt": "2026-06-08T09:19:11.591Z"
+    },
+    {
+      "id": "1780910351555-fdzfwk",
+      "url": "/media/abeliano-quartz-mckp.webp",
+      "alt": "Abeliano Quartz logosu",
+      "width": 1516,
+      "height": 500,
+      "size": 80704,
+      "originalName": "abeliano-quartz-1780315827555.png",
+      "createdAt": "2026-06-08T09:19:11.555Z"
+    },
+    {
+      "id": "1780910351370-bypjki",
+      "url": "/media/buckin-zmb3.webp",
+      "alt": "Buckin logosu",
+      "width": 972,
+      "height": 185,
+      "size": 14874,
+      "originalName": "buckin-1780315810675.png",
+      "createdAt": "2026-06-08T09:19:11.370Z"
+    },
+    {
+      "id": "1780910351339-cq1js8",
+      "url": "/media/la-mer-336a.webp",
+      "alt": "La Mer logosu",
+      "width": 642,
+      "height": 243,
+      "size": 5378,
+      "originalName": "la-mer-1780315782769.png",
+      "createdAt": "2026-06-08T09:19:11.339Z"
+    },
+    {
+      "id": "1780910351322-fry0lq",
+      "url": "/media/inter-trans-mms-la24.webp",
+      "alt": "Inter Trans MMS logosu",
+      "width": 809,
+      "height": 422,
+      "size": 36742,
+      "originalName": "inter-trans-mms-1780315513689.png",
+      "createdAt": "2026-06-08T09:19:11.322Z"
+    },
+    {
+      "id": "1780910351279-zezznx",
+      "url": "/media/astrolog-lale-leyla-okay-e77w.webp",
+      "alt": "Astrolog Lale Leyla Okay logosu",
+      "width": 1024,
+      "height": 290,
+      "size": 38860,
+      "originalName": "astrolog-lale-leyla-okay-1778874515968.png",
+      "createdAt": "2026-06-08T09:19:11.279Z"
+    },
+    {
+      "id": "1780910351246-bibxmg",
+      "url": "/media/d-d-petshop-2yl5.webp",
+      "alt": "D&D Petshop logosu",
+      "width": 581,
+      "height": 158,
+      "size": 26440,
+      "originalName": "d-d-petshop-1778874502185.png",
+      "createdAt": "2026-06-08T09:19:11.246Z"
+    },
+    {
+      "id": "1780910351222-oomtkp",
+      "url": "/media/kirgoz-turizm-qkk7.webp",
+      "alt": "Kırgöz Turizm logosu",
+      "width": 585,
+      "height": 135,
+      "size": 17162,
+      "originalName": "kirgoz-turizm-1778874486736.png",
+      "createdAt": "2026-06-08T09:19:11.222Z"
+    },
+    {
+      "id": "1780910351199-843fuv",
+      "url": "/media/odemor-f7wa.webp",
+      "alt": "Odemor logosu",
+      "width": 1024,
+      "height": 347,
+      "size": 17726,
+      "originalName": "odemor-1778874278217.png",
+      "createdAt": "2026-06-08T09:19:11.199Z"
+    },
+    {
+      "id": "1780910351147-4tx9ha",
+      "url": "/media/anasayfa-baris-el-stf4.webp",
+      "alt": "Anasayfa barış işareti yapan el görseli",
+      "width": 892,
+      "height": 2000,
+      "size": 237398,
+      "originalName": "peace-hand.png",
+      "createdAt": "2026-06-08T09:19:11.147Z"
+    },
+    {
+      "id": "1780910350853-ojc7f8",
+      "url": "/media/anasayfa-ok-el-srhc.webp",
+      "alt": "Anasayfa OK işareti yapan el görseli",
+      "width": 1147,
+      "height": 2000,
+      "size": 184884,
+      "originalName": "ok-hand.jpg",
+      "createdAt": "2026-06-08T09:19:10.853Z"
+    }
+  ]
 }

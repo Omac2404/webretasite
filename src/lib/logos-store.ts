@@ -20,6 +20,9 @@ export type Logo = {
   // back to rendering the name so the row never has gaps.
   imageUrl: string
   row: LogoRow
+  // When true, the logo also shows in the "Reklam Müşterilerimiz" grid on
+  // the Dijital Reklamlar page. Independent of the homepage marquee.
+  adCustomer: boolean
 }
 
 // Google Partner badge shown in the homepage hero. Admin can toggle
@@ -78,6 +81,7 @@ export async function readLogos(): Promise<LogosData> {
             name: String(l.name ?? ""),
             imageUrl: String(l.imageUrl ?? ""),
             row: normalizeRow(l.row),
+            adCustomer: l.adCustomer === true,
           }))
         : [],
       googlePartner: normalizeGooglePartner(parsed.googlePartner),
@@ -104,6 +108,7 @@ export async function addLogo(input: {
     name: input.name,
     imageUrl: input.imageUrl,
     row: input.row,
+    adCustomer: false,
   }
   data.logos.push(logo)
   await writeLogos(data)
@@ -158,6 +163,18 @@ export async function swapLogoRow(id: string): Promise<void> {
   const logo = data.logos.find((l) => l.id === id)
   if (!logo) return
   logo.row = logo.row === "a" ? "b" : "a"
+  await writeLogos(data)
+}
+
+// Mark/unmark a logo as a Dijital Reklamlar "Reklam Müşterisi".
+export async function setLogoAdCustomer(
+  id: string,
+  value: boolean,
+): Promise<void> {
+  const data = await readLogos()
+  const logo = data.logos.find((l) => l.id === id)
+  if (!logo) return
+  logo.adCustomer = value
   await writeLogos(data)
 }
 

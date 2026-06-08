@@ -51,6 +51,22 @@ export function ProjectFormFields({
   )
   const selected = sortedLogos.find((l) => l.id === companyId) ?? null
 
+  // Date can be entered as a full day/month/year OR just a year. Pick the
+  // initial mode from the existing value's shape, and seed each input so
+  // switching modes keeps a sensible default.
+  const initialDate = defaults?.publishDate ?? ""
+  const [dateMode, setDateMode] = useState<"full" | "year">(
+    /^\d{4}$/.test(initialDate) ? "year" : "full",
+  )
+  const fullDateDefault = /^\d{4}-\d{2}-\d{2}$/.test(initialDate)
+    ? initialDate
+    : ""
+  const yearDefault = /^\d{4}$/.test(initialDate)
+    ? initialDate
+    : /^\d{4}-\d{2}-\d{2}$/.test(initialDate)
+      ? initialDate.slice(0, 4)
+      : ""
+
   if (sortedLogos.length === 0) {
     return (
       <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-3 text-[13px] text-amber-900">
@@ -113,14 +129,49 @@ export function ProjectFormFields({
         </Field>
       </div>
 
-      <Field label="Yayın tarihi" hint="Kartta ve pop-up'ta tarih olarak gözükür.">
-        <input
-          name="publishDate"
-          type="date"
-          required
-          defaultValue={defaults?.publishDate ?? ""}
-          className={inputCls}
-        />
+      <Field
+        label="Yayın tarihi"
+        hint="Tam tarih ya da sadece yıl — kartta o şekilde gözükür."
+      >
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-1.5">
+            <DateModeBtn
+              active={dateMode === "full"}
+              onClick={() => setDateMode("full")}
+            >
+              Tam tarih
+            </DateModeBtn>
+            <DateModeBtn
+              active={dateMode === "year"}
+              onClick={() => setDateMode("year")}
+            >
+              Sadece yıl
+            </DateModeBtn>
+          </div>
+          {dateMode === "full" ? (
+            <input
+              key="full"
+              name="publishDate"
+              type="date"
+              required
+              defaultValue={fullDateDefault}
+              className={inputCls}
+            />
+          ) : (
+            <input
+              key="year"
+              name="publishDate"
+              type="number"
+              required
+              min={1900}
+              max={2200}
+              step={1}
+              placeholder="2025"
+              defaultValue={yearDefault}
+              className={inputCls}
+            />
+          )}
+        </div>
       </Field>
 
       <Field
@@ -233,6 +284,30 @@ function SelectedCompanyPreview({ logo }: { logo: Logo }) {
         </div>
       </div>
     </div>
+  )
+}
+
+function DateModeBtn({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        active
+          ? "rounded-lg bg-[#3c639f] px-3 py-1.5 text-[12px] font-medium text-white"
+          : "rounded-lg border border-black/[0.1] bg-white px-3 py-1.5 text-[12px] font-medium text-black/60 transition-colors hover:bg-black/[0.03]"
+      }
+    >
+      {children}
+    </button>
   )
 }
 

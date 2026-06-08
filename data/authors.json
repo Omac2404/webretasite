@@ -1,32 +1,8 @@
 {
   "authors": [
     {
-      "id": "auth-mert",
-      "name": "Mert Aksoy",
-      "expertise": "Senior Full-stack Developer",
-      "photo": ""
-    },
-    {
-      "id": "auth-selin",
-      "name": "Selin Demir",
-      "expertise": "Dijital Pazarlama Uzmanı",
-      "photo": ""
-    },
-    {
-      "id": "auth-kerem",
-      "name": "Kerem Yılmaz",
-      "expertise": "Performans Pazarlama Uzmanı",
-      "photo": ""
-    },
-    {
-      "id": "auth-ekip",
-      "name": "Webreta Ekibi",
-      "expertise": "İçerik Editörü",
-      "photo": ""
-    },
-    {
       "id": "1780664504390-go7pbd",
-      "name": "Deniz Aslantaş",
+      "name": "Deniz",
       "expertise": "Yazılımcı / Web Geliştirici",
       "photo": "/authors/deniz-aslantas-1780664504387.jpg"
     }

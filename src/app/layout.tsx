@@ -6,10 +6,12 @@ import FloatMenu from "@/components/FloatMenu";
 import BfcacheReset from "@/components/BfcacheReset";
 import MaintenanceBanner from "@/components/MaintenanceBanner";
 import CookieConsent from "@/components/CookieConsent";
+import SiteCodeInjector from "@/components/SiteCodeInjector";
 import { readSeo } from "@/lib/seo-store";
 import { readFloatMenu } from "@/lib/float-menu-store";
 import { readSiteSettings } from "@/lib/site-settings-store";
 import { readCookieConsent } from "@/lib/cookie-consent-store";
+import { readSiteCode } from "@/lib/site-code-store";
 import { getMetadataBase } from "@/lib/seo-metadata";
 
 const inter = Inter({
@@ -46,10 +48,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [floatMenu, siteSettings, cookieConsent] = await Promise.all([
+  const [floatMenu, siteSettings, cookieConsent, siteCode] = await Promise.all([
     readFloatMenu(),
     readSiteSettings(),
     readCookieConsent(),
+    readSiteCode(),
   ])
   return (
     <html lang="tr" className="bg-[#fafafa]">
@@ -62,6 +65,10 @@ export default async function RootLayout({
         <Tracker />
         <FloatMenu config={floatMenu} />
         <CookieConsent settings={cookieConsent} />
+        <SiteCodeInjector
+          head={siteCode.headEnabled ? siteCode.headCode : ""}
+          body={siteCode.bodyEnabled ? siteCode.bodyCode : ""}
+        />
         <BfcacheReset />
       </body>
     </html>

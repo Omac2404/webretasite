@@ -7,6 +7,7 @@ import {
   moveLogo,
   setDisplayMode,
   setGooglePartner,
+  setLogoAdCustomer,
   swapLogoRow,
   type LogoDisplayMode,
   type LogoRow,
@@ -21,6 +22,8 @@ function parseRow(value: FormDataEntryValue | null): LogoRow {
 function revalidateBoth(): void {
   revalidatePath("/admin/referanslar")
   revalidatePath("/")
+  // Ad-customer logos render here, so keep it fresh on any logo change.
+  revalidatePath("/dijital-reklamlar")
 }
 
 export async function addLogoAction(
@@ -69,6 +72,18 @@ export async function swapRowAction(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "")
   if (!id) return
   await swapLogoRow(id)
+  revalidateBoth()
+}
+
+// Toggle whether a logo appears in the Dijital Reklamlar "Reklam
+// Müşterilerimiz" grid. `value` is "on"/"off".
+export async function toggleAdCustomerAction(
+  formData: FormData,
+): Promise<void> {
+  const id = String(formData.get("id") ?? "")
+  if (!id) return
+  const value = String(formData.get("value") ?? "") === "on"
+  await setLogoAdCustomer(id, value)
   revalidateBoth()
 }
 

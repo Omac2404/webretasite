@@ -223,9 +223,9 @@ const typewriterWords = [
   { text: "problemi çözeriz", holdDuration: 4000, showCheck: true },
 ]
 
-// Partner wordmarks for the logo bar. Swap with real PNG/SVG logos by
-// dropping them into /public/logos/ and replacing each string with an
-// <Image> tile in LogoTile below.
+// Fallback partner wordmarks for the logo bar — only used when the admin
+// hasn't curated real logos. Real logos are managed in the Referanslar tab
+// (uploaded through the media library as WebP) and rendered via LogoTile.
 const partnersRowA = [
   "Aksel & Partners",
   "Mira Kafe",
@@ -1069,7 +1069,7 @@ function ProjectsSection({
           }}
         >
           <Image
-            src="/brand/ok-hand.jpg"
+            src="/media/anasayfa-ok-el-srhc.webp"
             alt=""
             width={525}
             height={945}
@@ -1974,7 +1974,7 @@ export default function Home({
             }}
           >
             <Image
-              src="/brand/peace-hand.png"
+              src="/media/anasayfa-baris-el-stf4.webp"
               alt=""
               width={1657}
               height={3714}
@@ -2188,7 +2188,7 @@ export default function Home({
                 }}
               >
                 <Image
-                  src="/brand/peace-hand.png"
+                  src="/media/anasayfa-baris-el-stf4.webp"
                   alt=""
                   width={1657}
                   height={3714}
