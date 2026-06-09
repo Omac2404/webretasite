@@ -1,0 +1,5 @@
+# Shell scriptleri ve Dockerfile her zaman LF satir sonu kullansin.
+# Windows'ta CRLF ile commit edilirse Alpine konteynerde "bad interpreter" hatasi olur.
+*.sh        text eol=lf
+docker-entrypoint.sh text eol=lf
+Dockerfile  text eol=lf
