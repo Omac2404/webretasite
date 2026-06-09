@@ -41,6 +41,40 @@ const FALLBACK_WHATSAPP: WhatsAppSettings = {
   display: "+90 532 123 45 67",
 }
 
+// Soft edge fade for the customer-logo marquee — tiles drift in/out instead
+// of clipping at the container edges.
+const MARQUEE_MASK = {
+  maskImage:
+    "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
+  WebkitMaskImage:
+    "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
+} as const
+
+// One logo tile in the reklam-müşterileri marquee. Fixed width + shrink-0 so
+// the flex track can overflow and scroll.
+function AdLogoTile({ c }: { c: { name: string; imageUrl: string } }) {
+  return (
+    <div
+      className="flex aspect-[3/2] w-[150px] shrink-0 items-center justify-center rounded-xl border border-black/[0.06] bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_6px_16px_-8px_rgba(15,23,42,0.10)]"
+      title={c.name}
+    >
+      {c.imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={c.imageUrl}
+          alt={c.name}
+          className="max-h-full max-w-full object-contain"
+          draggable={false}
+        />
+      ) : (
+        <span className="text-center text-[13px] font-semibold text-[#3c639f]">
+          {c.name}
+        </span>
+      )}
+    </div>
+  )
+}
+
 function WhatsAppIcon({ size = 16 }: { size?: number }) {
   return (
     <svg
@@ -186,6 +220,34 @@ const THEMES: Record<ChannelKey, ChannelTheme> = {
       "linear-gradient(135deg, #4285F4 0%, #833AB4 60%, #0866FF 100%)",
     glow: "rgba(60, 99, 159, 0.22)",
     softTint: "rgba(60, 99, 159, 0.08)",
+  },
+}
+
+// Per-channel card frame — a soft neon-ish border + glow so the packages
+// read by channel at a glance: Google bluish, Meta orangish, 360° (ikisi
+// birlikte) greenish. Intentionally distinct from THEMES.glow (where Meta is
+// brand-blue) because the user wants Meta framed in orange.
+// `ring` is the 2px gradient frame used on the featured ("En Popüler") card
+// — same channel hue as the border, with a light→bright sheen so it still
+// reads as the premium card.
+const FRAME: Record<
+  ChannelKey,
+  { border: string; glow: string; ring: string }
+> = {
+  google: {
+    border: "rgba(66, 133, 244, 0.55)",
+    glow: "rgba(66, 133, 244, 0.32)",
+    ring: "linear-gradient(135deg, #4285F4 0%, #8ab4f8 100%)",
+  },
+  meta: {
+    border: "rgba(249, 115, 22, 0.55)",
+    glow: "rgba(249, 115, 22, 0.32)",
+    ring: "linear-gradient(135deg, #f97316 0%, #fdba74 100%)",
+  },
+  "360": {
+    border: "rgba(34, 197, 94, 0.55)",
+    glow: "rgba(34, 197, 94, 0.34)",
+    ring: "linear-gradient(135deg, #22c55e 0%, #86efac 100%)",
   },
 }
 
@@ -1185,6 +1247,7 @@ function PackageCard({
   onRequest: () => void
 }) {
   const theme = THEMES[channel.key]
+  const frame = FRAME[channel.key]
 
   // Featured: static channel-colored conic ring (no rotation) + a brand-
   // navy "En Popüler" badge with a glossy shimmer. The wrapper carries
@@ -1203,15 +1266,22 @@ function PackageCard({
 
       <div
         className={`relative flex flex-1 flex-col rounded-2xl transition-transform duration-500 hover:-translate-y-1 ${
-          isFeatured ? "p-[2px]" : "border border-black/[0.10] bg-white"
+          isFeatured ? "p-[2px]" : "bg-white"
         }`}
         style={
           isFeatured
             ? {
-                background: theme.ringGradient,
-                boxShadow: `0 30px 60px -12px ${theme.glow}, 0 14px 28px -8px ${theme.glow}, 0 4px 10px -2px rgba(15, 23, 42, 0.10)`,
+                // Featured ring + glow both in the channel frame color
+                // (Google blue / Meta orange / 360° green) so it matches the
+                // other cards in its series instead of a generic multi-hue.
+                background: frame.ring,
+                boxShadow: `0 0 24px -2px ${frame.glow}, 0 30px 60px -12px ${frame.glow}, 0 14px 28px -8px ${frame.glow}, 0 4px 10px -2px rgba(15, 23, 42, 0.10)`,
               }
-            : undefined
+            : {
+                // Non-featured: solid channel-colored border + a soft neon glow.
+                border: `1.5px solid ${frame.border}`,
+                boxShadow: `0 0 16px -1px ${frame.glow}, 0 12px 30px -14px ${frame.glow}`,
+              }
         }
       >
         {/* Inner card — white surface with all the content */}
@@ -1507,28 +1577,45 @@ export default function DijitalReklamlarClient({
                 Reklam yönetimini bize emanet eden markalardan bazıları.
               </p>
             </div>
-            <div className="mt-10 grid grid-cols-3 gap-3 sm:gap-4 md:grid-cols-6">
-              {adCustomers.map((c, i) => (
-                <div
-                  key={`${c.name}-${i}`}
-                  className="flex aspect-[3/2] items-center justify-center rounded-xl border border-black/[0.06] bg-white p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04),0_6px_16px_-8px_rgba(15,23,42,0.10)] transition-shadow hover:shadow-[0_2px_4px_rgba(60,99,159,0.08),0_10px_24px_-6px_rgba(60,99,159,0.16)]"
-                  title={c.name}
-                >
-                  {c.imageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={c.imageUrl}
-                      alt={c.name}
-                      className="max-h-full max-w-full object-contain"
-                      draggable={false}
-                    />
-                  ) : (
-                    <span className="text-center text-[13px] font-semibold text-[#3c639f]">
-                      {c.name}
-                    </span>
-                  )}
+            {/* Kayan slider — masaüstünde tek sıra, mobilde çift sıra (zıt
+                yönlerde). İçerik JSX'te ikiye katlanıyor ki track'i -%50
+                kaydırınca dikişsiz döngü olsun; üzerine gelince durur. */}
+            <div className="mt-10">
+              {/* Masaüstü: tek sıra */}
+              <div
+                className="ad-logo-marquee group relative hidden overflow-hidden md:block"
+                style={MARQUEE_MASK}
+              >
+                <div className="ad-logo-track ad-logo-track-left flex w-max gap-4">
+                  {[...adCustomers, ...adCustomers].map((c, i) => (
+                    <AdLogoTile key={`d-${c.name}-${i}`} c={c} />
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Mobil: çift sıra, zıt yönlerde */}
+              <div
+                className="ad-logo-marquee group relative flex flex-col gap-3 overflow-hidden md:hidden"
+                style={MARQUEE_MASK}
+              >
+                <div className="ad-logo-track ad-logo-track-left flex w-max gap-3">
+                  {(() => {
+                    const row = adCustomers.filter((_, i) => i % 2 === 0)
+                    return [...row, ...row].map((c, i) => (
+                      <AdLogoTile key={`ma-${c.name}-${i}`} c={c} />
+                    ))
+                  })()}
+                </div>
+                <div className="ad-logo-track ad-logo-track-right flex w-max gap-3">
+                  {(() => {
+                    const row = adCustomers.filter((_, i) => i % 2 === 1)
+                    const safe = row.length > 0 ? row : adCustomers
+                    return [...safe, ...safe].map((c, i) => (
+                      <AdLogoTile key={`mb-${c.name}-${i}`} c={c} />
+                    ))
+                  })()}
+                </div>
+              </div>
             </div>
           </section>
         )}

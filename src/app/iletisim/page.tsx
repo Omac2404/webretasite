@@ -1,6 +1,6 @@
 import { Mail, Phone, MapPin, Clock } from "lucide-react"
 import SiteHeader from "@/components/SiteHeaderServer"
-import SiteFooter from "@/components/SiteFooter"
+import SiteFooter from "@/components/SiteFooterServer"
 import ContactForm from "@/components/ContactForm"
 import { readContact } from "@/lib/contact-store"
 import { buildPageMetadata } from "@/lib/seo-metadata"

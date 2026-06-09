@@ -4,7 +4,6 @@ import { useMemo, useState } from "react"
 import { Loader2 } from "lucide-react"
 import type { Logo } from "@/lib/logos-store"
 import {
-  PROJECT_CATEGORIES,
   deriveInitials,
   type Project,
   type ProjectCategory,
@@ -101,33 +100,20 @@ export function ProjectFormFields({
         {selected && <SelectedCompanyPreview logo={selected} />}
       </Field>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Field label="Kategori">
-          <select
-            name="category"
-            required
-            defaultValue={defaults?.category ?? "dev"}
-            className={`${inputCls} appearance-none`}
-          >
-            {PROJECT_CATEGORIES.map((c) => (
-              <option key={c.key} value={c.key}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-        </Field>
+      {/* All projects are "Geliştirmeler" — the ops category was retired, so
+          we always submit "dev" and no longer surface a category picker. */}
+      <input type="hidden" name="category" value="dev" />
 
-        <Field label="Tip" hint='Kartta sağ üstte gözüken chip — örn. "Web Sitesi".'>
-          <input
-            name="type"
-            type="text"
-            required
-            defaultValue={defaults?.type ?? ""}
-            placeholder="Web Sitesi"
-            className={inputCls}
-          />
-        </Field>
-      </div>
+      <Field label="Tip" hint='Kartta sağ üstte gözüken chip — örn. "Web Sitesi".'>
+        <input
+          name="type"
+          type="text"
+          required
+          defaultValue={defaults?.type ?? ""}
+          placeholder="Web Sitesi"
+          className={inputCls}
+        />
+      </Field>
 
       <Field
         label="Yayın tarihi"

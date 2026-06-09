@@ -25,11 +25,20 @@ const SEED_BANNER: KobiBanner = {
   ctaHref: "https://izmirwebsiteyaptirma.com",
 }
 
-export default function WebSiteExtras() {
-  // Admin-managed via /admin/web-paketleri. Seed renders on first paint;
-  // /api/web-packages replaces it when the request resolves.
-  const [banner, setBanner] = useState<KobiBanner>(SEED_BANNER)
+export default function WebSiteExtras({
+  banner: bannerProp,
+}: {
+  // Provided by the server (web-site page reads readWebPackages()). Seeding
+  // state from it means the real KOBİ copy is in the first paint — no
+  // default→real swap or layout jump. Falls back to the seed only if a
+  // caller renders this without the prop.
+  banner?: KobiBanner
+} = {}) {
+  const [banner, setBanner] = useState<KobiBanner>(bannerProp ?? SEED_BANNER)
   useEffect(() => {
+    // When the server already provided the banner, skip the refetch — the
+    // value matches and re-fetching would only risk a redundant render.
+    if (bannerProp) return
     let cancelled = false
     fetch("/api/web-packages")
       .then((r) => (r.ok ? r.json() : null))
@@ -41,7 +50,7 @@ export default function WebSiteExtras() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [bannerProp])
 
   const hasImage = banner.imageUrl && banner.imageUrl.trim().length > 0
 

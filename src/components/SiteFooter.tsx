@@ -81,20 +81,36 @@ function telHref(raw: string): string {
   return `tel:${raw.replace(/\s|\(|\)|-/g, "")}`
 }
 
-export default function SiteFooter() {
-  // First paint uses the same defaults the JSON file ships with, so the
-  // footer never flashes empty before /api/footer responds.
-  const [config, setConfig] = useState<FooterConfig>(DEFAULT_FOOTER)
-  const [nav, setNav] = useState<NavItem[]>([])
-  const [legalLinks, setLegalLinks] = useState<LegalLink[]>([])
+export default function SiteFooter({
+  config: configProp,
+  nav: navProp,
+  legalLinks: legalLinksProp,
+  googlePartner: googlePartnerProp,
+}: {
+  // Provided by SiteFooterServer (read server-side). Seeding from these means
+  // the real footer content is in the first paint — no default→real swap or
+  // layout jump. Falls back to client fetch only if rendered without props.
+  config?: FooterConfig
+  nav?: NavItem[]
+  legalLinks?: LegalLink[]
+  googlePartner?: { enabled: boolean; url: string }
+} = {}) {
+  const [config, setConfig] = useState<FooterConfig>(configProp ?? DEFAULT_FOOTER)
+  const [nav, setNav] = useState<NavItem[]>(navProp ?? [])
+  const [legalLinks, setLegalLinks] = useState<LegalLink[]>(legalLinksProp ?? [])
   // Google Partner badge — admin /admin/referanslar > Google Partner. /api/logos
   // bunu config'in yanında dönüyor; ana sayfadakiyle aynı kaynak.
   const [googlePartner, setGooglePartner] = useState<{
     enabled: boolean
     url: string
-  }>({ enabled: false, url: "" })
+  }>(googlePartnerProp ?? { enabled: false, url: "" })
+
+  // Whether the server already handed us the footer payload as props.
+  const hasServerData = Boolean(configProp)
 
   useEffect(() => {
+    // Server already seeded the footer via props — skip the redundant fetches.
+    if (hasServerData) return
     let cancelled = false
     fetch("/api/footer")
       .then((r) => (r.ok ? r.json() : null))
@@ -133,7 +149,7 @@ export default function SiteFooter() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [hasServerData])
 
   // Only render socials that have a URL set — empty entries shouldn't
   // produce dead-end icon buttons.
@@ -151,6 +167,12 @@ export default function SiteFooter() {
   )
 
   const copyright = renderCopyright(config.copyright)
+  // Split "© 2026 Webreta Web Teknolojileri" into the prefix ("© 2026",
+  // rendered white) and the brand ("Webreta Web Teknolojileri", rendered in
+  // bright neon blue). Falls back to the whole string if there's no year.
+  const copyrightMatch = copyright.match(/^(.*?\d{4})\s*(.*)$/)
+  const copyrightPrefix = copyrightMatch ? copyrightMatch[1] : ""
+  const copyrightBrand = copyrightMatch ? copyrightMatch[2] : copyright
 
   return (
     <footer className="relative mt-10 overflow-hidden bg-[#0a0e14] text-white md:mt-12">
@@ -201,6 +223,8 @@ export default function SiteFooter() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
               <a
                 href={config.ctaHref}
+                data-track="footer:cta"
+                data-track-label={config.ctaLabel}
                 className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-white px-7 py-3.5 text-[14px] font-medium text-[#0a0e14] transition-transform duration-300 hover:-translate-y-0.5"
               >
                 <span
@@ -218,6 +242,8 @@ export default function SiteFooter() {
               {config.contact.email && (
                 <a
                   href={`mailto:${config.contact.email}`}
+                  data-track="footer:email"
+                  data-track-label="Footer e-posta (üst CTA)"
                   className="group inline-flex items-center gap-2 text-[14px] text-white/65 transition-colors hover:text-white"
                 >
                   <span className="underline decoration-white/20 decoration-1 underline-offset-[6px] transition-colors group-hover:decoration-[#6a93ce]">
@@ -240,7 +266,7 @@ export default function SiteFooter() {
               </span>
               <div className="mt-5 flex flex-col gap-4">
                 {config.contact.phone && (
-                  <a href={telHref(config.contact.phone)} className="group flex items-start gap-3">
+                  <a href={telHref(config.contact.phone)} data-track="footer:phone" data-track-label="Footer telefon" className="group flex items-start gap-3">
                     <Phone size={16} className="mt-[3px] shrink-0 text-[#6a93ce]" strokeWidth={1.75} />
                     <div>
                       <div className="text-[11px] uppercase tracking-[0.08em] text-white/35">
@@ -253,7 +279,7 @@ export default function SiteFooter() {
                   </a>
                 )}
                 {config.contact.email && (
-                  <a href={`mailto:${config.contact.email}`} className="group flex items-start gap-3">
+                  <a href={`mailto:${config.contact.email}`} data-track="footer:email" data-track-label="Footer e-posta (kart)" className="group flex items-start gap-3">
                     <Mail size={16} className="mt-[3px] shrink-0 text-[#6a93ce]" strokeWidth={1.75} />
                     <div>
                       <div className="text-[11px] uppercase tracking-[0.08em] text-white/35">
@@ -287,7 +313,7 @@ export default function SiteFooter() {
         {/* Middle band — brand mark + horizontal nav + socials. */}
         <div className="mt-20 flex flex-col gap-8 border-t border-white/[0.06] py-8 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
           <div className="flex items-center gap-4">
-            <a href="/" aria-label="Webreta" className="inline-flex items-center">
+            <a href="/" aria-label="Webreta" data-track="footer:logo" data-track-label="Footer logo" className="inline-flex items-center">
               <Image
                 src="/brand/webreta-logo.webp"
                 alt="Webreta"
@@ -355,6 +381,8 @@ export default function SiteFooter() {
                 <a
                   key={item.href}
                   href={item.href}
+                  data-track={`footer:nav:${item.href}`}
+                  data-track-label={item.label}
                   className="text-[13px] text-white/55 transition-colors hover:text-white"
                 >
                   {item.label}
@@ -372,6 +400,8 @@ export default function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
+                  data-track={`footer:social:${key}`}
+                  data-track-label={`Footer ${label}`}
                   className="group relative flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/60 transition-all duration-300 hover:border-transparent hover:text-white"
                 >
                   <span
@@ -387,17 +417,40 @@ export default function SiteFooter() {
           )}
         </div>
 
-        {/* Bottom strip — copyright + admin-picked legal links. */}
-        <div className="flex flex-col gap-3 pb-10 pt-2 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[12px] text-white/30">{copyright}</p>
+        {/* Bottom strip — copyright + admin-picked legal links. On mobile the
+            legal links stack vertically + centered on top, with the copyright
+            centered underneath (flex-col-reverse puts the copyright last);
+            from sm+ it's the usual single row (copyright left, links right). */}
+        <div className="flex flex-col-reverse items-center gap-4 pb-10 pt-2 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:text-left">
+          <p className="text-[12px]">
+            {copyrightPrefix && (
+              <span className="text-white">{copyrightPrefix} </span>
+            )}
+            <span
+              style={{
+                color: "#6ab7ff",
+                textShadow: "0 0 10px rgba(106, 183, 255, 0.6)",
+              }}
+            >
+              {copyrightBrand}
+            </span>
+          </p>
           {legalLinks.length > 0 && (
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-white/35">
+            <div className="flex flex-col items-center gap-2 text-[12px] text-white/35 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-2">
               {legalLinks.map((link, idx) => (
                 <span key={link.id} className="flex items-center gap-5">
                   {idx > 0 && (
-                    <span aria-hidden className="h-1 w-1 rounded-full bg-white/15" />
+                    <span
+                      aria-hidden
+                      className="hidden h-1 w-1 rounded-full bg-white/15 sm:block"
+                    />
                   )}
-                  <a href={link.href} className="transition-colors hover:text-white/70">
+                  <a
+                    href={link.href}
+                    data-track={`footer:legal:${link.id}`}
+                    data-track-label={link.title}
+                    className="transition-colors hover:text-white/70"
+                  >
                     {link.title}
                   </a>
                 </span>

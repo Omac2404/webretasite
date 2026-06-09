@@ -61,6 +61,25 @@ export function EditPostForm({
     })
   }
 
+  // Wrap the current selection in a [metin](url) markdown link (or insert a
+  // placeholder when nothing is selected); cursor lands right after "https://".
+  function insertLink() {
+    const el = contentRef.current
+    const start = el?.selectionStart ?? content.length
+    const end = el?.selectionEnd ?? content.length
+    const selected = content.slice(start, end)
+    const label = selected || "bağlantı metni"
+    const snippet = `[${label}](https://)`
+    const next = content.slice(0, start) + snippet + content.slice(end)
+    setContent(next)
+    requestAnimationFrame(() => {
+      if (!el) return
+      const cursor = start + snippet.length - 1 // just before the closing ")"
+      el.focus()
+      el.setSelectionRange(cursor, cursor)
+    })
+  }
+
   useEffect(() => {
     if (state.ok) {
       setSavedFlash(true)
@@ -107,7 +126,7 @@ export function EditPostForm({
 
       <Field
         label="İçerik"
-        hint="## başlık, ### alt başlık, **kalın**, ![](url) görsel."
+        hint="## başlık, ### alt başlık, **kalın**, [metin](url) link, ![](url) görsel."
       >
         <textarea
           ref={contentRef}
@@ -122,6 +141,7 @@ export function EditPostForm({
           media={media}
           onInsert={(url) => insertSnippet(`\n\n![](${url})\n\n`)}
           onInsertVideo={(snippet) => insertSnippet(snippet)}
+          onInsertLink={insertLink}
         />
       </Field>
 
@@ -158,6 +178,19 @@ export function EditPostForm({
           className="h-4 w-4 rounded border-black/20 text-[#3c639f] focus:ring-[#3c639f]/30"
         />
         <span>Yayında</span>
+      </label>
+
+      <label className="flex flex-col gap-1.5 text-[13px] text-black/70">
+        <span>
+          Yayın tarihi{" "}
+          <span className="text-black/40">(sitede görünen tarih)</span>
+        </span>
+        <input
+          type="date"
+          name="displayDate"
+          defaultValue={post.createdAt ? post.createdAt.slice(0, 10) : ""}
+          className="w-fit rounded-lg border border-black/[0.12] bg-white px-3 py-2 text-[13px] text-[#0a0a0a] focus:border-[#3c639f] focus:outline-none focus:ring-2 focus:ring-[#3c639f]/20"
+        />
       </label>
 
       <label className="flex flex-col gap-1.5 text-[13px] text-black/70">

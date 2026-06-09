@@ -1,12 +1,17 @@
-import { Code2, Info } from "lucide-react"
+import { Code2, Info, Target } from "lucide-react"
 import { readSiteCode } from "@/lib/site-code-store"
+import { readAdsConversions } from "@/lib/ads-conversions-store"
 import { PreviewLink } from "@/components/admin/PreviewLink"
 import { CodeForm } from "./code-form"
+import { AdsConversionsForm } from "./ads-conversions-form"
 
 export const dynamic = "force-dynamic"
 
 export default async function SiteCodeAdminPage() {
-  const settings = await readSiteCode()
+  const [settings, adsConversions] = await Promise.all([
+    readSiteCode(),
+    readAdsConversions(),
+  ])
 
   return (
     <div className="mx-auto flex max-w-[820px] flex-col gap-8">
@@ -38,6 +43,25 @@ export default async function SiteCodeAdminPage() {
         </p>
         <div className="mt-4">
           <CodeForm initial={settings} />
+        </div>
+      </section>
+
+      <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
+        <div className="flex items-center gap-2">
+          <Target size={15} className="text-[#3c639f]" />
+          <div className="text-[13px] font-semibold text-[#0a0a0a]">
+            Google Ads dönüşümleri
+          </div>
+        </div>
+        <p className="mt-1 text-[12.5px] text-black/50">
+          Önce yukarıdaki alana Google Ads etiketini (gtag) yapıştır. Sonra
+          Google Ads&apos;te oluşturduğun dönüşüm aksiyonlarının{" "}
+          <code className="rounded bg-black/[0.05] px-1">send_to</code> değerini
+          (&quot;AW-XXX/etiket&quot;) ilgili kutuya koy. Form gönderimi,
+          WhatsApp ve telefon tıklamaları otomatik dönüşüm olarak gönderilir.
+        </p>
+        <div className="mt-4">
+          <AdsConversionsForm initial={adsConversions} />
         </div>
       </section>
 

@@ -39,8 +39,9 @@ export async function saveProjectsSidebarAction(
   return { ok: true }
 }
 
-function parseCategory(v: FormDataEntryValue | null): ProjectCategory {
-  return String(v ?? "") === "ops" ? "ops" : "dev"
+// The ops category was retired — every project is now "dev" (Geliştirmeler).
+function parseCategory(): ProjectCategory {
+  return "dev"
 }
 
 // Validate the publish date. We accept either a full ISO date
@@ -85,7 +86,7 @@ function readInput(formData: FormData): ProjectInput | string {
   const companyId = String(formData.get("companyId") ?? "").trim()
   const type = String(formData.get("type") ?? "").trim()
   const publishDate = String(formData.get("publishDate") ?? "").trim()
-  const category = parseCategory(formData.get("category"))
+  const category = parseCategory()
   const demand = String(formData.get("demand") ?? "").trim()
   const solution = String(formData.get("solution") ?? "").trim()
   const demandDetail = String(formData.get("demandDetail") ?? "").trim()

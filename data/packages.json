@@ -5,7 +5,7 @@
       "label": "Google",
       "pageTitle": "Google Reklamları",
       "short": "Google",
-      "intro": "Google + Meta",
+      "intro": "Google Ads paketlerimiz ile bütçenize en uygun çözümleri keşfedin.",
       "packages": [
         {
           "key": "basic",
@@ -168,24 +168,30 @@
       "label": "Google + Meta",
       "pageTitle": "Google + Meta",
       "short": "Google",
-      "intro": "Google Ads reklam yönetimi paketlerimiz ile bütçenize en uygun çözümü bulun.",
+      "intro": "Dijital reklam paketlerimizle size en uygun çözümü bulun.",
       "packages": [
         {
           "key": "basic",
           "name": "Başlangıç Paketi",
-          "tagline": "Google ve Instagram/Facebook reklamlarına tek elden başlayın. Temel kurulum ve yönetim.",
+          "tagline": "Temel Google Ads reklam kurulumu ve yönetimi.",
           "price": "₺9.000",
           "audience": [
-            "Reklama yeni başlayan markalar",
+            "Reklamlara yeni başlayacak işletmeler",
             "İki kanalda da görünür olmak isteyenler",
             "Aylık en az 20.000₺ bütçe ayırabilenler"
           ],
           "items": [
-            "Google Ads + Meta Ads hesap kurulumu",
-            "1 kampanya / kanal",
-            "Çapraz kanal raporlaması",
-            "Aylık 1 raporlama toplantısı",
-            "Birleşik dönüşüm takibi"
+            "Google arama reklamları kurulumu",
+            "Anahtar kelime araştırması ve seçimi",
+            "Gereksiz tıklamaları engelleme (negatif kelime)",
+            "Satış/iletişim takibi kurulumu",
+            "Instagram & Facebook reklam kampanyası",
+            "2 reklam seti",
+            "2 reklam görseli",
+            "Doğru hedef kitleye ulaşma",
+            "Aylık reklam raporu",
+            "Aylık performans değerlendirmesi",
+            "Hafta içi 09:00–18:00 destek"
           ],
           "whatsappMessage": ""
         },
@@ -200,12 +206,18 @@
             "Aylık en az 40.000₺ bütçe ayırabilenler"
           ],
           "items": [
-            "Google + Meta çoklu kampanya yönetimi",
-            "Remarketing (her iki kanalda)",
-            "A/B yaratıcı ve metin testleri",
-            "Aylık 2 raporlama toplantısı",
-            "Gelişmiş dönüşüm takibi (GA4 + CAPI)",
-            "Kanallar arası bütçe optimizasyonu"
+            "Google arama + görsel reklamlar",
+            "Siteyi ziyaret edenlere tekrar reklam gösterme",
+            "Haftalık reklam iyileştirmesi",
+            "Farklı reklam metinlerini test etme (A/B)",
+            "Rakip analizi",
+            "Instagram & Facebook satış, trafik ve mesaj reklamları",
+            "Mevcut müşterilere benzeyen yeni kişilere ulaşma",
+            "5 reklam görseli",
+            "Haftalık performans değerlendirmesi",
+            "Bütçe dağıtım planı",
+            "Aylık strateji toplantısı",
+            "Hafta içi 09:00–18:00 destek"
           ],
           "whatsappMessage": ""
         },
@@ -220,12 +232,18 @@
             "Aylık en az 100.000₺ bütçe ayırabilenler"
           ],
           "items": [
-            "Google + Meta'da tüm kampanya tipleri",
-            "Merchant Center + Catalog entegrasyonu",
-            "Gelişmiş kitle segmentasyonu ve attribution",
-            "Haftalık optimizasyon",
-            "Aylık 4 raporlama toplantısı",
-            "Özel dashboard ve stratejik danışmanlık"
+            "Google arama + görsel + mail + YouTube reklamları",
+            "Google'ın akıllı reklam sistemi (Performance Max)",
+            "E-ticaret için ürün reklamları (Shopping)",
+            "Günlük reklam iyileştirmesi ve bütçe kontrolü",
+            "Instagram & Facebook satış, trafik ve mesaj reklamları",
+            "Otomatik ürün reklamları",
+            "10 reklam görseli",
+            "Video reklam stratejisi",
+            "Tüm kanallarda kâr/getiri takibi",
+            "Açılış sayfası iyileştirme önerileri",
+            "Haftalık detaylı rapor",
+            "Öncelikli destek (hafta sonu dahil)"
           ],
           "whatsappMessage": ""
         }
@@ -239,7 +257,7 @@
   "globalCta": {
     "kicker": "Yurtdışı reklamları",
     "title": "Globale satış mı yapmak istiyorsun?",
-    "body": "Avrupa, ABD ve MENA bölgelerine yönelik Google Ads ve Meta kampanyalarını lokalleştirilmiş yaratıcılar, ülkeye özel optimizasyon ve şeffaf raporlamayla biz yönetelim. Strateji ihtiyacınıza göre kurgulanır.",
+    "body": "Avrupa, ABD ve MENA bölgelerine yönelik Google Ads ve Meta kampanyalarını ülkeye özel optimizasyon ve şeffaf raporlamayla biz yönetelim. Strateji ihtiyacınıza göre kurgulanır.",
     "buttonLabel": "İletişime geçin",
     "buttonHref": "/iletisim"
   }

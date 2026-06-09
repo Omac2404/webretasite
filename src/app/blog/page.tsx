@@ -1,6 +1,6 @@
 import Link from "next/link"
 import SiteHeader from "@/components/SiteHeaderServer"
-import SiteFooter from "@/components/SiteFooter"
+import SiteFooter from "@/components/SiteFooterServer"
 import { BlogSearchableGrid } from "@/components/BlogSearchableGrid"
 import { listPublished } from "@/lib/blog-store"
 import { readAuthors } from "@/lib/authors-store"

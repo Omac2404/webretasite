@@ -7,11 +7,13 @@ import BfcacheReset from "@/components/BfcacheReset";
 import MaintenanceBanner from "@/components/MaintenanceBanner";
 import CookieConsent from "@/components/CookieConsent";
 import SiteCodeInjector from "@/components/SiteCodeInjector";
+import AdsConversions from "@/components/AdsConversions";
 import { readSeo } from "@/lib/seo-store";
 import { readFloatMenu } from "@/lib/float-menu-store";
 import { readSiteSettings } from "@/lib/site-settings-store";
 import { readCookieConsent } from "@/lib/cookie-consent-store";
 import { readSiteCode } from "@/lib/site-code-store";
+import { readAdsConversions } from "@/lib/ads-conversions-store";
 import { getMetadataBase } from "@/lib/seo-metadata";
 
 const inter = Inter({
@@ -48,12 +50,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [floatMenu, siteSettings, cookieConsent, siteCode] = await Promise.all([
-    readFloatMenu(),
-    readSiteSettings(),
-    readCookieConsent(),
-    readSiteCode(),
-  ])
+  const [floatMenu, siteSettings, cookieConsent, siteCode, adsConversions] =
+    await Promise.all([
+      readFloatMenu(),
+      readSiteSettings(),
+      readCookieConsent(),
+      readSiteCode(),
+      readAdsConversions(),
+    ])
   return (
     <html lang="tr" className="bg-[#fafafa]">
       <body className={`${inter.variable} font-sans antialiased`}>
@@ -69,6 +73,7 @@ export default async function RootLayout({
           head={siteCode.headEnabled ? siteCode.headCode : ""}
           body={siteCode.bodyEnabled ? siteCode.bodyCode : ""}
         />
+        <AdsConversions settings={adsConversions} />
         <BfcacheReset />
       </body>
     </html>

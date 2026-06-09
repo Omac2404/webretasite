@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, ImageIcon } from "lucide-react"
 import SiteHeader from "@/components/SiteHeaderServer"
-import SiteFooter from "@/components/SiteFooter"
+import SiteFooter from "@/components/SiteFooterServer"
 import { DotPattern } from "@/components/DotPattern"
 import { ConstellationBackdrop } from "@/components/ConstellationBackdrop"
 import { readAbout } from "@/lib/about-store"
@@ -202,6 +202,10 @@ function AboutRowBlock({
         <div className="mt-6">
           <Link
             href={row.buttonHref || "#"}
+            // Dış bağlantılar (ör. Webreta KOBİ) yeni sekmede açılsın.
+            {...(/^https?:\/\//i.test(row.buttonHref || "")
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
             data-track={buttonTrack}
             data-track-label={row.buttonLabel}
             className="group inline-flex items-center gap-2 rounded-md bg-[#3c639f] px-5 py-2.5 text-[14px] font-medium text-white shadow-[0_8px_24px_-8px_rgba(60,99,159,0.4)] transition-all hover:-translate-y-0.5 hover:bg-[#2f5288] hover:shadow-[0_12px_28px_-8px_rgba(60,99,159,0.5)]"
@@ -228,8 +232,15 @@ function AboutRowBlock({
             : "md:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]"
         }`}
       >
-        {imageSide === "left" ? imageBlock : textBlock}
-        {imageSide === "left" ? textBlock : imageBlock}
+        {/* Mobilde her satır görsel → yazı sırasıyla diziliyor (sayfa boyunca
+            görsel-yazı-görsel-yazı akışı). Masaüstünde görsel, istenen yana
+            `order` ile geçiyor; bu yüzden DOM'da her zaman önce görsel var. */}
+        <div className={imageSide === "right" ? "md:order-2" : undefined}>
+          {imageBlock}
+        </div>
+        <div className={imageSide === "right" ? "md:order-1" : undefined}>
+          {textBlock}
+        </div>
       </div>
     </section>
   )

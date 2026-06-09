@@ -216,6 +216,9 @@ const PAGE_TABS: PageTab[] = [
   // page — `path` is unused for this tab; its cards use site-wide reach.
   { id: "float-menu", label: "Mobil Yüzen Menü", path: "" },
   { id: "bloglar", label: "Bloglar", path: "/blog" },
+  // Footer is also site-wide (every non-admin page); like float-menu its
+  // reach denominator is all visitors, not a single path.
+  { id: "footer", label: "Footer", path: "" },
 ]
 
 // Float menü buton target'larının okunabilir etiketleri. Sıralama, kartta
@@ -231,6 +234,31 @@ const FLOATMENU_LABEL: Record<string, string> = {
 
 function humanizeFloatMenu(key: string): string {
   return FLOATMENU_LABEL[key] ?? key
+}
+
+// Footer buton target'larının okunabilir etiketleri. nav/social/legal
+// hedefleri dinamik son ek taşır (footer:nav:/web-site gibi); onları
+// prefiksten türetip kalanı başlık olarak gösteriyoruz.
+const FOOTER_LABEL: Record<string, string> = {
+  "footer:cta": "Ana CTA butonu",
+  "footer:email": "E-posta",
+  "footer:phone": "Telefon",
+  "footer:logo": "Logo (anasayfa)",
+  "footer:partner-badge": "Google Partner badge",
+}
+
+function humanizeFooter(key: string): string {
+  if (FOOTER_LABEL[key]) return FOOTER_LABEL[key]
+  if (key.startsWith("footer:nav:")) {
+    return `Menü: ${key.slice("footer:nav:".length)}`
+  }
+  if (key.startsWith("footer:social:")) {
+    return `Sosyal: ${key.slice("footer:social:".length)}`
+  }
+  if (key.startsWith("footer:legal:")) {
+    return `Yasal: ${key.slice("footer:legal:".length)}`
+  }
+  return key
 }
 
 // Targets we hide from "Anasayfada en çok tıklananlar" — those are
@@ -301,6 +329,30 @@ export default async function AnalyticsPage({
   const deviceTotal = visitors.length
 
   // ── General cards ────────────────────────────────────────────────────
+  // Site-wide conversion ratios: "kaç kişi geldi / kaç kişi şu etkileşime
+  // geçti". Denominator is every visitor in scope; numerator is the distinct
+  // IPs that triggered the relevant target ANYWHERE on the site (these
+  // interactions live on multiple pages + the floating menu, so they can't
+  // be scoped to one path).
+  const siteWideReach = (predicate: (t: string) => boolean): Reach => ({
+    reached: visitors.length,
+    acted: visitorsClickedSiteWide(scopeEvents, predicate).size,
+  })
+  // KOBİ geçişleri: web-site banner/popup, hakkımızda CTA'sı (row2) ve
+  // referanslar sayfasındaki KOBİ butonu. Hepsi izmirwebsiteyaptirma.com'a
+  // gider.
+  const kobiReach: Reach = siteWideReach(
+    (t) => t.includes("kobi") || t === "hakkimizda:row2-cta",
+  )
+  // Herhangi bir WhatsApp etkileşimi: paket WhatsApp'ları + yüzen menü
+  // (mobil/masaüstü) WhatsApp butonları.
+  const whatsappReach: Reach = siteWideReach((t) => t.includes("whatsapp"))
+  // Herhangi bir telefon/"hemen ara" etkileşimi: iletişim telefon kartı +
+  // yüzen menü telefon seçimi.
+  const phoneReach: Reach = siteWideReach((t) => t.includes("phone"))
+  // Herhangi bir form gönderimi: iletişim, teklif ve randevu formları.
+  const formReach: Reach = siteWideReach((t) => t.startsWith("form-submit:"))
+
   const headerNavClicks = topClicksByPrefix(scopeEvents, "header:nav:", 5)
   const homeTopClicks = topClicksOnPath(
     scopeEvents,
@@ -341,7 +393,6 @@ export default async function AnalyticsPage({
   )
   const testimonialsDwell = sectionDwellSummary(scopeEvents, "testimonials")
   const projectsDwell = sectionDwellSummary(scopeEvents, "projects")
-  const opsTabReach: Reach = tabReach(scopeEvents, "projects", "ops", "/")
   const serviceCardsReach: Reach = clickReach(
     scopeEvents,
     (t) => HOME_SERVICE_CARD_TARGETS.has(t),
@@ -466,10 +517,9 @@ export default async function AnalyticsPage({
     "/referanslar",
   ).size
   const referanslarDwell = sectionDwellSummary(scopeEvents, "referanslar")
-  const referanslarOpsTabReach: Reach = tabReach(
+  const referanslarKobiReach: Reach = clickReach(
     scopeEvents,
-    "referanslar",
-    "ops",
+    (t) => t === "referanslar:kobi",
     "/referanslar",
   )
   const referanslarTopClicks = topClicksOnPath(
@@ -501,6 +551,24 @@ export default async function AnalyticsPage({
   const floatPhoneReach = floatButtonReach("floatmenu:phone")
   const floatWhatsappReach = floatButtonReach("floatmenu:whatsapp")
   const floatDesktopWaReach = floatButtonReach("floatmenu:desktop-whatsapp")
+
+  // ── Footer (site geneli) cards ───────────────────────────────────────
+  // Footer her sayfada render edilir; tıpkı yüzen menü gibi reach paydası
+  // kapsamdaki tüm ziyaretçilerdir. Hedef bazlı reach için site geneli
+  // tıklama kümesini kullanıyoruz.
+  const footerTotalVisitors = visitors.length
+  const footerTopClicks = topClicksByPrefix(scopeEvents, "footer:", 12)
+  const footerReach = (predicate: (t: string) => boolean): Reach => ({
+    reached: footerTotalVisitors,
+    acted: visitorsClickedSiteWide(scopeEvents, predicate).size,
+  })
+  const footerAnyReach = footerReach((t) => t.startsWith("footer:"))
+  const footerCtaReach = footerReach((t) => t === "footer:cta")
+  const footerPhoneReach = footerReach((t) => t === "footer:phone")
+  const footerEmailReach = footerReach((t) => t === "footer:email")
+  const footerSocialReach = footerReach((t) => t.startsWith("footer:social:"))
+  const footerNavReach = footerReach((t) => t.startsWith("footer:nav:"))
+  const footerPartnerReach = footerReach((t) => t === "footer:partner-badge")
 
   // ── Per-page (bloglar) cards ─────────────────────────────────────────
   // Count page_view events on /blog/<slug> paths, then merge with the
@@ -645,6 +713,38 @@ export default async function AnalyticsPage({
         sub="Tüm sayfaları kapsayan kartlar"
       />
 
+      {/* Site geneli dönüşüm oranları — her sayfayı kapsayan "kaç kişi geldi
+          / kaç kişi şu etkileşime geçti" kartları. */}
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <ReachCard
+          icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+          title="Webreta KOBİ'ye geçenler"
+          sub="Tüm ziyaretçilerden KOBİ sitesine yönlenen (banner / popup / butonlar)"
+          reach={kobiReach}
+        />
+
+        <ReachCard
+          icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+          title="WhatsApp etkileşimi"
+          sub="Herhangi bir WhatsApp butonuna tıklayan (paketler + yüzen menü)"
+          reach={whatsappReach}
+        />
+
+        <ReachCard
+          icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+          title="Telefon / Hemen ara"
+          sub="Telefon numarasına tıklayan (iletişim + yüzen menü)"
+          reach={phoneReach}
+        />
+
+        <ReachCard
+          icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+          title="Form gönderenler"
+          sub="Herhangi bir formu gönderen (iletişim / teklif / randevu)"
+          reach={formReach}
+        />
+      </div>
+
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
         <ListCard
           icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
@@ -749,13 +849,6 @@ export default async function AnalyticsPage({
             title="Projelerde durma süresi"
             visitorsOnPage={homeVisitorCount}
             dwell={projectsDwell}
-          />
-
-          <ReachCard
-            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
-            title="Operasyonlar sekmesi"
-            sub="Projeler bölümünde 'Operasyonlar' sekmesine geçen"
-            reach={opsTabReach}
           />
 
           <ReachCard
@@ -920,18 +1013,18 @@ export default async function AnalyticsPage({
 
           <ReachCard
             icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
-            title="Operasyonlar sekmesi"
-            sub="Referanslar sayfasında 'Operasyonlar' sekmesine geçen"
-            reach={referanslarOpsTabReach}
+            title="Webreta KOBİ'ye geçenler"
+            sub="Sayfa altındaki 'Webreta KOBİ' butonuna tıklayan"
+            reach={referanslarKobiReach}
           />
 
           <ListCard
             icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
             title="En çok tıklanan referanslar"
-            empty="Henüz 'Projeyi gör' tıklaması yok."
+            empty="Henüz proje kartı tıklaması yok."
             rows={referanslarTopClicks.map((r) => ({
               ...r,
-              display: (r.meta ?? r.key).replace(/^Projeyi gör — /, ""),
+              display: r.meta ?? r.key,
             }))}
           />
         </div>
@@ -1002,6 +1095,69 @@ export default async function AnalyticsPage({
 
       {activePageTab.id === "bloglar" && (
         <BlogStats stats={blogStats} scopeLabel={scopeLabel} />
+      )}
+
+      {activePageTab.id === "footer" && (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Footer'ı kullananlar"
+            sub="Tüm ziyaretçilerden footer'da herhangi bir bağlantıya tıklayan"
+            reach={footerAnyReach}
+          />
+
+          <ListCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Footer'da en çok tıklananlar"
+            empty="Footer'da henüz tıklama yok."
+            rows={footerTopClicks.map((r) => ({
+              ...r,
+              display: humanizeFooter(r.key),
+            }))}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Ana CTA butonu"
+            sub="Footer üstündeki büyük CTA butonuna tıklayan"
+            reach={footerCtaReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Telefon"
+            sub="Footer iletişim kartındaki telefona tıklayan"
+            reach={footerPhoneReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="E-posta"
+            sub="Footer'daki e-posta bağlantılarına tıklayan"
+            reach={footerEmailReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Menü linkleri"
+            sub="Footer'daki herhangi bir menü bağlantısına tıklayan"
+            reach={footerNavReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Sosyal medya"
+            sub="Footer'daki herhangi bir sosyal medya ikonuna tıklayan"
+            reach={footerSocialReach}
+          />
+
+          <ReachCard
+            icon={<MousePointerClick size={14} className="text-[#3c639f]" />}
+            title="Google Partner badge"
+            sub="Footer'daki Google Partner rozetine tıklayan"
+            reach={footerPartnerReach}
+          />
+        </div>
       )}
 
       {/* Visitors */}

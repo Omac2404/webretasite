@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import SiteHeader from "@/components/SiteHeaderServer"
-import SiteFooter from "@/components/SiteFooter"
+import SiteFooter from "@/components/SiteFooterServer"
 import { getLegalPageBySlug } from "@/lib/legal-store"
 import { readSeo } from "@/lib/seo-store"
 

@@ -294,3 +294,34 @@
   }
 }
 
+/* Reklam müşteri logoları marquee'si (dijital-reklamlar). Track JSX'te 2x
+   render edildiği için -%50 / +%50 kaydırma dikişsiz döner; üzerine gelince
+   durur. Masaüstü tek sıra (sola), mobil çift sıra (zıt yönler). */
+.ad-logo-track {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+.ad-logo-track-left {
+  animation-name: adMarqueeLeft;
+  animation-duration: 40s;
+}
+.ad-logo-track-right {
+  animation-name: adMarqueeRight;
+  animation-duration: 32s;
+}
+.ad-logo-marquee:hover .ad-logo-track {
+  animation-play-state: paused;
+}
+@keyframes adMarqueeLeft {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes adMarqueeRight {
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ad-logo-track { animation: none; }
+}
+

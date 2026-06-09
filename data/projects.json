@@ -57,6 +57,20 @@
       "updatedAt": "2026-06-08T14:00:21.900Z"
     },
     {
+      "id": "1780938947248-not3qw",
+      "companyId": "1780938762316-9t4ue5",
+      "category": "dev",
+      "type": "Web Sitesi",
+      "publishDate": "2026-04-28",
+      "demand": "Pilates ekipmanlarının profesyonel şekilde sergilenmesi ve incelenebilmesi",
+      "solution": "Ürün sayfalarında detay ve renk seçimleri özel olarak çalışıldı",
+      "demandDetail": "Pilates ekipmanları üreten/satan RN Pilates Equipment, reformer, cadillac, sandalye ve barel gibi ekipmanlarını profesyonel ve etkileyici bir şekilde sergileyebileceği bir web sitesi istedi. Her ürünün teknik özellikleriyle detaylı incelenebildiği; müşterinin malzeme, kaplama ve renk gibi seçenekler arasından tercihini görebildiği, markanın premium algısını yansıtan bir yapı öncelikli beklentiydi.",
+      "solutionDetail": "Markanın premium kimliğine uygun, şık ve güçlü görsel diline sahip bir web sitesi geliştirdik. Ekipmanları kategori bazında düzenleyen bir vitrin yapısının yanına, her ürün için teknik detayların ve görsel galerinin sunulduğu özel ürün sayfaları kurduk. Ürün sayfalarında müşterinin renk ve varyasyon seçimlerini canlı olarak görebildiği özel bir seçim mekanizması geliştirerek; ziyaretçinin ekipmanı her yönüyle inceleyip kişiselleştirebildiği, markayı sektöründe profesyonel konumlandıran nitelikli bir tanıtım platformu oluşturduk.",
+      "siteUrl": "https://rnpilatesequipment.com/",
+      "createdAt": "2026-06-08T17:15:47.248Z",
+      "updatedAt": "2026-06-08T17:15:47.248Z"
+    },
+    {
       "id": "1780928202524-cp23dd",
       "companyId": "1780928030019-dbr1t9",
       "category": "dev",
@@ -335,13 +349,27 @@
       "siteUrl": "https://ddpetshop.com/",
       "createdAt": "2026-06-05T11:57:23.269Z",
       "updatedAt": "2026-06-08T15:29:55.641Z"
+    },
+    {
+      "id": "1780939198289-1we70p",
+      "companyId": "1780938979881-hwmssw",
+      "category": "dev",
+      "type": "E-ticaret",
+      "publishDate": "2025",
+      "demand": "Profesyonel mekaniklerde yüksek hacimli e-ticaret konsepti talep edildi",
+      "solution": "Entegra altyapısında özel tasarıma sahip bir e-ticaret platformu geliştirildi",
+      "demandDetail": "Pet ürünleri satışı yapan Petimemama, geniş ürün gamını yüksek satış hacmini kaldırabilecek profesyonel bir altyapıda sunabileceği bir e-ticaret platformu istedi. Binlerce ürünün düzenli kategorilerde sergilendiği, stok ve sipariş süreçlerinin Entegra gibi bir e-ticaret altyapısıyla sorunsuz yönetilebildiği; markanın kimliğini yansıtan özel tasarımlı bir mağaza öncelikli beklentiydi.",
+      "solutionDetail": "Markanın kurumsal kimliğine uygun, özel tasarıma sahip ve yüksek hacimli satışa hazır bir e-ticaret platformu geliştirdik. Ürünleri kedi/köpek ve kategori bazında düzenleyen, hızlı arama ve filtrelemeyi destekleyen bir yapı kurduk; stok, ürün ve sipariş yönetimini Entegra altyapısıyla entegre ederek operasyonel süreçleri otomatize ettik. Standart tema görünümünden uzak, markaya özel arayüz tasarımıyla birlikte; hem performanslı hem de yönetimi kolay, büyümeye hazır bir online satış platformu oluşturduk.",
+      "siteUrl": "https://www.petimemama.com/",
+      "createdAt": "2026-06-08T17:19:58.289Z",
+      "updatedAt": "2026-06-08T17:19:58.289Z"
     }
   ],
   "sidebar": {
     "titleLeading": "Her projeye sıfırdan,",
     "titleHighlight": "ihtiyaca özel.",
-    "description": "Hazır şablon kullanmıyoruz. Talebinizi dinleyip size özel çözüm kurguluyoruz; web sitesinden eklentiye, sunucu taşımadan güvenlik kurulumuna kadar her adımı sizin işinize göre tasarlıyoruz.",
-    "ctaLabel": "Teklif al",
-    "ctaHref": "#teklif"
+    "description": "Talebinizi dinleyip size özel çözüm kurguluyoruz; web sitesinden eklentiye, sunucu taşımadan kurumsal e-posta işlemlerine kadar her adımı sizin işinize göre tasarlıyoruz.",
+    "ctaLabel": "Referanslar",
+    "ctaHref": "/referanslar"
   }
 }

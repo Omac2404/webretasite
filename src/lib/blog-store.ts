@@ -152,6 +152,9 @@ export async function addPost(input: {
   coverImage: string
   published: boolean
   publishAt?: string
+  // Optional ISO override for the publicly-displayed date (and sort key).
+  // Empty/omitted falls back to the current time.
+  createdAt?: string
   seo?: Partial<BlogPostSeo>
 }): Promise<BlogPost> {
   const data = await readBlog()
@@ -167,7 +170,7 @@ export async function addPost(input: {
     excerpt: input.excerpt,
     content: input.content.replace(/\r\n/g, "\n"),
     coverImage: input.coverImage,
-    createdAt: now,
+    createdAt: input.createdAt || now,
     updatedAt: now,
     published: input.published,
     publishAt: input.publishAt ?? "",
@@ -189,6 +192,9 @@ export async function updatePost(
     coverImage?: string
     published: boolean
     publishAt?: string
+    // Optional ISO override for the publicly-displayed date. When empty the
+    // existing createdAt is kept untouched.
+    createdAt?: string
     seo?: Partial<BlogPostSeo>
   },
 ): Promise<void> {
@@ -208,6 +214,7 @@ export async function updatePost(
   if (typeof input.coverImage === "string") post.coverImage = input.coverImage
   post.published = input.published
   if (input.publishAt !== undefined) post.publishAt = input.publishAt
+  if (input.createdAt) post.createdAt = input.createdAt
   const seo = normalizeSeo(input.seo)
   if (seo) post.seo = seo
   else delete post.seo

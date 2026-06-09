@@ -57,6 +57,16 @@ function normalizePublishAt(value: string): string {
   return Number.isNaN(d.getTime()) ? "" : d.toISOString()
 }
 
+// The display-date picker is a plain `date` input ("YYYY-MM-DD"). Convert
+// to an ISO timestamp at noon so timezone shifts can't bump it to the
+// previous/next calendar day when formatted for display. Blank → "".
+function normalizeDisplayDate(value: string): string {
+  const trimmed = value.trim()
+  if (!trimmed) return ""
+  const d = new Date(`${trimmed}T12:00:00`)
+  return Number.isNaN(d.getTime()) ? "" : d.toISOString()
+}
+
 export async function addPostAction(
   _prev: PostState,
   formData: FormData,
@@ -67,6 +77,7 @@ export async function addPostAction(
   const content = String(formData.get("content") ?? "").trim()
   const published = formData.get("published") === "on"
   const publishAt = normalizePublishAt(String(formData.get("publishAt") ?? ""))
+  const createdAt = normalizeDisplayDate(String(formData.get("displayDate") ?? ""))
 
   if (!title) return { error: "Başlık zorunlu." }
   if (!content) return { error: "İçerik boş olamaz." }
@@ -84,6 +95,7 @@ export async function addPostAction(
     coverImage,
     published,
     publishAt,
+    createdAt,
     seo: parseSeoFromForm(formData),
   })
 
@@ -102,6 +114,7 @@ export async function updatePostAction(
   const content = String(formData.get("content") ?? "").trim()
   const published = formData.get("published") === "on"
   const publishAt = normalizePublishAt(String(formData.get("publishAt") ?? ""))
+  const createdAt = normalizeDisplayDate(String(formData.get("displayDate") ?? ""))
 
   if (!id) return { error: "Geçersiz yazı." }
   if (!title) return { error: "Başlık zorunlu." }
@@ -121,6 +134,7 @@ export async function updatePostAction(
     coverImage,
     published,
     publishAt,
+    createdAt,
     seo: parseSeoFromForm(formData),
   })
 

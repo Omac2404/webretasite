@@ -58,6 +58,13 @@
       "adCustomer": false
     },
     {
+      "id": "1780938979881-hwmssw",
+      "name": "Petimemama",
+      "imageUrl": "/media/logo-bew8.webp",
+      "row": "a",
+      "adCustomer": true
+    },
+    {
       "id": "1780316096092-6pct8g",
       "name": "Sanitrox",
       "imageUrl": "/media/sanitrox-d49b.webp",
@@ -135,13 +142,6 @@
       "adCustomer": false
     },
     {
-      "id": "1780316090245-ve6o66",
-      "name": "KAIRU",
-      "imageUrl": "/media/kairu-h2bl.webp",
-      "row": "a",
-      "adCustomer": false
-    },
-    {
       "id": "1780316172778-7wtphs",
       "name": "Sirius Bilgelik",
       "imageUrl": "/media/sirius-bilgelik-6gyf.webp",
@@ -170,16 +170,16 @@
       "adCustomer": false
     },
     {
-      "id": "1780926734818-4njtj3",
-      "name": "Iron Select Automotive",
-      "imageUrl": "/media/iron-select-black-transparent-xhoz.webp",
+      "id": "1780316090245-ve6o66",
+      "name": "KAIRU",
+      "imageUrl": "/media/kairu-h2bl.webp",
       "row": "a",
       "adCustomer": false
     },
     {
-      "id": "1780927020012-aachht",
-      "name": "Rudy's Premium Pet Food",
-      "imageUrl": "/media/adsiz-tasarim74-1024x347-png-gsag.webp",
+      "id": "1780926734818-4njtj3",
+      "name": "Iron Select Automotive",
+      "imageUrl": "/media/iron-select-black-transparent-xhoz.webp",
       "row": "a",
       "adCustomer": false
     },
@@ -191,11 +191,25 @@
       "adCustomer": false
     },
     {
+      "id": "1780927020012-aachht",
+      "name": "Rudy's Premium Pet Food",
+      "imageUrl": "/media/adsiz-tasarim74-1024x347-png-gsag.webp",
+      "row": "a",
+      "adCustomer": false
+    },
+    {
       "id": "1780928429511-z4g7vt",
       "name": "Odepack",
       "imageUrl": "/media/packaging22-pwqa.webp",
       "row": "a",
       "adCustomer": false
+    },
+    {
+      "id": "1780939783274-s6hcc7",
+      "name": "Leo Concept",
+      "imageUrl": "/media/logo-6rwy.webp",
+      "row": "b",
+      "adCustomer": true
     },
     {
       "id": "1780929574196-4okxze",
@@ -205,11 +219,109 @@
       "adCustomer": false
     },
     {
+      "id": "1780938762316-9t4ue5",
+      "name": "RN Pilates Equipment",
+      "imageUrl": "/media/rn-pilates-logo-png-hwro.webp",
+      "row": "a",
+      "adCustomer": false
+    },
+    {
+      "id": "1780940329454-6hmqxo",
+      "name": "Wood Perest",
+      "imageUrl": "/media/woodperest-black-transparent-hfey.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
       "id": "1780930210980-sgo8sd",
       "name": "Alesta Coffee",
       "imageUrl": "/media/image-720-e7kx.webp",
       "row": "b",
-      "adCustomer": false
+      "adCustomer": true
+    },
+    {
+      "id": "1780939354899-styzia",
+      "name": "Workout Zone",
+      "imageUrl": "/media/workout-zone-logo-renkli-yatay-1024x351-4odj.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780939388389-54i0qq",
+      "name": "North Point Surf Center",
+      "imageUrl": "/media/north-point-surf-center4-duil.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780939446055-bhhdn5",
+      "name": "Rotam Ambalaj",
+      "imageUrl": "/media/adsiz-tasarim21-nu2k.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780939615741-eogol5",
+      "name": "Eren 35 Oto Lastik",
+      "imageUrl": "/media/eren-oto-lastik-1-duzenlendi-27ft.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780939818552-m6h12z",
+      "name": "Patinoya Veteriner Kliniği",
+      "imageUrl": "/media/patinoya-1-psc2.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780939859509-4qjjui",
+      "name": "Özkan Halı Yıkama",
+      "imageUrl": "/media/ozkan-hali-yikama-logo-dv6n.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780939893529-ant0d5",
+      "name": "Elif Platform",
+      "imageUrl": "/media/elif-platform2-2-page-0001-duzenlendi-1024x307-deqq.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780940180257-99ma8g",
+      "name": "FS Dental Clinics",
+      "imageUrl": "/media/fs-dental-logo-w53o.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780940113423-s0mhkm",
+      "name": "Dandini Uyku",
+      "imageUrl": "/media/dandini-logo-8u70.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780940426258-gaoadr",
+      "name": "Alp Akü",
+      "imageUrl": "/media/22373220192835525210logo-dark-1-neo5.svg",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780939934193-2rd1ku",
+      "name": "Dadaş Halı Yıkama",
+      "imageUrl": "/media/dadas-hali-yikama-logo-yatay-1024x363-3n7f.webp",
+      "row": "b",
+      "adCustomer": true
+    },
+    {
+      "id": "1780949814146-537vaa",
+      "name": "Glamdoll",
+      "imageUrl": "/media/screenshot-17-5cfr.webp",
+      "row": "b",
+      "adCustomer": true
     }
   ],
   "googlePartner": {

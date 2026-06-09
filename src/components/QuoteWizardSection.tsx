@@ -195,9 +195,10 @@ const QUOTE_CHANNELS = [
   { id: "email", label: "E-posta", color: "#3c639f", Icon: Mail },
 ]
 
-// Tech badge shown on every step-2 package card except the last one, which
-// is special-cased to "Projeye göre" since its stack is bespoke.
-const QUOTE_PKG_TECH = "Next.js · Node.js"
+// Tech badge shown on every step-2 package card. Every package is delivered
+// as bespoke software, so they all carry the same "Özel yazılım" label in the
+// amber/orange treatment.
+const QUOTE_PKG_TECH = "Özel yazılım"
 
 const QUOTE_STEPS = [
   { num: "01", title: "Sektör & Hizmet" },
@@ -260,6 +261,7 @@ const QUOTE_DEFAULT: QuoteForm = {
 export default function QuoteWizardSection({
   initialWizardHeading,
   initialPackages,
+  initialKobiPopup,
 }: {
   initialWizardHeading?: {
     titleLeader: string
@@ -267,7 +269,25 @@ export default function QuoteWizardSection({
     subtitle: string
   }
   initialPackages?: QuoteProjectType[]
+  // KOBİ cross-sell popup copy — admin-managed via /admin/web-paketleri.
+  initialKobiPopup?: {
+    title: string
+    description: string
+    dismissLabel: string
+    ctaLabel: string
+    ctaHref: string
+  }
 } = {}) {
+  // Resolved popup copy (server-provided when present, otherwise sensible
+  // defaults so the wizard works standalone).
+  const kobiPopup = initialKobiPopup ?? {
+    title: "Webreta KOBİ'yi de tavsiye ederiz!",
+    description:
+      "Küçük ve orta ölçekli işletmeler için tasarlanmış, daha hızlı ve daha uygun fiyatlı kurumsal site çözümlerimiz var.",
+    dismissLabel: "Bu pakette devam et",
+    ctaLabel: "Webreta KOBİ",
+    ctaHref: WEBRETA_KOBI_URL,
+  }
   // Quote wizard state
   const [quoteStep, setQuoteStep] = useState(0)
   const [quoteDir, setQuoteDir] = useState<1 | -1>(1)
@@ -982,6 +1002,7 @@ export default function QuoteWizardSection({
                               onChange={e =>
                                 setQuote(p => ({ ...p, industry: e.target.value }))
                               }
+                              placeholder="Danışmanlık, inşaat, mühendislik vb..."
                               className="mt-2.5 w-full rounded-xl border border-black/[0.1] bg-white px-4 py-3.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
                             />
                           </div>
@@ -998,6 +1019,7 @@ export default function QuoteWizardSection({
                                 setQuote(p => ({ ...p, services: e.target.value }))
                               }
                               rows={3}
+                              placeholder="Örn. danışmanlık, kurulum, bakım, satış sonrası destek..."
                               className="mt-2.5 w-full resize-none rounded-xl border border-black/[0.1] bg-white px-4 py-3.5 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08] md:flex-1"
                             />
                           </div>
@@ -1128,12 +1150,9 @@ export default function QuoteWizardSection({
                             ref={pkgScrollerRef}
                             className="quote-pkg-scroll flex snap-x snap-mandatory items-stretch gap-3 overflow-x-auto px-6 md:snap-none md:px-12"
                           >
-                            {projectTypes.map((t, idx) => {
+                            {projectTypes.map((t) => {
                               const isSel = quote.projectType === t.id
                               const Icon = QUOTE_ICONS[t.iconKey] ?? Layers
-                              // Last package gets a bespoke "Projeye göre"
-                              // label; the rest show the tech-stack badge.
-                              const isLastPkg = idx === projectTypes.length - 1
                               return (
                                 <button
                                   key={t.id}
@@ -1216,16 +1235,12 @@ export default function QuoteWizardSection({
                                     </span>
                                     {/* Tech badge — desktop: pushed to the far
                                         right of this row; mobile: wraps onto
-                                        its own line below. */}
+                                        its own line below. Every package is
+                                        bespoke, so they all share the amber
+                                        "Özel yazılım" treatment. */}
                                     <div className="w-full md:ml-auto md:w-auto">
-                                      <span
-                                        className={`inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.05em] ${
-                                          isLastPkg
-                                            ? 'border-amber-300/50 bg-amber-50 text-amber-700'
-                                            : 'border-[#3c639f]/25 bg-[#3c639f]/[0.06] text-[#3c639f]'
-                                        }`}
-                                      >
-                                        {isLastPkg ? 'Projeye göre' : QUOTE_PKG_TECH}
+                                      <span className="inline-flex items-center whitespace-nowrap rounded-full border border-amber-300/50 bg-amber-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.05em] text-amber-700">
+                                        {QUOTE_PKG_TECH}
                                       </span>
                                     </div>
                                   </div>
@@ -1772,11 +1787,10 @@ export default function QuoteWizardSection({
                   <Sparkles size={18} strokeWidth={1.75} />
                 </div>
                 <h3 className="mt-3 text-[17px] font-semibold tracking-[-0.01em]">
-                  Webreta KOBİ&apos;yi de tavsiye ederiz!
+                  {kobiPopup.title}
                 </h3>
                 <p className="mt-1.5 text-[12.5px] leading-relaxed text-white/85">
-                  Küçük ve orta ölçekli işletmeler için tasarlanmış, daha hızlı
-                  ve daha uygun fiyatlı kurumsal site çözümlerimiz var.
+                  {kobiPopup.description}
                 </p>
               </div>
               <div className="flex items-center justify-between gap-2 px-6 py-4">
@@ -1785,17 +1799,17 @@ export default function QuoteWizardSection({
                   onClick={() => setKobiModalOpen(false)}
                   className="rounded-lg px-3 py-2 text-[12.5px] font-medium text-black/60 transition-colors hover:bg-black/[0.04] hover:text-[#0a0a0a]"
                 >
-                  Bu pakette devam et
+                  {kobiPopup.dismissLabel}
                 </button>
                 <a
-                  href={WEBRETA_KOBI_URL}
+                  href={kobiPopup.ctaHref}
                   target="_blank"
                   rel="noopener noreferrer"
                   data-track="web-site:kobi-popup"
                   data-track-label="Teklif aracı KOBİ popup'ı"
                   className="inline-flex items-center gap-1.5 rounded-lg bg-[#3c639f] px-4 py-2 text-[13px] font-medium text-white shadow-[0_4px_12px_-2px_rgba(60,99,159,0.35)] transition-all hover:bg-[#2f5288]"
                 >
-                  Webreta KOBİ
+                  {kobiPopup.ctaLabel}
                   <ExternalLink size={13} />
                 </a>
               </div>

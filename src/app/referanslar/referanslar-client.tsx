@@ -4,12 +4,13 @@ import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { ProjectCard, ProjectPopup, type ProjectCardData } from "@/components/projects-cards"
+import { trackEvent } from "@/lib/track-client"
 
 // Public /referanslar grid. Reuses the homepage project card + popup so the
 // two surfaces stay in sync. Differences from the homepage carousel: every
 // project is shown (not just the first 10), laid out as a two-column grid
-// with a Geliştirmeler/Operasyonlar tab switch and an always-visible "Daha
-// fazla" affordance. Unlike the homepage, hovering only highlights the card
+// with an always-visible "Daha fazla" affordance.
+// Unlike the homepage, hovering only highlights the card
 // — the popup opens on CLICK (a centered modal), and carries a "Projeyi gör"
 // link. The whole grid sits in a [data-section="referanslar"] wrapper so the
 // analytics panel can report time-on-page; per-reference click-throughs are
@@ -34,15 +35,9 @@ type ApiProject = {
   siteUrl: string
 }
 
-const TABS: { id: Category; label: string }[] = [
-  { id: "dev", label: "Geliştirmeler" },
-  { id: "ops", label: "Operasyonlar" },
-]
-
 export default function ReferanslarClient() {
   const [projects, setProjects] = useState<GridProject[]>([])
   const [loaded, setLoaded] = useState(false)
-  const [activeTab, setActiveTab] = useState<Category>("dev")
   // Hover only drives the card's visual highlight (desktop). The popup is
   // gated on a separate click-driven `openId` so hovering never opens it.
   const [hoveredId, setHoveredId] = useState<string | null>(null)
@@ -92,8 +87,8 @@ export default function ReferanslarClient() {
   }, [openId])
 
   const visible = useMemo(
-    () => projects.filter((p) => p.category === activeTab),
-    [projects, activeTab],
+    () => projects.filter((p) => p.category === "dev"),
+    [projects],
   )
 
   const openProject =
@@ -113,42 +108,6 @@ export default function ReferanslarClient() {
         <p className="mx-auto mt-3 max-w-[640px] text-[15px] leading-relaxed text-black/60">
           Bir karta tıklayın, talebi ve çözümü inceleyin.
         </p>
-      </div>
-
-      {/* Segmented control */}
-      <div
-        className="mb-8 mx-auto flex w-fit items-center rounded-full p-1"
-        style={{
-          background: "#f1f3f7",
-          border: "1px solid rgba(60, 99, 159, 0.08)",
-        }}
-      >
-        {TABS.map((tab) => {
-          const active = activeTab === tab.id
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              data-track-tab-control="referanslar"
-              data-track-tab-value={tab.id}
-              data-track-label={tab.label}
-              onClick={() => {
-                setActiveTab(tab.id)
-                setOpenId(null)
-              }}
-              className="relative rounded-full px-4 py-2 text-[13px] font-medium transition-colors md:px-5"
-              style={{
-                background: active ? "#ffffff" : "transparent",
-                color: active ? "#3c639f" : "rgba(0,0,0,0.5)",
-                boxShadow: active
-                  ? "0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px -4px rgba(60, 99, 159, 0.18)"
-                  : "none",
-              }}
-            >
-              {tab.label}
-            </button>
-          )
-        })}
       </div>
 
       {/* Grid — two columns (çifterli). items-stretch keeps both cards in a
@@ -181,7 +140,18 @@ export default function ReferanslarClient() {
                 moreButton
                 onMouseEnter={() => setHoveredId(project.id!)}
                 onMouseLeave={() => setHoveredId(null)}
-                onClick={() => setOpenId(project.id!)}
+                onClick={() => {
+                  // Count the card click itself as the reference interaction
+                  // (feeds "en çok tıklanan referanslar" in the analytics
+                  // panel). The card has no data-track attribute, so this
+                  // programmatic event is the only one fired on open.
+                  trackEvent({
+                    type: "click",
+                    target: `referanslar:proje:${project.id}`,
+                    label: project.company,
+                  })
+                  setOpenId(project.id!)
+                }}
               />
             </div>
           ))}
@@ -189,17 +159,31 @@ export default function ReferanslarClient() {
       )}
 
       {/* Alt CTA — daha fazla proje için iletişim. Footer'dan hemen önce. */}
-      <div className="mt-16 flex flex-col items-center gap-4 border-t border-black/[0.06] pt-12 text-center">
-        <p className="text-[16px] font-medium tracking-[-0.01em] text-[#0a0a0a] md:text-[18px]">
-          Daha fazla proje ve referans için bizimle iletişime geçebilirsiniz.
+      <div className="mt-16 flex flex-col items-center gap-5 border-t border-black/[0.06] pt-12 text-center">
+        <p className="mx-auto max-w-[640px] text-[16px] font-medium tracking-[-0.01em] text-[#0a0a0a] md:text-[18px]">
+          Daha fazla proje veya referans için bizimle iletişime geçebilir ya da
+          Webreta KOBİ sitemizi inceleyebilirsiniz.
         </p>
-        <Link
-          href="/iletisim"
-          className="inline-flex items-center gap-2 rounded-lg bg-[#3c639f] px-6 py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]"
-        >
-          İletişime geç
-          <ArrowRight size={16} />
-        </Link>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/iletisim"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#3c639f] px-6 py-3 text-[14px] font-medium text-white transition-colors hover:bg-[#2f5288]"
+          >
+            İletişime geç
+            <ArrowRight size={16} />
+          </Link>
+          <a
+            href="https://izmirwebsiteyaptirma.com/neler-yaptik/"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="referanslar:kobi"
+            data-track-label="Referanslar Webreta KOBİ"
+            className="inline-flex items-center gap-2 rounded-lg border border-[#3c639f]/30 bg-white px-6 py-3 text-[14px] font-medium text-[#3c639f] transition-colors hover:bg-[#3c639f]/[0.06]"
+          >
+            Webreta KOBİ
+            <ArrowRight size={16} />
+          </a>
+        </div>
       </div>
 
       {/* Popup — opens on click as a centered modal (not on hover). */}
@@ -211,7 +195,7 @@ export default function ReferanslarClient() {
           onMouseEnter={() => {}}
           onMouseLeave={() => {}}
           onClose={() => setOpenId(null)}
-          trackTarget={`referanslar:proje:${openProject.id ?? ""}`}
+          trackTarget={`referanslar:proje-git:${openProject.id ?? ""}`}
         />
       )}
     </section>

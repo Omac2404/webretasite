@@ -63,9 +63,20 @@ export type WizardHeading = {
   subtitle: string
 }
 
+// Cross-sell popup shown in the quote wizard when a visitor picks a package
+// flagged `kobiRedirect`. All copy + the outbound link are admin-editable.
+export type KobiPopup = {
+  title: string
+  description: string
+  dismissLabel: string // "Bu pakette devam et" button
+  ctaLabel: string // "Webreta KOBİ" button
+  ctaHref: string
+}
+
 export type WebPackagesData = {
   packages: WebPackage[]
   kobiBanner: KobiBanner
+  kobiPopup: KobiPopup
   wizardHeading: WizardHeading
 }
 

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import SiteHeader from "@/components/SiteHeaderServer"
-import SiteFooter from "@/components/SiteFooter"
+import SiteFooter from "@/components/SiteFooterServer"
 import { BlogCard } from "@/components/BlogCard"
 import { AuthorAvatar } from "@/components/AuthorChip"
 import { getPostBySlug, listPublished } from "@/lib/blog-store"
@@ -357,10 +357,15 @@ function renderInline(text: string): React.ReactNode {
     }
     const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/)
     if (link) {
+      // External (http) links open in a new tab; internal (/, #) stay in-page.
+      const isExternal = /^https?:\/\//i.test(link[2])
       return (
         <a
           key={i}
           href={link[2]}
+          {...(isExternal
+            ? { target: "_blank", rel: "noopener noreferrer" }
+            : {})}
           className="text-[#3c639f] underline underline-offset-2 hover:text-[#2f5288]"
         >
           {link[1]}

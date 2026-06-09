@@ -10,6 +10,7 @@ import {
   WEB_PACKAGE_ICON_KEYS,
   readWebPackages,
   updateKobiBanner,
+  updateKobiPopup,
   updateWizardHeading,
   writeWebPackages,
   type WebPackage,
@@ -104,6 +105,7 @@ export async function saveWebPackagesAction(
   const data: WebPackagesData = {
     packages,
     kobiBanner: current.kobiBanner,
+    kobiPopup: current.kobiPopup,
     wizardHeading: current.wizardHeading,
   }
   await writeWebPackages(data)
@@ -204,6 +206,21 @@ export async function saveWizardHeadingAction(
   const titleHighlight = String(formData.get("titleHighlight") ?? "").trim()
   const subtitle = String(formData.get("subtitle") ?? "").trim()
   await updateWizardHeading({ titleLeader, titleHighlight, subtitle })
+  revalidatePath("/admin/web-paketleri")
+  revalidatePath("/web-site")
+  return { ok: true }
+}
+
+export async function saveKobiPopupAction(
+  _prev: SaveState,
+  formData: FormData,
+): Promise<SaveState> {
+  const title = String(formData.get("title") ?? "").trim()
+  const description = String(formData.get("description") ?? "").trim()
+  const dismissLabel = String(formData.get("dismissLabel") ?? "").trim()
+  const ctaLabel = String(formData.get("ctaLabel") ?? "").trim()
+  const ctaHref = String(formData.get("ctaHref") ?? "").trim()
+  await updateKobiPopup({ title, description, dismissLabel, ctaLabel, ctaHref })
   revalidatePath("/admin/web-paketleri")
   revalidatePath("/web-site")
   return { ok: true }

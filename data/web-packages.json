@@ -79,13 +79,20 @@
     "title": "Webreta Kobi",
     "description": "Küçük işletmeler ve esnaflar için tasarladığımız Webreta KOBİ, bütçe dostu fiyatlarla modern tasarımlı, mobil uyumlu ve reklam çalışmalarına uygun web siteleri sunmaktadır. Karmaşaya girmeden, ihtiyacınız olan her şey.",
     "bullets": [
-      "2 hafta içinde yayında",
+      "10 gün içinde yayında",
       "Sürpriz ek maaliyetler yok",
       "Mobil uyumlu modern tasarım",
       "Sürekli teknik destek"
     ],
     "ctaLabel": "Webreta KOBİ'yi keşfet",
     "ctaHref": "https://izmirwebsiteyaptirma.com/"
+  },
+  "kobiPopup": {
+    "title": "Webreta KOBİ'yi de tavsiye ederiz!",
+    "description": "Küçük işletmeler ve esnaflar için tasarlanmış, daha uygun fiyatlı kurumsal site çözümlerimiz de var.",
+    "dismissLabel": "Bu pakette devam et",
+    "ctaLabel": "Webreta KOBİ",
+    "ctaHref": "https://izmirwebsiteyaptirma.com"
   },
   "wizardHeading": {
     "titleLeader": "Size Özel",

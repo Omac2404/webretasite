@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState, useEffect, useRef, useState } from "react"
-import { Images, Film, Loader2 } from "lucide-react"
+import { Images, Film, Loader2, Link as LinkIcon } from "lucide-react"
 import type { Author } from "@/lib/authors-types"
 import type { MediaItem } from "@/lib/media-store"
 import { CATEGORIES, type CategoryKey } from "@/lib/blog-types"
@@ -62,6 +62,26 @@ export function AddPostForm({
     })
   }
 
+  // Wrap the current selection in a [metin](url) markdown link (or insert a
+  // placeholder when nothing is selected) and drop the cursor right after
+  // "https://" so the admin can type the URL immediately.
+  function insertLink() {
+    const el = contentRef.current
+    const start = el?.selectionStart ?? content.length
+    const end = el?.selectionEnd ?? content.length
+    const selected = content.slice(start, end)
+    const label = selected || "bağlantı metni"
+    const snippet = `[${label}](https://)`
+    const next = content.slice(0, start) + snippet + content.slice(end)
+    setContent(next)
+    requestAnimationFrame(() => {
+      if (!el) return
+      const cursor = start + snippet.length - 1 // just before the closing ")"
+      el.focus()
+      el.setSelectionRange(cursor, cursor)
+    })
+  }
+
   return (
     <form ref={formRef} action={formAction} className="flex flex-col gap-4">
       <Field label="Başlık">
@@ -100,7 +120,7 @@ export function AddPostForm({
 
       <Field
         label="İçerik"
-        hint="Boş satır = paragraf. ## başlık, ### alt başlık, **kalın**, ![](url) görsel."
+        hint="Boş satır = paragraf. ## başlık, ### alt başlık, **kalın**, [metin](url) link, ![](url) görsel."
       >
         <textarea
           ref={contentRef}
@@ -116,6 +136,7 @@ export function AddPostForm({
           media={media}
           onInsert={(url) => insertSnippet(`\n\n![](${url})\n\n`)}
           onInsertVideo={(snippet) => insertSnippet(snippet)}
+          onInsertLink={insertLink}
         />
       </Field>
 
@@ -155,6 +176,20 @@ export function AddPostForm({
             (kapatırsan taslak olarak kalır)
           </span>
         </span>
+      </label>
+
+      <label className="flex flex-col gap-1.5 text-[13px] text-black/70">
+        <span>
+          Yayın tarihi{" "}
+          <span className="text-black/40">
+            (sitede görünen tarih — boş = bugün)
+          </span>
+        </span>
+        <input
+          type="date"
+          name="displayDate"
+          className="w-fit rounded-lg border border-black/[0.12] bg-white px-3 py-2 text-[13px] text-[#0a0a0a] focus:border-[#3c639f] focus:outline-none focus:ring-2 focus:ring-[#3c639f]/20"
+        />
       </label>
 
       <label className="flex flex-col gap-1.5 text-[13px] text-black/70">
@@ -235,10 +270,12 @@ export function InlineImageUploader({
   media,
   onInsert,
   onInsertVideo,
+  onInsertLink,
 }: {
   media: MediaItem[]
   onInsert: (url: string) => void
   onInsertVideo: (snippet: string) => void
+  onInsertLink?: () => void
 }) {
   const [open, setOpen] = useState(false)
   const [items, setItems] = useState<MediaItem[]>(media)
@@ -272,10 +309,26 @@ export function InlineImageUploader({
           YouTube videosu ekle
         </button>
 
+        {onInsertLink && (
+          <button
+            type="button"
+            onClick={onInsertLink}
+            className="inline-flex items-center gap-2 rounded-md border border-black/[0.10] bg-white px-3 py-1.5 text-[12px] font-medium text-black/70 transition-colors hover:border-[#3c639f]/30 hover:text-[#3c639f]"
+            title="Önce metni seçin, sonra tıklayın — seçili metin linke dönüşür"
+          >
+            <LinkIcon size={12} />
+            Link ekle
+          </button>
+        )}
+
         <span className="text-[11px] text-black/40">
           İmlecin olduğu yere{" "}
           <code className="rounded bg-black/[0.04] px-1 text-[10.5px]">
             ![](url)
+          </code>
+          ,{" "}
+          <code className="rounded bg-black/[0.04] px-1 text-[10.5px]">
+            [metin](url)
           </code>{" "}
           veya{" "}
           <code className="rounded bg-black/[0.04] px-1 text-[10.5px]">

@@ -9,6 +9,7 @@ import {
   MAX_WEB_PACKAGE_BULLETS,
   WEB_PACKAGE_ICON_KEYS,
   type KobiBanner,
+  type KobiPopup,
   type WebPackage,
   type WebPackageIconKey,
   type WebPackagesData,
@@ -17,6 +18,7 @@ import {
 
 export type {
   KobiBanner,
+  KobiPopup,
   WebPackage,
   WebPackageIconKey,
   WebPackagesData,
@@ -56,10 +58,20 @@ const DEFAULT_KOBI_BANNER: KobiBanner = {
   ctaHref: "https://izmirwebsiteyaptirma.com",
 }
 
+const DEFAULT_KOBI_POPUP: KobiPopup = {
+  title: "Webreta KOBİ'yi de tavsiye ederiz!",
+  description:
+    "Küçük ve orta ölçekli işletmeler için tasarlanmış, daha hızlı ve daha uygun fiyatlı kurumsal site çözümlerimiz var.",
+  dismissLabel: "Bu pakette devam et",
+  ctaLabel: "Webreta KOBİ",
+  ctaHref: "https://izmirwebsiteyaptirma.com",
+}
+
 const DATA_FILE = path.join(process.cwd(), "data", "web-packages.json")
 
 const SEED: WebPackagesData = {
   kobiBanner: DEFAULT_KOBI_BANNER,
+  kobiPopup: DEFAULT_KOBI_POPUP,
   wizardHeading: DEFAULT_WIZARD_HEADING,
   packages: [
     {
@@ -188,6 +200,19 @@ function normalizeKobi(input: unknown): KobiBanner {
   }
 }
 
+function normalizeKobiPopup(input: unknown): KobiPopup {
+  const raw = (input ?? {}) as Partial<KobiPopup>
+  const pickStr = (v: unknown, fallback: string): string =>
+    typeof v === "string" && v.trim() ? v.trim() : fallback
+  return {
+    title: pickStr(raw.title, DEFAULT_KOBI_POPUP.title),
+    description: pickStr(raw.description, DEFAULT_KOBI_POPUP.description),
+    dismissLabel: pickStr(raw.dismissLabel, DEFAULT_KOBI_POPUP.dismissLabel),
+    ctaLabel: pickStr(raw.ctaLabel, DEFAULT_KOBI_POPUP.ctaLabel),
+    ctaHref: pickStr(raw.ctaHref, DEFAULT_KOBI_POPUP.ctaHref),
+  }
+}
+
 function normalize(input: unknown): WebPackagesData {
   const obj = (input as Partial<WebPackagesData>) ?? {}
   const list = Array.isArray(obj.packages) ? obj.packages : []
@@ -221,10 +246,11 @@ function normalize(input: unknown): WebPackagesData {
     })
     .filter((p): p is WebPackage => p !== null)
   const kobiBanner = normalizeKobi(obj.kobiBanner)
+  const kobiPopup = normalizeKobiPopup(obj.kobiPopup)
   const wizardHeading = normalizeWizard(obj.wizardHeading)
   return packages.length > 0
-    ? { packages, kobiBanner, wizardHeading }
-    : { ...SEED, kobiBanner, wizardHeading }
+    ? { packages, kobiBanner, kobiPopup, wizardHeading }
+    : { ...SEED, kobiBanner, kobiPopup, wizardHeading }
 }
 
 function normalizeWizard(input: unknown): WizardHeading {
@@ -267,4 +293,12 @@ export async function updateWizardHeading(
   const current = await readWebPackages()
   const merged = normalizeWizard({ ...current.wizardHeading, ...patch })
   await writeWebPackages({ ...current, wizardHeading: merged })
+}
+
+export async function updateKobiPopup(
+  patch: Partial<KobiPopup>,
+): Promise<void> {
+  const current = await readWebPackages()
+  const merged = normalizeKobiPopup({ ...current.kobiPopup, ...patch })
+  await writeWebPackages({ ...current, kobiPopup: merged })
 }

@@ -188,18 +188,22 @@ export default function SiteHeader({
                 </li>
               ))}
             </ul>
-          </nav>
 
-          <div className="border-t border-black/[0.06] p-6">
+            {/* Blog — menü öğelerinin hemen altında, mavi CTA buton. */}
             <a
               href="/blog"
+              data-track="header:blog-cta"
+              data-track-label="Header Blog butonu"
               onClick={() => setMobileMenuOpen(false)}
-              className="cta-primary inline-flex w-full items-center justify-center gap-2 rounded-md px-4 py-3 text-[14px] font-medium"
+              className="cta-primary mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md px-4 py-3 text-[14px] font-medium"
             >
               <BookOpen size={15} strokeWidth={2.25} />
               Blog
             </a>
-            <p className="mt-4 text-[12px] leading-relaxed text-black/45">
+          </nav>
+
+          <div className="border-t border-black/[0.06] p-6">
+            <p className="text-[12px] leading-relaxed text-black/45">
               Webreta · İzmir merkezli web ajansı
             </p>
           </div>

@@ -116,7 +116,11 @@ export default async function PackagesAdminPage({
           Sekme adı, kısa adı ve sayfa başlığı altındaki açıklama.
         </p>
         <div className="mt-4">
+          {/* key includes the channel so switching tabs remounts the form —
+              its inputs are uncontrolled (defaultValue), which React won't
+              refresh on a plain prop change. */}
           <ChannelForm
+            key={channel.key}
             channelKey={channel.key}
             label={channel.label}
             pageTitle={channel.pageTitle ?? ""}
@@ -126,11 +130,15 @@ export default async function PackagesAdminPage({
         </div>
       </section>
 
-      {/* Three package forms */}
+      {/* Three package forms. The key is scoped to the channel because the
+          package keys (basic/growth/premium) repeat across channels — without
+          the channel prefix React would reuse the same DOM when switching
+          tabs and the uncontrolled (defaultValue) inputs, e.g. "Kimler için
+          uygun", would keep the previous channel's values. */}
       <div className="flex flex-col gap-5">
         {channel.packages.map((pkg) => (
           <PackageForm
-            key={pkg.key}
+            key={`${channel.key}:${pkg.key}`}
             channelKey={channel.key}
             pkg={pkg}
             featured={pkg.key === "growth"}

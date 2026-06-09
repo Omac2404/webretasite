@@ -1,5 +1,5 @@
 import SiteHeaderServer from "@/components/SiteHeaderServer"
-import SiteFooter from "@/components/SiteFooter"
+import SiteFooter from "@/components/SiteFooterServer"
 import { buildPageMetadata } from "@/lib/seo-metadata"
 import ReferanslarClient from "./referanslar-client"
 

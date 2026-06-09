@@ -8,6 +8,7 @@ import HomeBlogSection from "@/components/HomeBlogSection"
 import SiteFooter from "@/components/SiteFooter"
 import SiteHeader from "@/components/SiteHeader"
 import { ProjectCard, ProjectPopup } from "@/components/projects-cards"
+import type { FooterConfig } from "@/lib/footer-types"
 
 type Testimonial = {
   text: string
@@ -711,16 +712,12 @@ function ProjectsSection({
 }) {
   const isMobile = useIsMobile()
 
-  const [activeTab, setActiveTab] = useState<ProjectCategory>('dev')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(true)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [tappedIndex, setTappedIndex] = useState<number | null>(null)
   const [popupPosition, setPopupPosition] = useState<{ left: number; top: number } | null>(null)
-  // Once the visitor clicks the Operasyonlar tab, the pulse stops for the
-  // remainder of the session. Otherwise it fires every 3s to draw the eye.
-  const [opsPulsing, setOpsPulsing] = useState(true)
   // Mobile swipe hint — shown once when the carousel scrolls into view, or
   // until the first finger touch dismisses it.
   const [hintActive, setHintActive] = useState(false)
@@ -741,12 +738,12 @@ function ProjectsSection({
   const STEP = CARD_HEIGHT + CARD_GAP
   const VISIBLE_HEIGHT = STEP * 3 + CARD_HEIGHT * 0.4
 
-  // Homepage shows at most the first 10 projects per category — the full
-  // archive lives on /referanslar. Admin drag-ordering puts the ones meant
-  // for the homepage at the top of each category's list.
+  // Homepage shows at most the first 10 projects — the full archive lives on
+  // /referanslar. Admin drag-ordering puts the ones meant for the homepage at
+  // the top of the list.
   const activeProjects = useMemo(
-    () => projectsProp.filter((p) => p.category === activeTab).slice(0, 10),
-    [activeTab, projectsProp],
+    () => projectsProp.filter((p) => p.category === 'dev').slice(0, 10),
+    [projectsProp],
   )
   const totalOriginal = activeProjects.length
   // Duplicated list enables seamless infinite loop
@@ -754,18 +751,6 @@ function ProjectsSection({
     () => [...activeProjects, ...activeProjects],
     [activeProjects],
   )
-
-  // Reset to first card whenever the tab changes
-  useEffect(() => {
-    setIsTransitioning(false)
-    setCurrentIndex(0)
-    setHoveredIndex(null)
-    setTappedIndex(null)
-    setPopupPosition(null)
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => setIsTransitioning(true))
-    })
-  }, [activeTab])
 
   // Auto-advance on desktop (paused on hover or while a popup is open).
   // 2s per card — slightly faster than the testimonial column above so the
@@ -987,60 +972,12 @@ function ProjectsSection({
 
   return (
     <section ref={sectionRef} data-section="projects" className="relative mx-auto max-w-[1280px] px-6 pb-16 md:px-12 md:pb-20">
-      {/* Section heading — title and segmented control sit together on the
-          same baseline. The control hugs the right edge of the title rather
-          than being pushed to the far right of the section. */}
+      {/* Section heading */}
       <div className="mb-8">
-        <div className="flex flex-wrap items-center gap-4">
-          <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
-            <span className="font-normal">Neler </span>
-            <span className="font-bold text-[#3c639f]">Yaptık?</span>
-          </h2>
-
-          {/* Segmented control */}
-          <div
-            className="inline-flex shrink-0 items-center rounded-full p-1"
-            style={{
-              background: '#f1f3f7',
-              border: '1px solid rgba(60, 99, 159, 0.08)',
-            }}
-          >
-            {([
-              { id: 'dev', label: 'Geliştirmeler' },
-              { id: 'ops', label: 'Operasyonlar' },
-            ] as const).map(tab => {
-              const active = activeTab === tab.id
-              // The Operasyonlar tab pulses every 3s until the visitor clicks
-              // it — keyframes fire a quick double-tap then settle.
-              const shouldPulse = tab.id === 'ops' && opsPulsing && !active
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  data-track-tab-control="projects"
-                  data-track-tab-value={tab.id}
-                  data-track-label={tab.label}
-                  onClick={() => {
-                    setActiveTab(tab.id)
-                    if (tab.id === 'ops') setOpsPulsing(false)
-                  }}
-                  className="relative rounded-full px-4 py-2 text-[13px] font-medium transition-colors md:px-5"
-                  style={{
-                    background: active ? '#ffffff' : 'transparent',
-                    color: active ? '#3c639f' : 'rgba(0,0,0,0.5)',
-                    boxShadow: active
-                      ? '0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px -4px rgba(60, 99, 159, 0.18)'
-                      : 'none',
-                    animation: shouldPulse ? 'opsPulse 3s ease-in-out infinite' : 'none',
-                    transformOrigin: 'center',
-                  }}
-                >
-                  {tab.label}
-                </button>
-              )
-            })}
-          </div>
-        </div>
+        <h2 className="text-[32px] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] md:text-[44px]">
+          <span className="font-normal">Neler </span>
+          <span className="font-bold text-[#3c639f]">Yaptık?</span>
+        </h2>
       </div>
 
       {/* Two column layout — left carousel, right copy + CTA. A decorative
@@ -1123,7 +1060,7 @@ function ProjectsSection({
             >
               {activeProjects.map((project, index) => (
                 <div
-                  key={`${activeTab}-${index}`}
+                  key={`proj-${index}`}
                   className="snap-start shrink-0"
                   style={{ width: '86%' }}
                 >
@@ -1169,7 +1106,7 @@ function ProjectsSection({
                   const isFocused = slot === 1
                   return (
                     <div
-                      key={`${activeTab}-${index}`}
+                      key={`proj-${index}`}
                       className="relative box-border w-full"
                       style={{
                         height: `${CARD_HEIGHT}px`,
@@ -1254,12 +1191,57 @@ function ProjectsSection({
 export default function Home({
   logoUrl,
   hero: heroProp,
+  logos: logosProp,
+  services: servicesProp,
+  projects: projectsProp,
+  sidebar: sidebarProp,
+  reviews: reviewsProp,
+  footer: footerProp,
 }: {
   logoUrl?: string
   hero?: {
     subheadline: string
     primaryButton: { label: string; href: string }
     secondaryButton: { label: string; href: string }
+  }
+  // The sections below are read server-side (readHomeData) and passed in so
+  // the first paint already shows the real, admin-edited content — no
+  // default→real swap / layout jump. Each fetch effect is skipped when its
+  // prop is present.
+  logos?: {
+    mode: LogoDisplayMode
+    entries: LogoEntry[]
+    googlePartner: { enabled: boolean; url: string }
+  }
+  services?: {
+    web: { title: string; bullets: string[] }
+    reklam: { title: string; bullets: string[] }
+  }
+  projects?: Project[]
+  sidebar?: {
+    titleLeading: string
+    titleHighlight: string
+    description: string
+    ctaLabel: string
+    ctaHref: string
+  }
+  reviews?: {
+    summary: {
+      rating: number
+      reviewCount: number
+      businessName: string
+      reviewsUrl: string
+    }
+    testimonials: Testimonial[]
+  }
+  // Footer is rendered inside this client tree, so its server-read data is
+  // threaded through here (rather than via SiteFooterServer) to keep the
+  // first paint flash-free.
+  footer?: {
+    config: FooterConfig
+    nav: { href: string; label: string }[]
+    legalLinks: { id: string; title: string; href: string }[]
+    googlePartner: { enabled: boolean; url: string }
   }
 } = {}) {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -1283,31 +1265,38 @@ export default function Home({
   // hardcoded list so the marquee renders something on first paint,
   // then replaced once /api/logos resolves. Admin-managed via the
   // panel; we'll migrate this to Postgres later.
-  const [logoMode, setLogoMode] = useState<LogoDisplayMode>("names")
-  const [logoEntries, setLogoEntries] = useState<LogoEntry[]>(() => [
-    ...partnersRowA.map((name, i) => ({
-      id: `fallback-a-${i}`,
-      name,
-      imageUrl: "",
-      row: "a" as const,
-    })),
-    ...partnersRowB.map((name, i) => ({
-      id: `fallback-b-${i}`,
-      name,
-      imageUrl: "",
-      row: "b" as const,
-    })),
-  ])
+  const [logoMode, setLogoMode] = useState<LogoDisplayMode>(
+    logosProp?.mode ?? "names",
+  )
+  const [logoEntries, setLogoEntries] = useState<LogoEntry[]>(
+    () =>
+      logosProp?.entries ?? [
+        ...partnersRowA.map((name, i) => ({
+          id: `fallback-a-${i}`,
+          name,
+          imageUrl: "",
+          row: "a" as const,
+        })),
+        ...partnersRowB.map((name, i) => ({
+          id: `fallback-b-${i}`,
+          name,
+          imageUrl: "",
+          row: "b" as const,
+        })),
+      ],
+  )
   // Google Partner badge — admin-controlled via Referanslar tab. Default
   // to enabled with the canonical directory URL so the badge renders on
   // first paint; once /api/logos resolves we honor the saved settings.
   const [googlePartner, setGooglePartner] = useState<{
     enabled: boolean
     url: string
-  }>({
-    enabled: true,
-    url: "https://www.google.com/partners/agency?id=7356236542",
-  })
+  }>(
+    logosProp?.googlePartner ?? {
+      enabled: true,
+      url: "https://www.google.com/partners/agency?id=7356236542",
+    },
+  )
   // Hero subheadline + CTA buttons — admin-managed via /admin (the
   // dashboard page). Seeded with the defaults so first paint renders the
   // original copy; replaced once /api/hero resolves.
@@ -1378,6 +1367,8 @@ export default function Home({
     }
   }, [])
   useEffect(() => {
+    // Server already seeded logos via props — skip the redundant refetch.
+    if (logosProp) return
     let cancelled = false
     fetch("/api/logos")
       .then((r) => (r.ok ? r.json() : null))
@@ -1415,7 +1406,7 @@ export default function Home({
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [logosProp])
   const logoRows = useMemo(
     () => ({
       rowA: logoEntries.filter((l) => l.row === "a"),
@@ -1431,25 +1422,29 @@ export default function Home({
   const [serviceCards, setServiceCards] = useState<{
     web: { title: string; bullets: string[] }
     reklam: { title: string; bullets: string[] }
-  }>({
-    web: {
-      title: "Web Site",
-      bullets: [
-        "Next.js + TypeScript ile modern altyapı",
-        "Tasarımdan SEO'ya uçtan uca süreç",
-        "Lighthouse 95+ performans hedefi",
-      ],
+  }>(
+    servicesProp ?? {
+      web: {
+        title: "Web Site",
+        bullets: [
+          "Next.js + TypeScript ile modern altyapı",
+          "Tasarımdan SEO'ya uçtan uca süreç",
+          "Lighthouse 95+ performans hedefi",
+        ],
+      },
+      reklam: {
+        title: "Dijital Reklamlar",
+        bullets: [
+          "Google Ads & Meta Ads yönetimi",
+          "Performans odaklı kampanya stratejisi",
+          "Şeffaf ve sade raporlama paneli",
+        ],
+      },
     },
-    reklam: {
-      title: "Dijital Reklamlar",
-      bullets: [
-        "Google Ads & Meta Ads yönetimi",
-        "Performans odaklı kampanya stratejisi",
-        "Şeffaf ve sade raporlama paneli",
-      ],
-    },
-  })
+  )
   useEffect(() => {
+    // Server already seeded the service cards via props — skip the refetch.
+    if (servicesProp) return
     let cancelled = false
     type ApiCard = { key: "web" | "reklam"; title: string; bullets: string[] }
     fetch("/api/services")
@@ -1468,31 +1463,33 @@ export default function Home({
     return () => {
       cancelled = true
     }
-    // We seed once at mount; subsequent edits in the admin reach us
-    // through a fresh page load (revalidatePath("/")), so no deps.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [servicesProp])
 
-  // Projects — fetched from the admin store. Seeded with the hardcoded
-  // list so the carousel renders something on first paint, then replaced
-  // once /api/projects resolves. Each API row already carries the joined
-  // referans data (company name, logo image, initials, formatted date).
-  const [activeProjects, setActiveProjects] = useState<Project[]>(projects)
+  // Projects — seeded from the server prop (readHomeData) so the carousel +
+  // sidebar copy render correct on first paint. Falls back to the hardcoded
+  // seed list / default sidebar only if a caller renders without the props.
+  const [activeProjects, setActiveProjects] = useState<Project[]>(
+    projectsProp ?? projects,
+  )
   const [projectsSidebar, setProjectsSidebar] = useState<{
     titleLeading: string
     titleHighlight: string
     description: string
     ctaLabel: string
     ctaHref: string
-  }>({
-    titleLeading: "Her projeye sıfırdan,",
-    titleHighlight: "ihtiyaca özel.",
-    description:
-      "Hazır şablon kullanmıyoruz. Talebinizi dinleyip size özel çözüm kurguluyoruz; web sitesinden eklentiye, sunucu taşımadan güvenlik kurulumuna kadar her adımı sizin işinize göre tasarlıyoruz.",
-    ctaLabel: "Teklif al",
-    ctaHref: "#teklif",
-  })
+  }>(
+    sidebarProp ?? {
+      titleLeading: "Her projeye sıfırdan,",
+      titleHighlight: "ihtiyaca özel.",
+      description:
+        "Hazır şablon kullanmıyoruz. Talebinizi dinleyip size özel çözüm kurguluyoruz; web sitesinden eklentiye, sunucu taşımadan güvenlik kurulumuna kadar her adımı sizin işinize göre tasarlıyoruz.",
+      ctaLabel: "Teklif al",
+      ctaHref: "#teklif",
+    },
+  )
   useEffect(() => {
+    // Server already seeded projects + sidebar via props — skip the refetch.
+    if (projectsProp || sidebarProp) return
     let cancelled = false
     type ApiProject = {
       id: string
@@ -1571,22 +1568,25 @@ export default function Home({
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [projectsProp, sidebarProp])
 
   // Testimonials kaynağı — admin elle eklediği yorumlar varsa onlar
   // kullanılır; yoksa hardcoded preset listeye düşeriz ki bölüm asla boş
-  // görünmesin. Özet kartı (puan/yorum sayısı/firma adı/link) de aynı
-  // endpoint'ten geliyor.
+  // görünmesin. Sunucudan prop ile tohumlanır ki ilk boyamada doğru gelsin.
   const [activeTestimonials, setActiveTestimonials] = useState<Testimonial[]>(
-    testimonials,
+    reviewsProp?.testimonials ?? testimonials,
   )
-  const [reviewsSummary, setReviewsSummary] = useState({
-    rating: 5.0,
-    reviewCount: 0,
-    businessName: "Webreta Web Teknolojileri",
-    reviewsUrl: "",
-  })
+  const [reviewsSummary, setReviewsSummary] = useState(
+    reviewsProp?.summary ?? {
+      rating: 5.0,
+      reviewCount: 0,
+      businessName: "Webreta Web Teknolojileri",
+      reviewsUrl: "",
+    },
+  )
   useEffect(() => {
+    // Server already seeded reviews via props — skip the refetch.
+    if (reviewsProp) return
     let cancelled = false
     type ApiReview = {
       id: string
@@ -1631,7 +1631,7 @@ export default function Home({
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [reviewsProp])
 
   const containerRef = useRef<HTMLDivElement>(null)
   const testimonialColumnRef = useRef<HTMLDivElement>(null)
@@ -2716,7 +2716,12 @@ export default function Home({
 
       </main>
 
-      <SiteFooter />
+      <SiteFooter
+        config={footerProp?.config}
+        nav={footerProp?.nav}
+        legalLinks={footerProp?.legalLinks}
+        googlePartner={footerProp?.googlePartner}
+      />
 
       {/* Cursor blink + mobile swipe hint animations. Global because the
           @keyframes are referenced from inline style={{ animation: ... }};
@@ -3005,38 +3010,6 @@ export default function Home({
           10% { opacity: 1; transform: scale(1); }
           90% { opacity: 1; transform: scale(1); }
           100% { opacity: 0; transform: scale(0.96); }
-        }
-        /* Operasyonlar tab pulse — ONE slow neon tap every 3s, then idle.
-           The tap takes its time expanding (long ring travel, bright cyan
-           core + brand-blue outer glow). Stops on first click via the
-           opsPulsing state. */
-        @keyframes opsPulse {
-          0% {
-            transform: scale(1);
-            box-shadow:
-              0 0 0 0 rgba(99, 165, 245, 0),
-              0 0 0 0 rgba(60, 99, 159, 0);
-          }
-          /* Peak */
-          8% {
-            transform: scale(1.06);
-            box-shadow:
-              0 0 10px 2px rgba(99, 165, 245, 0.65),
-              0 0 0 0 rgba(60, 99, 159, 0.55);
-          }
-          /* Ring fully travelled, fading */
-          45% {
-            transform: scale(1.02);
-            box-shadow:
-              0 0 6px 1px rgba(99, 165, 245, 0),
-              0 0 0 22px rgba(60, 99, 159, 0);
-          }
-          55%, 100% {
-            transform: scale(1);
-            box-shadow:
-              0 0 0 0 rgba(99, 165, 245, 0),
-              0 0 0 0 rgba(60, 99, 159, 0);
-          }
         }
         /* Brand-blue text shimmer for the "devamını gör" button. A lighter
            blue highlight sweeps left→right through the text via a moving
