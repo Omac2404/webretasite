@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
                   autoFocus
                   required
                   className="w-full rounded-xl border border-black/[0.1] bg-white py-3 pl-10 pr-4 text-[14px] text-[#0a0a0a] placeholder:text-black/35 focus:border-[#3c639f]/50 focus:outline-none focus:ring-4 focus:ring-[#3c639f]/[0.08]"
-                  placeholder="webreta.digital@gmail.com"
+                  placeholder=""
                 />
               </div>
             </div>

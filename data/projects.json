@@ -6,13 +6,13 @@
       "category": "dev",
       "type": "İş Paneli",
       "publishDate": "2026-06-05",
-      "demand": "Lojistik süreçlerinin kendi istedikleri gibi yönetilip takip edilmesini sağlayabilecek bir yapı kurulması",
+      "demand": "Lojistik süreçlerinin istedikleri gibi yönetilip takip edilmesini sağlayabilecek bir sistem kurulması",
       "solution": "Tüm lojistik süreçleri içeren firmaya özel yönetim sistemi",
       "demandDetail": "Multimodal lojistik hizmetleri sunan Inter Trans MMS, tüm lojistik operasyonlarını kendi iş akışına göre yönetip uçtan uca takip edebileceği firmaya özel bir iş paneli istedi. Sevkiyat, taşıma ve süreç adımlarının tek bir merkezden izlenebildiği; ekibin yetki ve rollerine göre çalışabildiği, operasyonel verimliliği artıran kapsamlı bir yönetim sistemi öncelikli beklentiydi.",
       "solutionDetail": "Firmaya özel, lojistik operasyonlarının uçtan uca yönetildiği kapsamlı bir iş paneli geliştirdik. Süreçlerin oluşturulduğu, takip edildiği ve durum güncellemelerinin yapıldığı; ilgili kayıtların düzenli biçimde listelenip raporlanabildiği bir yönetim altyapısı kurduk. Rol/yetki bazlı erişim ve operasyonun her aşamasını kontrol eden modüler yapısıyla; firmanın tüm lojistik süreçlerini tek ekrandan yönetip izleyebildiği, iş akışına tam uyumlu merkezi bir sistem oluşturduk.",
       "siteUrl": "https://intertransmms.com/login",
       "createdAt": "2026-06-08T14:30:46.276Z",
-      "updatedAt": "2026-06-08T14:30:46.276Z"
+      "updatedAt": "2026-06-09T11:40:12.182Z"
     },
     {
       "id": "1780926347698-g0l309",

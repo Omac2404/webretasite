@@ -1,6 +1,202 @@
 {
   "entries": [
     {
+      "id": "1781004601785-t4e0g0",
+      "ts": "2026-06-09T11:30:01.785Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/genel-odemeler-tutar-girin",
+      "note": "→ /"
+    },
+    {
+      "id": "1781004579899-otsul8",
+      "ts": "2026-06-09T11:29:39.899Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/sosyal-medya-referanslari/",
+      "note": "→ /dijital-reklamlar"
+    },
+    {
+      "id": "1781004561087-5d9yww",
+      "ts": "2026-06-09T11:29:21.087Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/kampanya-tesekkurler/",
+      "note": "→ /"
+    },
+    {
+      "id": "1781004552912-08w46o",
+      "ts": "2026-06-09T11:29:12.912Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/sosyal-medya-yonetimi/",
+      "note": "→ /dijital-reklamlar"
+    },
+    {
+      "id": "1781004540400-3tczox",
+      "ts": "2026-06-09T11:29:00.400Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/k-v-k-k-ve-gizlilik-politikasi",
+      "note": "→ /gizlilik-politikasi-ve-k-v-k-k-aydinlatma-metni"
+    },
+    {
+      "id": "1781004522557-qaeeyp",
+      "ts": "2026-06-09T11:28:42.557Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/eko-kurumsal-web-site-yapimi",
+      "note": "→ /web-site"
+    },
+    {
+      "id": "1781004510285-byt5a4",
+      "ts": "2026-06-09T11:28:30.285Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/mini-website-fiyatlari",
+      "note": "→ /web-site"
+    },
+    {
+      "id": "1781004496652-mykl97",
+      "ts": "2026-06-09T11:28:16.652Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/online-odeme/kurumsal-web-site-ekim-kampanyasi",
+      "note": "→ /iletisim"
+    },
+    {
+      "id": "1781004475358-o74ki9",
+      "ts": "2026-06-09T11:27:55.358Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/reklam-yonetimi-referanslari",
+      "note": "→ /dijital-reklamlar"
+    },
+    {
+      "id": "1781004463130-d4w8yb",
+      "ts": "2026-06-09T11:27:43.130Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/ikas-e-ticaret-sitesi",
+      "note": "→ /web-site"
+    },
+    {
+      "id": "1781004450412-563xfa",
+      "ts": "2026-06-09T11:27:30.412Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/hizmetlerimiz",
+      "note": "→ /"
+    },
+    {
+      "id": "1781004441624-led51y",
+      "ts": "2026-06-09T11:27:21.625Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/internet-reklamlari",
+      "note": "→ /dijital-reklamlar"
+    },
+    {
+      "id": "1781004418496-gkbzs0",
+      "ts": "2026-06-09T11:26:58.496Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/ozel-proje-referanslari",
+      "note": "→ /referanslar"
+    },
+    {
+      "id": "1781004403404-0aijiy",
+      "ts": "2026-06-09T11:26:43.404Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/e-ticaret-tesekkurler",
+      "note": "→ /"
+    },
+    {
+      "id": "1781004393472-7qbdij",
+      "ts": "2026-06-09T11:26:33.472Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/website-referanslari",
+      "note": "→ /referanslar"
+    },
+    {
+      "id": "1781004376354-l9kvqe",
+      "ts": "2026-06-09T11:26:16.354Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/neler-yaptik",
+      "note": "→ /referanslar"
+    },
+    {
+      "id": "1781004359994-t1kl1r",
+      "ts": "2026-06-09T11:25:59.994Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/website-yapimi",
+      "note": "→ /web-site"
+    },
+    {
+      "id": "1781004344292-wvf8qm",
+      "ts": "2026-06-09T11:25:44.292Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/e-ticaret-sitesi",
+      "note": "→ /web-site"
+    },
+    {
+      "id": "1781004327243-6elkv7",
+      "ts": "2026-06-09T11:25:27.243Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/web-sitesi-yapimi",
+      "note": "→ /web-site"
+    },
+    {
+      "id": "1781004292968-0wn3s5",
+      "ts": "2026-06-09T11:24:52.968Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/sosyal-medya-tesekkurler",
+      "note": "→ /"
+    },
+    {
+      "id": "1781004279301-lynr7e",
+      "ts": "2026-06-09T11:24:39.301Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.delete",
+      "target": "1781004263972-b9dnt1"
+    },
+    {
+      "id": "1781004263990-obm215",
+      "ts": "2026-06-09T11:24:23.990Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "redirect.add",
+      "target": "/sosyal-medya-tesekkurler",
+      "note": "→ /dijital-reklamlar"
+    },
+    {
+      "id": "1781003616155-84rxll",
+      "ts": "2026-06-09T11:13:36.155Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "settings.landing.save",
+      "note": "dijital-reklamlar"
+    },
+    {
+      "id": "1781003591037-zsnrg1",
+      "ts": "2026-06-09T11:13:11.037Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "settings.landing.save",
+      "note": "web-site"
+    },
+    {
+      "id": "1781003152321-eiz7nw",
+      "ts": "2026-06-09T11:05:52.321Z",
+      "user": "webreta.digital@gmail.com",
+      "action": "auth.login.ok",
+      "target": "webreta.digital@gmail.com"
+    },
+    {
       "id": "1780994177588-b6zu9r",
       "ts": "2026-06-09T08:36:17.588Z",
       "user": "webreta.digital@gmail.com",

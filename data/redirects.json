@@ -1,3 +1,224 @@
 {
-  "redirects": []
+  "redirects": [
+    {
+      "id": "1781004601772-kp9sce",
+      "source": "/genel-odemeler-tutar-girin",
+      "destination": "/",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:30:01.772Z"
+    },
+    {
+      "id": "1781004579893-xq43bj",
+      "source": "/sosyal-medya-referanslari/",
+      "destination": "/dijital-reklamlar",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:29:39.893Z"
+    },
+    {
+      "id": "1781004561068-v49iyq",
+      "source": "/kampanya-tesekkurler/",
+      "destination": "/",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:29:21.068Z"
+    },
+    {
+      "id": "1781004552901-wzvijp",
+      "source": "/sosyal-medya-yonetimi/",
+      "destination": "/dijital-reklamlar",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:29:12.901Z"
+    },
+    {
+      "id": "1781004540391-1jazmy",
+      "source": "/k-v-k-k-ve-gizlilik-politikasi",
+      "destination": "/gizlilik-politikasi-ve-k-v-k-k-aydinlatma-metni",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:29:00.391Z"
+    },
+    {
+      "id": "1781004522545-0odv4c",
+      "source": "/eko-kurumsal-web-site-yapimi",
+      "destination": "/web-site",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:28:42.545Z"
+    },
+    {
+      "id": "1781004510270-7a52pz",
+      "source": "/mini-website-fiyatlari",
+      "destination": "/web-site",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:28:30.270Z"
+    },
+    {
+      "id": "1781004496645-5eiya9",
+      "source": "/online-odeme/kurumsal-web-site-ekim-kampanyasi",
+      "destination": "/iletisim",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:28:16.645Z"
+    },
+    {
+      "id": "1781004475346-850h0v",
+      "source": "/reklam-yonetimi-referanslari",
+      "destination": "/dijital-reklamlar",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:27:55.346Z"
+    },
+    {
+      "id": "1781004463112-y85t6o",
+      "source": "/ikas-e-ticaret-sitesi",
+      "destination": "/web-site",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:27:43.112Z"
+    },
+    {
+      "id": "1781004450397-cddidp",
+      "source": "/hizmetlerimiz",
+      "destination": "/",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:27:30.397Z"
+    },
+    {
+      "id": "1781004441612-4bzbbp",
+      "source": "/internet-reklamlari",
+      "destination": "/dijital-reklamlar",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:27:21.612Z"
+    },
+    {
+      "id": "1781004418482-yo3cku",
+      "source": "/ozel-proje-referanslari",
+      "destination": "/referanslar",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:26:58.482Z"
+    },
+    {
+      "id": "1781004403392-zjj1ch",
+      "source": "/e-ticaret-tesekkurler",
+      "destination": "/",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:26:43.392Z"
+    },
+    {
+      "id": "1781004393458-ub9e6m",
+      "source": "/website-referanslari",
+      "destination": "/referanslar",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:26:33.458Z"
+    },
+    {
+      "id": "1781004376335-18r99i",
+      "source": "/neler-yaptik",
+      "destination": "/referanslar",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:26:16.335Z"
+    },
+    {
+      "id": "1781004359989-y5qesl",
+      "source": "/website-yapimi",
+      "destination": "/web-site",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:25:59.989Z"
+    },
+    {
+      "id": "1781004344272-qtyk16",
+      "source": "/e-ticaret-sitesi",
+      "destination": "/web-site",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:25:44.272Z"
+    },
+    {
+      "id": "1781004327233-uzvx54",
+      "source": "/web-sitesi-yapimi",
+      "destination": "/web-site",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:25:27.233Z"
+    },
+    {
+      "id": "1781004292964-rc5ncy",
+      "source": "/sosyal-medya-tesekkurler",
+      "destination": "/",
+      "matchType": "exact",
+      "permanent": true,
+      "enabled": true,
+      "preserveQuery": false,
+      "hits": 0,
+      "createdAt": "2026-06-09T11:24:52.964Z"
+    }
+  ]
 }

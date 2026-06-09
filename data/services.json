@@ -4,9 +4,11 @@
       "key": "web",
       "title": "Web Site",
       "bullets": [
-        "Next.js + TypeScript ile modern altyapı",
-        "Tasarımdan SEO'ya uçtan uca süreç",
-        "Lighthouse 95+ performans hedefi"
+        "Hızlı açılan, modern siteler",
+        "Masaüstü ve mobilde tam optimize görünüm",
+        "Google ile uyumlu yüksek SEO potansiyeli",
+        "Kolay yönetilen, size özel panel",
+        "Tasarımdan yayın sonrasına kadar tam kapsamlı hizmet"
       ]
     },
     {
@@ -14,8 +16,10 @@
       "title": "Dijital Reklamlar",
       "bullets": [
         "Google Ads & Meta Ads yönetimi",
-        "Performans odaklı kampanya stratejisi",
-        "Şeffaf ve sade raporlama paneli"
+        "Doğru kitleye, doğru bütçeyle ulaşın",
+        "Daha fazla müşteri, daha çok satış",
+        "Anlaşılır raporlar, net sonuçlar",
+        "Bütçenizi en efektif şekilde kullanın"
       ]
     }
   ]
