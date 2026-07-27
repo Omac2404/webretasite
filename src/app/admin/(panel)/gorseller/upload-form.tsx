@@ -6,10 +6,16 @@ import { uploadMediaAction, type UploadMediaState } from "./actions"
 
 const INITIAL: UploadMediaState = {}
 
+// Sunucu tarafındaki sınırla aynı (bkz. ./actions.ts MAX_BYTES). Burada da
+// kontrol ediyoruz çünkü Next, gövde limitini aşan isteği server action hiç
+// çalışmadan reddediyor — o durumda kullanıcı hiçbir hata görmüyor.
+const MAX_BYTES = 12 * 1024 * 1024
+
 export function UploadForm() {
   const [state, formAction, pending] = useActionState(uploadMediaAction, INITIAL)
   const [preview, setPreview] = useState<string | null>(null)
   const [filename, setFilename] = useState<string | null>(null)
+  const [sizeError, setSizeError] = useState<string | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
@@ -17,6 +23,7 @@ export function UploadForm() {
       formRef.current?.reset()
       setPreview(null)
       setFilename(null)
+      setSizeError(null)
     }
   }, [state.ok])
 
@@ -51,8 +58,19 @@ export function UploadForm() {
               if (!f) {
                 setPreview(null)
                 setFilename(null)
+                setSizeError(null)
                 return
               }
+              if (f.size > MAX_BYTES) {
+                e.target.value = ""
+                setPreview(null)
+                setFilename(null)
+                setSizeError(
+                  `Bu görsel ${(f.size / 1024 / 1024).toFixed(1)} MB — en fazla 12 MB yükleyebilirsin. Görseli küçültüp tekrar dene.`,
+                )
+                return
+              }
+              setSizeError(null)
               setFilename(f.name)
               setPreview(URL.createObjectURL(f))
             }}
@@ -80,16 +98,16 @@ export function UploadForm() {
         </div>
       </div>
 
-      {state.error && (
+      {(sizeError || state.error) && (
         <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12.5px] text-red-700">
-          {state.error}
+          {sizeError ?? state.error}
         </div>
       )}
 
       <div>
         <button
           type="submit"
-          disabled={pending}
+          disabled={pending || Boolean(sizeError)}
           className="inline-flex items-center gap-2 rounded-lg bg-[#3c639f] px-4 py-2.5 text-[13px] font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {pending && <Loader2 size={14} className="animate-spin" />}

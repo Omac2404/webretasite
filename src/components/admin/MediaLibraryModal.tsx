@@ -5,6 +5,9 @@ import { Search, Upload, Loader2, X, Check } from "lucide-react"
 import type { MediaItem } from "@/lib/media-store"
 import { uploadToLibraryAction } from "@/app/admin/(panel)/gorseller/actions"
 
+// Sunucu tarafındaki sınırla aynı (bkz. gorseller/actions.ts MAX_BYTES).
+const MAX_UPLOAD_BYTES = 12 * 1024 * 1024
+
 // Shared "kütüphaneden seç ya da bilgisayardan yükle" dialog. Used by the
 // MediaPicker (cover/logo selection) and the blog inline-image toolbar.
 //
@@ -52,6 +55,15 @@ export function MediaLibraryModal({
 
   async function handleFile(file: File) {
     setError(null)
+    // Sunucudaki sınırla aynı. Next, gövde limitini aşan isteği server action
+    // hiç çalışmadan reddettiği için buradaki kontrol olmazsa kullanıcı
+    // sebebi anlaşılmayan genel bir hata görüyor.
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setError(
+        `Bu görsel ${(file.size / 1024 / 1024).toFixed(1)} MB — en fazla 12 MB yükleyebilirsin.`,
+      )
+      return
+    }
     setUploading(true)
     try {
       const fd = new FormData()

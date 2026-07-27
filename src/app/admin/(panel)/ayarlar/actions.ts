@@ -116,7 +116,9 @@ export async function resetLogoAction(): Promise<void> {
 }
 
 const DATA_DIR = path.join(process.cwd(), "data")
-const BACKUP_MAX_BYTES = 50 * 1024 * 1024
+// next.config.ts'teki serverActions.bodySizeLimit (16mb) ile uyumlu tutuluyor:
+// bunun üstündeki bir dosya action'a hiç ulaşamaz, kullanıcı da hata göremezdi.
+const BACKUP_MAX_BYTES = 15 * 1024 * 1024
 
 // Restores the admin's exported backup JSON. The backup shape is
 // { exportedAt, data: { "<basename>": <parsed-json> } } — see
@@ -131,7 +133,7 @@ export async function restoreBackupAction(
     return { error: "Yedek dosyası seçilmedi." }
   }
   if (file.size > BACKUP_MAX_BYTES) {
-    return { error: "Yedek dosyası 50 MB'dan büyük olamaz." }
+    return { error: "Yedek dosyası 15 MB'dan büyük olamaz." }
   }
 
   let parsed: unknown
