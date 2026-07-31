@@ -13,6 +13,7 @@ import { readFloatMenu } from "@/lib/float-menu-store";
 import { readSiteSettings } from "@/lib/site-settings-store";
 import { readCookieConsent } from "@/lib/cookie-consent-store";
 import { readSiteCode } from "@/lib/site-code-store";
+import { extractHeadTags } from "@/lib/site-code-head";
 import { readAdsConversions } from "@/lib/ads-conversions-store";
 import { getMetadataBase } from "@/lib/seo-metadata";
 
@@ -58,8 +59,20 @@ export default async function RootLayout({
       readSiteCode(),
       readAdsConversions(),
     ])
+  // Kod Ekleme'ye yapıştırılan <meta>/<link> etiketleri sunucuda basılır:
+  // Search Console ve benzeri doğrulayıcılar ham HTML'i okur, JS çalıştırmaz.
+  // React 19 bu elementleri otomatik olarak <head>'e taşır. <script>'ler ise
+  // SiteCodeInjector'da client tarafında kalmaya devam ediyor (innerHTML ile
+  // basılan script'ler çalışmaz).
+  const headTags = siteCode.headEnabled
+    ? extractHeadTags(siteCode.headCode)
+    : []
+
   return (
     <html lang="tr" className="bg-[#fafafa]">
+      {headTags.map(({ tag: Tag, attrs }, i) => (
+        <Tag key={`site-code-head-${i}`} {...attrs} />
+      ))}
       <body className={`${inter.variable} font-sans antialiased`}>
         <MaintenanceBanner
           enabled={siteSettings.maintenance.enabled}

@@ -32,7 +32,9 @@ export default function SiteCodeInjector({
     if (pathname.startsWith("/admin")) return
     if (!injected.head && head.trim()) {
       injected.head = true
-      injectInto(head, document.head)
+      // meta/link etiketleri artık root layout'ta sunucuda basılıyor
+      // (bkz. lib/site-code-head.ts) — burada tekrar eklersek çift olurlar.
+      injectInto(head, document.head, true)
     }
     if (!injected.body && body.trim()) {
       injected.body = true
@@ -45,12 +47,24 @@ export default function SiteCodeInjector({
 
 // Parse a raw HTML string and append its nodes to `target`, recreating any
 // <script> elements (at any depth) so the browser actually executes them.
-function injectInto(html: string, target: HTMLElement): void {
+// `skipHeadTags` atlar <meta>/<link>: onlar sunucuda render ediliyor.
+function injectInto(
+  html: string,
+  target: HTMLElement,
+  skipHeadTags = false,
+): void {
   const tpl = document.createElement("template")
   tpl.innerHTML = html
   for (const node of Array.from(tpl.content.childNodes)) {
+    if (skipHeadTags && isHeadTag(node)) continue
     target.appendChild(activate(node))
   }
+}
+
+function isHeadTag(node: Node): boolean {
+  if (node.nodeType !== Node.ELEMENT_NODE) return false
+  const tag = (node as Element).tagName
+  return tag === "META" || tag === "LINK"
 }
 
 // Returns a copy of `node` with every <script> rebuilt as a fresh element
